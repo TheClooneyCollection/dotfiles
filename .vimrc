@@ -167,10 +167,10 @@ nnoremap <leader>. :q<cr>
 function! s:RubyKepMap()
   inoremap <buffer> <c-l> <space>=><space>
   " rspec
-  noremap <buffer> <Leader>rf :call RunCurrentSpecFile()<CR>
-  noremap <buffer> <Leader>rn :call RunNearestSpec()<CR>
-  noremap <buffer> <Leader>rl :call RunLastSpec()<CR>
-  noremap <buffer> <Leader>ra :call RunAllSpecs()<CR>
+  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<CR>
+  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<CR>
+  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<CR>
+  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<CR>
 endfunction
 autocmd FileType ruby call s:RubyKepMap()
 
