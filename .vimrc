@@ -171,6 +171,8 @@ function! s:RubyKepMap()
 endfunction
 autocmd FileType ruby call s:RubyKepMap()
 
+nnoremap <silent> <Leader>t :CommandT .<CR>
+
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
