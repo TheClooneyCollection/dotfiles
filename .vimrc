@@ -82,11 +82,13 @@ call vundle#begin(s:bundle_path)
 " let Vundle manage itself
 Plugin 'gmarik/Vundle.vim'
 
+" UI
 Plugin 'altercation/vim-colors-solarized'
-
-" UI and Behaviour
 Plugin 'bling/vim-airline'
+
+" Behaviour
 Plugin 'wincent/command-t'
+Plugin 'bufkill.vim'
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -96,7 +98,6 @@ Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'thoughtbot/vim-rspec'
-Plugin 'bufkill.vim'
 
 call vundle#end()
 
