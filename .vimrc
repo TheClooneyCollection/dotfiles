@@ -89,11 +89,11 @@ Plugin 'bling/vim-airline'
 " Behaviour
 Plugin 'wincent/command-t'
 Plugin 'bufkill.vim'
+Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
 
-Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
@@ -120,6 +120,18 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
 let g:rspec_command = "!rspec --color --format doc --order defined {spec}"
+
+function! s:RubyKepMap()
+  inoremap <buffer> <c-l> <space>=><space>
+  " rspec
+  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<CR>
+  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<CR>
+  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<CR>
+  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<CR>
+endfunction
+autocmd FileType ruby call s:RubyKepMap()
+
+nnoremap <silent> <Leader>t :CommandT .<CR>
 
 " Autocmds
 
@@ -161,18 +173,6 @@ let mapleader = ","
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>. :q<cr>
-
-function! s:RubyKepMap()
-  inoremap <buffer> <c-l> <space>=><space>
-  " rspec
-  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<CR>
-  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<CR>
-  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<CR>
-  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<CR>
-endfunction
-autocmd FileType ruby call s:RubyKepMap()
-
-nnoremap <silent> <Leader>t :CommandT .<CR>
 
 nnoremap j gj
 nnoremap k gk
