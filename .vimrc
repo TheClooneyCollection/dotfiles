@@ -114,6 +114,9 @@ endif
 filetype plugin indent on
 
 " Plugin Setup
+nnoremap <leader>vi :w\|so %\|PluginInstall<cr>
+nnoremap <leader>vc :w\|so %\|PluginClean<cr>
+
 colorscheme solarized
 if !exists("s:background") " don't reset when re-souring .vimrc
   let s:background = "light"
