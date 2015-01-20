@@ -89,6 +89,11 @@ Plugin 'bling/vim-airline'
 " Behaviour
 Plugin 'wincent/command-t'
 Plugin 'bufkill.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-commentary'
+Plugin 'jiangmiao/auto-pairs'
+" create any non-existent directories before writing a buffer
+Plugin 'pbrisbin/vim-mkdir'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 
 Plugin 'ervandew/supertab'
