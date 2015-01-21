@@ -37,6 +37,7 @@ set tabstop=4 shiftwidth=4 softtabstop=4
 set autoindent smartindent
 
 " Behavior
+set complete+=kspell
 set list
 set listchars=tab:>.,trail:·,extends:#,nbsp:.
 set wildmode=longest,list
