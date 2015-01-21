@@ -177,7 +177,8 @@ nnoremap : ;
 
 inoremap <c-c> <esc>
 inoremap kj <esc>
-cnoremap kj <esc>
+cnoremap kj <c-c> " fix exit after typing :help in command
+vnoremap kj <c-c>
 
 let mapleader = ","
 
