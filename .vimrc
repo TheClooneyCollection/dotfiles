@@ -48,6 +48,7 @@ set t_ti= t_te=
 " no startup message
 set shortmess+=I
 set showcmd
+set noswapfile
 
 " Encodings
 set encoding=utf-8
