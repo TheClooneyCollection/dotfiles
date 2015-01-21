@@ -157,12 +157,12 @@ augroup vimrcEx
   " for ruby, autoindent with two spaces, always expand tabs
   autocmd FileType ruby,yaml,html,javascript,cucumber set ai sw=2 sts=2 et
 
-
-  " don't syntax highlight markdown because it's often wrong
-  autocmd! FileType mkd setlocal syn=off
-
   " *.md is markdown
-  autocmd! BufNewFile,BufRead *.md setlocal ft=
+  autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
+
+  " wrap at 80 characters and spell check markdown
+  autocmd FileType markdown setlocal textwidth=80 spell
+
 augroup END
 
 " Key settings
