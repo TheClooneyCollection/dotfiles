@@ -198,8 +198,8 @@ nnoremap <c-l> <c-w>l
 
 nnoremap <leader><leader> :bnext<cr>
 nnoremap <leader>' :bprev<cr>
-nnoremap <leader>oa o<esc>k
-nnoremap <leader>oi O<esc>j
+nnoremap <leader>oa mmo<esc>`m
+nnoremap <leader>oi mmO<esc>`m
 
 nnoremap <leader>h :help
 
