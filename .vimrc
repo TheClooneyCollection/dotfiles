@@ -197,6 +197,7 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
 nnoremap <leader><leader> :bnext<cr>
+nnoremap <leader>' :bprev<cr>
 nnoremap <leader>oa o<esc>k
 nnoremap <leader>oi O<esc>j
 
