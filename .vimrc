@@ -163,6 +163,9 @@ augroup vimrcEx
   " wrap at 80 characters and spell check markdown
   autocmd FileType markdown setlocal textwidth=80 spell
 
+  " wrap at 72 characters and spell check git commit messages
+  autocmd FileType gitcommit setlocal textwidth=72 spell
+
 augroup END
 
 " Key settings
