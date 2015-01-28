@@ -116,9 +116,6 @@ endif
 filetype plugin indent on
 
 " Plugin Setup
-nnoremap <leader>vi :w\|so %\|PluginInstall<cr>
-nnoremap <leader>vc :w\|so %\|PluginClean<cr>
-
 colorscheme solarized
 if !exists("s:background") " don't reset when re-souring .vimrc
   let s:background = "light"
@@ -182,6 +179,11 @@ vnoremap kj <c-c>
 
 let mapleader = ","
 
+" plugin
+nnoremap <leader>vi :so $MYVIMRC\|PluginInstall<cr>
+nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
+
+" vim
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>. :q<cr>
