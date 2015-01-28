@@ -128,18 +128,6 @@ let g:airline_powerline_fonts = 1
 
 let g:rspec_command = "!rspec --color --format doc --order defined {spec}"
 
-function! s:RubyKepMap()
-  inoremap <buffer> <c-l> <space>=><space>
-  " rspec
-  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<CR>
-  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<CR>
-  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<CR>
-  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<CR>
-endfunction
-autocmd FileType ruby call s:RubyKepMap()
-
-nnoremap <silent> <Leader>t :CommandT .<CR>
-
 " Autocmds
 
 " modified from garybernhart's .vimrc
@@ -182,6 +170,18 @@ let mapleader = ","
 " plugin
 nnoremap <leader>vi :so $MYVIMRC\|PluginInstall<cr>
 nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
+
+function! s:RubyKepMap()
+  inoremap <buffer> <c-l> <space>=><space>
+  " rspec
+  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<cr>
+  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<cr>
+  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<cr>
+  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<cr>
+endfunction
+autocmd FileType ruby call s:RubyKepMap()
+
+nnoremap <silent> <Leader>t :CommandT .<cr>
 
 " vim
 nnoremap <leader>w :w<cr>
