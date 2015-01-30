@@ -224,7 +224,6 @@ nnoremap <s-tab> <<
 
 " FIXME: When sharing Vim with someone else
 inoremap <esc> <nop>
-inoremap <esc> <nop>
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <right> <nop>
