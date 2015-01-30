@@ -37,6 +37,8 @@ set tabstop=4 shiftwidth=4 softtabstop=4
 set autoindent smartindent
 
 " Behavior
+let mapleader = ","
+
 set complete+=kspell
 set list
 set listchars=tab:>.,trail:·,extends:#,nbsp:.
@@ -116,6 +118,10 @@ endif
 filetype plugin indent on
 
 " Plugin Setup
+nnoremap <leader>vi :so $MYVIMRC\|PluginInstall<cr>
+nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
+
+" solarized
 colorscheme solarized
 if !exists("s:background") " don't reset when re-souring .vimrc
   let s:background = "light"
@@ -126,7 +132,20 @@ call togglebg#map("<F5>") " solarized background toggle
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+
+nnoremap <silent> <Leader>t :CommandT .<cr>
+
+" vim-rspec
 let g:rspec_command = "!rspec --color --format doc --order defined {spec}"
+function! s:RubyKepMap()
+  inoremap <buffer> <c-l> <space>=><space>
+  " rspec
+  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<cr>
+  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<cr>
+  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<cr>
+  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<cr>
+endfunction
+autocmd FileType ruby call s:RubyKepMap()
 
 " Autocmds
 
@@ -163,24 +182,6 @@ nnoremap : ;
 inoremap <c-c> <esc>
 inoremap kj <esc>
 cnoremap kj <c-c> " fix exit after typing :help in command
-
-let mapleader = ","
-
-" plugin
-nnoremap <leader>vi :so $MYVIMRC\|PluginInstall<cr>
-nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
-
-function! s:RubyKepMap()
-  inoremap <buffer> <c-l> <space>=><space>
-  " rspec
-  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<cr>
-  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<cr>
-  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<cr>
-  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<cr>
-endfunction
-autocmd FileType ruby call s:RubyKepMap()
-
-nnoremap <silent> <Leader>t :CommandT .<cr>
 
 " vim
 nnoremap <leader>w :w<cr>
