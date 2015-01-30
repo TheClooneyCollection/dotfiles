@@ -99,6 +99,7 @@ Plugin 'jiangmiao/auto-pairs'
 " create any non-existent directories before writing a buffer
 Plugin 'pbrisbin/vim-mkdir'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
+Plugin 'Lokaltog/vim-easymotion'
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -132,6 +133,31 @@ call togglebg#map("<F5>") " solarized background toggle
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+" easymotion
+let g:EasyMotion_smartcase = 1 " turn on case insensitive feature
+let g:EasyMotion_do_mapping = 0 " disable default mappings
+let g:EasyMotion_use_smartsign_us = 1 " 1 will match 1 and !
+let g:EasyMotion_use_upper = 1
+let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
+let g:EasyMotion_space_jump_first = 1
+
+nmap s <Plug>(easymotion-s2)
+nmap t <Plug>(easymotion-t2)
+nmap f <Plug>(easymotion-f)
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+
+" nmap w <Plug>(easymotion-wl)
+" nmap b <Plug>(easymotion-bl)
+
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+
+" jk motions: line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+" end of easymotion
 
 nnoremap <silent> <Leader>t :CommandT .<cr>
 
