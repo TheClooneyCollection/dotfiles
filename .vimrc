@@ -99,6 +99,7 @@ Plugin 'jiangmiao/auto-pairs'
 " create any non-existent directories before writing a buffer
 Plugin 'pbrisbin/vim-mkdir'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
+Plugin 'tpope/vim-eunuch'
 Plugin 'Lokaltog/vim-easymotion'
 
 Plugin 'ervandew/supertab'
