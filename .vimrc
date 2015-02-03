@@ -155,9 +155,6 @@ omap / <Plug>(easymotion-tn)
 " nmap w <Plug>(easymotion-wl)
 " nmap b <Plug>(easymotion-bl)
 
-map  n <Plug>(easymotion-next)
-map  N <Plug>(easymotion-prev)
-
 " jk motions: line motions
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
