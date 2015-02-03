@@ -161,7 +161,8 @@ map <Leader>k <Plug>(easymotion-k)
 
 " end of easymotion
 
-nnoremap <silent> <Leader>t :CommandT .<cr>
+nnoremap <silent> <Leader>tf :CommandT .<cr>
+nnoremap <silent> <Leader>tb :CommandTBuffer<cr>
 
 " vim-rspec
 let g:rspec_command = "!rspec --color --format doc --order defined {spec}"
