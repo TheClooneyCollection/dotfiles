@@ -135,6 +135,8 @@ call togglebg#map("<F5>") " solarized background toggle
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+nmap <leader>. <Plug>BufKillBd
+
 " easymotion
 let g:EasyMotion_smartcase = 1 " turn on case insensitive feature
 let g:EasyMotion_do_mapping = 0 " disable default mappings
@@ -215,7 +217,6 @@ cnoremap kj <c-c> " fix exit after typing :help in command
 " vim
 nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
-nnoremap <leader>. :q<cr>
 
 nnoremap j gj
 nnoremap k gk
