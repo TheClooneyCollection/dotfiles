@@ -109,6 +109,7 @@ let g:SuperTabDefaultCompletionType = "context"
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'thoughtbot/vim-rspec'
+Plugin 'tpope/vim-rails'
 
 call vundle#end()
 
