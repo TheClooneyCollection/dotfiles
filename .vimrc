@@ -146,6 +146,8 @@ nmap <leader>g <Plug>(easymotion-bd-w)
 nmap s <Plug>(easymotion-s2)
 map t <Plug>(easymotion-bd-t)
 map f <Plug>(easymotion-bd-f)
+omap t <Plug>(easymotion-tl)
+omap f <Plug>(easymotion-fl)
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 
