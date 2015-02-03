@@ -143,8 +143,8 @@ let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
 let g:EasyMotion_space_jump_first = 1
 
 nmap s <Plug>(easymotion-s2)
-nmap t <Plug>(easymotion-t2)
-nmap f <Plug>(easymotion-f)
+map t <Plug>(easymotion-bd-t)
+map f <Plug>(easymotion-bd-f)
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 
