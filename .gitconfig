@@ -1,0 +1,48 @@
+[user]
+    name = NicholasTD07
+    email = Nicholas.TD07@gmail.com
+[alias]
+    a = add
+    aa = add --all
+    amend = commit --amend
+    ap = add -p
+    b = branch
+    ba = branch -a
+    c = commit -v
+    ca = commit -av
+    cav = commit -av
+    cd1 = clone --depth=1
+    ci = commit
+    cp = cherry-pick
+    cm = commit -m
+    cv = commit -v
+    co = checkout
+    cob = checkout -b
+    d = diff
+    dc = diff --cached
+    p = push
+    pav = push --all -v
+    pom = push origin master
+    r = reset
+    s = status
+    st = stash
+    undo = reset --hard
+
+    # Fancy logging.
+    #   h = head
+    #   hp = head with patch
+    #   r = recent commits, only current branch
+    #   ra = recent commits, all reachable refs
+    #   l = all commits, only current branch
+    #   la = all commits, all reachable refs
+    head = !git r -1
+    h = !git head
+    hp = "!. ~/.githelpers && show_git_head"
+    r = !GIT_NO_PAGER=1 git l -30
+    ra = !git r --all
+    l = "!. ~/.githelpers && pretty_git_log"
+    la = !git l --all
+[color]
+    ui=auto
+[core]
+    editor = vim
