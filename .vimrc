@@ -239,6 +239,7 @@ vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 nnoremap <silent> <leader>c :nohlsearch<cr>
 
 nnoremap <leader>ev :e $MYVIMRC<cr>
+nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
 
 vnoremap <leader>p "*p
