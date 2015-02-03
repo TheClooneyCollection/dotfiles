@@ -232,7 +232,7 @@ nnoremap <leader>' :bprev<cr>
 nnoremap <leader>oa mmo<esc>`m
 nnoremap <leader>oi mmO<esc>`m
 
-nnoremap <leader>h :help
+nnoremap <leader>h :help<space>
 
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 vnoremap <leader>s :%s/\<<C-r><C-w>\>/
