@@ -142,6 +142,7 @@ let g:EasyMotion_use_upper = 1
 let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ;'
 let g:EasyMotion_space_jump_first = 1
 
+nmap <leader>g <Plug>(easymotion-bd-w)
 nmap s <Plug>(easymotion-s2)
 map t <Plug>(easymotion-bd-t)
 map f <Plug>(easymotion-bd-f)
