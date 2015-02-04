@@ -30,6 +30,7 @@ function! SetBackgroundByTime()
     set background=dark
   endif
 endfunction
+call SetBackgroundByTime()
 
 " Search
 set hlsearch
@@ -189,6 +190,7 @@ autocmd FileType ruby call s:RubyKepMap()
 " https://github.com/garybernhardt/dotfiles/blob/master/.vimrc
 augroup vimrcEx
   autocmd!
+  autocmd WinEnter * call SetBackgroundByTime()
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
