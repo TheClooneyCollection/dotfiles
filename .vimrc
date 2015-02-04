@@ -216,7 +216,6 @@ cnoremap kj <c-c> " fix exit after typing :help in command
 
 " vim
 nnoremap <leader>w :w<cr>
-nnoremap <leader>q :q<cr>
 
 nnoremap j gj
 nnoremap k gk
