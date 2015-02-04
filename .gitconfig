@@ -25,6 +25,7 @@
     pom = push origin master
     r = reset
     s = status
+    ss = status --short
     st = stash
     undo = reset --hard
 
