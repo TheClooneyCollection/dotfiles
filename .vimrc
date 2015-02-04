@@ -23,6 +23,14 @@ set laststatus=2
 " show matching brackets
 set showmatch
 
+function! SetBackgroundByTime()
+  if strftime("%H") < 18
+    set background=light
+  else
+    set background=dark
+  endif
+endfunction
+
 " Search
 set hlsearch
 " show matches when typing search pattern
@@ -126,10 +134,6 @@ nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
 
 " solarized
 colorscheme solarized
-if !exists("s:background") " don't reset when re-souring .vimrc
-  let s:background = "light"
-  let &background=s:background
-endif
 call togglebg#map("<F5>") " solarized background toggle
 
 let g:airline#extensions#tabline#enabled = 1
