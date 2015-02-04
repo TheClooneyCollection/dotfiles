@@ -212,8 +212,8 @@ augroup END
 
 " Key settings
 
-nnoremap ; :
-nnoremap : ;
+noremap ; :
+noremap : ;
 
 inoremap <c-c> <esc>
 inoremap kj <esc>
