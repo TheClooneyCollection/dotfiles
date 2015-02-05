@@ -24,8 +24,8 @@
     pav = push --all -v
     pom = push origin master
     r = reset
-    s = status
-    ss = status --short
+    ss = status
+    s = status --short
     st = stash
     undo = reset --hard
 
