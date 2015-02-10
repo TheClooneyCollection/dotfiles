@@ -23,14 +23,19 @@ set laststatus=2
 " show matching brackets
 set showmatch
 
+function! ReloadColorScheme()
+  let l:colorscheme = g:colors_name
+  execute ':colorscheme '.l:colorscheme
+endfunction
+
 function! SetBackgroundByTime()
   if strftime("%H") < 18
     set background=light
   else
     set background=dark
   endif
+  call ReloadColorScheme()
 endfunction
-call SetBackgroundByTime()
 
 " Search
 set hlsearch
