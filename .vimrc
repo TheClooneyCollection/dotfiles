@@ -115,6 +115,7 @@ Plugin 'pbrisbin/vim-mkdir'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 Plugin 'tpope/vim-eunuch'
 Plugin 'Lokaltog/vim-easymotion'
+Plugin 'tpope/vim-dispatch'
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -178,7 +179,7 @@ nnoremap <silent> <Leader>tf :CommandT .<cr>
 nnoremap <silent> <Leader>tb :CommandTBuffer<cr>
 
 " vim-rspec
-let g:rspec_command = "!rspec --color --format doc --order defined {spec}"
+let g:rspec_command = "Dispatch rspec --color --format doc --order defined {spec}"
 function! s:RubyKepMap()
   inoremap <buffer> <c-l> <space>=><space>
   " rspec
