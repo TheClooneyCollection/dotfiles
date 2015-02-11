@@ -20,6 +20,7 @@
     cob = checkout -b
     d = diff
     dc = diff --cached
+    lfo = ls-files --others
     p = push
     pav = push --all -v
     pom = push origin master
@@ -28,6 +29,7 @@
     s = status --short
     st = stash
     undo = reset --hard
+    untracked = !git lfo
 
     # Fancy logging.
     #   h = head
