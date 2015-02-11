@@ -241,7 +241,7 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-nnoremap <leader><leader> :bnext<cr>
+nnoremap <leader><leader> <c-^>
 nnoremap <leader>' :bprev<cr>
 nnoremap <leader>oa mmo<esc>`m
 nnoremap <leader>oi mmO<esc>`m
