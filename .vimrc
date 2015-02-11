@@ -16,7 +16,7 @@ syntax enable
 
 set number relativenumber
 set cursorline
-set winwidth=85
+set winwidth=81
 set scrolloff=5
 " always show status line
 set laststatus=2
