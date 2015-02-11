@@ -190,6 +190,9 @@ function! s:RubyKepMap()
 endfunction
 autocmd FileType ruby call s:RubyKepMap()
 
+" vim-rails
+nnoremap <cr> :A<cr>
+
 " Autocmds
 
 " modified from garybernhart's .vimrc
