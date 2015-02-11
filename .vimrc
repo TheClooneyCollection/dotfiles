@@ -195,8 +195,6 @@ nnoremap <cr> :A<cr>
 
 " Autocmds
 
-" modified from garybernhart's .vimrc
-" https://github.com/garybernhardt/dotfiles/blob/master/.vimrc
 augroup vimrcEx
   autocmd!
   autocmd WinEnter * call SetBackgroundByTime()
