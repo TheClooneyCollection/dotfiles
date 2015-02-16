@@ -13,11 +13,11 @@
     cav = commit -av
     cd1 = clone --depth=1
     ci = commit
-    cp = cherry-pick
     cm = commit -m
-    cv = commit -v
     co = checkout
     cob = checkout -b
+    cp = cherry-pick
+    cv = commit -v
     d = diff
     dc = diff --cached
     lfo = ls-files --others
