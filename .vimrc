@@ -123,8 +123,8 @@ let g:SuperTabDefaultCompletionType = "context"
 
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
-Plugin 'thoughtbot/vim-rspec'
 Plugin 'tpope/vim-rails'
+Plugin 'NicholasTD07/vim-rspec'
 
 call vundle#end()
 
@@ -187,6 +187,7 @@ function! s:RubyKepMap()
   noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<cr>
   noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<cr>
   noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<cr>
+  noremap <buffer> <Leader>rt :w\|redraw\|call RunAllSpecsFilteredByTags()<cr>
 endfunction
 autocmd FileType ruby call s:RubyKepMap()
 
