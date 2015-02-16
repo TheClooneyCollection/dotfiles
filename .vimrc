@@ -28,13 +28,16 @@ function! ReloadColorScheme()
   execute ':colorscheme '.l:colorscheme
 endfunction
 
+let g:auto_backgroud = 1
 function! SetBackgroundByTime()
-  if strftime("%H") < 18
-    set background=light
-  else
-    set background=dark
+  if g:auto_backgroud
+    if strftime("%H") < 18
+      set background=light
+    else
+      set background=dark
+    endif
+    call ReloadColorScheme()
   endif
-  call ReloadColorScheme()
 endfunction
 
 " Search
