@@ -17,6 +17,7 @@
     co = checkout
     cob = checkout -b
     cp = cherry-pick
+    cs = clone --depth 1
     cv = commit -v
     d = diff
     dc = diff --cached
