@@ -126,6 +126,9 @@ Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 Plugin 'tpope/vim-eunuch'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-repeat'
+Plugin 'rking/ag.vim'
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -185,19 +188,19 @@ map <Leader>k <Plug>(easymotion-k)
 
 " end of easymotion
 
-nnoremap <silent> <Leader>tf :CommandT .<cr>
-nnoremap <silent> <Leader>tb :CommandTBuffer<cr>
+nnoremap <silent> <c-f> :CommandT .<cr>
+nnoremap <silent> <c-b> :CommandTBuffer<cr>
 
 " vim-rspec
 let g:rspec_command = "Dispatch rspec --color --format doc --order defined {spec}"
 function! s:RubyKepMap()
   inoremap <buffer> <c-l> <space>=><space>
   " rspec
-  noremap <buffer> <Leader>rf :w\|redraw\|call RunCurrentSpecFile()<cr>
-  noremap <buffer> <Leader>rn :w\|redraw\|call RunNearestSpec()<cr>
-  noremap <buffer> <Leader>rl :w\|redraw\|call RunLastSpec()<cr>
-  noremap <buffer> <Leader>ra :w\|redraw\|call RunAllSpecs()<cr>
-  noremap <buffer> <Leader>rt :w\|redraw\|call RunAllSpecsFilteredByTags()<cr>
+  noremap <buffer> <Leader>rf :wa\|redraw\|call RunCurrentSpecFile()<cr>
+  noremap <buffer> <Leader>rn :wa\|redraw\|call RunNearestSpec()<cr>
+  noremap <buffer> <Leader>rl :wa\|redraw\|call RunLastSpec()<cr>
+  noremap <buffer> <Leader>ra :wa\|redraw\|call RunAllSpecs()<cr>
+  noremap <buffer> <Leader>rt :wa\|redraw\|call RunAllSpecsFilteredByTags()<cr>
 endfunction
 autocmd FileType ruby call s:RubyKepMap()
 
