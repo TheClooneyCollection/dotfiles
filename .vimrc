@@ -257,8 +257,6 @@ nnoremap <c-l> <c-w>l
 
 nnoremap <leader><leader> <c-^>
 nnoremap <leader>' :bprev<cr>
-nnoremap <leader>oa mmo<esc>`m
-nnoremap <leader>oi mmO<esc>`m
 
 nnoremap <leader>h :help<space>
 
@@ -280,9 +278,13 @@ nnoremap <leader>y "*y
 nnoremap <tab> >>
 nnoremap <s-tab> <<
 
+" delete comment lines and empty lines
+nnoremap <leader>dc :%g/^\s*#.*/d
+nnoremap <leader>de :%g/^s*$/d
+
 " FIXME: When sharing Vim with someone else
-inoremap <esc> <nop>
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <right> <nop>
-nnoremap <left> <nop>
+" inoremap <esc> <nop>
+" nnoremap <up> <nop>
+" nnoremap <down> <nop>
+" nnoremap <right> <nop>
+" nnoremap <left> <nop>
