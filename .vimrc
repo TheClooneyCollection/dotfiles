@@ -24,21 +24,28 @@ set laststatus=2
 set showmatch
 
 function! ReloadColorScheme()
-  let l:colorscheme = g:colors_name
-  execute ':colorscheme '.l:colorscheme
+  if exists("g:colors_name")
+    execute "colorscheme " . g:colors_name
+  endif
 endfunction
 
 let g:auto_backgroud = 1
 function! SetBackgroundByTime()
-  if g:auto_backgroud
-    if strftime("%H") < 18
-      set background=light
-    else
-      set background=dark
+    let &background = ( strftime("%H") < 17? "light" : "dark" )
+    if exists("g:colors_name")
+        exe "colorscheme " . g:colors_name
     endif
-    call ReloadColorScheme()
-  endif
 endfunction
+" function! SetBackgroundByTime()
+"   if g:auto_backgroud
+"     if strftime("%H") < 17
+"       let &background="light"
+"     else
+"       let &background="dark"
+"     endif
+"     call ReloadColorScheme()
+"   endif
+" endfunction
 
 " Search
 set hlsearch
@@ -201,7 +208,7 @@ nnoremap <cr> :A<cr>
 
 augroup vimrcEx
   autocmd!
-  autocmd WinEnter * call SetBackgroundByTime()
+  autocmd VimEnter,WinEnter * call SetBackgroundByTime()
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
