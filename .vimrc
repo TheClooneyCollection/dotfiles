@@ -65,7 +65,7 @@ let mapleader = ","
 
 set complete+=kspell
 set list
-set listchars=tab:>.,trail:·,extends:#,nbsp:.
+set listchars=tab:>-,trail:·,extends:#,nbsp:. ",eol:¬ " end
 set wildmode=longest,list
 set switchbuf=useopen
 " prevent vim from clobbering the scrollback buffer. see
@@ -130,7 +130,7 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
 
-
+" language
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-rails'
