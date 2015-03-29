@@ -29,24 +29,6 @@ function! ReloadColorScheme()
   endif
 endfunction
 
-let g:auto_backgroud = 1
-function! SetBackgroundByTime()
-    let &background = ( strftime("%H") < 17? "light" : "dark" )
-    if exists("g:colors_name")
-        exe "colorscheme " . g:colors_name
-    endif
-endfunction
-" function! SetBackgroundByTime()
-"   if g:auto_backgroud
-"     if strftime("%H") < 17
-"       let &background="light"
-"     else
-"       let &background="dark"
-"     endif
-"     call ReloadColorScheme()
-"   endif
-" endfunction
-
 " Search
 set hlsearch
 " show matches when typing search pattern
