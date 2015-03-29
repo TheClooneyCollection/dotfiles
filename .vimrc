@@ -158,11 +158,6 @@ map t <Plug>(easymotion-bd-t)
 map f <Plug>(easymotion-bd-f)
 omap t <Plug>(easymotion-tl)
 omap f <Plug>(easymotion-fl)
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
-
-" nmap w <Plug>(easymotion-wl)
-" nmap b <Plug>(easymotion-bl)
 
 " jk motions: line motions
 map <Leader>j <Plug>(easymotion-j)
