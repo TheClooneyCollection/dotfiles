@@ -10,7 +10,7 @@
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '()
+   dotspacemacs-configuration-layers '(git)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -107,6 +107,7 @@ before layers configuration."
   ;; So 'ht' needs to be typed really fast,
   ;; or change that delay to a larger value.
   (setq-default evil-escape-key-sequence "ht")
+  (setq magit-last-seen-setup-instructions "1.4.0")
   )
 
 (defun dotspacemacs/config ()
