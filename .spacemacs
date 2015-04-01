@@ -58,7 +58,7 @@ before layers configuration."
    ;; Emacs commands (M-x).
    ;; By default the command key is `:' so ex-commands are executed like in Vim
    ;; with `:' and Emacs commands are executed with `<leader> :'.
-   dotspacemacs-command-key ":"
+   dotspacemacs-command-key ";"
    ;; If non nil the paste micro-state is enabled. While enabled pressing `p`
    ;; several times cycle between the kill ring content.
    dotspacemacs-enable-paste-micro-state t
@@ -102,6 +102,11 @@ before layers configuration."
    ;; Not used for now.
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
+
+  ;; The `evil-escape-delay` defaults to 0.1 second.
+  ;; So 'ht' needs to be typed really fast,
+  ;; or change that delay to a larger value.
+  (setq-default evil-escape-key-sequence "ht")
   )
 
 (defun dotspacemacs/config ()
