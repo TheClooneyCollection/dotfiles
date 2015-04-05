@@ -107,7 +107,8 @@ before layers configuration."
   ;; The `evil-escape-delay` defaults to 0.1 second.
   ;; So 'ht' needs to be typed really fast,
   ;; or change that delay to a larger value.
-  (setq-default evil-escape-key-sequence "ht"
+  (setq-default evil-escape-key-sequence "hu"
+                evil-escape-delay 0.15
                 ruby-version-manager 'rvm
                 ruby-enable-ruby-on-rails-support t)
   (setq magit-last-seen-setup-instructions "1.4.0")
