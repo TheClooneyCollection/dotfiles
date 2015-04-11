@@ -128,8 +128,8 @@
   ; (bind-key [remap completion-at-point] #'company-complete company-mode-map)
 
   (setq company-tooltip-align-annotations t
-  ;; Easy navigation to candidates with M-<n>
-  company-show-numbers t)
+    ;; Easy navigation to candidates with M-<n>
+    company-show-numbers t)
   (global-company-mode))
 
 (use-package company-quickhelp          ; Documentation popups for Company
