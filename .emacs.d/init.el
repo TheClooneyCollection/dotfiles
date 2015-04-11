@@ -79,7 +79,8 @@
   :ensure t
   :config
   (require 'helm-config)
-  (helm-mode))
+  (helm-mode)
+  (helm-autoresize-mode))
 
 ;; behaviour
 
