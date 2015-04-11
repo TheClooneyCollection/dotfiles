@@ -170,7 +170,7 @@ nnoremap <silent> <c-b> :CommandTBuffer<cr>
 
 " vim-rspec
 let g:rspec_command = "Dispatch rspec --color --format doc --order defined {spec}"
-function! s:RubyKepMap()
+function! RubyKepMap()
   inoremap <buffer> <c-l> <space>=><space>
   " rspec
   noremap <buffer> <Leader>rf :wa\|redraw\|call RunCurrentSpecFile()<cr>
@@ -179,7 +179,7 @@ function! s:RubyKepMap()
   noremap <buffer> <Leader>ra :wa\|redraw\|call RunAllSpecs()<cr>
   noremap <buffer> <Leader>rt :wa\|redraw\|call RunAllSpecsFilteredByTags()<cr>
 endfunction
-autocmd FileType ruby call s:RubyKepMap()
+autocmd FileType ruby call RubyKepMap()
 
 " vim-rails
 nnoremap <cr> :A<cr>
