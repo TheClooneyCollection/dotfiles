@@ -188,7 +188,6 @@ nnoremap <cr> :A<cr>
 
 augroup vimrcEx
   autocmd!
-  autocmd VimEnter,WinEnter * call SetBackgroundByTime()
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
