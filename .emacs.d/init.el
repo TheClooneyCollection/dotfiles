@@ -25,8 +25,11 @@
 ;; ridiculously bizarre thing entirely.
 (fset 'display-startup-echo-area-message #'ignore)
 
+(electric-pair-mode)
+(show-paren-mode)
 ;; highlight current line
 (global-hl-line-mode)
+
 
 
 (defun dot-emacs/location ()
