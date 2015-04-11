@@ -140,10 +140,10 @@
 (use-package flycheck                   ; On-the-fly syntax checking
   :ensure t
   :config
-;   (setq flycheck-completion-system 'ido)
+  ;   (setq flycheck-completion-system 'ido)
 
-;   ;; Use italic face for checker name
-;   (set-face-attribute 'flycheck-error-list-checker-name nil :inherit 'italic))
+  ;   ;; Use italic face for checker name
+  ;   (set-face-attribute 'flycheck-error-list-checker-name nil :inherit 'italic))
   (global-flycheck-mode)
 
   (use-package flycheck-pos-tip           ; Show Flycheck messages in popups
@@ -151,7 +151,7 @@
     :config
     (eval-after-load 'flycheck
       '(custom-set-variables
-       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))))
+         '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))))
 
 (use-package solarized-theme
   :ensure t
