@@ -24,6 +24,10 @@
 ;; ridiculously bizarre thing entirely.
 (fset 'display-startup-echo-area-message #'ignore)
 
+;;; default modes
+
+(setq-default indent-tabs-mode nil)
+
 (electric-pair-mode)
 (show-paren-mode)
 (global-hl-line-mode) ;; highlight current line
