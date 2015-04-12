@@ -62,6 +62,23 @@
 
 ;;; packages
 
+;; ui
+
+(use-package solarized-theme
+  :ensure t
+  :config (load-theme 'solarized-light 'no-confirm))
+
+(use-package zenburn-theme
+  :disabled t
+  :ensure t)
+
+(use-package nyan-mode
+  :ensure t
+  :config
+  (nyan-mode))
+
+;; project
+
 (use-package projectile
   :ensure t
   :diminish projectile-mode
@@ -74,6 +91,15 @@
   (setq projectile-completion-system 'helm)
   (helm-projectile-on))
 
+;; behaviour
+
+(use-package guide-key
+  :ensure t
+  :diminish guide-key-mode
+  :config
+  (setq guide-key/guide-key-sequence t)
+  (guide-key-mode))
+
 (use-package helm
   :ensure t
   :diminish helm-mode
@@ -82,7 +108,7 @@
   (helm-mode)
   (helm-autoresize-mode))
 
-;; behaviour
+;; evil
 
 (use-package evil
   :ensure t
@@ -118,12 +144,7 @@
     :ensure t)
   (evil-mode))
 
-(use-package guide-key
-  :ensure t
-  :diminish guide-key-mode
-  :config
-  (setq guide-key/guide-key-sequence t)
-  (guide-key-mode))
+;; auto-completion, flycheck
 
 (use-package company                    ; Graphical (auto-)completion
   :ensure t
@@ -157,15 +178,3 @@
     (eval-after-load 'flycheck
       '(custom-set-variables
         '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))))
-
-(use-package solarized-theme
-  :ensure t
-  :config (load-theme 'solarized-light 'no-confirm))
-
-(use-package zenburn-theme
-  :disabled t
-  :ensure t)
-
-(use-package nyan-mode
-  :ensure t
-  :config (nyan-mode))
