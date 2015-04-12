@@ -56,7 +56,7 @@
 (eval-when-compile
   (require 'use-package))
 
-; (require 'diminish)                ;; if you use :diminish
+(require 'diminish)                ;; if you use :diminish
 (require 'bind-key)                ;; if you use any :bind variant
 
 
@@ -64,6 +64,7 @@
 
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :config
   (projectile-global-mode))
 
@@ -75,6 +76,7 @@
 
 (use-package helm
   :ensure t
+  :diminish helm-mode
   :config
   (require 'helm-config)
   (helm-mode)
@@ -89,6 +91,7 @@
   :config
   (use-package evil-escape
     :ensure t
+    :diminish evil-escape-mode
     :config
     (setq-default evil-escape-key-sequence "kj")
     (evil-escape-mode))
@@ -117,12 +120,14 @@
 
 (use-package guide-key
   :ensure t
+  :diminish guide-key-mode
   :config
   (setq guide-key/guide-key-sequence t)
   (guide-key-mode))
 
 (use-package company                    ; Graphical (auto-)completion
   :ensure t
+  :diminish company-mode
   :config
   ; ;; Use Company for completion
   ; (bind-key [remap completion-at-point] #'company-complete company-mode-map)
