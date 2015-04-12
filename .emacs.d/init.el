@@ -171,8 +171,8 @@
   :ensure t
   :diminish company-mode
   :config
-  ; ;; Use Company for completion
-  ; (bind-key [remap completion-at-point] #'company-complete company-mode-map)
+  ;; Use Company for completion
+  (bind-key [remap completion-at-point] #'company-complete company-mode-map)
 
   (setq company-tooltip-align-annotations t
         ;; Easy navigation to candidates with M-<n>
@@ -189,8 +189,8 @@
   :config
                                         ;   (setq flycheck-completion-system 'ido)
 
-  ;   ;; Use italic face for checker name
-  ;   (set-face-attribute 'flycheck-error-list-checker-name nil :inherit 'italic))
+  ;; Use italic face for checker name
+  (set-face-attribute 'flycheck-error-list-checker-name nil :inherit 'italic)
   (global-flycheck-mode)
 
   (use-package flycheck-pos-tip           ; Show Flycheck messages in popups
