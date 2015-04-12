@@ -121,7 +121,21 @@
   :ensure t
   :init (setq evil-want-C-u-scroll t)
   :config
-  :config
+  ;;; ace-jump-mode
+  (setq ace-jump-mode-scope 'window)
+
+  ; (use-package evil-rebellion
+  ;   :ensure t)
+
+  ;;; key mappings
+  (define-key evil-motion-state-map (kbd "f") #'evil-ace-jump-char-mode)
+  (define-key evil-motion-state-map (kbd "t") #'evil-ace-jump-char-to-mode)
+  ;;; TODO: find out why f and t in operator mode is so slow
+  ;;; `df<char>' or `ct<char>' is so slow compared to `vf<char' or `vt<char>'
+  ;;; TODO: find out why visual state map is mixed up with operator state
+  (define-key evil-visual-state-map (kbd "f") #'evil-ace-jump-char-mode)
+  (define-key evil-visual-state-map (kbd "t") #'evil-ace-jump-char-to-mode)
+
   (use-package evil-escape
     :ensure t
     :diminish evil-escape-mode
@@ -135,6 +149,7 @@
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "." 'eval-buffer
+      ; eval-region
       "=" 'text-scale-increase
       "-" 'text-scale-decrease
       "1" 'delete-other-windows
@@ -143,12 +158,11 @@
       "ev" 'dot-emacs/find-dotfile
       "f" 'find-file
       "l" 'evil-ace-jump-line-mode
+      ; projectile
       "t" 'evil-ace-jump-char-to-mode
       "w" 'save-buffer
       "q" 'save-buffers-kill-emacs
       ))
-  (use-package evil-easymotion
-    :ensure t)
   (evil-mode))
 
 ;; auto-completion, flycheck
