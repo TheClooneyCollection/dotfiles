@@ -99,6 +99,8 @@
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
       "." 'eval-buffer
+      "=" 'text-scale-increase
+      "-" 'text-scale-decrease
       "1" 'delete-other-windows
       "b" 'switch-to-buffer
       "c" 'evil-ace-jump-char-mode
