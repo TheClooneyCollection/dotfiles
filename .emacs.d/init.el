@@ -8,7 +8,7 @@
 
 ;;; user interfaces
 
-(set-default-font "Inconsolata-g 12")
+(set-frame-font "Source Code Pro-14")
 
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
