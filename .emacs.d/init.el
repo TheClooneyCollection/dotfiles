@@ -8,29 +8,25 @@
 
 ;;; user interfaces
 
-;; Get rid of tool bar, menu bar and scroll bars.  On OS X we preserve the menu
-;; bar, since the top menu bar is always visible anyway, and we'd just empty it
-;; which is rather pointless.
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; No blinking and beeping, no startup screen, no scratch message and short
-;; Yes/No questions.
+;; No blinking and beeping
 (blink-cursor-mode -1)
 (setq ring-bell-function #'ignore
-      inhibit-startup-screen t
-      initial-scratch-message "Hello there!\n")
-(fset 'yes-or-no-p #'y-or-n-p)
+  ;; no startup screen, no scratch message
+  inhibit-startup-screen t
+  initial-scratch-message "Hello there!\n")
+(fset 'yes-or-no-p #'y-or-n-p) ;; short Yes/No questions.
 ;; Opt out from the startup message in the echo area by simply disabling this
 ;; ridiculously bizarre thing entirely.
 (fset 'display-startup-echo-area-message #'ignore)
 
 (electric-pair-mode)
 (show-paren-mode)
-;; highlight current line
-(global-hl-line-mode)
+(global-hl-line-mode) ;; highlight current line
 
-
+;;; custom functions
 
 (defun dot-emacs/location ()
   (concat user-emacs-directory "init.el"))
