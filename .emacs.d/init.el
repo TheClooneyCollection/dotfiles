@@ -16,9 +16,9 @@
 ;; No blinking and beeping
 (blink-cursor-mode -1)
 (setq ring-bell-function #'ignore
-  ;; no startup screen, no scratch message
-  inhibit-startup-screen t
-  initial-scratch-message "Hello there!\n")
+      ;; no startup screen, no scratch message
+      inhibit-startup-screen t
+      initial-scratch-message "Hello there!\n")
 (fset 'yes-or-no-p #'y-or-n-p) ;; short Yes/No questions.
 ;; Opt out from the startup message in the echo area by simply disabling this
 ;; ridiculously bizarre thing entirely.
@@ -128,8 +128,8 @@
   ; (bind-key [remap completion-at-point] #'company-complete company-mode-map)
 
   (setq company-tooltip-align-annotations t
-    ;; Easy navigation to candidates with M-<n>
-    company-show-numbers t)
+        ;; Easy navigation to candidates with M-<n>
+        company-show-numbers t)
   (global-company-mode))
 
 (use-package company-quickhelp          ; Documentation popups for Company
@@ -140,7 +140,7 @@
 (use-package flycheck                   ; On-the-fly syntax checking
   :ensure t
   :config
-  ;   (setq flycheck-completion-system 'ido)
+                                        ;   (setq flycheck-completion-system 'ido)
 
   ;   ;; Use italic face for checker name
   ;   (set-face-attribute 'flycheck-error-list-checker-name nil :inherit 'italic))
@@ -151,7 +151,7 @@
     :config
     (eval-after-load 'flycheck
       '(custom-set-variables
-         '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))))
+        '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))))
 
 (use-package solarized-theme
   :ensure t
