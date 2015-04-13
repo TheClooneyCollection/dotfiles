@@ -2,6 +2,7 @@
 
 !.vimrc
 
+
 # dont really know why it needs to be like this
 # to unignore .emacs.d/init.el
 # this SO helped:
@@ -11,6 +12,10 @@
 
 !.spacemacs
 
+
 !.gitignore
 !.gitconfig
 !.githelpers
+
+!pull-branch.rb
+!push-current-branch.rb
