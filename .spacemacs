@@ -116,11 +116,19 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
   (setq powerline-default-separator 'arrow)
+
+  (nickTD/relative-line-number)
+
   (evil-leader/set-key
     "SPC" 'sort-lines
     "<return>" 'sort-paragraphs)
   (define-key evil-motion-state-map (kbd "f") #'evil-ace-jump-char-mode)
   (define-key evil-motion-state-map (kbd "t") #'evil-ace-jump-char-to-mode)
+)
+
+(defun nickTD/relative-line-number
+ (global-linum-mode)
+ (linum-relative-toggle)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
