@@ -126,7 +126,7 @@ layers configuration."
   (define-key evil-motion-state-map (kbd "t") #'evil-ace-jump-char-to-mode)
 )
 
-(defun nickTD/relative-line-number
+(defun nickTD/relative-line-number ()
  (global-linum-mode)
  (linum-relative-toggle)
 )
