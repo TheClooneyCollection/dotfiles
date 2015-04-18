@@ -149,6 +149,8 @@
   (use-package evil-leader
     :ensure t
     :config
+    (use-package evil-easymotion
+      :ensure t)
     (global-evil-leader-mode)
     (evil-leader/set-leader "<SPC>")
     (evil-leader/set-key
@@ -159,6 +161,9 @@
       "1" 'delete-other-windows
       "b" 'switch-to-buffer
       "c" 'evil-ace-jump-char-mode
+      "j" (evilem-create 'next-line
+             nil nil ((temporary-goal-column (current-column))
+             (line-move-visual nil)))
       "ev" 'dot-emacs/find-dotfile
       "f" 'find-file
       "l" 'evil-ace-jump-line-mode
