@@ -17,5 +17,7 @@
 !.gitconfig
 !.githelpers
 
+!.liftoffrc
+
 !pull-branch.rb
 !push-current-branch.rb
