@@ -119,9 +119,6 @@ layers configuration."
 
   (nickTD/relative-line-number)
 
-  (evil-leader/set-key
-    "SPC" 'sort-lines
-    "<return>" 'sort-paragraphs)
   (define-key evil-motion-state-map (kbd "f") #'evil-ace-jump-char-mode)
   (define-key evil-motion-state-map (kbd "t") #'evil-ace-jump-char-to-mode)
 )
