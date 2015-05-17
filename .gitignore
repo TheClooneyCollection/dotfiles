@@ -17,6 +17,9 @@
 !.githelpers
 
 !.liftoffrc
+!.liftoff/
+!.liftoff/*
+!.liftoff/templates/*
 
 !pull-branch.rb
 !push-current-branch.rb
