@@ -27,6 +27,7 @@ run_script_phases:
 templates:
   - travis.yml: .travis.yml
   - Gemfile.rb: Gemfile
+  - setup.sh: bin/setup
   - test.sh: bin/test
   - README.md: README.md
 
