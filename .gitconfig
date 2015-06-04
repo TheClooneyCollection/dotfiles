@@ -12,7 +12,7 @@
     ca = commit -av
     cav = commit -av
     cd1 = clone --depth=1
-    ci = commit
+    ci = check-ignore -v
     cm = commit -m
     co = checkout
     cob = checkout -b
@@ -21,7 +21,9 @@
     cv = commit -v
     d = diff
     dc = diff --cached
+    f = flow
     lfo = ls-files --others
+    lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     p = push
     pav = push --all -v
     pom = push origin master
