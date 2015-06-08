@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cd .emacs.d/
+git pull --rebase
+git submodule sync; git submodule update

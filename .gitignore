@@ -2,14 +2,6 @@
 
 !.vimrc
 
-
-# dont really know why it needs to be like this
-# to unignore .emacs.d/init.el
-# this SO helped:
-#   http://stackoverflow.com/questions/26515346/git-ignore-unignore-not-working
-!.emacs.d/
-!.emacs.d/init.el
-
 !.spacemacs
 
 !.gitignore
