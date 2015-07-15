@@ -261,8 +261,39 @@ nnoremap <leader>dc :%g/^\s*#.*/d
 nnoremap <leader>de :%g/^s*$/d
 
 " FIXME: When sharing Vim with someone else
-" inoremap <esc> <nop>
-" nnoremap <up> <nop>
-" nnoremap <down> <nop>
-" nnoremap <right> <nop>
-" nnoremap <left> <nop>
+inoremap <esc> <nop>
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <right> <nop>
+nnoremap <left> <nop>
+"nnoremap h <nop>
+"nnoremap j <nop>
+"nnoremap k <nop>
+"nnoremap l <nop>
+
+" for python and ruby
+inoremap ; :
+inoremap : ;
+" for all programming languages
+" TOO INCONVIENT
+" when writing git commit message with version number...
+" inoremap 1 !
+" inoremap ! 1
+" inoremap 2 @
+" inoremap @ 2
+" inoremap 3 #
+" inoremap # 3
+" inoremap 4 $
+" inoremap $ 4
+" inoremap 5 %
+" inoremap % 5
+" inoremap 6 ^
+" inoremap ^ 6
+" inoremap 7 &
+" inoremap & 7
+" inoremap 8 *
+" inoremap * 8
+" inoremap 9 (
+" inoremap ( 9
+" inoremap 0 )
+" inoremap ) 0
