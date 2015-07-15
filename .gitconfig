@@ -22,16 +22,20 @@
     d = diff
     dc = diff --cached
     f = flow
+    fa = fetch --all
     lfo = ls-files --others
     lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     p = push
-    pav = push --all -v
-    pt = !git push --all && git push --tags
-    r = reset
+    pa = push --all
+    pt = push --tags
+    pat = !git pa && git pt
     ri = rebase -i
+    rs = reset
     ss = status
-    s = status --short
+    s = status --short --branch
     st = stash
+    sts = stash save
+    stp = stash pop
     undo = reset --hard
     untracked = !git lfo
 
