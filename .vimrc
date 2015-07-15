@@ -101,15 +101,15 @@ Plugin 'wincent/command-t'
 Plugin 'bufkill.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
-Plugin 'jiangmiao/auto-pairs'
 " create any non-existent directories before writing a buffer
 Plugin 'pbrisbin/vim-mkdir'
+Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 Plugin 'tpope/vim-eunuch'
-Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-dispatch'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-fugitive'
 Plugin 'rking/ag.vim'
 
 Plugin 'ervandew/supertab'
@@ -120,6 +120,8 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-rails'
 Plugin 'NicholasTD07/vim-rspec'
+
+Plugin 'keith/swift.vim'
 
 call vundle#end()
 
