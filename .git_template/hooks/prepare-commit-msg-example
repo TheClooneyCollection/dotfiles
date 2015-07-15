@@ -1,0 +1,1 @@
+echo "#`git rev-parse --abbrev-ref HEAD` work `cat $1`" > "$1"

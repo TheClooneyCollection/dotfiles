@@ -2,11 +2,15 @@
 
 !.vimrc
 
+!update-spacemacs
 !.spacemacs
 
 !.gitignore
 !.gitconfig
 !.githelpers
+!.git_template/
+!.git_template/hooks/
+!.git_template/hooks/*
 
 !.liftoffrc
 !.liftoff/
