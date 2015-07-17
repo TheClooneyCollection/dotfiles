@@ -13,6 +13,7 @@
     cav = commit -av
     cd1 = clone --depth=1
     ci = check-ignore -v
+    cl = clone
     cm = commit -m
     co = checkout
     cob = checkout -b
