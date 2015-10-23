@@ -1,5 +1,7 @@
 *
 
+!bin/
+!bin/*
 !.vimrc
 
 !update-spacemacs
