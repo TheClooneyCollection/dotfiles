@@ -111,6 +111,7 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-fugitive'
 Plugin 'rking/ag.vim'
+Plugin 'jiangmiao/auto-pairs'
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -138,6 +139,11 @@ nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
 
 " solarized
 colorscheme solarized
+if strftime("%H") > 18
+  set background=dark
+else
+  set background=light
+endif
 call togglebg#map("<F5>") " solarized background toggle
 
 let g:airline#extensions#tabline#enabled = 1
@@ -198,7 +204,7 @@ augroup vimrcEx
     \ endif
 
   " for ruby, autoindent with two spaces, always expand tabs
-  autocmd FileType ruby,eruby,yaml,html,haml,javascript,cucumber set ai sw=2 sts=2 et
+  autocmd FileType ruby,eruby,yaml,html,haml,javascript,cucumber,json set ai sw=2 sts=2 et
 
   " *.md is markdown
   autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
