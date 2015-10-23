@@ -27,10 +27,13 @@
     lfo = ls-files --others
     lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     p = push
+    pp = pull
     pa = push --all
     pt = push --tags
     pat = !git pa && git pt
+    pr = !hub pull-request
     ri = rebase -i
+    rc = rebase --continue
     rs = reset
     ss = status
     s = status --short --branch
@@ -68,3 +71,7 @@
     default = simple
 [credential]
 	helper = osxkeychain
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
