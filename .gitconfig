@@ -4,10 +4,12 @@
 [alias]
     a = add
     aa = add --all
+    amd = commit --amend
     amend = commit --amend
     ap = add -p
     b = branch
     ba = branch -a
+    bc = !~/bin/remove-merged-branches.py
     c = commit -v
     ca = commit -av
     cav = commit -av
@@ -32,8 +34,9 @@
     pt = push --tags
     pat = !git pa && git pt
     pr = !hub pull-request
-    ri = rebase -i
+    rba = rebase --abort
     rc = rebase --continue
+    ri = rebase -i
     rs = reset
     ss = status
     s = status --short --branch
@@ -67,6 +70,7 @@
     ui=auto
 [core]
     editor = vim
+	gitproxy = git-proxy
 [push]
     default = simple
 [credential]
@@ -75,3 +79,7 @@
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
+[socks]
+	proxy = localhost:6777
+[http]
+	proxy = socks5://localhost:6777
