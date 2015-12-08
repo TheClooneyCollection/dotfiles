@@ -1,12 +1,18 @@
 #!/usr/bin/env python2
 # Remove all merged branches, except ignored as specified in IGNORE_BRANCHES
 
+import sys
 import subprocess
 
 IGNORE_BRANCHES = ['master', 'develop']
 
 def main():
-    checkout_branch('master')
+    if len(sys.argv) > 1:
+        default_branch = sys.argv[1]
+    else:
+        default_branch = 'master'
+
+    checkout_branch(default_branch)
     merged_branches_except_ignored = filter_branches_with_ignores(
             merged_branches(),
             IGNORE_BRANCHES
