@@ -121,6 +121,7 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-rails'
 Plugin 'NicholasTD07/vim-rspec'
+Plugin 'cespare/vim-toml'
 
 Plugin 'keith/swift.vim'
 
@@ -139,7 +140,8 @@ nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
 
 " solarized
 colorscheme solarized
-if strftime("%H") > 18
+set background=dark
+if (strftime("%H") < 8 || strftime("%H") >= 18)
   set background=dark
 else
   set background=light
