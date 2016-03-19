@@ -32,6 +32,7 @@
     pp = pull
     pa = push --all
     pt = push --tags
+    ppt = !git p && git pt
     pat = !git pa && git pt
     pr = !hub pull-request
     rba = rebase --abort
