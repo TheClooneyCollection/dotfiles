@@ -71,7 +71,7 @@
     ui=auto
 [core]
     editor = vim
-	gitproxy = git-proxy
+	; gitproxy = git-proxy
 [push]
     default = simple
 [credential]
@@ -80,7 +80,11 @@
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
-[socks]
-	proxy = localhost:6777
-[http]
-	proxy = socks5://localhost:6777
+# [socks]
+# 	proxy = localhost:6777
+# [http]
+# 	proxy = socks5://localhost:6777
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
