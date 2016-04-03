@@ -12,6 +12,8 @@ def main():
     else:
         default_branch = 'master'
 
+    IGNORE_BRANCHES.append(default_branch)
+
     checkout_branch(default_branch)
     merged_branches_except_ignored = filter_branches_with_ignores(
             merged_branches(),

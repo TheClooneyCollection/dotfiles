@@ -98,6 +98,8 @@ Plugin 'bling/vim-airline'
 
 " Behaviour
 Plugin 'wincent/command-t'
+let g:CommandTFileScanner = "git"
+
 Plugin 'bufkill.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
@@ -120,6 +122,7 @@ let g:SuperTabDefaultCompletionType = "context"
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-rvm'
 Plugin 'NicholasTD07/vim-rspec'
 Plugin 'cespare/vim-toml'
 
@@ -198,6 +201,7 @@ nnoremap <cr> :A<cr>
 
 augroup vimrcEx
   autocmd!
+  autocmd! VimEnter * Rvm use system
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
