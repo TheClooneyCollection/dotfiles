@@ -129,6 +129,7 @@ Plugin 'NicholasTD07/vim-rspec'
 
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'nvie/vim-flake8'
+Plugin 'hynek/vim-python-pep8-indent'
 
 Plugin 'cespare/vim-toml'
 
