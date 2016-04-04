@@ -119,11 +119,17 @@ Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
 
 " language
+
+" Ruby
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-rvm'
 Plugin 'NicholasTD07/vim-rspec'
+
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'nvie/vim-flake8'
+
 Plugin 'cespare/vim-toml'
 
 Plugin 'keith/swift.vim'
