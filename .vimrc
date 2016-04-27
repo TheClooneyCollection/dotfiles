@@ -23,12 +23,6 @@ set laststatus=2
 " show matching brackets
 set showmatch
 
-function! ReloadColorScheme()
-  if exists("g:colors_name")
-    execute "colorscheme " . g:colors_name
-  endif
-endfunction
-
 " Search
 set hlsearch
 " show matches when typing search pattern
