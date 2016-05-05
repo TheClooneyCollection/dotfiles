@@ -26,6 +26,7 @@
     dc = diff --cached
     f = flow
     fa = fetch --all
+    ls = ls-files
     lfo = ls-files --others
     lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     p = push
