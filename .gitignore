@@ -14,11 +14,6 @@
 !.git_template/hooks/
 !.git_template/hooks/*
 
-!.liftoffrc
-!.liftoff/
-!.liftoff/*
-!.liftoff/templates/*
-
 !pull-branch.rb
 !push-current-branch.rb
 !set-upstream.rb
