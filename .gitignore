@@ -13,7 +13,3 @@
 !.git_template/
 !.git_template/hooks/
 !.git_template/hooks/*
-
-!pull-branch.rb
-!push-current-branch.rb
-!set-upstream.rb
