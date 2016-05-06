@@ -1,1 +1,3 @@
+# Thie will produce "#branch-name work ..."
+# ... being what's passed into this script, which may contain \n
 echo "#`git rev-parse --abbrev-ref HEAD` work `cat $1`" > "$1"
