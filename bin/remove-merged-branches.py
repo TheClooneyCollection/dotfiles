@@ -1,6 +1,17 @@
 #!/usr/bin/env python2
 # Remove all merged branches, except ignored as specified in IGNORE_BRANCHES
 
+# Usage:
+#   $ path/to/remove-merged-branches.py # removes all merged branches in default_branch (`master` by default, you can specify it)
+#   $ path/to/remove-merged-branches.py develop # specifies `develop` as the default_branch
+
+# How it works?
+#
+# Checks out the `default_branch`
+# Run command `git branch --merged` to find branches merged into `default_branch`
+# Exclude branches defined in IGNORE_BRANCHES from the branches in last step
+# Delete branches with `git branch -d`
+
 import sys
 import subprocess
 
