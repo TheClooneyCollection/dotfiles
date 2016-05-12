@@ -47,6 +47,11 @@ def filter_branches_with_ignores(branches, ignores):
             ]
 
 def delete_branch(branch):
-    print(subprocess.check_output(['git', 'branch', '-d', branch]))
+    try:
+        output = subprocess.check_output(['git', 'branch', '-d', branch])
+    except subprocess.CalledProcessError as e:
+        print("returned non-zero exit status {}".format(e.returncode))
+
+    print(output)
 
 main()
