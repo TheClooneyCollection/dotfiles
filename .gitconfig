@@ -38,6 +38,7 @@
     pr = !hub pull-request
     rba = rebase --abort
     rc = rebase --continue
+    rh = !~/bin/checkout-history
     ri = rebase -i
     rs = reset
     ss = status
