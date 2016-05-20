@@ -44,6 +44,7 @@
     rs = reset
     ss = status
     s = status --short --branch
+    sc = !git s | grep UU | sed 's/UU //g' # merge conflicts
     st = stash
     sts = stash save
     stp = stash pop
