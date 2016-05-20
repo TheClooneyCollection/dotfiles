@@ -51,6 +51,7 @@ def delete_branch(branch):
         output = subprocess.check_output(['git', 'branch', '-d', branch])
     except subprocess.CalledProcessError as e:
         print("returned non-zero exit status {}".format(e.returncode))
+        return
 
     print(output)
 
