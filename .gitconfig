@@ -48,7 +48,7 @@
     st = stash
     sts = stash save
     stp = stash pop
-    undo = reset --hard
+    undo = git stash && git reset --hard
     untracked = !git lfo
 
     # Fancy logging.
