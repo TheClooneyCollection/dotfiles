@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
-cd .emacs.d/
-git pull --rebase
-git submodule sync; git submodule update
+if [ -d ".emacs.d" ]; then
+    cd .emacs.d/ && git pull --rebase && git submodule sync; git submodule update
+else
+    git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+fi
+
+echo "Read this for futher instructions"
+open https://github.com/syl20bnr/spacemacs#install
