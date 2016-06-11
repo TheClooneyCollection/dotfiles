@@ -13,6 +13,7 @@
     c = commit -v
     ca = commit -av
     cav = commit -av
+    cd = checkout develop
     cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
@@ -46,9 +47,11 @@
     s = status --short --branch
     sc = !git s | grep UU | sed 's/UU //g' # merge conflicts
     st = stash
+    stc = stash clear
+    stl = stash list
     sts = stash save
     stp = stash pop
-    undo = git stash && git reset --hard
+    undo = !git stash && git reset --hard
     untracked = !git lfo
 
     # Fancy logging.
