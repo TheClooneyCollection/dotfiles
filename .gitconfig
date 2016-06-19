@@ -14,6 +14,7 @@
     ca = commit -av
     cav = commit -av
     cd = checkout develop
+    cdpp = !git checkout develop && git pull
     cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
@@ -29,10 +30,11 @@
     fa = fetch --all
     ls = ls-files
     lsd = ls-tree -d HEAD
-    lfo = ls-files --others
+    lso = ls-files --others
     lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     p = push
     pp = pull
+    ppr = pull --rebase
     pa = push --all
     pt = push --tags
     ppt = !git p && git pt
