@@ -14,7 +14,7 @@
     ca = commit -av
     cav = commit -av
     cd = checkout develop
-    cdpp = !git checkout develop && git pull
+    cdpp = !git cd && git pp
     cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
@@ -26,6 +26,8 @@
     cv = commit -v
     d = diff
     dc = diff --cached
+    ds = diff --stat
+    dss = diff --shortstat
     f = flow
     fa = fetch --all
     ls = ls-files
@@ -36,6 +38,7 @@
     pp = pull
     ppr = pull --rebase
     pa = push --all
+    pd = !git cd && git pp && git co -
     pt = push --tags
     ppt = !git p && git pt
     pat = !git pa && git pt
