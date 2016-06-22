@@ -15,6 +15,7 @@
     cav = commit -av
     cd = checkout develop
     cdpp = !git cd && git pp
+    cdppo = !git cd && git pp && git cd -
     cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
