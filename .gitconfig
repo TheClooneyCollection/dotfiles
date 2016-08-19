@@ -21,7 +21,7 @@
     cl = clone
     cm = commit -m
     co = checkout
-    cob = checkout -b
+    ; cob = checkout -b
     cp = cherry-pick
     cs = clone --depth 1
     cv = commit -v
@@ -37,6 +37,7 @@
     lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     lmr = !git log --reverse -20 --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone REVERSED
     lp = log -p
+    n = checkout -b
     p = push
     pp = pull
     ppr = pull --rebase
