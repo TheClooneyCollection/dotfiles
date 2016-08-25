@@ -12,6 +12,7 @@
     bc = !~/bin/remove-merged-branches.py
     c = commit -v
     ca = commit -av
+    cam = commit -am
     cav = commit -av
     cd = checkout develop
     cdpp = !git cd && git pp
