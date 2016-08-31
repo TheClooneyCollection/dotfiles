@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+import re
+import sys
+import subprocess
+
+"""
+Usage:
+
+Pass the branch name or a commit you want to diff to this script, e.g. t.py feature/awesome-new-feature
+It will print out the carthage bootstrap command depends on
+what dependencies are updated/added to Cartfile.resolved
+
+Example:
+```
+./t.py feature/some-branch-I-was-on-previously
+carthage bootstrap some-networking-sdk some-ui-sdk --no-use-binaries --platform iOS
+```
+"""
+
+args = sys.argv
+
+assert len(args) == 2, """
+Usage: {} commit/branch
+""".format(args[0])
+
+branch = args[1]
+command = ['git', 'diff', branch, './Cartfile.resolved']
+# print(' '.join(command))
+diff = subprocess.check_output(command)
+
+"""
+Example input
++git "git@github.com:some-company/some-private-repo.git" "1.0.0"
++github "robrix/Either" "1.4.0"
+"""
+
+pattern = r"""
+    \+          # only match lines beginning with `+`
+    \w+         # match the git/github string
+    \s+         # match the space after those ^
+    "           # match the beginning " for the identifier thingy
+    .*?         # I don't care anything before the /
+    /           # the actual /
+    (.*?)       # ONLY THING I CARE is the things after / and before the ending "
+    "           # match the ending " for the identifier thingy
+    .*?
+"""
+
+matches = re.findall(pattern, diff, re.X)
+
+added_or_changed_deps = [ match.replace('.git', '') for match in matches ]
+
+if len(added_or_changed_deps) > 0:
+    print('carthage bootstrap ' + ' '.join(added_or_changed_deps) + ' --no-use-binaries --platform iOS')
+else:
+    print('No diff?')
+    print('Raw diff:')
+    print(diff)
