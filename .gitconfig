@@ -30,8 +30,7 @@
     dc = diff --cached
     ds = diff --stat
     dss = diff --shortstat
-    f = flow
-    fa = fetch --all
+    f = fetch
     ls = ls-files
     lsd = ls-tree -d HEAD
     lso = ls-files --others
@@ -57,10 +56,9 @@
     ss = status
     s = status --short --branch
     sc = !git s | grep UU | sed -e 's/UU //g' -e 's/.*/\"&\"/g' # show merge conflicts
-    st = stash
+    st = stash save
     stc = stash clear
     stl = stash list
-    sts = stash save
     stp = stash pop
     undo = !git stash && git reset --hard
     untracked = !git lfo
