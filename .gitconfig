@@ -40,6 +40,7 @@
     n = checkout -b
     nn = checkout --orphan
     p = push
+    pc = !git pp && git bc
     pp = pull
     ppr = pull --rebase
     pa = push --all
