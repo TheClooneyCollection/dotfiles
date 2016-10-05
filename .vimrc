@@ -127,7 +127,7 @@ Plugin 'hynek/vim-python-pep8-indent'
 
 Plugin 'cespare/vim-toml'
 
-Plugin 'keith/swift.vim'
+Plugin 'bumaociyuan/vim-swift'
 
 call vundle#end()
 
@@ -172,6 +172,8 @@ map t <Plug>(easymotion-bd-t)
 map f <Plug>(easymotion-bd-f2)
 omap t <Plug>(easymotion-tl)
 omap f <Plug>(easymotion-fl)
+vmap t <Plug>(easymotion-tl)
+vmap f <Plug>(easymotion-fl)
 
 " jk motions: line motions
 map <Leader>j <Plug>(easymotion-j)
