@@ -21,6 +21,7 @@
     ci = check-ignore -v
     cl = clone
     cm = checkout master
+    cmm = commit -m
     co = checkout
     cp = cherry-pick
     cs = clone --depth 1
