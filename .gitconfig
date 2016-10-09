@@ -20,9 +20,8 @@
     cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
-    cm = commit -m
+    cm = checkout master
     co = checkout
-    ; cob = checkout -b
     cp = cherry-pick
     cs = clone --depth 1
     cv = commit -v
