@@ -118,7 +118,6 @@ let g:SuperTabDefaultCompletionType = "context"
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-rvm'
 Plugin 'NicholasTD07/vim-rspec'
 
 Plugin 'Valloric/YouCompleteMe'
@@ -204,7 +203,6 @@ nnoremap <cr> :A<cr>
 
 augroup vimrcEx
   autocmd!
-  autocmd! VimEnter * Rvm use system
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
