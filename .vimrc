@@ -216,6 +216,9 @@ augroup vimrcEx
   " *.md is markdown
   autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
 
+  " *.swift is swift
+  autocmd! BufNewFile,BufRead *.swift setlocal filetype=swift
+
   " wrap at 80 characters and spell check markdown
   autocmd FileType markdown setlocal textwidth=80 spell
 
