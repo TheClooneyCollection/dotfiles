@@ -8,6 +8,31 @@ alias - 'cd -'
 #### Notes ####
 # git diff --no-prefix (echo "$config_old" | psub) (echo "$config_new" | psub)
 
+function c
+    v (config_path)
+end
+
+function git
+    set commit (command git rev-parse --short HEAD)
+
+    command git $argv
+    set command_status $status
+
+    if test $command_status -ne 0
+        return $command_status
+    end
+
+    if test (count $argv) -gt 0
+        switch $argv[1]
+        case c commit
+            echo
+            echo "Last commit was $commit."
+        end
+    end
+
+    return $command_status
+end
+
 function reload
     echo "Reloaded ~/.config/fish/config.fish"
     . (config_path)
