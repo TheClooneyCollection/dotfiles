@@ -2,13 +2,14 @@ set -x PATH $PATH ~/bin/
 
 alias g 'git'
 alias r 'reload'
+alias - 'cd -'
 
 #### Notes ####
 # git diff --no-prefix (echo "$config_old" | psub) (echo "$config_new" | psub)
 
 function reload
-    echo Reloaded ~/.config/fish/config.fish
-    . ~/.config/fish/config.fish
+    echo "Reloaded ~/.config/fish/config.fish"
+    . (config_path)
 end
 
 function config_path
