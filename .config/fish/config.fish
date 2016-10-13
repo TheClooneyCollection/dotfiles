@@ -6,7 +6,14 @@ alias v 'vim'
 alias - 'cd -'
 
 #### Notes ####
-# git diff --no-prefix (echo "$config_old" | psub) (echo "$config_new" | psub)
+
+## Show diff after reloading config
+#
+# save new config to variable
+# when reloading diff current config
+
+# cat (config_path) | read -z __config
+# git diff --no-prefix (echo "$__config" | psub) (cat (config_path) | psub)
 
 function c
     v (config_path)
@@ -41,6 +48,7 @@ function git
 
     return $command_status
 end
+
 
 function reload
     echo "Reloaded ~/.config/fish/config.fish"
