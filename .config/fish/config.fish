@@ -21,6 +21,12 @@ function vc
     vim (config_path)
 end
 
+function fish_right_prompt
+    set_color green
+    echo -n (date "+%H:%M")
+    set_color normal
+end
+
 function fish_prompt
     if not set -q __fish_git_prompt_show_informative_status
         set -g __fish_git_prompt_show_informative_status 1
