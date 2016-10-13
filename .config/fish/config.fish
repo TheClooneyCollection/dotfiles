@@ -2,6 +2,7 @@ set -x PATH $PATH ~/bin/
 
 alias g 'git'
 alias r 'reload'
+alias v 'vim'
 alias - 'cd -'
 
 #### Notes ####
