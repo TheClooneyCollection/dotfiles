@@ -128,6 +128,8 @@ Plugin 'cespare/vim-toml'
 
 Plugin 'bumaociyuan/vim-swift'
 
+Plugin 'dag/vim-fish'
+
 call vundle#end()
 
 if exists("s:vundle_initialized") && s:vundle_initialized
