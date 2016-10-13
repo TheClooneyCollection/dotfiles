@@ -1,11 +1,13 @@
-*
+/*
 
 !bin/
 !bin/*
+
 !.vimrc
 
-!update-spacemacs
-!.spacemacs
+!.config/
+.config/*
+!.config/fish
 
 !.gitignore
 !.gitconfig
@@ -13,3 +15,4 @@
 !.git_template/
 !.git_template/hooks/
 !.git_template/hooks/*
+
