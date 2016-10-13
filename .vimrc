@@ -218,6 +218,9 @@ augroup vimrcEx
   " *.md is markdown
   autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
 
+  " *.fish is fish
+  autocmd! BufNewFile,BufRead *.fish setlocal filetype=fish
+
   " *.swift is swift
   autocmd! BufNewFile,BufRead *.swift setlocal filetype=swift
 
