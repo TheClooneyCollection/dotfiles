@@ -26,7 +26,10 @@ function git
         switch $argv[1]
         case commit c ca pull pc pp ppr reset rs undo
             echo
-            echo "Last commit was $commit."
+            echo -n "Last commit was "
+            set_color yellow
+            echo $commit
+            set_color normal
         end
     end
 
