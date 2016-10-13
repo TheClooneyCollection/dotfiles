@@ -15,8 +15,6 @@
     cam = commit -am
     cav = commit -av
     cd = checkout develop
-    cdpp = !git cd && git pp
-    cdppo = !git stash && git cd && git pp && git co - && echo "Remember to pop stash"
     cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
@@ -43,12 +41,9 @@
     pc = !git pp && git bc
     pp = pull
     ppr = pull --rebase
-    pa = push --all
-    pd = !git cd && git pp && git co -
     pt = push --tags
     ppt = !git p && git pt
     pat = !git pa && git pt
-    pr = !hub pull-request
     rba = rebase --abort
     rc = rebase --continue
     rh = !~/bin/checkout-history
