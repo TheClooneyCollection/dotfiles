@@ -16,7 +16,13 @@ function git
     set commit (command git rev-parse --short HEAD)
 
     command git $argv
+
     set command_status $status
+    set commit_after_command (command git rev-parse --short HEAD)
+
+    if command test $commit = $commit_after_command
+        return $command_status
+    end
 
     if test $command_status -ne 0
         return $command_status
