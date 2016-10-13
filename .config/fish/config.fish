@@ -24,7 +24,7 @@ function git
 
     if test (count $argv) -gt 0
         switch $argv[1]
-        case commit c ca pull pc pp ppr
+        case commit c ca pull pc pp ppr reset rs undo
             echo
             echo "Last commit was $commit."
         end
