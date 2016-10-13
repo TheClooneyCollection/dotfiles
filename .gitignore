@@ -8,6 +8,9 @@
 !.config/
 .config/*
 !.config/fish
+.config/fish/*
+!.config/fish/config.fish
+!.config/fish/functions/fisher.fish
 
 !.gitignore
 !.gitconfig
