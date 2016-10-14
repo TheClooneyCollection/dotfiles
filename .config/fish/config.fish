@@ -59,10 +59,6 @@ function config_path
     status -f
 end
 
-function vc
-    vim (config_path)
-end
-
 function fish_right_prompt
     set_color green
     echo -n (date "+%H:%M")
