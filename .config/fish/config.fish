@@ -1,7 +1,6 @@
 set -x PATH $PATH ~/bin/
 
 alias g 'git'
-alias r 'reload'
 alias v 'vim'
 alias - 'cd -'
 
@@ -23,11 +22,20 @@ function jo
     zo "$argv"
 end
 
-function c
+function c --description "Edit fish shell's config file in vim"
     v (config_path)
 end
 
-function git
+function r --description "Reload fish shell's config file"
+    echo "Reloaded ~/.config/fish/config.fish"
+    . (config_path)
+end
+
+function config_path
+    status -f
+end
+
+function git --description "After running git commands that would affect HEAD, print out the last commit hash"
     set commit (command git rev-parse --short HEAD)
 
     command git $argv
@@ -55,16 +63,6 @@ function git
     end
 
     return $command_status
-end
-
-
-function reload
-    echo "Reloaded ~/.config/fish/config.fish"
-    . (config_path)
-end
-
-function config_path
-    status -f
 end
 
 function fish_right_prompt
