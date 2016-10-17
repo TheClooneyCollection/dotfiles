@@ -1,5 +1,6 @@
 set -x PATH $PATH ~/bin/
 
+alias o 'open'
 alias g 'git'
 alias v 'vim'
 alias - 'cd -'
@@ -14,16 +15,16 @@ alias - 'cd -'
 # cat (config_path) | read -z __config
 # git diff --no-prefix (echo "$__config" | psub) (cat (config_path) | psub)
 
-function j
+function c --description "Edit fish shell's config file in vim"
+    v (config_path)
+end
+
+function t
     z "$argv"
 end
 
 function jo
     zo "$argv"
-end
-
-function c --description "Edit fish shell's config file in vim"
-    v (config_path)
 end
 
 function r --description "Reload fish shell's config file"
