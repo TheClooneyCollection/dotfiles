@@ -15,6 +15,14 @@ alias - 'cd -'
 # cat (config_path) | read -z __config
 # git diff --no-prefix (echo "$__config" | psub) (cat (config_path) | psub)
 
+function j
+    z "$argv"
+end
+
+function jo
+    zo "$argv"
+end
+
 function c
     v (config_path)
 end
