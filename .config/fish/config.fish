@@ -1,6 +1,7 @@
 set -x PATH $PATH ~/bin/
 
 alias o 'open'
+alias oo 'open .'
 alias g 'git'
 alias v 'vim'
 alias - 'cd -'
