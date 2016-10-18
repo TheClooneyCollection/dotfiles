@@ -224,6 +224,12 @@ augroup vimrcEx
   " *.swift is swift
   autocmd! BufNewFile,BufRead *.swift setlocal filetype=swift
 
+  " *.podspec is ruby
+  autocmd! BufNewFile,BufRead *.podspec setlocal filetype=ruby
+
+  " Podfile is ruby
+  autocmd! BufNewFile,BufRead Podfile setlocal filetype=ruby
+
   " wrap at 80 characters and spell check markdown
   autocmd FileType markdown setlocal textwidth=80 spell
 
