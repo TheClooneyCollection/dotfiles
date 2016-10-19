@@ -1,5 +1,6 @@
 set -x PATH $PATH ~/bin/
 
+alias b 'bundle'
 alias o 'open'
 alias oo 'open .'
 alias g 'git'
