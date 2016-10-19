@@ -6,6 +6,7 @@ alias oo 'open .'
 alias g 'git'
 alias v 'vim'
 alias - 'cd -'
+alias fuck 'git push -u origin (git symbolic-ref --short HEAD)'
 
 #### Notes ####
 
