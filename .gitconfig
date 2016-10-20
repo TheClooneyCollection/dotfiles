@@ -38,6 +38,7 @@
     n = checkout -b
     nn = checkout --orphan
     p = push
+    po = !git push -u origin $(git symbolic-ref --short HEAD)
     pc = !git pp && git bc
     pp = pull
     ppr = pull --rebase
