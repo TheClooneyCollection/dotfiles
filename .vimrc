@@ -254,6 +254,7 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+nnoremap <return> <C-d>
 " motions for splits
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
