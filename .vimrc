@@ -223,6 +223,7 @@ augroup vimrcEx
 
   " *.swift is swift
   autocmd! BufNewFile,BufRead *.swift setlocal filetype=swift
+  autocmd FileType swift set ai sw=4 sts=4 et
 
   " *.podspec is ruby
   autocmd! BufNewFile,BufRead *.podspec setlocal filetype=ruby
@@ -271,6 +272,7 @@ vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 nnoremap <silent> <leader>c :nohlsearch<cr>
 
+nnoremap <leader>ee :e %<cr>
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
