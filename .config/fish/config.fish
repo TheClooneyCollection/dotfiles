@@ -58,7 +58,7 @@ function git --description "After running git commands that would affect HEAD, p
 
     if test (count $argv) -gt 0
         switch $argv[1]
-        case amend amd commit c ca pull pc pp ppr reset rs undo
+        case amend amd commit c ca merge pull pc pp ppr reset rs undo
             echo
             echo -n "Last commit was "
             set_color yellow
