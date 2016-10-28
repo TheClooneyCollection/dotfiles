@@ -3,8 +3,6 @@ set -x PATH $PATH ~/bin/
 alias b 'bundle'
 alias o 'open'
 alias xo 'open -a Xcode *.xcworkspace'
-alias o7 'open -a Xcode\ 7 *.xcworkspace'
-alias o8 'open -a Xcode\ 8 *.xcworkspace'
 alias oo 'open .'
 alias g 'git'
 alias v 'vim'
