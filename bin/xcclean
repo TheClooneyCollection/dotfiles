@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+"""
+Removes files too small (length=0) in xcode's intermediate build folder
+"""
+
+import re
+import os
+import glob
+
+print('Paste it here:')
+
+text = ""
+
+for _ in range(5):
+    text += raw_input()
+
+matched_filepath = re.findall(r"'(.*?Build/Intermediates.*?)'", text)[0]
+
+folder_path = os.path.dirname(matched_filepath)
+
+object_file_pattern = os.path.join(folder_path, '*.o')
+
+for filepath in glob.iglob(object_file_pattern):
+    if os.path.getsize(filepath) == 0:
+        os.remove(filepath)
+        print("rm {}".format(filepath))
