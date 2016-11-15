@@ -208,6 +208,12 @@ augroup vimrcEx
   " *.swift is swift
   autocmd! BufNewFile,BufRead *.swift setlocal filetype=swift
   autocmd FileType swift set ai sw=4 sts=4 et
+  autocmd FileType swift call SwiftKeyMap()
+
+  function! SwiftKeyMap()
+    noremap <buffer> <leader>w :wa \| redraw \| ! swift test <cr>
+  endfunction
+
 
   " *.podspec is ruby
   autocmd! BufNewFile,BufRead *.podspec setlocal filetype=ruby
