@@ -226,6 +226,7 @@ augroup vimrcEx
 
   " wrap at 72 characters and spell check git commit messages
   autocmd FileType gitcommit setlocal textwidth=72 spell
+  autocmd FileType gitcommit noremap <buffer> <leader>w :wq<cr>
 
 augroup END
 
