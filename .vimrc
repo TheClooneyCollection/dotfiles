@@ -208,10 +208,17 @@ augroup vimrcEx
   " *.swift is swift
   autocmd! BufNewFile,BufRead *.swift setlocal filetype=swift
   autocmd FileType swift set ai sw=4 sts=4 et
-  autocmd FileType swift call SwiftKeyMap()
+  autocmd FileType swift call SetUpSwift()
 
-  function! SwiftKeyMap()
-    noremap <buffer> <leader>w :wa \| redraw \| ! swift test <cr>
+  function! SetUpSwift()
+    set makeprg=swift\ test
+    set efm=
+    set efm+=%E%f:%l:%c:\ error:\ %m
+    set efm+=%W%f:%l:%c:\ warning:\ %m
+    set efm+=%Z%\s%#^~%#
+    set efm+=%f:%l:\ error:\ %m
+    set efm+=%-G%.%#
+    noremap <buffer> <leader>w :wa \| redraw \| make <cr>
   endfunction
 
 
@@ -246,7 +253,6 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
-nnoremap <return> <C-d>
 " motions for splits
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
