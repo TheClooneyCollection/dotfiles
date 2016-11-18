@@ -45,6 +45,11 @@ function v
     else
         echo "Install Neovim by running:"
         echo "brew install neovim/neovim/neovim"
+        echo "pip2 install neovim"
+        echo "pip3 install neovim"
+        echo "gem install neovim"
+        echo
+        echo "After all this, don't forget to setup CommandT"
     end
 end
 
