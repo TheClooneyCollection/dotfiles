@@ -5,7 +5,6 @@ alias o 'open'
 alias xo 'open -a Xcode *.xcworkspace'
 alias oo 'open .'
 alias g 'git'
-alias v 'vim'
 alias - 'cd -'
 
 #### Notes ####
@@ -37,6 +36,16 @@ end
 
 function config_path
     status -f
+end
+
+function v
+    which vim 2>&1 >/dev/null
+    if command test $status = 0
+        nvim $argv
+    else
+        echo "Install Neovim by running:"
+        echo "brew install neovim/neovim/neovim"
+    end
 end
 
 function git --description "After running git commands that would affect HEAD, print out the last commit hash"
