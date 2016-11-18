@@ -106,13 +106,10 @@ Plugin 'tpope/vim-commentary'
 Plugin 'pbrisbin/vim-mkdir'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
-Plugin 'tpope/vim-eunuch'
-Plugin 'tpope/vim-dispatch'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-eunuch' " Move, Rename, Remove, etc...
+Plugin 'tpope/vim-repeat' " Enable repeat for certain/almost all tpope's plugins
 Plugin 'rking/ag.vim'
-Plugin 'jiangmiao/auto-pairs'
+Plugin 'jiangmiao/auto-pairs' " () '', pairs, you get it
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -121,9 +118,9 @@ let g:SuperTabDefaultCompletionType = "context"
 
 " Ruby
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-cucumber'
-Plugin 'tpope/vim-rails'
-Plugin 'NicholasTD07/vim-rspec'
+" Plugin 'tpope/vim-cucumber'
+" Plugin 'tpope/vim-rails'
+" Plugin 'NicholasTD07/vim-rspec'
 
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'nvie/vim-flake8'
@@ -133,7 +130,7 @@ Plugin 'cespare/vim-toml'
 
 Plugin 'bumaociyuan/vim-swift'
 
-Plugin 'dag/vim-fish'
+Plugin 'dag/vim-fish' " fishshell
 
 call vundle#end()
 
