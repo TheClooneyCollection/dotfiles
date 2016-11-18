@@ -226,6 +226,7 @@ augroup vimrcEx
     " Example:
     " File /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
     " File /path/to/another.swift:104|            }
+    set efm+=%-GFile\ %f:%l:\ %#}
     set efm+=File\ %f:%l:\ %#%m
 
     set efm+=%-G%.%#
