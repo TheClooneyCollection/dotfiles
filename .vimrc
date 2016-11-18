@@ -235,6 +235,7 @@ augroup vimrcEx
   autocmd FileType gitcommit setlocal textwidth=72 spell
   autocmd FileType gitcommit noremap <buffer> <leader>w :wq<cr>
 
+  autocmd FileType vim noremap <buffer> <leader>w :w \| redraw \| source $MYVIMRC <cr>
 augroup END
 
 " Key settings
