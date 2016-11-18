@@ -217,6 +217,7 @@ augroup vimrcEx
     set efm+=%W%f:%l:%c:\ warning:\ %m
     set efm+=%Z%\s%#^~%#
     set efm+=%f:%l:\ error:\ %m
+    set efm+=fatal\ error:\ %m
     set efm+=%-G%.%#
     noremap <buffer> <leader>w :wa! \| silent make \| redraw! \| cw 4 <cr>
   endfunction
