@@ -102,10 +102,10 @@ Plugin 'wincent/command-t'
 let g:CommandTFileScanner = "git"
 
 Plugin 'bufkill.vim'
+
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
-" create any non-existent directories before writing a buffer
-Plugin 'pbrisbin/vim-mkdir'
+Plugin 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
 Plugin 'tpope/vim-eunuch' " Move, Rename, Remove, etc...
@@ -118,6 +118,12 @@ let g:SuperTabDefaultCompletionType = "context"
 
 " language
 
+" Swift
+
+Plugin 'bumaociyuan/vim-swift'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'mitsuse/autocomplete-swift'
+
 " Ruby
 Plugin 'vim-ruby/vim-ruby'
 " Plugin 'tpope/vim-cucumber'
@@ -129,8 +135,6 @@ Plugin 'nvie/vim-flake8'
 Plugin 'hynek/vim-python-pep8-indent'
 
 Plugin 'cespare/vim-toml'
-
-Plugin 'bumaociyuan/vim-swift'
 
 Plugin 'dag/vim-fish' " fishshell
 
