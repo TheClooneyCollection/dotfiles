@@ -211,7 +211,6 @@ augroup vimrcEx
   autocmd FileType swift call SetUpSwift()
 
   function! SetUpSwift()
-    set makeprg=swift\ test
     set efm=
     set efm+=%E%f:%l:%c:\ error:\ %m
     set efm+=%W%f:%l:%c:\ warning:\ %m
