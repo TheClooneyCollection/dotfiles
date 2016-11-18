@@ -1,0 +1,25 @@
+#!/usr/bin/env fish
+
+function neovim
+    which nvim 2>&1 >/dev/null
+    if command test $status = 0
+        # has nvim
+        test -n "$NVIM_LISTEN_ADDRESS"
+        if command test $status = 0
+            # fish running in vim
+            exec nvr --remote $argv
+        else
+            nvim $argv
+        end
+    else
+        echo "Install Neovim by running:"
+        echo "brew install neovim/neovim/neovim"
+        echo "pip2 install neovim"
+        echo "pip3 install neovim"
+        echo "gem install neovim"
+        echo
+        echo "After all this, don't forget to setup CommandT & YCM"
+    end
+end
+
+neovim $argv
