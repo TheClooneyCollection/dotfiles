@@ -84,7 +84,7 @@
 [color]
     ui=auto
 [core]
-    editor = vim
+    editor = nvim
 	; gitproxy = git-proxy
 [push]
     default = simple
