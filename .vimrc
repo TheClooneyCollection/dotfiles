@@ -53,7 +53,6 @@ set showcmd
 set noswapfile
 
 " Encodings
-set encoding=utf-8
 set fileencodings=utf-8,gb2312,gbk,cp936,latin1
 
 " IO
@@ -62,6 +61,7 @@ set autoread
 " Neovim
 if has('nvim')
 else
+    set encoding=utf-8
 endif
 
 " Vundle
