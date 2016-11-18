@@ -6,6 +6,8 @@ alias xo 'open -a Xcode *.xcworkspace'
 alias oo 'open .'
 alias g 'git'
 alias - 'cd -'
+alias v 'neovim'
+alias vim 'neovim'
 
 #### Notes ####
 
@@ -38,7 +40,7 @@ function config_path
     status -f
 end
 
-function v
+function neovim
     which vim 2>&1 >/dev/null
     if command test $status = 0
         nvim $argv
