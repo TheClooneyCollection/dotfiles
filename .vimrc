@@ -184,6 +184,7 @@ map <Leader>k <Plug>(easymotion-k)
 
 nnoremap <silent> <c-f> :CommandT .<cr>
 nnoremap <silent> <c-b> :CommandTBuffer<cr>
+noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
 
 " Autocmds
 
@@ -225,10 +226,11 @@ augroup vimrcEx
     " Example:
     " /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
     " /path/to/another.swift:104|            }
-    set efm+=%f:%l\\|\ %#%m
+    set efm+=%f:%l:\ %#%m
 
     set efm+=%-G%.%#
     noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
+    noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
   endfunction
 
 
