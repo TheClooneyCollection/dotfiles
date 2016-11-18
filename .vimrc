@@ -224,9 +224,9 @@ augroup vimrcEx
 
     " custom codecov errors
     " Example:
-    " /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
-    " /path/to/another.swift:104|            }
-    set efm+=%f:%l:\ %#%m
+    " File /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
+    " File /path/to/another.swift:104|            }
+    set efm+=File\ %f:%l:\ %#%m
 
     set efm+=%-G%.%#
     noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
