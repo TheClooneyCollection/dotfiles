@@ -192,12 +192,18 @@ map <Leader>k <Plug>(easymotion-k)
 
 nnoremap <silent> <c-f> :CommandT .<cr>
 nnoremap <silent> <c-b> :CommandTBuffer<cr>
-noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
 
 " Autocmds
 
 augroup vimrcEx
   autocmd!
+  autocmd VimEnter * noremap <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
+
+  if has('nvim')
+    autocmd VimEnter * noremap <leader>f :tabn \| te fish <cr>
+    autocmd TermOpen * setlocal number relativenumber
+  endif
+
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
@@ -242,7 +248,6 @@ augroup vimrcEx
     noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
     noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
   endfunction
-
 
   " *.podspec is ruby
   autocmd! BufNewFile,BufRead *.podspec setlocal filetype=ruby
@@ -293,6 +298,7 @@ vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 nnoremap <silent> <leader>c :nohlsearch<cr>
 
 nnoremap <leader>ee :e %<cr>
+nnoremap <leader>ef :e ~/.config/fish/config.fish<cr>
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
