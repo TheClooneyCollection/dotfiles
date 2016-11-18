@@ -1,4 +1,4 @@
-set -x PATH $PATH ~/bin/
+set -x PATH $PATH ~/bin
 
 alias b 'bundle'
 alias o 'open'
@@ -6,8 +6,8 @@ alias xo 'open -a Xcode *.xcworkspace'
 alias oo 'open .'
 alias g 'git'
 alias - 'cd -'
-alias v 'neovim'
-alias vim 'neovim'
+alias v '~/bin/nvim'
+alias vim '~/bin/nvim'
 
 #### Notes ####
 
@@ -38,21 +38,6 @@ end
 
 function config_path
     status -f
-end
-
-function neovim
-    which vim 2>&1 >/dev/null
-    if command test $status = 0
-        nvim $argv
-    else
-        echo "Install Neovim by running:"
-        echo "brew install neovim/neovim/neovim"
-        echo "pip2 install neovim"
-        echo "pip3 install neovim"
-        echo "gem install neovim"
-        echo
-        echo "After all this, don't forget to setup CommandT"
-    end
 end
 
 function git --description "After running git commands that would affect HEAD, print out the last commit hash"
