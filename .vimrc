@@ -211,12 +211,22 @@ augroup vimrcEx
   autocmd FileType swift call SetUpSwift()
 
   function! SetUpSwift()
+    " reset errorformat
     set efm=
+
+    " swift test/build errors
     set efm+=%E%f:%l:%c:\ error:\ %m
     set efm+=%W%f:%l:%c:\ warning:\ %m
     set efm+=%Z%\s%#^~%#
     set efm+=%f:%l:\ error:\ %m
     set efm+=fatal\ error:\ %m
+
+    " custom codecov errors
+    " Example:
+    " /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
+    " /path/to/another.swift:104|            }
+    set efm+=%f:%l\\|\ %#%m
+
     set efm+=%-G%.%#
     noremap <buffer> <leader>w :wa! \| silent make \| redraw! \| cw 4 <cr>
   endfunction
