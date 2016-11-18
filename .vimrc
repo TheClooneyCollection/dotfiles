@@ -154,11 +154,11 @@ nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
 " solarized
 colorscheme solarized
 set background=dark
-if (strftime("%H") < 8 || strftime("%H") >= 18)
-  set background=dark
-else
-  set background=light
-endif
+" if (strftime("%H") < 8 || strftime("%H") >= 18)
+"   set background=dark
+" else
+"   set background=light
+" endif
 call togglebg#map("<F5>") " solarized background toggle
 
 let g:airline#extensions#tabline#enabled = 1
