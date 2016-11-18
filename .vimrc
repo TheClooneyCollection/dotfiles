@@ -222,11 +222,12 @@ augroup vimrcEx
     set efm+=%f:%l:\ error:\ %m
     set efm+=fatal\ error:\ %m
 
-    " custom codecov errors
-    " Example:
-    " File /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
+    " custom codecov errors (zero-hit detection)
+    " Example: Ignore zero-hit ending brackets
     " File /path/to/another.swift:104|            }
     set efm+=%-GFile\ %f:%l:\ %#}
+    " Example: Detect other zero-hit lines
+    " File /path/to/a.swift:56|    func remove(todo: ToDo) -> State {
     set efm+=File\ %f:%l:\ %#%m
 
     set efm+=%-G%.%#
