@@ -60,6 +60,8 @@ set autoread
 
 " Neovim
 if has('nvim')
+    tmap <esc> <c-\><c-n> " Exit terminal mode
+    tnoremap kj <c-\><c-n> " Exit terminal mode
 else
     set encoding=utf-8
 endif
