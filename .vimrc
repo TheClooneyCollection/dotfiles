@@ -59,6 +59,11 @@ set fileencodings=utf-8,gb2312,gbk,cp936,latin1
 " IO
 set autoread
 
+" Neovim
+if has('nvim')
+else
+endif
+
 " Vundle
 
 " modified bootstrap, originally by John Whitley
