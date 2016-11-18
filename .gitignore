@@ -22,6 +22,8 @@
 # ~/.config/nvim
 
 !.config/nvim
+.config/nvim/*
+!.config/nvim/init.vim
 
 !.gitignore
 !.gitconfig
