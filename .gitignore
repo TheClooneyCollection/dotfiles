@@ -5,25 +5,13 @@
 
 !.vimrc
 
-# ~/.config
-
 !.config/
 .config/*
-
-# ~/.config/fish
-
 !.config/fish
 .config/fish/*
 !.config/fish/fishfile
 !.config/fish/config.fish
 !.config/fish/functions/fisher.fish
-
-
-# ~/.config/nvim
-
-!.config/nvim
-.config/nvim/*
-!.config/nvim/init.vim
 
 !.gitignore
 !.gitconfig

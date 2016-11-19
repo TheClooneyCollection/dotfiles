@@ -53,18 +53,11 @@ set showcmd
 set noswapfile
 
 " Encodings
+set encoding=utf-8
 set fileencodings=utf-8,gb2312,gbk,cp936,latin1
 
 " IO
 set autoread
-
-" Neovim
-if has('nvim')
-    tmap <esc> <c-\><c-n> " Exit terminal mode
-    tnoremap kj <c-\><c-n> " Exit terminal mode
-else
-    set encoding=utf-8
-endif
 
 " Vundle
 
@@ -117,12 +110,6 @@ Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
 
 " language
-
-" Swift
-
-Plugin 'bumaociyuan/vim-swift'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'mitsuse/autocomplete-swift'
 
 " Ruby
 Plugin 'vim-ruby/vim-ruby'
