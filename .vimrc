@@ -111,6 +111,8 @@ let g:SuperTabDefaultCompletionType = "context"
 
 " language
 
+Plugin 'bumaociyuan/vim-swift'
+
 " Ruby
 Plugin 'vim-ruby/vim-ruby'
 " Plugin 'tpope/vim-cucumber'
