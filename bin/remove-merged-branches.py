@@ -21,16 +21,17 @@ def main():
     if len(sys.argv) > 1:
         default_branch = sys.argv[1]
     else:
-        default_branch = 'master'
+        current_branch = subprocess.check_output("git rev-parse --abbrev-ref HEAD".split()).strip()
+        default_branch = current_branch
 
     IGNORE_BRANCHES.append(default_branch)
 
-    checkout_branch(default_branch)
     merged_branches_except_ignored = filter_branches_with_ignores(
             merged_branches(),
             IGNORE_BRANCHES
             )
     map(delete_branch, merged_branches_except_ignored)
+    checkout_branch(default_branch)
 
 def checkout_branch(branch):
     subprocess.call(['git', 'checkout', branch])
