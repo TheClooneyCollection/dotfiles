@@ -186,11 +186,6 @@ augroup vimrcEx
   autocmd!
   autocmd VimEnter * noremap <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
 
-  if has('nvim')
-    autocmd VimEnter * noremap <leader>f :tabn \| te fish <cr>
-    autocmd TermOpen * setlocal number relativenumber
-  endif
-
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
