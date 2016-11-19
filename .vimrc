@@ -95,19 +95,16 @@ Plugin 'wincent/command-t'
 let g:CommandTFileScanner = "git"
 
 Plugin 'bufkill.vim'
+
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
-" create any non-existent directories before writing a buffer
-Plugin 'pbrisbin/vim-mkdir'
+Plugin 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-endwise' " helps to end certain structures automatically
-Plugin 'tpope/vim-eunuch'
-Plugin 'tpope/vim-dispatch'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-eunuch' " Move, Rename, Remove, etc...
+Plugin 'tpope/vim-repeat' " Enable repeat for certain/almost all tpope's plugins
 Plugin 'rking/ag.vim'
-Plugin 'jiangmiao/auto-pairs'
+Plugin 'jiangmiao/auto-pairs' " () '', pairs, you get it
 
 Plugin 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = "context"
@@ -116,9 +113,9 @@ let g:SuperTabDefaultCompletionType = "context"
 
 " Ruby
 Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-cucumber'
-Plugin 'tpope/vim-rails'
-Plugin 'NicholasTD07/vim-rspec'
+" Plugin 'tpope/vim-cucumber'
+" Plugin 'tpope/vim-rails'
+" Plugin 'NicholasTD07/vim-rspec'
 
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'nvie/vim-flake8'
@@ -126,9 +123,7 @@ Plugin 'hynek/vim-python-pep8-indent'
 
 Plugin 'cespare/vim-toml'
 
-Plugin 'bumaociyuan/vim-swift'
-
-Plugin 'dag/vim-fish'
+Plugin 'dag/vim-fish' " fishshell
 
 call vundle#end()
 
@@ -146,11 +141,11 @@ nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
 " solarized
 colorscheme solarized
 set background=dark
-if (strftime("%H") < 8 || strftime("%H") >= 18)
-  set background=dark
-else
-  set background=light
-endif
+" if (strftime("%H") < 8 || strftime("%H") >= 18)
+"   set background=dark
+" else
+"   set background=light
+" endif
 call togglebg#map("<F5>") " solarized background toggle
 
 let g:airline#extensions#tabline#enabled = 1
@@ -184,12 +179,13 @@ map <Leader>k <Plug>(easymotion-k)
 
 nnoremap <silent> <c-f> :CommandT .<cr>
 nnoremap <silent> <c-b> :CommandTBuffer<cr>
-noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
 
 " Autocmds
 
 augroup vimrcEx
   autocmd!
+  autocmd VimEnter * noremap <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
+
   autocmd FileType text setlocal textwidth=78
   " jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
@@ -234,7 +230,6 @@ augroup vimrcEx
     noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
     noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
   endfunction
-
 
   " *.podspec is ruby
   autocmd! BufNewFile,BufRead *.podspec setlocal filetype=ruby
@@ -285,6 +280,7 @@ vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 nnoremap <silent> <leader>c :nohlsearch<cr>
 
 nnoremap <leader>ee :e %<cr>
+nnoremap <leader>ef :e ~/.config/fish/config.fish<cr>
 nnoremap <leader>ev :e $MYVIMRC<cr>
 nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
