@@ -4,6 +4,9 @@
 !bin/*
 
 !.vimrc
+!/.vim
+.vim/*
+!/.vim/mappings.vim
 
 !.config/
 .config/*
