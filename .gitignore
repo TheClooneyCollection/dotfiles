@@ -8,6 +8,7 @@
 .vim/*
 !/.vim/settings.vim
 !/.vim/plugins.vim
+!/.vim/plugin-settings.vim
 !/.vim/mappings.vim
 
 !.config/
