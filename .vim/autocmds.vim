@@ -60,5 +60,6 @@ augroup vimrcEx
   autocmd FileType gitcommit setlocal textwidth=72 spell
   autocmd FileType gitcommit noremap <buffer> <leader>w :wq<cr>
 
+  autocmd FileType vim set ai ts=2 sts=2 sw=2 expandtab
   autocmd FileType vim noremap <buffer> <leader>w :w \| source $MYVIMRC <cr>
 augroup END
