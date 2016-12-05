@@ -46,7 +46,7 @@
     ppt = !git p && git pt
     pat = !git pa && git pt
     rba = rebase --abort
-    rc = rebase --continue
+    rbc = rebase --continue
     rh = !~/bin/checkout-history
     ri = rebase -i
     rs = reset
