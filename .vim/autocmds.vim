@@ -43,7 +43,13 @@ augroup vimrcEx
     set efm+=File\ %f:%l:\ %#%m
 
     set efm+=%-G%.%#
-    noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
+
+    if !empty(glob("./Package.swift"))
+      noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
+    else
+      noremap <buffer> <leader>w :w \| ! swift % <cr>
+    endif
+
     noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
   endfunction
 
