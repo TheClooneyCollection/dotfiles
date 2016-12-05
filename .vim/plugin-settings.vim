@@ -2,6 +2,10 @@
 nnoremap <leader>vi :so $MYVIMRC\|PluginInstall<cr>
 nnoremap <leader>vc :so $MYVIMRC\|PluginClean<cr>
 
+" Ag
+nnoremap <leader>aa :Ag "<C-r><C-w>" <cr>
+vnoremap <leader>aa :Ag "<C-r><C-w>" <cr>
+
 " CommandT
 
 nnoremap <silent> <c-f> :CommandT .<cr>
