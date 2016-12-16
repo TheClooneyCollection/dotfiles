@@ -1,7 +1,8 @@
 # taps
 
-tap 'caskroom/cask'
 tap 'homebrew/bundle'
+tap 'caskroom/cask'
+tap 'caskroom/fonts'
 
 # essential
 
@@ -9,43 +10,47 @@ brew 'mas' # cli for Mac App Store
 
 # casks
 
-# apps
+## apps
 
 cask 'opera'
 cask 'macid'
 cask 'nvalt'
+cask 'sketch'
 
-# devtools
+## devtools
 
 cask 'iterm2'
 cask 'reveal'
 cask 'paw'
 
+## fonts
+cask 'font-consolas-for-powerline'
+cask 'font-inconsolata-g-for-powerline'
+
 ## utils
 
 cask 'alfred'
 cask 'bartender'
+cask 'caffeine'
 cask 'dropbox'
 cask 'flux'
 cask 'istat-menus'
 cask 'moom'
 cask 'gfxCardStatus'
-cask 'textexpander'
 
 # apps from mas
 
-mas 'Slack', id: 803453959
-
 mas '1Password', id: 443987910
-
-mas 'Caffeine', id: 411246225
-mas 'GIPHY CAPTURE', id: 668208984
 
 mas 'Pages', id: 409201541
 mas 'Keynote', id: 409183694
 
 mas 'Disk Care', id: 913724705
 mas 'DaisyDisk', id: 411643860
+
+mas 'Slack', id: 803453959
+
+mas 'GIPHY CAPTURE', id: 668208984
 
 # brews
 
@@ -59,6 +64,13 @@ brew 'pkg-config'
 
 brew 'fish'
 brew 'git'
+
+### lang (needed by vim)
+
+brew 'python'
+brew 'python3'
+brew 'ruby'
+
 brew 'vim', args: ['without-perl']
 
 ## utils
@@ -66,12 +78,6 @@ brew 'vim', args: ['without-perl']
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
 brew 'the_silver_searcher'
-
-## lang
-
-brew 'python'
-brew 'python3'
-brew 'ruby'
 
 ## iOS
 
