@@ -1,3 +1,14 @@
+function generate_ssh_key
+    echo "Generate a ssh key for you"
+    echo "What's your email address?"
+
+    read -l email
+    ssh-keygen -t rsa -b 4096 -C $email
+
+    echo ""
+    echo "Done!"
+end
+
 function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
@@ -17,7 +28,9 @@ function set_fish_as_default_shell
 
     chsh -s (which fish)
 
+    echo ""
     echo "Done!"
+    echo ""
 end
 
 function disable_bouncing_dock_icons
@@ -26,7 +39,9 @@ function disable_bouncing_dock_icons
     defaults write com.apple.dock no-bouncing -bool TRUE
     killall Dock
 
+    echo ""
     echo "Disabled bouncing dock icons. 😝"
+    echo ""
 end
 
 function compile_vim_plugins
@@ -38,7 +53,9 @@ function compile_YCM
     pushd ~/.vim/.vim/bundle/YouCompleteMe/
     echo "Compiling YCM"
     ./install.py
+    echo ""
     echo "Done!"
+    echo ""
     popd
 end
 
@@ -48,6 +65,8 @@ function compile_command_t
     ruby extconf.rb
     echo "Compiling CommandT"
     make
+    echo ""
     echo "Done!"
+    echo ""
     popd
 end
