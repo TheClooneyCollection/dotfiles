@@ -30,6 +30,7 @@ cask 'flux'
 cask 'istat-menus'
 cask 'moom'
 cask 'gfxCardStatus'
+cask 'textexpander'
 
 # apps from mas
 
