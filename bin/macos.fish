@@ -1,3 +1,10 @@
+function set_fish_as_default_shell
+    echo "Remember to add fish shell to /etc/shells"
+    echo (which fish)
+    echo ""
+    chsh -s (which fish)
+end
+
 function compile_vim_plugins
     compile_command_t
     compile_YCM
