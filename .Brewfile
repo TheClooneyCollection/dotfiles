@@ -24,7 +24,6 @@ cask 'reveal'
 cask 'paw'
 
 ## fonts
-cask 'font-consolas-for-powerline'
 cask 'font-inconsolata-g-for-powerline'
 
 ## utils
