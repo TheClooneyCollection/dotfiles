@@ -1,9 +1,11 @@
 /*
 
+!/.Brewfile
+
 !bin/
 !bin/*
 
-!.vimrc
+!/.vimrc
 !/.vim
 .vim/*
 !/.vim/settings.vim
