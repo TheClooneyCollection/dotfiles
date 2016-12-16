@@ -30,6 +30,7 @@ augroup vimrcEx
     " swift test/build errors
     set efm+=%E%f:%l:%c:\ error:\ %m
     set efm+=%W%f:%l:%c:\ warning:\ %m
+    set efm+=%I%f:%l:%c:\ note:\ %m
     set efm+=%Z%\s%#^~%#
     set efm+=%f:%l:\ error:\ %m
     set efm+=fatal\ error:\ %m
