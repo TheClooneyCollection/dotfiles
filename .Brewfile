@@ -7,7 +7,31 @@ tap 'homebrew/bundle'
 
 brew 'mas' # cli for Mac App Store
 
+# casks
+
 # apps
+
+cask 'opera'
+cask 'macid'
+cask 'nvalt'
+
+# devtools
+
+cask 'iterm2'
+cask 'reveal'
+cask 'paw'
+
+## utils
+
+cask 'alfred'
+cask 'bartender'
+cask 'dropbox'
+cask 'flux'
+cask 'istat-menus'
+cask 'moom'
+cask 'gfxCardStatus'
+
+# apps from mas
 
 mas 'Slack', id: 803453959
 
