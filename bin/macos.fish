@@ -14,6 +14,7 @@ function mac_init
     echo "Initializing your Mac :)"
 
     set_fish_as_default_shell
+    install_fish_plugins
     compile_vim_plugins
     disable_bouncing_dock_icons
 
@@ -27,6 +28,17 @@ function set_fish_as_default_shell
     echo ""
 
     chsh -s (which fish)
+
+    echo ""
+    echo "Done!"
+    echo ""
+end
+
+function install_fish_plugins
+    echo "Installing fish shell plugins"
+    echo ""
+
+    fisher
 
     echo ""
     echo "Done!"
