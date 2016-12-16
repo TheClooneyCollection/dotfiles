@@ -88,3 +88,4 @@ brew 'pcre' # the_silver_searcher
 brew 'sqlite' # python
 brew 'libyaml' # ruby
 brew 'pcre2' # fish
+brew 'cmake' # vim plugin YCM needs it
