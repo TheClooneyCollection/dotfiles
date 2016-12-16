@@ -1,8 +1,32 @@
+function mac_init
+    echo "Run this after started vim once and added fishshell to /etc/shells"
+    echo "Initializing your Mac :)"
+
+    set_fish_as_default_shell
+    compile_vim_plugins
+    disable_bouncing_dock_icons
+
+    echo "Your mac is set up and ready!"
+end
+
 function set_fish_as_default_shell
+    echo "Setting fish as default shell"
     echo "Remember to add fish shell to /etc/shells"
     echo (which fish)
     echo ""
+
     chsh -s (which fish)
+
+    echo "Done!"
+end
+
+function disable_bouncing_dock_icons
+    echo "Disabling bouncing dock icons"
+
+    defaults write com.apple.dock no-bouncing -bool TRUE
+    killall Dock
+
+    echo "Disabled bouncing dock icons. 😝"
 end
 
 function compile_vim_plugins
@@ -12,7 +36,7 @@ end
 
 function compile_YCM
     pushd ~/.vim/.vim/bundle/YouCompleteMe/
-    echo "compiling YCM"
+    echo "Compiling YCM"
     ./install.py
     echo "Done!"
     popd
@@ -20,16 +44,10 @@ end
 
 function compile_command_t
     pushd ~/.vim/.vim/bundle/command-t/ruby/command-t/
-    echo "configuring CommandT"
+    echo "Configuring CommandT"
     ruby extconf.rb
-    echo "compiling CommandT"
+    echo "Compiling CommandT"
     make
     echo "Done!"
     popd
-end
-
-function disable_bouncing_dock_icons
-    defaults write com.apple.dock no-bouncing -bool TRUE
-    killall Dock
-    echo "disabled bouncing icons. 😝"
 end
