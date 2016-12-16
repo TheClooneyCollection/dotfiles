@@ -24,7 +24,7 @@ cask 'reveal'
 cask 'paw'
 
 ## fonts
-cask 'font-inconsolata-g-for-powerline'
+cask 'font-inconsolata-g-for-powerline' # disable iTerm thinner font on Retina
 
 ## utils
 
