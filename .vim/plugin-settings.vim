@@ -11,6 +11,9 @@ vnoremap <leader>aa :Ag "<C-r><C-w>" <cr>
 nnoremap <silent> <c-f> :CommandT .<cr>
 nnoremap <silent> <c-b> :CommandTBuffer<cr>
 
+let g:CommandTAlwaysShowDotFiles = 1
+let g:CommandTScanDotDirectories = 1
+
 " solarized
 colorscheme solarized
 call togglebg#map("<F5>") " solarized background toggle
