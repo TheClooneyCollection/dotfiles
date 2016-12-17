@@ -1,6 +1,7 @@
 set -x PATH $PATH ~/bin/
 
 alias b 'bundle'
+alias bb 'brew bundle --global'
 alias o 'open'
 alias xo 'open -a Xcode *.xcworkspace'
 alias oo 'open .'
