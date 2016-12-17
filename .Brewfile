@@ -12,7 +12,8 @@ brew 'mas' # cli for Mac App Store
 
 ## apps
 
-cask 'opera'
+cask 'opera' # does not support Apple Script...
+cask 'google-chrome'
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
