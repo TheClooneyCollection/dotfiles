@@ -10,7 +10,7 @@ augroup vimrcEx
     \ endif
 
   " for ruby, autoindent with two spaces, always expand tabs
-  autocmd FileType ruby,eruby,yaml,html,haml,javascript,cucumber set ai sw=2 sts=2 et
+  autocmd FileType ruby,eruby,yaml,html,haml,javascript,cucumber,json set ai sw=2 sts=2 et
 
   " *.md is markdown
   autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
