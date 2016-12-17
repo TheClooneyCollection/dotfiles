@@ -8,16 +8,6 @@ alias g 'git'
 alias v 'vim'
 alias - 'cd -'
 
-#### Notes ####
-
-## Show diff after reloading config
-#
-# save new config to variable
-# when reloading diff current config
-
-# cat (config_path) | read -z __config
-# git diff --no-prefix (echo "$__config" | psub) (cat (config_path) | psub)
-
 function c --description "Edit fish shell's config file in vim"
     v (config_path)
 end
