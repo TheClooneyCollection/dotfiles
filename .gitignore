@@ -5,6 +5,8 @@
 !bin/
 !bin/*
 
+!/sandbox-config/
+
 !/.vimrc
 !/.vim
 .vim/*
