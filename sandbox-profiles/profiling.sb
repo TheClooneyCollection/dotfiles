@@ -1,2 +1,2 @@
 (version 1)
-(trace "profile.sb")
+(trace "sandbox-trace.sb")
