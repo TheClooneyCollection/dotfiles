@@ -14,6 +14,7 @@ brew 'mas' # cli for Mac App Store
 
 cask 'opera' # does not support Apple Script...
 cask 'google-chrome'
+cask 'firefox' # Lightbeam: who's tracking me
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
