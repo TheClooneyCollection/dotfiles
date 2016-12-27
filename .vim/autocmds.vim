@@ -9,6 +9,10 @@ augroup vimrcEx
     \   exe "normal g`\"" |
     \ endif
 
+  " python
+
+  autocmd FileType python noremap <buffer> <leader>w :w \| ! python % <cr>
+
   " *.fish is fish
   autocmd! BufNewFile,BufRead *.fish setlocal filetype=fish
 
