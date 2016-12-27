@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+if __name__ == '__main__':
+    import os
+    import argparse
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-f', '--file', dest='filename')
+
+    args = parser.parse_args()
+    filename = args.filename
+
+    def error(message):
+        print(message)
+        exit(1)
+
+    if filename is None or type(filename) is not str:
+        error("Please add -f or --file to point to a file")
+
+    if not os.path.exists(filename):
+        error("{} does not exist.".format(filename))
+    if not os.path.isfile(filename):
+        error("{} is not a file.".format(filename))
+
+    with open(filename) as f:
+        trace = f.read()
+
+    if len(trace) == 0:
+        error("File is empty.")
