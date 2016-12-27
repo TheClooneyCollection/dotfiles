@@ -9,12 +9,6 @@ augroup vimrcEx
     \   exe "normal g`\"" |
     \ endif
 
-  " for ruby, autoindent with two spaces, always expand tabs
-  autocmd FileType ruby,eruby,yaml,html,haml,javascript,cucumber,json set ai sw=2 sts=2 et
-
-  " *.md is markdown
-  autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
-
   " *.fish is fish
   autocmd! BufNewFile,BufRead *.fish setlocal filetype=fish
 
@@ -54,6 +48,12 @@ augroup vimrcEx
 
     noremap <buffer> <leader>t :wa \| silent make coverage \| redraw! \| cw 4 <cr>
   endfunction
+
+  " for ruby, autoindent with two spaces, always expand tabs
+  autocmd FileType ruby,eruby,yaml,html,haml,javascript,cucumber,json set ai sw=2 sts=2 et
+
+  " *.md is markdown
+  autocmd! BufNewFile,BufRead *.md setlocal filetype=markdown
 
   " *.podspec is ruby
   autocmd! BufNewFile,BufRead *.podspec setlocal filetype=ruby
