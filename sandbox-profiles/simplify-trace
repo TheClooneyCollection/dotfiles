@@ -1,5 +1,16 @@
 #!/usr/bin/env python
 
+def main(lines):
+    lines = unique(lines)
+
+    lines.sort()
+
+    return lines
+
+
+def unique(lines):
+    return list(set(lines))
+
 if __name__ == '__main__':
     import os
     import argparse
@@ -24,7 +35,14 @@ if __name__ == '__main__':
         error("{} is not a file.".format(filename))
 
     with open(filename) as f:
-        trace = f.read()
+        trace_lines = f.readlines()
 
-    if len(trace) == 0:
+    if len(trace_lines) == 0:
         error("File is empty.")
+
+    lines = main(trace_lines)
+
+    root, ext = os.path.splitext(filename)
+
+    with open(root + "-simplified" + ext, 'w') as f:
+        f.writelines(lines)
