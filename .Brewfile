@@ -17,6 +17,8 @@ cask 'firefox' # Lightbeam: who's tracking me
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
+cask 'google-drive'
+cask 'scansnap-manager' # for ScanSnap S1300i
 
 ## devtools
 
@@ -26,6 +28,7 @@ cask 'reveal'
 cask 'paw'
 
 ## fonts
+
 cask 'font-inconsolata-g-for-powerline' # disable iTerm thinner font on Retina
 
 ## utils
@@ -53,6 +56,8 @@ mas 'DaisyDisk', id: 411643860
 mas 'Slack', id: 803453959
 
 mas 'GIPHY CAPTURE', id: 668208984
+
+mas 'Mini Metro', id: 1047760200 # Resource planning game
 
 # brews
 
