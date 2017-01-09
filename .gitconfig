@@ -35,6 +35,7 @@
     lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
     lmr = !git log --reverse -20 --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone REVERSED
     lp = log -p
+    m = merge
     n = checkout -b
     nn = checkout --orphan
     p = push
