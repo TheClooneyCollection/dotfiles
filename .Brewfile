@@ -71,6 +71,7 @@ brew 'pkg-config'
 
 brew 'fish'
 brew 'git'
+brew 'git-lfs'
 
 ### lang (needed by vim)
 
