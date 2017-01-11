@@ -54,6 +54,8 @@ mas 'Disk Care', id: 913724705
 mas 'DaisyDisk', id: 411643860
 
 mas 'Slack', id: 803453959
+mas 'WeChat', id: 836500024
+mas 'QQ', id: 451108668
 
 mas 'GIPHY CAPTURE', id: 668208984
 
@@ -86,6 +88,7 @@ brew 'vim', args: ['without-perl']
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
 brew 'the_silver_searcher'
+brew 'aria2'
 
 ## iOS
 
