@@ -52,7 +52,6 @@ mas 'Keynote', id: 409183694
 mas 'Disk Care', id: 913724705
 mas 'DaisyDisk', id: 411643860
 
-mas 'Slack', id: 803453959
 mas 'WeChat', id: 836500024
 mas 'QQ', id: 451108668
 
