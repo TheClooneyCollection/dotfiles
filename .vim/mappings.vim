@@ -13,12 +13,17 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+
+nnoremap <tab> <c-u>
+nnoremap <return> <c-d>
+
 " motions for splits
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+" mappings start with <leader>
 nnoremap <leader><leader> <c-^>
 nnoremap <leader>' :bprev<cr>
 
@@ -40,9 +45,6 @@ nnoremap <leader>p "*p
 
 vnoremap <leader>y "*y
 nnoremap <leader>y "*y
-
-nnoremap <tab> >>
-nnoremap <s-tab> <<
 
 " FIXME: When sharing Vim with someone else
 inoremap <esc> <nop>
