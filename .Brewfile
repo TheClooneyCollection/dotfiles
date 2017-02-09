@@ -46,6 +46,8 @@ cask 'gfxCardStatus'
 mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
 
+mas 'Billings Pro', id: 434514810
+
 mas 'Pages', id: 409201541
 mas 'Keynote', id: 409183694
 
