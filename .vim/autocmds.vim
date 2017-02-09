@@ -13,6 +13,9 @@ augroup vimrcEx
 
   autocmd FileType python noremap <buffer> <leader>w :w \| ! python % <cr>
 
+  " haskell
+  autocmd FileType haskell noremap <buffer> <leader>w :w \| ! ghci % <cr>
+
   " *.fish is fish
   autocmd! BufNewFile,BufRead *.fish setlocal filetype=fish
 
