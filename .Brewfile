@@ -78,6 +78,7 @@ brew 'git-lfs'
 brew 'python'
 brew 'python3'
 brew 'ruby'
+brew 'haskell-stack'
 
 brew 'vim', args: ['without-perl']
 
@@ -104,3 +105,5 @@ brew 'sqlite' # python
 brew 'libyaml' # ruby
 brew 'pcre2' # fish
 brew 'cmake' # vim plugin YCM needs it
+brew 'ghc' # haskell
+brew 'cabal-install' # haskell
