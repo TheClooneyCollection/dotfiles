@@ -13,6 +13,10 @@ function give_xcode_all_cpus
     defaults write com.apple.dt.Xcode IDEBuildOperationMaxNumberOfConcurrentCompileTasks (sysctl -n hw.ncpu)
 end
 
+function dont_give_xcode_all_cpus
+    defaults delete com.apple.dt.Xcode IDEBuildOperationMaxNumberOfConcurrentCompileTasks
+end
+
 function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
