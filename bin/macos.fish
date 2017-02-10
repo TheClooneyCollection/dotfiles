@@ -9,6 +9,10 @@ function generate_ssh_key
     echo "Done!"
 end
 
+function give_xcode_all_cpus
+    defaults write com.apple.dt.Xcode IDEBuildOperationMaxNumberOfConcurrentCompileTasks (sysctl -n hw.ncpu)
+end
+
 function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
