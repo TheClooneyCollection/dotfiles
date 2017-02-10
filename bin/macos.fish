@@ -17,6 +17,17 @@ function dont_give_xcode_all_cpus
     defaults delete com.apple.dt.Xcode IDEBuildOperationMaxNumberOfConcurrentCompileTasks
 end
 
+function how_many_cpus_xcode_use
+    set CPUs (sysctl -n hw.ncpu)
+    echo "You have $CPUs CPUs"
+    set Xcode_has_CPUs (defaults read com.apple.dt.Xcode IDEBuildOperationMaxNumberOfConcurrentCompileTasks 2>/dev/null)
+    if test $status -ne 0
+        echo "Xcode is on default setting"
+    else
+        echo "Xcode uses $Xcode_has_CPUs CPUs"
+    end
+end
+
 function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
