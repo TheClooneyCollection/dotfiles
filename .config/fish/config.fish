@@ -7,7 +7,6 @@ alias xo 'open -a Xcode *.xcworkspace'
 alias oo 'open .'
 alias g 'git'
 alias v 'vim'
-alias - 'cd -'
 
 function c --description "Edit fish shell's config file in vim"
     v (config_path)
