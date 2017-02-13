@@ -30,6 +30,8 @@
     ds = diff --stat
     dss = diff --shortstat
     f = fetch
+    hard-reset = reset --hard
+    hr = reset --hard
     ls = ls-files
     lsd = ls-tree -d HEAD
     lso = ls-files --others
