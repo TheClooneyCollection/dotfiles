@@ -91,6 +91,8 @@ brew 'vim', args: ['without-perl']
 
 ## utils
 
+brew 'thefuck'
+
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
 brew 'the_silver_searcher'
