@@ -1,5 +1,8 @@
 set -x PATH $PATH ~/bin/
 
+# fuck!
+eval (thefuck --alias | tr '\n' ';')
+
 alias b 'bundle'
 alias bb 'brew bundle --global'
 alias o 'open'
