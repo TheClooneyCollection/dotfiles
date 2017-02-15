@@ -40,10 +40,13 @@ cask 'alfred'
 cask 'bartender'
 cask 'caffeine'
 cask 'dropbox'
+
 cask 'flux'
 cask 'istat-menus'
 cask 'moom'
-cask 'gfxCardStatus'
+
+cask 'gfxCardStatus' # for work laptop
+cask 'karabiner' # for Kinesis Advantage
 
 # apps from mas
 
