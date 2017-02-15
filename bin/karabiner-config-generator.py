@@ -1,10 +1,10 @@
+# Generate config for Karabiner
+# which disables combination of shift (left or right) and another key on the same side.
 # Layout based on Kinesis Advantage
 
 def main():
     shift_L = "SHIFT_L"
     shift_R = "SHIFT_R"
-
-    # based on Kinesis Advantage
 
     chars_on_dvorak_left = """
     =12345
@@ -65,6 +65,7 @@ def chars_to_list(chars):
     return list(chars.replace('\n', '').replace(' ', ''))
 
 def map_symbol_to_keycode(symbol):
+    # source: https://github.com/tekezo/Karabiner/blob/version_10.22.0/src/bridge/generator/keycode/data/KeyCode.data
     symbol_map_with_whitespace = {
         "`": "BACKQUOTE    ",
         "\\": "BACKSLASH    ",
