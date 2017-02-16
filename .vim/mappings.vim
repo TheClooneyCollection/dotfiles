@@ -15,7 +15,10 @@ vnoremap j gj
 vnoremap k gk
 
 nnoremap <tab> <c-u>
+nnoremap <del> <c-u>
+nnoremap <bs> <c-u>
 nnoremap <return> <c-d>
+nnoremap <space> <c-d>
 
 " motions for splits
 nnoremap <c-j> <c-w>j
