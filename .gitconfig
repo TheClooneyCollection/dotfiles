@@ -22,6 +22,7 @@
     cm = checkout master
     cmm = commit -m
     co = checkout
+    count = rev-list --count
     cp = cherry-pick
     cs = clone --depth 1
     cv = commit -v
@@ -41,6 +42,7 @@
     m = merge
     n = checkout -b
     nn = checkout --orphan
+    no = !git count
     p = push
     po = !git push -u origin $(git symbolic-ref --short HEAD)
     pc = !git pp && git bc
