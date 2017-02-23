@@ -40,6 +40,7 @@
     lmr = !git log --reverse -20 --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone REVERSED
     lp = log -p
     m = merge
+    mab = merge --abort
     n = checkout -b
     nn = checkout --orphan
     no = !git count
