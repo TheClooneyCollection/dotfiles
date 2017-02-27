@@ -38,6 +38,10 @@ function gp --description "Open the Pull Requests page of the repo if origin's U
     open (git ls-remote --get-url origin | sed "s/\.git/\/pulls/g")
 end
 
+function gpp --description "Open the New Pull Requests page of the repo if origin's URL is HTTPS"
+    open (git ls-remote --get-url origin | sed "s/\.git/\/compare/g")
+end
+
 function gi --description "Open the Issues page of the repo if origin's URL is HTTPS"
     open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
 end
