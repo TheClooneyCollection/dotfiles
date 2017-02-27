@@ -33,7 +33,6 @@ function config_path
 end
 
 # GitHub
-#
 
 function gp --description "Open the Pull Requests page of the repo if origin's URL is HTTPS"
     open (git ls-remote --get-url origin | sed "s/\.git/\/pulls/g")
@@ -42,6 +41,12 @@ end
 function gi --description "Open the Issues page of the repo if origin's URL is HTTPS"
     open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
 end
+
+function gc --description "Open the Commits page of the repo if origin's URL is HTTPS"
+    open (git ls-remote --get-url origin | sed "s/\.git/\/commits/g")
+end
+
+# git wrapper
 
 function git --description "After running git commands that would affect HEAD, print out the last commit hash"
     set commit (command git rev-parse --short HEAD)
