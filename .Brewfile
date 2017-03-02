@@ -25,6 +25,7 @@ cask 'iterm2'
 cask 'dash'
 cask 'reveal'
 cask 'paw'
+cask 'zeplin'
 
 ### trailing
 
