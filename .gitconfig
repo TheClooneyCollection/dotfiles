@@ -57,7 +57,8 @@
     rh = !~/bin/checkout-history
     ri = rebase -i
     rs = reset
-    ss = status
+    size = !git count-objects -vH | grep size-pack
+    ss = !git gc 1>/dev/null 2>&1 && git size
     s = status --short --branch
     sc = !git s | grep UU | sed -e 's/UU //g' -e 's/.*/\"&\"/g' # show merge conflicts
     st = stash save
