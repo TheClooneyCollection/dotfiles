@@ -80,7 +80,7 @@ function git --description "After running git commands that would affect HEAD, p
                 echo -n "$commit"
                 set_color normal
                 echo ") and HEAD,"
-                echo -n "there are "
+                echo -n "there have been "
                 set_color yellow
                 echo -n (git rev-list --count $commit..HEAD)
                 set_color normal
