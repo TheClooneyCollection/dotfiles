@@ -70,12 +70,28 @@ function git --description "After running git commands that would affect HEAD, p
 
     if test (count $argv) -gt 0
         switch $argv[1]
-        case amend amd commit c ca merge m pull pc pp ppr rebase ri reset revert rs undo
-            echo
-            echo -n "Last commit was "
-            set_color yellow
-            echo $commit
-            set_color normal
+        case amend amd commit c ca merge m pull pc pp ppr rebase ri revert reset rs undo hard-reset
+            switch $argv[1]
+            case merge m pull pc pp ppr
+                echo
+
+                echo -n "Between last commit ("
+                set_color yellow
+                echo -n "$commit"
+                set_color normal
+                echo ") and HEAD,"
+                echo -n "there are "
+                set_color yellow
+                echo -n (git rev-list --count $commit..HEAD)
+                set_color normal
+                echo " commits."
+            case '*'
+                echo
+                echo -n "Last commit was "
+                set_color yellow
+                echo $commit
+                set_color normal
+            end
         end
     end
 
