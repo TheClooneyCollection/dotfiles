@@ -3,6 +3,7 @@
 tap 'homebrew/bundle'
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
+tap 'neovim/neovim'
 
 # essential
 
@@ -54,7 +55,7 @@ cask 'karabiner' # for Kinesis Advantage
 mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
 
-mas "Brainwave Studio", id: 548229245
+mas 'Brainwave Studio', id: 548229245
 # mas 'Billings Pro', id: 434514810
 
 mas 'Pages', id: 409201541
@@ -92,6 +93,7 @@ brew 'ruby'
 brew 'haskell-stack'
 
 brew 'vim', args: ['without-perl']
+brew 'neovim'
 
 ## utils
 
@@ -118,6 +120,15 @@ brew 'pcre' # the_silver_searcher
 brew 'sqlite' # python
 brew 'libyaml' # ruby
 brew 'pcre2' # fish
-brew 'cmake' # vim plugin YCM needs it
+brew 'cmake' # plugin YCM needs it
 brew 'ghc' # haskell
 brew 'cabal-install' # haskell
+
+brew 'libtool' # neovim
+brew 'libuv' # neovim
+brew 'msgpack' # neovim
+brew 'unibilium' # neovim
+brew 'libtermkey' # neovim
+brew 'libvterm' # neovim
+brew 'gettext' # neovim
+brew 'jemalloc' # neovim

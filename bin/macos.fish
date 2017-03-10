@@ -34,6 +34,8 @@ function mac_init
 
     set_fish_as_default_shell
     install_fish_plugins
+    install_python_packages
+    install_ruby_gems
     compile_vim_plugins
     disable_bouncing_dock_icons
 
@@ -58,6 +60,31 @@ function install_fish_plugins
     echo ""
 
     fisher
+
+    echo ""
+    echo "Done!"
+    echo ""
+end
+
+function install_python_packages
+    echo "Installing Python packages"
+    echo ""
+
+    set packages ipython virtualenv pip-tools neovim
+
+    pip2 install $packages
+    pip3 install $packages
+
+    echo ""
+    echo "Done!"
+    echo ""
+end
+
+function install_ruby_gems
+    echo "Installing Ruby gems"
+    echo ""
+
+    gem install bundler cocoapods
 
     echo ""
     echo "Done!"
