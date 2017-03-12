@@ -40,6 +40,7 @@ nnoremap <silent> <leader>c :nohlsearch<cr>
 nnoremap <leader>ee :e %<cr>
 nnoremap <leader>ef :e ~/.config/fish/config.fish<cr>
 nnoremap <leader>ev :e ~/.vim/<cr>
+nnoremap <leader>ep :e ~/.vim/plugins.vim<cr>
 nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
 
