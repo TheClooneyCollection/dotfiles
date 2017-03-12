@@ -85,14 +85,13 @@ brew 'fish'
 brew 'git'
 brew 'git-lfs'
 
-### lang (needed by vim)
+### lang
 
 brew 'python'
 brew 'python3'
 brew 'ruby'
 brew 'haskell-stack'
 
-brew 'vim', args: ['without-perl']
 brew 'neovim'
 
 ## utils
