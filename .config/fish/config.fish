@@ -3,6 +3,11 @@ set -x PATH $PATH ~/bin/
 # fuck!
 eval (thefuck --alias | tr '\n' ';')
 
+# fzf
+set -U FZF_DEFAULT_COMMAND 'git ls-files'
+set -U FZF_DEFAULT_OPTS '--height 40%'
+fzf_key_bindings
+
 alias b 'bundle'
 alias bb 'brew bundle --global'
 alias o 'open'
