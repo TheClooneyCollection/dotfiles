@@ -48,7 +48,7 @@ cask 'istat-menus'
 cask 'moom'
 
 cask 'gfxCardStatus' # for work laptop
-cask 'karabiner' # for Kinesis Advantage
+cask 'karabiner'     # for Kinesis Advantage
 
 # apps from mas
 
@@ -56,7 +56,6 @@ mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
 
 mas 'Brainwave Studio', id: 548229245
-# mas 'Billings Pro', id: 434514810
 
 mas 'Pages', id: 409201541
 mas 'Keynote', id: 409183694
@@ -97,7 +96,7 @@ brew 'neovim'
 ## utils
 
 brew 'thefuck'
-brew 'fzf' # fuzzy finder
+brew 'fzf'       # fuzzy finder
 
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
@@ -111,23 +110,23 @@ brew 'swiftlint'
 
 ## dependencies
 
-brew 'openssl' # python python3 ruby
-brew 'readline' # python python3 ruby
-brew 'gdbm' # python python3
-brew 'xz' # python3 the_silver_searcher
-brew 'pcre' # the_silver_searcher
-brew 'sqlite' # python
-brew 'libyaml' # ruby
-brew 'pcre2' # fish
-brew 'cmake' # plugin YCM needs it
-brew 'ghc' # haskell
+brew 'openssl'       # python python3 ruby
+brew 'readline'      # python python3 ruby
+brew 'gdbm'          # python python3
+brew 'xz'            # python3 the_silver_searcher
+brew 'pcre'          # the_silver_searcher
+brew 'sqlite'        # python
+brew 'libyaml'       # ruby
+brew 'pcre2'         # fish
+brew 'cmake'         # plugin YCM needs it
+brew 'ghc'           # haskell
 brew 'cabal-install' # haskell
 
-brew 'libtool' # neovim
-brew 'libuv' # neovim
-brew 'msgpack' # neovim
-brew 'unibilium' # neovim
-brew 'libtermkey' # neovim
-brew 'libvterm' # neovim
-brew 'gettext' # neovim
-brew 'jemalloc' # neovim
+brew 'libtool'       # neovim
+brew 'libuv'         # neovim
+brew 'msgpack'       # neovim
+brew 'unibilium'     # neovim
+brew 'libtermkey'    # neovim
+brew 'libvterm'      # neovim
+brew 'gettext'       # neovim
+brew 'jemalloc'      # neovim
