@@ -1,6 +1,12 @@
-
 noremap ; :
 noremap : ;
+
+cnoremap ; :
+cnoremap : ;
+
+" for python and ruby and swift
+inoremap ; :
+inoremap : ;
 
 inoremap <c-c> <esc>
 inoremap kj <esc>
@@ -17,18 +23,10 @@ vnoremap k gk
 nnoremap <tab> <c-u>
 nnoremap <del> <c-u>
 nnoremap <bs> <c-u>
-nnoremap <return> <c-d>
 nnoremap <space> <c-d>
-
-" motions for splits
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
 
 " mappings start with <leader>
 nnoremap <leader><leader> <c-^>
-nnoremap <leader>' :bprev<cr>
 
 nnoremap <leader>h :help<space>
 
@@ -56,7 +54,3 @@ nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <right> <nop>
 nnoremap <left> <nop>
-
-" for python and ruby and swift
-inoremap ; :
-inoremap : ;
