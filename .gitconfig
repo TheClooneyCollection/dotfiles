@@ -21,7 +21,8 @@
     cl = clone
     cm = checkout master
     cmm = commit -m
-    co = checkout
+    # Must have fzf installed
+    co = !git branch --all | grep -v HEAD | fzf | xargs git checkout
     count = rev-list --count
     cp = cherry-pick
     cs = clone --depth 1
