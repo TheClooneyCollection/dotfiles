@@ -14,10 +14,9 @@
 !/.vim
 .vim/*
 !/.vim/settings.vim
-!/.vim/plugins.vim
-!/.vim/plugin-settings.vim
 !/.vim/autocmds.vim
 !/.vim/mappings.vim
+!/.vim/plugins.vim
 
 !.config/
 .config/*
