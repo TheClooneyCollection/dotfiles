@@ -49,6 +49,9 @@ endif
 
 "" Configure plugins ""
 
+nnoremap <silent> <leader>ii :PlugInstall <cr>
+nnoremap <silent> <leader>iu :PlugUpdate <cr>
+
 " fzf
 
 set rtp+=/usr/local/opt/fzf " Add fzf's vim plugin
