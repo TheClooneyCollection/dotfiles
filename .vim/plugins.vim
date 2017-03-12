@@ -28,14 +28,19 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
 
 " Behaviour
+Plug 'Lokaltog/vim-easymotion'
+
+Plug 'junegunn/vim-easy-align'
+
+Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
+
+Plug 'jiangmiao/auto-pairs' " () '', pairs, you get it
+
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
-Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-endwise' " helps to end certain structures automatically
 Plug 'tpope/vim-eunuch' " Move, Rename, Remove, etc...
 Plug 'tpope/vim-repeat' " Enable repeat for certain/almost all tpope's plugins
-Plug 'jiangmiao/auto-pairs' " () '', pairs, you get it
 
 " Languages
 Plug 'dag/vim-fish' " fishshell
@@ -67,6 +72,12 @@ nnoremap <silent> <c-b> :call fzf#run({
             \ 'down': '~40%',
             \ }) <cr>
 " https://github.com/junegunn/fzf/wiki/Examples-(vim)
+
+" easy-align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " solarized
 colorscheme solarized
