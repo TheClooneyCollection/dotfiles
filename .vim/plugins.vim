@@ -26,21 +26,24 @@ call plug#begin(s:vim_plugins_path.'/plugins')
 " UI
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
+Plug 'mhinz/vim-signify' " change indicator
 
 " Behaviour
 Plug 'Lokaltog/vim-easymotion'
 
-Plug 'junegunn/vim-easy-align'
-
 Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 
-Plug 'jiangmiao/auto-pairs' " () '', pairs, you get it
+" Editing
+
+Plug 'junegunn/vim-easy-align'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise' " helps to end certain structures automatically
 Plug 'tpope/vim-eunuch' " Move, Rename, Remove, etc...
 Plug 'tpope/vim-repeat' " Enable repeat for certain/almost all tpope's plugins
+
+Plug 'jiangmiao/auto-pairs' " () '', pairs, you get it
 
 " Languages
 
@@ -76,18 +79,22 @@ nnoremap <silent> <c-b> :call fzf#run({
             \ }) <cr>
 " https://github.com/junegunn/fzf/wiki/Examples-(vim)
 
-" easy-align
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
 " solarized
 colorscheme solarized
+
+" signify
+let g:signify_vcs_list = [ 'git' ]
 
 " airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+
+" easy-align
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " easymotion
 let g:EasyMotion_smartcase = 1 " turn on case insensitive feature
