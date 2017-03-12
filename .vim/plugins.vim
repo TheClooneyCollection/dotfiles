@@ -43,6 +43,9 @@ Plug 'tpope/vim-eunuch' " Move, Rename, Remove, etc...
 Plug 'tpope/vim-repeat' " Enable repeat for certain/almost all tpope's plugins
 
 " Languages
+
+Plug 'apple/swift', { 'rtp': 'utils/vim' }
+
 Plug 'dag/vim-fish' " fishshell
 
 call plug#end()
