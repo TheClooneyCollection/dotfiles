@@ -97,6 +97,7 @@ brew 'neovim'
 
 brew 'thefuck'
 brew 'fzf'       # fuzzy finder
+brew 'ctags'
 
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
