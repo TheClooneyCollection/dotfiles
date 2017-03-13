@@ -20,6 +20,7 @@
 !/.vim/mappings.vim
 !/.vim/plugins.vim
 !/.vim/fzf.vim
+!/.vim/easy-motion.vim
 
 !.config/
 .config/*
