@@ -70,6 +70,7 @@ endfunction
 
 function! s:btags_sink(line)
   execute split(a:line, "\t")[2]
+  TagbarClose
 endfunction
 
 function! Btags()

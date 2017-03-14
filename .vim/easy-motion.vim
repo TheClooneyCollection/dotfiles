@@ -8,7 +8,6 @@ let g:EasyMotion_enter_jump_first = 1
 
 nmap <leader>g <Plug>(easymotion-bd-w)
 nmap s <Plug>(easymotion-s2)
-map t <Plug>(easymotion-bd-t)
 map f <Plug>(easymotion-bd-f2)
 omap t <Plug>(easymotion-tl)
 omap f <Plug>(easymotion-fl)

@@ -8,6 +8,8 @@ augroup swift
     setlocal foldmethod=indent
     setlocal foldlevel=2
 
+    TagbarOpen
+
     " set up swift compile
     if !empty(glob("./Package.swift"))
       noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
