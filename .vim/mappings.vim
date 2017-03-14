@@ -39,6 +39,7 @@ nnoremap <leader>ee :e %<cr>
 nnoremap <leader>ef :e ~/.config/fish/config.fish<cr>
 nnoremap <leader>ev :e ~/.vim/<cr>
 nnoremap <leader>ep :e ~/.vim/plugins.vim<cr>
+nnoremap <leader>es :e ~/.vim/swift.vim<cr>
 nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
 
