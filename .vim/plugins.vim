@@ -67,6 +67,8 @@ endif
 nnoremap <silent> <leader>ii :PlugInstall <cr>
 nnoremap <silent> <leader>iu :PlugUpdate <cr>
 
+nnoremap <silent> T :w \| !ctags <cr>
+
 " solarized
 colorscheme solarized
 
