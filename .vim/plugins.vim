@@ -35,6 +35,8 @@ Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a
 
 Plug 'majutsushi/tagbar'
 
+Plug 'neomake/neomake'
+
 " Editing
 
 Plug 'junegunn/vim-easy-align'
@@ -85,3 +87,4 @@ nmap ga <Plug>(EasyAlign)
 source ~/.vim/fzf.vim
 source ~/.vim/easy-motion.vim
 source ~/.vim/tagbar.vim
+source ~/.vim/neomake.vim

@@ -22,6 +22,7 @@
 !/.vim/fzf.vim
 !/.vim/easy-motion.vim
 !/.vim/tagbar.vim
+!/.vim/neomake.vim
 
 !.config/
 .config/*
