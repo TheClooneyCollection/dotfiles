@@ -21,6 +21,7 @@
 !/.vim/plugins.vim
 !/.vim/fzf.vim
 !/.vim/easy-motion.vim
+!/.vim/tagbar.vim
 
 !.config/
 .config/*

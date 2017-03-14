@@ -33,6 +33,8 @@ Plug 'Lokaltog/vim-easymotion'
 
 Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 
+Plug 'majutsushi/tagbar'
+
 " Editing
 
 Plug 'junegunn/vim-easy-align'
@@ -82,3 +84,4 @@ nmap ga <Plug>(EasyAlign)
 
 source ~/.vim/fzf.vim
 source ~/.vim/easy-motion.vim
+source ~/.vim/tagbar.vim
