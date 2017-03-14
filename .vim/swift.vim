@@ -5,6 +5,9 @@ augroup swift
   autocmd FileType swift call SetUpSwift()
 
   function! SetUpSwift()
+    setlocal foldmethod=indent
+    setlocal foldlevel=2
+
     " set up swift compile
     if !empty(glob("./Package.swift"))
       noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
