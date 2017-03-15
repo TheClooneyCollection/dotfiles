@@ -13,7 +13,8 @@ nnoremap <silent> <c-b> :call fzf#run({
             \ 'down': '~40%',
             \ }) <cr>
 nnoremap <silent> <c-t> :call Tags() <cr>
-nnoremap <silent> <c-h> :call Btags() <cr>
+nnoremap <c-n> : w \| call Btags() <cr>
+nnoremap <c-o> : w \| call Btags() <cr>
 
 function! s:tags_sink(line)
   let parts = split(a:line, '\t\zs')
