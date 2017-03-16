@@ -12,6 +12,8 @@ inoremap <c-c> <esc>
 inoremap kj <esc>
 cnoremap kj <c-c> " fix exit after typing :help in command
 
+noremap <c-j> <c-w>j
+noremap <c-k> <c-w>k
 " vim
 nnoremap <leader>w :w<cr>
 
