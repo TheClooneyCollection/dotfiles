@@ -14,7 +14,7 @@ cnoremap kj <c-c> " fix exit after typing :help in command
 
 noremap <c-j> <c-w>j
 noremap <c-k> <c-w>k
-" vim
+
 nnoremap <leader>w :w<cr>
 
 nnoremap j gj
@@ -25,7 +25,8 @@ vnoremap k gk
 nnoremap <tab> <c-u>
 nnoremap <del> <c-u>
 nnoremap <bs> <c-u>
-nnoremap <space> <c-d>
+
+nnoremap <space> zA
 
 " mappings start with <leader>
 nnoremap <leader><leader> <c-^>
