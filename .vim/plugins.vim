@@ -31,11 +31,13 @@ Plug 'mhinz/vim-signify' " change indicator
 " Behaviour
 Plug 'Lokaltog/vim-easymotion'
 
-Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
+Plug 'ervandew/supertab'
 
 Plug 'majutsushi/tagbar'
 
 Plug 'neomake/neomake'
+
+Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 
 " Editing
 
@@ -55,6 +57,11 @@ Plug 'apple/swift', { 'rtp': 'utils/vim' }
 
 Plug 'dag/vim-fish' " fishshell
 
+" Autocomplete
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+
 call plug#end()
 
 if exists("s:initialized_plugin_manager") && s:initialized_plugin_manager
@@ -64,13 +71,17 @@ endif
 
 "" Configure plugins ""
 
-nnoremap <silent> <leader>ii :PlugInstall <cr>
+nnoremap <silent> <leader>ii :source $MYVIMRC \| PlugInstall <cr>
 nnoremap <silent> <leader>iu :PlugUpdate <cr>
 
 nnoremap <silent> T :w \| !ctags <cr>
 
 " solarized
 colorscheme solarized
+
+"deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#jedi#show_docstring = 1
 
 " signify
 let g:signify_vcs_list = [ 'git' ]

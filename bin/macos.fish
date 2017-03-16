@@ -82,7 +82,7 @@ function install_python_packages
     echo "Installing Python packages"
     echo ""
 
-    set packages ipython virtualenv pip-tools neovim
+    set packages ipython virtualenv pip-tools neovim jedi
 
     pip2 install $packages
     pip3 install $packages
