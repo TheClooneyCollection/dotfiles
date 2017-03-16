@@ -4,6 +4,7 @@
 --exclude=node_modules
 --exclude=Carthage
 --exclude=Pods
+--exclude=vendor
 
 --langdef=swift
 --langmap=swift:.swift
