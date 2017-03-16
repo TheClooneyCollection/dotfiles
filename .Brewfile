@@ -69,12 +69,6 @@ mas 'Mini Metro', id: 1047760200 # Resource planning game
 
 # brews
 
-## brew tools
-
-brew 'autoconf'
-brew 'automake'
-brew 'pkg-config'
-
 ## core
 
 brew 'fish'
@@ -107,6 +101,12 @@ brew 'aria2'
 
 brew 'carthage'
 brew 'swiftlint'
+
+## make tools
+
+brew 'autoconf'
+brew 'automake'
+brew 'pkg-config'
 
 ## dependencies
 
