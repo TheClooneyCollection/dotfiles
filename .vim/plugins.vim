@@ -37,6 +37,8 @@ Plug 'majutsushi/tagbar'
 
 Plug 'neomake/neomake'
 
+Plug 'mbbill/undotree'
+
 Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 
 " Editing
