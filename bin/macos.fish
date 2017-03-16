@@ -32,14 +32,26 @@ function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
 
+    disable_xcode_indexing
+
     set_fish_as_default_shell
+
     install_fish_plugins
     install_python_packages
     install_ruby_gems
     compile_vim_plugins
+
     disable_bouncing_dock_icons
 
     echo "Your mac is set up and ready!"
+end
+
+function enable_xcode_indexing
+    defaults write com.apple.dt.XCode IDEIndexDisable 0
+end
+
+function disable_xcode_indexing
+    defaults write com.apple.dt.XCode IDEIndexDisable 1
 end
 
 function set_fish_as_default_shell
