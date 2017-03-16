@@ -35,20 +35,10 @@ function! Tags()
     call system('ctags -R')
   endif
 
-  let tagfiles = join(map(tagfiles(), 'fnamemodify(v:val, ":S")'))
-
-  let lines = map(split(system(printf(
-              \ 'cat %s | grep -v -a ^!',
-              \ tagfiles)), "\n"), 'split(v:val, "\t")')
-  if v:shell_error
-    throw 'failed to extract tags'
-  endif
-
-  let source = map(s:align_lists(lines), 'join(v:val, "\t")')
-
   call fzf#run({
-        \ 'source':  source,
-        \ 'options': '-d "\t" --with-nth 1,4.. --tiebreak=index',
+        \ 'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
+        \            '| grep -v -a ^!',
+        \ 'options': '+m -d "\t" --with-nth 1,4.. --tiebreak=index',
         \ 'down':    '~40%',
         \ 'sink':    function('s:tags_sink')})
 endfunction
