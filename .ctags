@@ -1,10 +1,13 @@
 --recurse
 
 --exclude=.git
---exclude=node_modules
+--exclude=venv
+
 --exclude=Carthage
 --exclude=Pods
+
 --exclude=vendor
+--exclude=node_modules
 
 --langdef=swift
 --langmap=swift:.swift
