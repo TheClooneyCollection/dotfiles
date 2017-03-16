@@ -13,7 +13,7 @@ brew 'mas' # cli for Mac App Store
 
 ## apps
 
-cask 'google-chrome'
+cask 'opera'
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
