@@ -48,6 +48,9 @@ cask 'gfxCardStatus' # for work laptop
 cask 'karabiner'     # for Kinesis Advantage
 
 # apps from mas
+## games
+
+cask 'minecraft'
 
 mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
