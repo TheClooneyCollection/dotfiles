@@ -84,7 +84,7 @@ brew 'git-lfs'
 ### lang
 
 brew 'python'
-brew 'python3'
+brew 'python3' # httpie
 brew 'ruby'
 brew 'haskell-stack'
 
@@ -95,6 +95,8 @@ brew 'neovim'
 brew 'thefuck'
 brew 'fzf'       # fuzzy finder
 brew 'ctags'
+
+brew 'httpie'
 
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
