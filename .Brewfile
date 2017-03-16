@@ -27,6 +27,9 @@ cask 'iterm2'
 cask 'NicholasTD07/lychee-gold/dash' # v2
 cask 'reveal'
 cask 'paw'
+
+## ios
+
 cask 'zeplin'
 
 ## fonts
@@ -47,13 +50,19 @@ cask 'moom'
 cask 'gfxCardStatus' # for work laptop
 cask 'karabiner'     # for Kinesis Advantage
 
-# apps from mas
 ## games
 
 cask 'minecraft'
 
+# mas
+
+## essential
+
 mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
+mas 'DaisyDisk', id: 411643860
+
+## utils
 
 mas 'Brainwave Studio', id: 548229245
 
@@ -61,12 +70,12 @@ mas 'Pages', id: 409201541
 mas 'Keynote', id: 409183694
 
 mas 'Disk Care', id: 913724705
-mas 'DaisyDisk', id: 411643860
 
-mas 'WeChat', id: 836500024
-mas 'QQ', id: 451108668
+## iOS
 
 mas 'GIPHY CAPTURE', id: 668208984
+
+## games
 
 mas 'Mini Metro', id: 1047760200 # Resource planning game
 
