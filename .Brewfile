@@ -29,10 +29,6 @@ cask 'reveal'
 cask 'paw'
 cask 'zeplin'
 
-### trailing
-
-cask 'Kaleidoscope'
-
 ## fonts
 
 cask 'font-inconsolata-g-for-powerline' # disable iTerm thinner font on Retina
