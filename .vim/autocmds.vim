@@ -11,7 +11,7 @@ augroup vimrcEx
 
   " python
 
-  autocmd FileType python noremap <buffer> <leader>w :w \| ! python % <cr>
+  autocmd FileType python noremap <buffer> <leader>w :w \| ! python3 % <cr>
 
   " haskell
   autocmd FileType haskell noremap <buffer> <leader>w :w \| ! ghci % <cr>
