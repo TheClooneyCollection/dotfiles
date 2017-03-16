@@ -4,6 +4,7 @@ tap 'homebrew/bundle'
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
 tap 'neovim/neovim'
+tap 'NicholasTD07/lychee-gold'
 
 # essential
 
@@ -23,7 +24,7 @@ cask 'scansnap-manager' # for ScanSnap S1300i
 ## devtools
 
 cask 'iterm2'
-cask 'dash'
+cask 'NicholasTD07/lychee-gold/dash' # v2
 cask 'reveal'
 cask 'paw'
 cask 'zeplin'
