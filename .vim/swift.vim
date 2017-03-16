@@ -6,7 +6,7 @@ augroup swift
 
   function! SetUpSwift()
     setlocal foldmethod=indent
-    setlocal foldlevel=2
+    setlocal foldlevel=1
 
     TagbarOpen
 
