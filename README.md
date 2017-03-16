@@ -31,7 +31,8 @@
 fish
 source bin/macos.fish
 
-# set fish as default shell | compile vim plugins | disable dock bouncing icons
+# sets fish as default shell | compiles vim plugins | disables dock bouncing icons
+# it also disables xcode indexing
 mac_init
 
 # optional
