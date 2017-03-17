@@ -38,6 +38,18 @@ vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 nnoremap <silent> <leader>c :nohlsearch<cr>
 
+function! Next()
+  let _ = "Prototyping the function for pressing `n`"
+  let search = @/
+  echom "Next start"
+  echom search
+  if empty(search)
+    echom "go to next error"
+  else
+    echom "go to next search result"
+  endif
+endfunction
+
 nnoremap <leader>ee :e %<cr>
 nnoremap <leader>ev :e ~/.vim/<cr>
 nnoremap <leader>em :e ~/.vim/mappings.vim<cr>
