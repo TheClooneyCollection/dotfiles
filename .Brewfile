@@ -75,6 +75,10 @@ mas 'Disk Care', id: 913724705
 
 mas 'GIPHY CAPTURE', id: 668208984
 
+## social
+
+mas 'Tweetbot for Twitter', id: 557168941
+
 ## games
 
 mas 'Mini Metro', id: 1047760200 # Resource planning game
