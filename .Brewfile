@@ -19,7 +19,11 @@ cask 'macid'
 cask 'nvalt'
 cask 'sketch'
 cask 'google-drive'
+
+# drivers
+
 cask 'scansnap-manager' # for ScanSnap S1300i
+cask 'logitech-control-center' # for G213
 
 ## devtools
 
