@@ -113,7 +113,7 @@ brew 'httpie'
 
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
-brew 'the_silver_searcher'
+brew 'ripgrep'
 brew 'aria2'
 
 ## iOS
