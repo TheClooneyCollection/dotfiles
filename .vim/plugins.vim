@@ -93,6 +93,11 @@ let g:signify_vcs_list = [ 'git' ]
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
+" rg
+set grepprg=rg\ --vimgrep\ --no-heading\ --glob\ '!tags'\ --glob\ '!*.xc*'
+set grepformat=%f:%l:%c:%m,%f:%l:%m
+nnoremap <leader>g :silent grep <c-r><c-w>
+
 " easy-align
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
