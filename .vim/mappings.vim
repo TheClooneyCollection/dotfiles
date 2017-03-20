@@ -26,7 +26,7 @@ nnoremap <tab> <c-u>
 nnoremap <del> <c-u>
 nnoremap <bs> <c-u>
 
-nnoremap <space> zA
+nnoremap <space> za
 
 " mappings start with <leader>
 nnoremap <leader><leader> <c-^>
