@@ -42,6 +42,7 @@ Plug 'mbbill/undotree'
 Plug 'pbrisbin/vim-mkdir' " create any non-existent directories before writing a buffer
 
 " Editing
+Plug 'bkad/CamelCaseMotion'
 
 Plug 'junegunn/vim-easy-align'
 
@@ -104,6 +105,17 @@ nnoremap <leader>g :silent grep <c-r><c-w>
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+" CamelCaseMotion
+
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
 
 source ~/.vim/fzf.vim
 source ~/.vim/easy-motion.vim
