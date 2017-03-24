@@ -77,7 +77,7 @@ endif
 nnoremap <silent> <leader>ii :source $MYVIMRC \| PlugInstall <cr>
 nnoremap <silent> <leader>iu :PlugUpdate <cr>
 
-nnoremap <silent> T :w \| !ctags <cr>
+nnoremap <silent> T :!ctags <cr>
 nnoremap <silent> U :UndotreeToggle \| UndotreeFocus <cr>
 
 " solarized
