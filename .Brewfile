@@ -4,6 +4,7 @@ tap 'homebrew/bundle'
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
 tap 'neovim/neovim'
+tap 'facebook/fb'
 tap 'NicholasTD07/lychee-gold'
 
 # essential
@@ -120,6 +121,7 @@ brew 'aria2'
 
 brew 'carthage'
 brew 'swiftlint'
+brew 'fbsimctl' #, args: ['HEAD'] # facebook's open source simulator control tool
 
 ## make tools
 
