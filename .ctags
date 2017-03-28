@@ -16,6 +16,6 @@
 --regex-swift=/[[:<:]]func[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/f,function/
 --regex-swift=/[[:<:]]protocol[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/p,protocol/
 --regex-swift=/[[:<:]]struct[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/s,struct/
---regex-swift=/[[:<:]]extension[[:>:]][[:space:]]+([[:alnum:]_]+[[:space:]]*:[[:space:]]*[[:alnum:]_]+)/\1/E,extension/
+--regex-swift=/[[:<:]]extension[[:>:]][[:space:]]+([[:alnum:]_.]+[[:space:]]*:[[:space:]]*[[:alnum:]_]+)/\1/E,extension/
 --regex-swift=/[[:<:]]typealias[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/t,typealias/
 
