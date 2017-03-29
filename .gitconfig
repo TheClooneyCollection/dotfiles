@@ -28,8 +28,8 @@
     cp = cherry-pick
     cs = clone --depth 1
     cv = commit -v
-    d = diff
-    dc = diff --cached
+    d = !cdiff
+    dc = !cdiff --cached
     ds = diff --stat
     dss = diff --shortstat
     f = fetch
