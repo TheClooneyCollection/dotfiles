@@ -33,8 +33,12 @@
     ds = diff --stat
     dss = diff --shortstat
     f = fetch
+    h = !git head
+    head = !GIT_NO_PAGER=1 git l -1
+    hp = log -1 -p --pretty="tformat:"
     hard-reset = reset --hard
     hr = reset --hard
+    l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
     ls = ls-files
     lsd = ls-tree -d HEAD
     lso = ls-files --others
@@ -54,6 +58,8 @@
     pt = push --tags
     ppt = !git p && git pt
     pat = !git pa && git pt
+    r = !GIT_NO_PAGER=1 git l -10
+    rr = !GIT_NO_PAGER=1 git l -50
     rba = rebase --abort
     rbc = rebase --continue
     rh = !~/bin/checkout-history
@@ -69,27 +75,6 @@
     stp = stash pop
     undo = !git stash && git reset --hard
     untracked = !git lfo
-
-    # Fancy logging.
-    #   h = head
-    #   hp = head with patch
-    #   r = recent commits, only current branch
-    #   rn = limited numbers of recent commits
-    #   ra = recent commits, all reachable refs
-    #   l = all commits, only current branch
-    #   la = all commits, all reachable refs
-    #
-    # This came from Gary Bernhardt's dotfiles:
-    #     https://github.com/garybernhardt/dotfiles
-
-    head = !git r -1
-    h = !git head
-    hp = "!. ~/.githelpers && show_git_head"
-    r = !GIT_NO_PAGER=1 git l -10
-    rr = !GIT_NO_PAGER=1 git l -50
-    ra = !git r --all
-    l = "!. ~/.githelpers && pretty_git_log"
-    la = !git l --all
 
 [color]
     ui=auto
