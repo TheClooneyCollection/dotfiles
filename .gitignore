@@ -16,6 +16,7 @@
 .vim/*
 !/.vim/settings.vim
 !/.vim/swift.vim
+!/.vim/fastlane.vim
 !/.vim/autocmds.vim
 !/.vim/mappings.vim
 !/.vim/plugins.vim
