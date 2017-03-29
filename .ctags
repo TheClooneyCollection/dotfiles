@@ -13,7 +13,7 @@
 --langmap=swift:.swift
 --regex-swift=/[[:<:]]class[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/c,class/
 --regex-swift=/[[:<:]]enum[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/e,enum/
---regex-swift=/[[:<:]]func[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/f,function/
+--regex-swift=/[[:<:]]func[[:>:]][[:space:]]+([[:alnum:][:punct:][:space:]]+)/\1/f,function/
 --regex-swift=/[[:<:]]protocol[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/p,protocol/
 --regex-swift=/[[:<:]]struct[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/s,struct/
 --regex-swift=/[[:<:]]extension[[:>:]][[:space:]]+([[:alnum:]_.]+[[:space:]]*:[[:space:]]*[[:alnum:]_]+)/\1/E,extension/
