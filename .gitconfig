@@ -3,31 +3,30 @@
     email = Nicholas.TD07@gmail.com
 [alias]
     a = add
-    aa = add --all
+    ; aa = add --all
     amd = commit --amend
-    amend = commit --amend
+    ; amend = commit --amend
     ap = add -p
     b = branch
-    ba = branch -a
-    bc = !~/bin/remove-merged-branches.py
+    ; ba = branch -a
+    ; bc = !~/bin/remove-merged-branches.py
     c = commit -v
     ca = commit -av
-    cam = commit -am
-    cav = commit -av
+    ; cam = commit -am
+    ; cav = commit -av
     cc = checkout -
     cd = checkout develop
-    cd1 = clone --depth=1
+    ; cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
     cm = checkout master
-    cmm = commit -m
+    ; cmm = commit -m
     co = checkout
-    # Must have fzf installed
+    ; Must have fzf installed
     cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
     count = rev-list --count
     cp = cherry-pick
-    cs = clone --depth 1
-    cv = commit -v
+    ; cs = clone --depth 1
     d = !cdiff
     dc = !cdiff --cached
     ds = diff --stat
@@ -40,15 +39,15 @@
     hr = reset --hard
     l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
     ls = ls-files
-    lsd = ls-tree -d HEAD
-    lso = ls-files --others
-    lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
-    lmr = !git log --reverse -20 --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone REVERSED
+    ; lsd = ls-tree -d HEAD
+    ; lso = ls-files --others
+    ; lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
+    ; lmr = !git log --reverse -20 --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone REVERSED
     lp = log -p
     m = merge
     mab = merge --abort
     n = checkout -b
-    nn = checkout --orphan
+    ; nn = checkout --orphan
     no = !git count
     p = push
     po = !git push -u origin $(git symbolic-ref --short HEAD)
@@ -56,8 +55,8 @@
     pp = pull
     ppr = pull --rebase
     pt = push --tags
-    ppt = !git p && git pt
-    pat = !git pa && git pt
+    ; ppt = !git p && git pt
+    ; pat = !git pa && git pt
     r = !GIT_NO_PAGER=1 git l -10
     rr = !GIT_NO_PAGER=1 git l -50
     rba = rebase --abort
