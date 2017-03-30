@@ -74,6 +74,10 @@
     stp = stash pop
     undo = !git stash && git reset --hard
     untracked = !git lfo
+    me = config --get user.name
+    whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me) --since
+    day = !git whathaveidone 1.day
+    week = !git whathaveidone 1.week
 
 [color]
     ui=auto
