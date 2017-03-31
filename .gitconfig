@@ -24,6 +24,7 @@
     co = checkout
     ; Must have fzf installed
     cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
+    cot = !git tag | fzf | xargs git checkout
     count = rev-list --count
     cp = cherry-pick
     ; cs = clone --depth 1
