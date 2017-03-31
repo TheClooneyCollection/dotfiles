@@ -7,7 +7,7 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 set nocompatible
 filetype off
 
-set shell=/bin/bash
+set shell=/usr/local/bin/fish
 
 set hidden
 set history=10000
