@@ -35,7 +35,7 @@
     f = fetch
     h = !git head
     head = !GIT_NO_PAGER=1 git l -1
-    hp = log -1 -p --pretty="tformat:"
+    hp = !git log -1 -p --pretty="tformat:" | cdiff
     hard-reset = reset --hard
     hr = reset --hard
     l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
