@@ -77,9 +77,9 @@
     untracked = !git lfo
     me = config --get user.name
     whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
-    day = !git whathaveidone --since 1.day
-    today = !git whathaveidone --since 9am
-    week = !git whathaveidone --since 1.week
+    today = !git whathaveidone --since 7am
+    week = !git whathaveidone --since 'This Monday'
+    lastweek = !git whathaveidone --since 'Last Monday' --until 'Last Friday'
 
 [color]
     ui=auto
