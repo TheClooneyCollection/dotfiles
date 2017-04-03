@@ -58,6 +58,11 @@ cask 'karabiner'     # for Kinesis Advantage
 
 cask 'minecraft'
 
+## virtual machine environments
+
+cask 'virtualbox'
+cask 'vagrant'
+
 # mas
 
 ## essential
