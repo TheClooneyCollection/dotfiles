@@ -2,19 +2,24 @@
 
 ## Usage
 
-#### Install Homebrew
+#### Install Git
+
+##### (`if macOS`) Install Git with Homebrew
 
 `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 
-#### Clone this repo
-
 (`git` is installed when you installed Homebrew)
 
-`git clone https://github.com/NicholasTD07/dotfiles.git`
+#### Set up your `~`
 
-#### Move files into your home folder
+```sh
+cd ~
+git init
+git remote add origin https://github.com/NicholasTD07/dotfiles.git
+git pull
 
-`cp -rv /path/to/dotfiles/.* ~/`
+# You should have all the files :)
+```
 
 #### Install tools and apps with Homebrew Bundle
 
