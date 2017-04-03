@@ -10,6 +10,7 @@ fzf_key_bindings
 
 alias b 'bundle'
 alias bb 'brew bundle --global'
+alias update_casks 'brew cask outdated | cut -d " " -f 1 | xargs brew cask install --force'
 alias o 'open'
 alias xo 'open -a Xcode *.xcworkspace'
 alias oo 'open .'
