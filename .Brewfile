@@ -111,7 +111,6 @@ brew 'neovim'
 
 ## utils
 
-brew 'thefuck'
 brew 'fzf'       # fuzzy finder
 brew 'ctags'
 

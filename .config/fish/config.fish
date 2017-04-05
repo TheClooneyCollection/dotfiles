@@ -1,8 +1,5 @@
 set -x PATH $PATH ~/bin/
 
-# fuck!
-eval (thefuck --alias | tr '\n' ';')
-
 # fzf
 set -U FZF_DEFAULT_COMMAND 'git ls-files'
 set -U FZF_DEFAULT_OPTS '--height 40%'
