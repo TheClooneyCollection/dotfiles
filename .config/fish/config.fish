@@ -20,7 +20,7 @@ alias v 'nvim'
 alias va 'vagrant'
 alias vu 'va up'
 alias vup 'va up --provision'
-alias vs 'va ssh'
+alias vsh 'va ssh'
 
 function c --description "Edit fish shell's config file in nvim"
     v (config_path)
