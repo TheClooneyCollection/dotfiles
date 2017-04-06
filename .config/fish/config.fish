@@ -168,21 +168,29 @@ function fish_prompt
     echo -n (prompt_pwd)
     set_color normal
 
-    printf '%s ' (__fish_vcs_prompt)
-
-    if not test $last_status -eq 0
-    set_color $fish_color_error
+    git_repo_exists
+    if test $status -eq 0
+        printf '%s ' (__fish_vcs_prompt)
     end
 
-    set_color yellow
+    if not test $last_status -eq 0
+        set_color $fish_color_error
+    end
 
-    set commit (command git rev-parse --short HEAD)
-    echo -n "$commit "
-
-    set_color normal
+    git_repo_exists
+    if test $status -eq 0
+        set_color yellow
+        set commit (command git rev-parse --short HEAD)
+        echo -n "$commit"
+        set_color normal
+    end
 
     echo
     echo -n "$suffix "
 
     set_color normal
+end
+
+function git_repo_exists
+    command git status > /dev/null ^ /dev/null
 end
