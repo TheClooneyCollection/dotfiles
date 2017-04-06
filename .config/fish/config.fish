@@ -192,5 +192,5 @@ function fish_prompt
 end
 
 function git_repo_exists
-    command git status > /dev/null ^ /dev/null
+    command git rev-parse --is-inside-work-tree > /dev/null ^ /dev/null
 end
