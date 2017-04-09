@@ -113,6 +113,7 @@ brew 'neovim'
 
 brew 'fzf'       # fuzzy finder
 brew 'ctags'
+brew 'cdiff'
 
 brew 'httpie'
 
