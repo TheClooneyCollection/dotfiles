@@ -168,11 +168,20 @@ function fish_prompt
         set suffix '$'
     end
 
+    switch (uname)
+        case Darwin
+            echo -n 'macOS '
+        case '*'
+            echo -n (uname)
+            echo -n ' '
+    end
+
     # PWD
     set_color $color_cwd
     echo -n (prompt_pwd)
     set_color normal
 
+    # git status
     git_repo_exists
     if test $status -eq 0
         printf '%s ' (__fish_vcs_prompt)
@@ -182,6 +191,7 @@ function fish_prompt
         set_color $fish_color_error
     end
 
+    # git commit
     git_repo_exists
     if test $status -eq 0
         set_color yellow
