@@ -19,16 +19,14 @@ alias vu 'va up'
 alias vup 'va up --provision'
 alias vsh 'va ssh'
 
+# fish
+
 function c --description "Edit fish shell's config file in nvim"
     v (config_path)
 end
 
 function t
     z "$argv"
-end
-
-function jo
-    zo "$argv"
 end
 
 function r --description "Reload fish shell's config file"
@@ -38,6 +36,13 @@ end
 
 function config_path
     status -f
+end
+
+# shell
+
+function mkdir
+    command mkdir -p $argv
+    cd $argv
 end
 
 # GitHub
