@@ -74,7 +74,7 @@
     stc = stash clear
     stl = stash list
     stp = stash pop
-    undo = !git stash && git reset --hard
+    undo = !git add --all && git stash && git reset --hard
     untracked = !git lfo
     me = config --get user.name
     whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
