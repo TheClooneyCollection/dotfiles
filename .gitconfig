@@ -5,29 +5,21 @@
     a = add
     aa = add --all
     amd = commit --amend
-    ; amend = commit --amend
     ap = add -p
     b = branch
-    ; ba = branch -a
-    ; bc = !~/bin/remove-merged-branches.py
     c = commit -v
     ca = commit -av
-    ; cam = commit -am
-    ; cav = commit -av
     cc = checkout -
     cd = checkout develop
-    ; cd1 = clone --depth=1
     ci = check-ignore -v
     cl = clone
     cm = checkout master
-    ; cmm = commit -m
     co = checkout
     ; Must have fzf installed
     cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
     cot = !git tag | fzf | xargs git checkout
     count = rev-list --count
     cp = cherry-pick
-    ; cs = clone --depth 1
     d = !cdiff
     dc = !cdiff --cached
     ds = diff --stat
@@ -51,6 +43,7 @@
     n = checkout -b
     ; nn = checkout --orphan
     no = !git count
+    nuke = !git reset --hard && git clean -df
     p = push
     po = !git push -u origin $(git symbolic-ref --short HEAD)
     pc = !git pp && git bc
