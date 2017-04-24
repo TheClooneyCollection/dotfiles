@@ -3,7 +3,7 @@
     email = NicholasTD07@users.noreply.github.com
 [alias]
     a = add
-    ; aa = add --all
+    aa = add --all
     amd = commit --amend
     ; amend = commit --amend
     ap = add -p
