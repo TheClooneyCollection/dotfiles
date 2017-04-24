@@ -28,6 +28,8 @@ nnoremap <bs> <c-u>
 
 nnoremap <space> za
 
+nnoremap T :!ctags <cr>
+
 " mappings start with <leader>
 nnoremap <leader><leader> <c-^>
 
