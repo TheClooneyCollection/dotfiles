@@ -35,13 +35,10 @@
     ls = ls-files
     ; lsd = ls-tree -d HEAD
     ; lso = ls-files --others
-    ; lm = !git log --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone
-    ; lmr = !git log --reverse -20 --format=' *%C(bold red)%d%Creset %s %C(yellow)%h%Creset' # log for milestone REVERSED
     lp = log -p
     m = merge
     mab = merge --abort
     n = checkout -b
-    ; nn = checkout --orphan
     no = !git count
     nuke = !git reset --hard && git clean -df
     p = push
@@ -50,8 +47,6 @@
     pp = pull
     ppr = pull --rebase
     pt = push --tags
-    ; ppt = !git p && git pt
-    ; pat = !git pa && git pt
     r = !GIT_NO_PAGER=1 git l -10
     rr = !GIT_NO_PAGER=1 git l -50
     rba = rebase --abort
@@ -79,7 +74,6 @@
     ui=auto
 [core]
     editor = nvim
-	; gitproxy = git-proxy
 [push]
     default = simple
 [credential]
@@ -89,10 +83,6 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-# [socks]
-# 	proxy = localhost:6777
-# [http]
-# 	proxy = socks5://localhost:6777
 [filter "media"]
 	clean = git media clean %f
 	smudge = git media smudge %f
