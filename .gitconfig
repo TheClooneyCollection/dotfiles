@@ -45,6 +45,11 @@
     po = !git push -u origin $(git symbolic-ref --short HEAD)
     pc = !git pp && git bc
     pp = pull
+
+    # Pen Pineapple Apple Pen
+    # No seriously: pull --rebase and push
+    ppap = !git ppr && git p
+
     ppr = pull --rebase
     pt = push --tags
     r = !GIT_NO_PAGER=1 git l -10
