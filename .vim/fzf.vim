@@ -6,6 +6,12 @@ nnoremap <silent> <c-f> :call fzf#run({
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ }) <cr>
+nnoremap <silent> <c-m> :call fzf#run({
+            \ 'source': 'git ls-files',
+            \ 'sink': 'e',
+            \ 'down': '~40%',
+            \ 'options': '-m --bind=ctrl-a:select-all,ctrl-d:deselect-all'
+            \ }) <cr>
 nnoremap <silent> <c-b> :call fzf#run({
             \ 'source': map(range(1, bufnr('$')),
             \ 'bufname(v:val)'),
