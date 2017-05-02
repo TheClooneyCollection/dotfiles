@@ -13,7 +13,9 @@ augroup swift
       set makeprg=swift\ test
       noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
     else
+      set makeprg=swift\ %
       noremap <buffer> <leader>w :w \| ! swift % <cr>
+      noremap <buffer> <leader>t :w \| silent make \| redraw! \| cw 4 <cr>
     endif
 
     " reset errorformat
