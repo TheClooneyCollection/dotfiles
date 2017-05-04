@@ -4,6 +4,7 @@
 [alias]
     a = add
     aa = add --all
+    ac = !git aa && git c
     amd = commit --amend
     ap = add -p
     b = branch
