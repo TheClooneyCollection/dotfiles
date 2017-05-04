@@ -17,6 +17,8 @@ alias oo 'open .'
 alias g 'git'
 alias v 'nvim'
 
+alias ig 'v (git rev-parse --show-toplevel)/.gitignore'
+
 alias va 'vagrant'
 alias vu 'va up'
 alias vup 'va up --provision'
