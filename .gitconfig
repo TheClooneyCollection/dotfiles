@@ -42,6 +42,7 @@
     lp = log -p
     m = merge
     mab = merge --abort
+    mff = merge --ff-only
     n = checkout -b
     no = !git count
     nuke = !git reset --hard && git clean -df
