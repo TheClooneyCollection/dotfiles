@@ -1,25 +1,25 @@
 " https://github.com/junegunn/fzf/wiki/Examples-(vim)
 "
 set rtp+=/usr/local/opt/fzf " Add fzf's vim plugin
-nnoremap <silent> <c-f> :call fzf#run({
+nnoremap <silent> <leader>f :call fzf#run({
             \ 'source': 'git ls-files',
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ }) <cr>
-nnoremap <silent> <c-y> :call fzf#run({
+nnoremap <silent> <leader>y :call fzf#run({
             \ 'source': 'git ls-files',
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ 'options': '-m --bind=ctrl-a:select-all,ctrl-d:deselect-all'
             \ }) <cr>
-nnoremap <silent> <c-b> :call fzf#run({
+nnoremap <silent> <leader>b :call fzf#run({
             \ 'source': map(range(1, bufnr('$')),
             \ 'bufname(v:val)'),
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ }) <cr>
-nnoremap <silent> <c-t> :call Tags() <cr>
-nnoremap <c-n> : w \| call Btags() <cr>
+nnoremap <silent> <leader>t :call Tags() <cr>
+nnoremap <leader>n : w \| call Btags() <cr>
 
 function! s:tags_sink(line)
   let parts = split(a:line, '\t\zs')
