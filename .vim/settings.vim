@@ -38,8 +38,6 @@ set tabstop=4 shiftwidth=4 softtabstop=4
 set autoindent smartindent
 
 " Behavior
-let mapleader = ","
-
 set complete+=kspell
 set list
 set listchars=tab:>-,trail:·,extends:#,nbsp:. ",eol:¬ " end
