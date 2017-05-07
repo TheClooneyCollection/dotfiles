@@ -11,6 +11,7 @@ inoremap : ;
 inoremap <c-c> <esc>
 inoremap kj <esc>
 cnoremap kj <c-c> " fix exit after typing :help in command
+tnoremap kj <esc>
 
 noremap <c-j> <c-w>j
 noremap <c-k> <c-w>k
