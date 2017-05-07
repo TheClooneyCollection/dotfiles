@@ -44,13 +44,14 @@
     mab = merge --abort
     mff = merge --ff-only
     n = checkout -b
+    name = rev-parse --abbrev-ref HEAD
     no = !git count
     nuke = !git reset --hard && git clean -df
     p = push
     po = !git push -u origin $(git symbolic-ref --short HEAD)
     pc = !git pp && git bc
     pp = pull
-    pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare/g")
+    pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
     prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pull/g")
 
     # Pen Pineapple Apple Pen
