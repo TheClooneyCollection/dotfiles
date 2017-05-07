@@ -10,8 +10,7 @@ augroup swift
 
     " set up swift compile
     if !empty(glob("./Package.swift"))
-      set makeprg=swift\ test
-      noremap <buffer> <leader>w :wa \| silent make \| redraw! \| cw 4 <cr>
+      noremap <buffer> <leader>w :wa \| Neomake! <cr>
     else
       set makeprg=swift\ %
       noremap <buffer> <leader>w :w \| ! swift % <cr>
