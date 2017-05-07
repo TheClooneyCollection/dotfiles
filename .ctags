@@ -3,11 +3,13 @@
 --exclude=.git
 --exclude=venv
 
---exclude=Carthage
 --exclude=Pods
+--exclude=Carthage
 
 --exclude=vendor
 --exclude=node_modules
+
+--exclude=build
 
 --langdef=swift
 --langmap=swift:.swift
