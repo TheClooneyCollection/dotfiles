@@ -23,12 +23,14 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-nnoremap <space> za
-
 nnoremap T :!ctags <cr>
 
-" mappings start with <leader>
-nnoremap <leader><leader> <c-^>
+noremap <leader><leader> <c-d>
+nnoremap <leader>d <c-d>
+nnoremap <leader>u <c-u>
+
+nnoremap <leader>a <c-^>
+nnoremap <leader>o zA
 
 nnoremap <leader>h :help<space>
 
@@ -36,6 +38,13 @@ nnoremap <leader>s :%s/\<<C-r><C-w>\>/
 vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 nnoremap <silent> <leader>c :nohlsearch<cr>
+
+" mappings for QuickFix
+
+nnoremap <leader>cc :cc <cr>
+nnoremap <leader>cn :cn <cr>
+nnoremap <leader>cw :cw 4 <cr>
+nnoremap <leader>cl :ccl <cr>
 
 function! Next()
   let _ = "Prototyping the function for pressing `n`"

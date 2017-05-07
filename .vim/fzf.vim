@@ -1,3 +1,5 @@
+let mapleader = "\<space>"
+
 " https://github.com/junegunn/fzf/wiki/Examples-(vim)
 "
 set rtp+=/usr/local/opt/fzf " Add fzf's vim plugin
@@ -6,7 +8,7 @@ nnoremap <silent> <leader>f :call fzf#run({
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ }) <cr>
-nnoremap <silent> <leader>y :call fzf#run({
+nnoremap <silent> <leader>m :call fzf#run({
             \ 'source': 'git ls-files',
             \ 'sink': 'e',
             \ 'down': '~40%',
