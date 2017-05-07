@@ -15,8 +15,10 @@ nnoremap <silent> <leader>m :call fzf#run({
             \ 'options': '-m --bind=ctrl-a:select-all,ctrl-d:deselect-all'
             \ }) <cr>
 nnoremap <silent> <leader>b :call fzf#run({
-            \ 'source': map(range(1, bufnr('$')),
-            \ 'bufname(v:val)'),
+            \ 'source': filter(
+            \             map(range(1, bufnr('$')), 'bufname(v:val)'),
+            \             '!empty(v:val)'
+            \ ),
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ }) <cr>
