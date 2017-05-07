@@ -41,6 +41,8 @@
     ; lso = ls-files --others
     lp = log -p
     m = merge
+    mm = !branch=$(git name) && git cm && git mff $branch
+    md = !branch=$(git name) && git cd && git mff $branch
     mab = merge --abort
     mff = merge --ff-only
     n = checkout -b
