@@ -22,10 +22,6 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-nnoremap <tab> <c-u>
-nnoremap <del> <c-u>
-nnoremap <bs> <c-u>
-
 nnoremap <space> za
 
 nnoremap T :!ctags <cr>
