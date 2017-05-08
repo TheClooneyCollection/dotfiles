@@ -21,7 +21,7 @@
     cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
     ; commits = !open (git ls-remote --get-url origin | sed 's/\.git/\/commits/g')
     cot = !git tag | fzf | xargs git checkout
-    count = rev-list --count
+    count = !git rev-list --count $(git name)
     cp = cherry-pick
     d = !cdiff
     dc = !cdiff --cached
