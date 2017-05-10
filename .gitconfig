@@ -29,9 +29,9 @@
     dss = diff --shortstat
     f = fetch
     h = !git head
+    hard-reset = reset --hard
     head = !GIT_NO_PAGER=1 git l -1
     hp = !git log -1 -p --pretty="tformat:" | cdiff
-    hard-reset = reset --hard
     hr = reset --hard
     ; issues = !open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
     l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
@@ -41,6 +41,7 @@
     ; lso = ls-files --others
     lp = log -p
     m = merge
+    me = config --get user.name
     mm = !branch=$(git name) && git cm && git mff $branch
     md = !branch=$(git name) && git cd && git mff $branch
     mab = merge --abort
@@ -53,8 +54,6 @@
     po = !git push -u origin $(git symbolic-ref --short HEAD)
     pc = !git pp && git bc
     pp = pull
-    pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
-    prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pull/g")
 
     # Pen Pineapple Apple Pen
     # No seriously: pull --rebase and push
@@ -80,11 +79,15 @@
     stp = stash pop
     undo = !git add --all && git stash && git reset --hard
     untracked = !git lfo
-    me = config --get user.name
+
     whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
     today = !git whathaveidone --since 7am
     week = !git whathaveidone --since 'This Monday'
     lastweek = !git whathaveidone --since 'Last Monday' --until 'Last Friday'
+
+    # GitHub
+    pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
+    prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pull/g")
 
 [color]
     ui=auto
