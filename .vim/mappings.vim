@@ -25,7 +25,10 @@ vnoremap k gk
 
 nnoremap T :!ctags <cr>
 
-noremap <leader><leader> <c-d>
+nnoremap <leader><leader> <c-d>
+
+nnoremap <leader>q :wqa <cr>
+
 nnoremap <leader>d <c-d>
 nnoremap <leader>u <c-u>
 
