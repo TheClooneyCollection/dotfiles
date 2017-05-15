@@ -46,6 +46,7 @@
     m2m = !branch=$(git name) && git cm && git mff $branch
     m2d = !branch=$(git name) && git cd && git mff $branch
     md = merge develop
+    mod = merge origin/develop
     me = config --get user.name
     mab = merge --abort
     mff = merge --ff-only
