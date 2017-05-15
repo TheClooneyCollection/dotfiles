@@ -74,9 +74,6 @@ endif
 
 "" Configure plugins ""
 
-nnoremap <silent> <leader>ii :source $MYVIMRC \| PlugInstall <cr>
-nnoremap <silent> <leader>iu :PlugUpdate <cr>
-
 nnoremap <silent> U :UndotreeToggle \| UndotreeFocus <cr>
 
 " solarized
@@ -96,7 +93,6 @@ let g:airline_powerline_fonts = 1
 " rg
 set grepprg=rg\ --vimgrep\ --no-heading\ --glob\ '!tags'\ --glob\ '!*.xc*'
 set grepformat=%f:%l:%c:%m,%f:%l:%m
-nnoremap <leader>g :silent grep <c-r><c-w>
 
 " easy-align
 

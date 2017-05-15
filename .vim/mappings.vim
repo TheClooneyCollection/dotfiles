@@ -42,6 +42,12 @@ vnoremap <leader>s :%s/\<<C-r><C-w>\>/
 
 nnoremap <silent> <leader>c :nohlsearch<cr>
 
+" mappings for plugins
+nnoremap <leader>g :silent grep <c-r><c-w>
+
+nnoremap <silent> <leader>ii :source $MYVIMRC \| PlugInstall <cr>
+nnoremap <silent> <leader>iu :PlugUpdate <cr>
+
 " mappings for QuickFix
 
 nnoremap <leader>cc :cc <cr>
