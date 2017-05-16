@@ -91,7 +91,7 @@
 
     # GitHub
     pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
-    prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pull/g")
+    prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pulls/g")
     repo = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\//g")
 
 [color]
