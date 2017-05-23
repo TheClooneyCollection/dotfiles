@@ -50,10 +50,10 @@ nnoremap <silent> <leader>iu :PlugUpdate <cr>
 
 " mappings for QuickFix
 
-nnoremap <leader>cc :cc <cr>
-nnoremap <leader>cn :cn <cr>
-nnoremap <leader>cw :cw 4 <cr>
-nnoremap <leader>cl :ccl <cr>
+nnoremap <silent> <leader>cc :cc <cr>
+nnoremap <silent> <leader>cn :cn <cr>
+nnoremap <silent> <leader>cw :copen 4 <cr>
+nnoremap <silent> <leader>cl :ccl <cr>
 
 function! Next()
   let _ = "Prototyping the function for pressing `n`"
