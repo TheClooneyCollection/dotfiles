@@ -7,7 +7,6 @@ fzf_key_bindings
 
 alias b 'bundle'
 alias bb 'brew bundle --global'
-alias update_casks 'brew cask outdated | cut -d " " -f 1 | xargs brew cask install --force'
 
 alias clean_derived_data 'rm -rf ~/Library/Developer/Xcode/DerivedData'
 alias xo 'open -a Xcode *.xcworkspace'
@@ -23,6 +22,13 @@ alias va 'vagrant'
 alias vu 'va up'
 alias vup 'va up --provision'
 alias vsh 'va ssh'
+
+# brew 
+function update_casks --description "Update outdated casks"
+    brew cask outdated
+
+    brew cask outdated | cut -d " " -f 1 | xargs brew cask install --force
+end
 
 # fish
 
