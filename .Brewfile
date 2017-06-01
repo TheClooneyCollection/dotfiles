@@ -16,6 +16,7 @@ brew 'mas' # cli for Mac App Store
 ## apps
 
 cask 'opera'
+cask 'firefox'
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
