@@ -14,6 +14,7 @@ alias xo 'open -a Xcode *.xcworkspace'
 alias o 'open'
 alias oo 'open .'
 alias g 'git'
+alias gg 'g d'
 alias v 'nvim'
 
 alias ig 'v (git rev-parse --show-toplevel)/.gitignore'
@@ -61,7 +62,11 @@ end
 function git --description "After running git commands that would affect HEAD, print out the last commit hash"
     set commit (command git rev-parse --short HEAD)
 
-    command git $argv
+    if test (count $argv) -eq 0
+        command git s
+    else
+        command git $argv
+    end
 
     set command_status $status
     set commit_after_command (command git rev-parse --short HEAD)
