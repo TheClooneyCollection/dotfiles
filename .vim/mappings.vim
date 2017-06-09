@@ -86,7 +86,7 @@ nnoremap <leader>y "*y
 
 " FIXME: When sharing Vim with someone else
 inoremap <esc> <nop>
-noremap! <up> <nop>
-noremap! <down> <nop>
-noremap! <right> <nop>
-noremap! <left> <nop>
+noremap <up> <nop>
+noremap <down> <nop>
+noremap <right> <nop>
+noremap <left> <nop>
