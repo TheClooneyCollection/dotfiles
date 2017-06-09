@@ -25,6 +25,7 @@
     cp = cherry-pick
     d = !cdiff
     dc = !cdiff --cached
+    dd = !git d develop
     ; delete remote branch
     dr = !git push origin :$(git name)
     ds = diff --stat
