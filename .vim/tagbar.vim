@@ -10,5 +10,3 @@ let g:tagbar_type_swift = {
         \'t:typealias',
     \]
 \}
-
-nnoremap t :TagbarToggle <cr>
