@@ -10,8 +10,8 @@ augroup swift
 
     " set up swift compile
     if !empty(glob("./Package.swift"))
-      noremap <buffer> <leader>w :wa \| Neomake! <cr>
-    elseif !empty(glob("./*.xcworkspace"))
+      noremap <buffer> <leader>w :wa \| Neomake! swifttest <cr>
+    elseif !empty(glob("./*.xcworkspace")) || !empty(glob("./*.xcodeproj"))
     else
       set makeprg=swift\ %
       noremap <buffer> <leader>w :w \| ! swift % <cr>
