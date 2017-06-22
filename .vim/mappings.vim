@@ -76,6 +76,7 @@ nnoremap <leader>ef :e ~/.vim/fzf.vim<cr>
 nnoremap <leader>ea :e ~/.vim/autocmds.vim<cr>
 nnoremap <leader>eg :e ~/.gitconfig<cr>
 nnoremap <leader>eb :e ~/.Brewfile<cr>
+nnoremap <leader>ec :e ~/.ctags<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
 
 vnoremap <leader>p "*p
