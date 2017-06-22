@@ -21,3 +21,7 @@
 --regex-swift=/[[:<:]]extension[[:>:]][[:space:]]+([[:alnum:]_.]+[[:space:]]*:[[:space:]]*[[:alnum:]_]+)/\1/E,extension/
 --regex-swift=/[[:<:]]typealias[[:>:]][[:space:]]+([[:alnum:]_]+)/\1/t,typealias/
 
+--langdef=markdown
+--langmap=markdown:.md
+--langmap=markdown:.markdown
+--regex-markdown=/^#+[ \t](.*$)/\1/h,heading,headings/
