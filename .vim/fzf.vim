@@ -91,7 +91,7 @@ function! Btags()
   try
     call fzf#run({
     \ 'source':  s:btags_source(),
-    \ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
+    \ 'options': '+m -d "\t" --with-nth 1,4.. --tiebreak=index',
     \ 'down':    '40%',
     \ 'sink':    function('s:btags_sink')})
   catch
