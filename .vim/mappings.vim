@@ -23,7 +23,7 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
-nnoremap T :!ctags <cr>
+nnoremap T :!ctags (git ls) <cr>
 
 nnoremap <leader><leader> <c-d>
 
