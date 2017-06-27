@@ -8,6 +8,10 @@ nnoremap <silent> <leader>f :call fzf#run({
             \ 'sink': 'e',
             \ 'down': '~40%',
             \ }) <cr>
+nnoremap <silent> <leader>. :call fzf#run({
+            \ 'sink': 'e',
+            \ 'down': '~40%',
+            \ }) <cr>
 nnoremap <silent> <leader>m :call fzf#run({
             \ 'source': 'git ls-files',
             \ 'sink': 'e',
