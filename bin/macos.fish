@@ -50,6 +50,14 @@ function enable_xcode_indexing
     defaults write com.apple.dt.XCode IDEIndexDisable 0
 end
 
+function is_xcode_indexing
+    if test (defaults read com.apple.dt.XCode IDEIndexDisable) -eq 0
+        echo "NOPE"
+    else
+        echo "Yes, it is"
+    end
+end
+
 function disable_xcode_indexing
     defaults write com.apple.dt.XCode IDEIndexDisable 1
 end
