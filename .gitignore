@@ -2,7 +2,6 @@
 
 !/.Brewfile
 !/.ctags
-!/.emacs
 
 !bin/
 !bin/*
@@ -11,6 +10,10 @@
 
 !/requirements.in
 !/requirements.txt
+
+!/.emacs.d
+.emacs.d/*
+!/.emacs.d/init.el
 
 !/.vimrc
 !/.vim
