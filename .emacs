@@ -1,7 +1,8 @@
 ; package.el
 
 (require 'package)
-(setq package-enable-at-startup nil)
+(setq package-enable-at-startup nil
+      load-prefer-newer t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
 (package-initialize)
@@ -27,7 +28,15 @@
 
 ; packages.el
 
+; evil.el
+; VIM! I mean EVIL!
+
+(use-package evil
+  :config
+  (evil-mode))
+
 ; Functionality
+
 (use-package guide-key
   :diminish guide-key-mode
   :config
