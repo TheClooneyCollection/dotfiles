@@ -74,8 +74,6 @@ mas 'DaisyDisk', id: 411643860
 
 ## utils
 
-mas 'Brainwave Studio', id: 548229245
-
 mas 'Pages', id: 409201541
 mas 'Keynote', id: 409183694
 
@@ -87,7 +85,7 @@ mas 'GIPHY CAPTURE', id: 668208984
 
 ## social
 
-mas 'Tweetbot for Twitter', id: 557168941
+# mas 'Tweetbot for Twitter', id: 557168941
 
 ## games
 
@@ -101,14 +99,15 @@ brew 'fish'
 brew 'git'
 brew 'git-lfs'
 
+brew 'emacs'
+brew 'neovim'
+
 ### lang
 
 brew 'python'
 brew 'python3' # httpie
 brew 'ruby'
 brew 'haskell-stack'
-
-brew 'neovim'
 
 ## utils
 
