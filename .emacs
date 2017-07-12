@@ -32,8 +32,8 @@
 ; VIM! I mean EVIL!
 
 (use-package evil
-  :config
-  (evil-mode))
+  :init (setq evil-want-C-u-scroll t) ; Enable <c-u> to scroll up
+  :config (evil-mode))
 
 ; Functionality
 
