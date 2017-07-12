@@ -77,7 +77,8 @@
     size = !git count-objects -vH | grep size-pack
     ss = !git gc 1>/dev/null 2>&1 && git size
     s = status --short --branch
-    sc = !git s | grep UU | sed -e 's/UU //g' -e 's/.*/\"&\"/g' # show merge conflicts
+    sc = !git s | grep -E '^(U.|.U)' | sed -e 's/.U //g' -e 's/U. //g' -e 's/.*/\"&\"/g' # show merge conflicts
+    scc = !git s | grep -E '^(U.|.U)'
     st = stash save
     stc = stash clear
     stl = stash list
