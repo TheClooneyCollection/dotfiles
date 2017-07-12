@@ -69,7 +69,7 @@
     r = !GIT_NO_PAGER=1 git l -10
     rr = !GIT_NO_PAGER=1 git l -50
     ra = remote add origin
-    rba = rebase --abort
+    rbabt = rebase --abort
     rbc = rebase --continue
     rh = !~/bin/checkout-history
     ri = rebase -i
