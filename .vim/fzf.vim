@@ -46,7 +46,7 @@ function! Tags()
     echohl WarningMsg
     echom 'Preparing tags'
     echohl None
-    call system('ctags -R')
+    call system('git ls | ctags')
   endif
 
   call fzf#run({
