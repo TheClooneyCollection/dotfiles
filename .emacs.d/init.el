@@ -5,11 +5,11 @@
 
 (package-initialize)
 
-(defun l (f)
-  (load-file (concat user-emacs-directory f)))
 
-(l "packages.el")
-(l "ui.el")
-(l "evil.el")
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
+(require 'packages)
+(require 'devil)
+(require 'ui)
 
 (setq custom-file "~/.emacs.d/custom.el")
