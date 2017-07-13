@@ -1,4 +1,3 @@
-; evil.el
 ; VIM! I mean EVIL!
 
 (use-package evil
@@ -10,4 +9,4 @@
   :init (setq-default evil-escape-key-sequence "kj")
   :config (evil-escape-mode))
 
-(provide 'evil)
+(provide 'devil)
