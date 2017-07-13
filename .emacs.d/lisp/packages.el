@@ -26,3 +26,5 @@
   :config
   (setq guide-key/guide-key-sequence t) ; Enable guide-key for all key sequences
   (guide-key-mode)) ; Enable guide-key-mode
+
+(provide 'packages)

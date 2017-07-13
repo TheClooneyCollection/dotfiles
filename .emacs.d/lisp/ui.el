@@ -7,3 +7,5 @@
 (fset 'display-startup-echo-area-message #'ignore) ; No more startup message
 
 (menu-bar-mode -1) ; Hide menu bar at top
+
+(provide 'ui)

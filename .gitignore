@@ -14,9 +14,7 @@
 !/.emacs.d
 .emacs.d/*
 !/.emacs.d/init.el
-!/.emacs.d/packages.el
-!/.emacs.d/evil.el
-!/.emacs.d/ui.el
+!/.emacs.d/lisp/
 
 !/.vimrc
 !/.vim
