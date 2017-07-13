@@ -10,3 +10,4 @@
 
 (l "packages.el")
 (l "ui.el")
+(l "evil.el")
