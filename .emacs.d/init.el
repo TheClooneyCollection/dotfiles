@@ -11,3 +11,5 @@
 (l "packages.el")
 (l "ui.el")
 (l "evil.el")
+
+(setq custom-file "~/.emacs.d/custom.el")
