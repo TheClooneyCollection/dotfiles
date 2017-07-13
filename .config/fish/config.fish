@@ -14,8 +14,8 @@ alias xo 'open -a Xcode *.xcworkspace'
 alias o 'open'
 alias oo 'open .'
 alias g 'git'
-alias gg 'g d'
-alias ggg 'g ca'
+
+alias e 'emacs'
 alias v 'nvim'
 
 alias ig 'v (git rev-parse --show-toplevel)/.gitignore'
