@@ -53,6 +53,10 @@
   :config
     (ac-config-default))
 
+(use-package smartparens
+  :config
+    (smartparens-mode))
+
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
   :config
