@@ -30,7 +30,10 @@
 (use-package magit
   :commands magit-status)
 
+(use-package auto-complete
+  :diminish auto-complete-mode
   :config
+    (ac-config-default))
 
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
