@@ -65,6 +65,7 @@
 (use-package ace-jump-mode
   :commands (evil-ace-jump-line-mode)
   :init
+  (setq ace-jump-mode-move-keys (number-sequence ?a ?z))
   (general-define-key :prefix nil "f" 'evil-ace-jump-char-mode)
   (general-define-key "l" 'evil-ace-jump-line-mode)
 )
