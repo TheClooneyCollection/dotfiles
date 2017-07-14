@@ -38,11 +38,13 @@
 )
 
 (use-package general
+  :demand t
   :init
     (setq general-default-keymaps 'evil-normal-state-map
           general-default-prefix "<SPC>")
   :config
     (general-define-key "f" 'helm-ls-git-ls)
+    (general-define-key "r" 'dot-emacs/reload)
 )
 
 ; Helm

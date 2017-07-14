@@ -13,3 +13,7 @@
 (require 'ui)
 
 (setq custom-file "~/.emacs.d/custom.el")
+
+(defun dot-emacs/reload ()
+  (interactive)
+  (load-file (concat user-emacs-directory "init.el")))
