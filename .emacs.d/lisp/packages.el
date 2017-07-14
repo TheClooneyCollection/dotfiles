@@ -33,6 +33,7 @@
           general-default-prefix "<SPC>")
   :config
     (general-define-key "r" 'dot-emacs/reload)
+    (general-define-key "qq" 'save-buffers-kill-terminal)
 )
 
 ; Languages
