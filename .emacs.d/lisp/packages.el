@@ -32,6 +32,7 @@
   :config
   (setq guide-key/guide-key-sequence t) ; Enable guide-key for all key sequences
   (guide-key-mode)) ; Enable guide-key-mode
+
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
   :config
@@ -62,7 +63,8 @@
     (helm-mode))
 
 (use-package helm-ls-git
-  :config
+  :commands helm-ls-git-ls
+  :init
     (general-define-key "f" 'helm-ls-git-ls))
 
 
