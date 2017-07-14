@@ -14,7 +14,7 @@
 !/.emacs.d
 .emacs.d/*
 !/.emacs.d/init.el
-!/.emacs.d/lisp/
+!/.emacs.d/lisp/*.el
 
 !/.vimrc
 !/.vim
