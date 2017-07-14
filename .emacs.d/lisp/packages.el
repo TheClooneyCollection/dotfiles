@@ -21,7 +21,9 @@
 
 ; Languages
 
-(use-package swift-mode)
+(use-package swift-mode
+  :mode "\\.swift\\'"
+  :interpreter "swift")
 
 ; Functionality
 
