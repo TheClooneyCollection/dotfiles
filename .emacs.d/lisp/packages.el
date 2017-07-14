@@ -19,6 +19,10 @@
 
 ; Packages
 
+; Languages
+
+(use-package swift-mode)
+
 ; Functionality
 
 (use-package guide-key
