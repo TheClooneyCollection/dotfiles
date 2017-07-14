@@ -60,7 +60,7 @@
 
 (use-package smartparens
   :config
-    (smartparens-mode))
+    (smartparens-global-mode))
 
 (use-package ace-jump-mode
   :commands (evil-ace-jump-line-mode)
