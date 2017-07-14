@@ -40,7 +40,6 @@
 )
 
 (use-package general
-  :demand t
   :init
     (setq general-default-keymaps 'evil-normal-state-map
           general-default-prefix "<SPC>")
