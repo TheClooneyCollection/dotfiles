@@ -48,6 +48,9 @@
     (general-define-key "r" 'dot-emacs/reload)
 )
 
+(use-package magit
+  :commands magit-status)
+
 ; Helm
 (use-package helm
   :bind ("M-x" . helm-M-x)
