@@ -33,6 +33,14 @@
     (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
 )
 
+(use-package general
+  :init
+    (setq general-default-keymaps 'evil-normal-state-map
+          general-default-prefix "<SPC>")
+  :config
+    (general-define-key "f" 'helm-ls-git-ls)
+)
+
 ; Helm
 (use-package helm
   :bind ("M-x" . helm-M-x)
