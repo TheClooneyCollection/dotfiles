@@ -80,6 +80,7 @@
 
 ; Helm
 (use-package helm
+  :diminish helm-mode
   :bind ("M-x" . helm-M-x)
   :init
     ; ; Enable fuzzy matching globally
