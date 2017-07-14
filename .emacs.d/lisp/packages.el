@@ -19,6 +19,22 @@
 
 ; Packages
 
+; Keys
+
+(use-package guide-key
+  :diminish guide-key-mode
+  :config
+  (setq guide-key/guide-key-sequence t) ; Enable guide-key for all key sequences
+  (guide-key-mode)) ; Enable guide-key-mode
+
+(use-package general
+  :init
+    (setq general-default-keymaps 'evil-normal-state-map
+          general-default-prefix "<SPC>")
+  :config
+    (general-define-key "r" 'dot-emacs/reload)
+)
+
 ; Languages
 
 (use-package swift-mode
@@ -41,22 +57,6 @@
   :config
     (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
     (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
-)
-
-; Keys
-
-(use-package guide-key
-  :diminish guide-key-mode
-  :config
-  (setq guide-key/guide-key-sequence t) ; Enable guide-key for all key sequences
-  (guide-key-mode)) ; Enable guide-key-mode
-
-(use-package general
-  :init
-    (setq general-default-keymaps 'evil-normal-state-map
-          general-default-prefix "<SPC>")
-  :config
-    (general-define-key "r" 'dot-emacs/reload)
 )
 
 ; Helm
