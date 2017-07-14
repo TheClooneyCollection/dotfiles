@@ -66,6 +66,7 @@
     ; (setq helm-mode-fuzzy-match t
     ;       helm-completion-in-region-fuzzy-match t)
     (general-define-key "<SPC>" 'helm-M-x)
+    (general-define-key "b" 'helm-buffers-list)
   :config
     (helm-mode))
 
