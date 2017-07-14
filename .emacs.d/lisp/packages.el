@@ -26,5 +26,24 @@
   :config
   (setq guide-key/guide-key-sequence t) ; Enable guide-key for all key sequences
   (guide-key-mode)) ; Enable guide-key-mode
+(use-package async
+  :init (setq async-bytecomp-allowed-packages '(all))
+  :config
+    (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
+    (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
+)
+
+; Helm
+(use-package helm
+  :bind ("M-x" . helm-M-x)
+  :init
+    ; ; Enable fuzzy matching globally
+    ; (setq helm-mode-fuzzy-match t
+    ;       helm-completion-in-region-fuzzy-match t)
+  :config
+    (helm-mode))
+
+(use-package helm-ls-git)
+
 
 (provide 'packages)
