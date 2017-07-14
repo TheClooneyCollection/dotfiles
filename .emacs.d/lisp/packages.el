@@ -43,7 +43,6 @@
     (setq general-default-keymaps 'evil-normal-state-map
           general-default-prefix "<SPC>")
   :config
-    (general-define-key "f" 'helm-ls-git-ls)
     (general-define-key "r" 'dot-emacs/reload)
 )
 
@@ -55,9 +54,12 @@
     ; (setq helm-mode-fuzzy-match t
     ;       helm-completion-in-region-fuzzy-match t)
   :config
+    (general-define-key "<SPC>" 'helm-M-x)
     (helm-mode))
 
-(use-package helm-ls-git)
+(use-package helm-ls-git
+  :config
+    (general-define-key "f" 'helm-ls-git-ls))
 
 
 (provide 'packages)
