@@ -57,8 +57,8 @@
     ; ; Enable fuzzy matching globally
     ; (setq helm-mode-fuzzy-match t
     ;       helm-completion-in-region-fuzzy-match t)
-  :config
     (general-define-key "<SPC>" 'helm-M-x)
+  :config
     (helm-mode))
 
 (use-package helm-ls-git
