@@ -57,6 +57,13 @@
   :config
     (smartparens-mode))
 
+(use-package ace-jump-mode
+  :commands (evil-ace-jump-line-mode)
+  :init
+  (general-define-key "j" 'evil-ace-jump-line-mode)
+  (general-define-key "k" 'evil-ace-jump-line-mode)
+)
+
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
   :config
