@@ -28,7 +28,8 @@
 ; Functionality
 
 (use-package magit
-  :commands magit-status)
+  :commands magit-status
+  :init (general-define-key "s" 'magit-status))
 
 (use-package auto-complete
   :diminish auto-complete-mode
