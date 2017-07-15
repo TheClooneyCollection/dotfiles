@@ -62,7 +62,7 @@
   :mode "\\.swift\\'"
   :interpreter "swift")
 
-(use-package ruby-mode
+(use-package ruby-mode ; Built-in
   :mode ("\\.rb\\'" "\\Brewfile\\'"))
 
 (use-package fish-mode)
