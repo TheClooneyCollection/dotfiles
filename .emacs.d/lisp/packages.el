@@ -54,6 +54,12 @@
       (dot-emacs/edit "packages.el"))
 
     (general-define-key "ee" 'dot-emacs/edit-packages)
+
+    (defun dot-emacs/edit-ui ()
+      (interactive)
+      (dot-emacs/edit "ui.el"))
+
+    (general-define-key "eu" 'dot-emacs/edit-ui)
 )
 
 ; Languages
