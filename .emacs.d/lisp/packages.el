@@ -47,6 +47,11 @@
   :mode "\\.swift\\'"
   :interpreter "swift")
 
+(use-package ruby-mode
+  :mode ("\\.rb\\'" "\\Brewfile\\'"))
+
+(use-package fish-mode)
+
 ; Functionality
 
 (use-package magit
