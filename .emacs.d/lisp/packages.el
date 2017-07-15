@@ -91,7 +91,9 @@
   (general-define-key "l" 'evil-ace-jump-line-mode)
 )
 
-(use-package helm-gtags)
+(use-package helm-gtags
+  :commands (helm-gtags-select)
+  :init (general-define-key :prefix nil "t" 'helm-gtags-select))
 
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
