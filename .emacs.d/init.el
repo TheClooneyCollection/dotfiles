@@ -13,3 +13,4 @@
 (require 'ui)
 
 (setq custom-file "~/.emacs.d/custom.el")
+(setq-default indent-tabs-mode nil) ; Don't indent with tabs.
