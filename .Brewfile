@@ -115,7 +115,10 @@ brew 'fzf'       # fuzzy finder
 brew 'ctags'
 brew 'cdiff'
 
-brew 'global', args: ["--with-ctags", "--with-pygments"]
+brew 'global', args: [
+       "--with-ctags", # neovim still needs ctags
+       "--with-pygments",
+     ]
 
 brew 'httpie'
 
