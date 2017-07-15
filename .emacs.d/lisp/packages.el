@@ -76,6 +76,8 @@
   (general-define-key "l" 'evil-ace-jump-line-mode)
 )
 
+(use-package helm-gtags)
+
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
   :config

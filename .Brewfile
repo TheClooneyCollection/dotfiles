@@ -115,6 +115,8 @@ brew 'fzf'       # fuzzy finder
 brew 'ctags'
 brew 'cdiff'
 
+brew 'global', args: ["--with-ctags", "--with-pygments"]
+
 brew 'httpie'
 
 brew 'coreutils' # gln for relative symlink

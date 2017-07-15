@@ -2,6 +2,7 @@
 
 !/.Brewfile
 !/.ctags
+!/.globalrc
 
 !bin/
 !bin/*
