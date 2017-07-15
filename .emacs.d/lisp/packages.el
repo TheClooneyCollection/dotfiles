@@ -39,11 +39,21 @@
 
     (general-define-key "r" 'dot-emacs/reload)
     (general-define-key "w" 'save-buffer)
+    (general-define-key "k" 'delete-other-windows)
     (general-define-key "qq" 'save-buffers-kill-terminal)
 
     (general-define-key "hf" 'describe-function)
     (general-define-key "hk" 'describe-key)
     (general-define-key "hv" 'describe-variable)
+
+    (defun dot-emacs/edit (filename)
+      (find-file (concat (concat user-emacs-directory "lisp/") filename)))
+
+    (defun dot-emacs/edit-packages ()
+      (interactive)
+      (dot-emacs/edit "packages.el"))
+
+    (general-define-key "ee" 'dot-emacs/edit-packages)
 )
 
 ; Languages
