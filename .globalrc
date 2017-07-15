@@ -1,5 +1,5 @@
 default:\
-    :tc=ctags:tc=pygments:
+    :tc=pygments:
 
 ctags:\
     :tc=exuberant-ctags:
