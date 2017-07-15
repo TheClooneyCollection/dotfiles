@@ -32,6 +32,11 @@
     (setq general-default-keymaps 'evil-normal-state-map
           general-default-prefix "<SPC>")
   :config
+
+    (defun dot-emacs/reload ()
+      (interactive)
+      (load-file (concat user-emacs-directory "init.el")))
+
     (general-define-key "r" 'dot-emacs/reload)
     (general-define-key "w" 'save-buffer)
     (general-define-key "qq" 'save-buffers-kill-terminal)
