@@ -9,6 +9,7 @@
 (menu-bar-mode -1) ; Hide menu bar at top
 
 (use-package whitespace ; Built-in
+  :diminish (whitespace-mode global-whitespace-mode)
   :init (setq whitespace-style '(face tabs trailing empty tab-mark))
   :config (global-whitespace-mode))
 
