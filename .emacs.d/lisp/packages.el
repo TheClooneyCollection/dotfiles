@@ -29,8 +29,9 @@
 
 (use-package general
   :init
-    (setq general-default-keymaps 'evil-normal-state-map
-          general-default-prefix "<SPC>")
+  (setq general-default-keymaps (list 'evil-normal-state-map
+                                      'evil-visual-state-map)
+        general-default-prefix "<SPC>")
   :config
 
     (defun dot-emacs/reload ()
