@@ -42,8 +42,9 @@
       (load-file (concat user-emacs-directory "init.el")))
 
     (general-define-key "r" 'dot-emacs/reload)
-    (general-define-key "w" 'save-buffer)
+    (general-define-key "fw" 'save-buffer)
     (general-define-key "wk" 'delete-other-windows)
+    (general-define-key "wo" 'other-window)
     (general-define-key "qq" 'save-buffers-kill-terminal)
 
     (general-define-key "hf" 'describe-function)
