@@ -29,8 +29,11 @@
 
 (use-package general
   :init
-  (setq general-default-keymaps (list 'evil-normal-state-map
-                                      'evil-visual-state-map)
+  (setq general-default-keymaps (list
+                                 'evil-normal-state-map
+                                 'evil-visual-state-map
+                                 'evil-operator-state-map
+                                 )
         general-default-prefix "<SPC>")
   :config
 
