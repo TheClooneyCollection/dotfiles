@@ -84,6 +84,9 @@
   :commands magit-status
   :init (general-define-key "s" 'magit-status))
 
+(use-package evil-magit
+  :config (evil-magit-init))
+
 (use-package avy
   :init
   (setq avy-background t)
