@@ -85,6 +85,7 @@
   :init (general-define-key "s" 'magit-status))
 
 (use-package evil-easymotion
+  :after evil
   :config
   ; Evil-easymotion's line movements work perfectly with evil.
   (general-define-key "j" (evilem-create 'evil-next-line))
