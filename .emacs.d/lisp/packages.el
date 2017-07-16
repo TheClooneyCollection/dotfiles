@@ -86,10 +86,14 @@
 
 (use-package evil-easymotion
   :config
+  ; Evil-easymotion's line movements work perfectly with evil.
   (general-define-key "j" (evilem-create 'evil-next-line))
   (general-define-key "k" (evilem-create 'evil-previous-line))
 )
 
+; Avy's line movements do not work with evil too well
+; For example, when in visual line selection mode (V), avy does not work at all;
+; and when it does work in visual selection mode (v), it selects the line before selection.
 (use-package avy
   :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
   :init
