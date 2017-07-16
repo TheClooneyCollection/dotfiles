@@ -84,14 +84,18 @@
   :commands magit-status
   :init (general-define-key "s" 'magit-status))
 
+(use-package evil-easymotion
+  :config
+  (general-define-key "j" (evilem-create 'evil-next-line))
+  (general-define-key "k" (evilem-create 'evil-previous-line))
+)
+
 (use-package avy
   :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
   :init
   (setq avy-background t)
   (setq avy-keys (number-sequence ?a ?z))
   (general-define-key :prefix nil "f" 'avy-goto-char-2)
-  (general-define-key "k" 'avy-goto-line-above)
-  (general-define-key "j" 'avy-goto-line-below)
   )
 
 (use-package helm-gtags
