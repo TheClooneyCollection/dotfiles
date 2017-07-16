@@ -79,16 +79,6 @@
   :commands magit-status
   :init (general-define-key "s" 'magit-status))
 
-(use-package auto-complete
-  :diminish auto-complete-mode
-  :config
-    (ac-config-default))
-
-(use-package smartparens
-  :config
-  (show-smartparens-global-mode)
-  (smartparens-global-mode))
-
 (use-package ace-jump-mode
   :commands (evil-ace-jump-line-mode evil-ace-jump-char-mode)
   :init
@@ -100,6 +90,16 @@
 (use-package helm-gtags
   :commands (helm-gtags-select)
   :init (general-define-key :prefix nil "t" 'helm-gtags-select))
+
+(use-package auto-complete
+  :diminish auto-complete-mode
+  :config
+    (ac-config-default))
+
+(use-package smartparens
+  :config
+  (show-smartparens-global-mode)
+  (smartparens-global-mode))
 
 (use-package async
   :init (setq async-bytecomp-allowed-packages '(all))
