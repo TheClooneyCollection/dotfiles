@@ -83,12 +83,18 @@
   :commands magit-status
   :init (general-define-key "s" 'magit-status))
 
+(use-package avy
+  :init
+  (setq avy-background t)
+  (setq avy-keys (number-sequence ?a ?z))
+  (general-define-key :prefix nil "f" 'avy-goto-char-2)
+  (general-define-key "k" 'avy-goto-line-above)
+  (general-define-key "j" 'avy-goto-line-below)
+  )
+
 (use-package ace-jump-mode
   :commands (evil-ace-jump-line-mode evil-ace-jump-char-mode)
   :init
-  (setq ace-jump-mode-move-keys (number-sequence ?a ?z))
-  (general-define-key :prefix nil "f" 'evil-ace-jump-char-mode)
-  (general-define-key "l" 'evil-ace-jump-line-mode)
 )
 
 (use-package helm-gtags
