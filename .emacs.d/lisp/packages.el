@@ -85,6 +85,7 @@
   :init (general-define-key "s" 'magit-status))
 
 (use-package avy
+  :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
   :init
   (setq avy-background t)
   (setq avy-keys (number-sequence ?a ?z))
