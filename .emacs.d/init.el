@@ -14,3 +14,4 @@
 
 (setq custom-file "~/.emacs.d/custom.el")
 (setq-default indent-tabs-mode nil) ; Don't indent with tabs.
+(setq gc-cons-threshold 50000000) ; Do GC when every 50MB are allocated
