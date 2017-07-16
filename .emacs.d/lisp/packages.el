@@ -96,11 +96,6 @@
   (general-define-key "j" 'avy-goto-line-below)
   )
 
-(use-package ace-jump-mode
-  :commands (evil-ace-jump-line-mode evil-ace-jump-char-mode)
-  :init
-)
-
 (use-package helm-gtags
   :commands (helm-gtags-select)
   :init (general-define-key :prefix nil "t" 'helm-gtags-select))
