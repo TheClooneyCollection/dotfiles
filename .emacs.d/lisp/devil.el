@@ -14,4 +14,7 @@
   :config
   (evil-escape-mode))
 
+(use-package evil-magit
+  :config (evil-magit-init))
+
 (provide 'devil)
