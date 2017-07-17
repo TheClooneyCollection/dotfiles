@@ -28,10 +28,6 @@
     (general-define-key "wo" 'other-window)
     (general-define-key "qq" 'save-buffers-kill-terminal)
 
-    (general-define-key "hf" 'describe-function)
-    (general-define-key "hk" 'describe-key)
-    (general-define-key "hv" 'describe-variable)
-
     (defun dot-emacs/edit (filename)
       (find-file (concat (concat user-emacs-directory "lisp/") filename)))
 
@@ -61,6 +57,33 @@
   :mode "\\.fish\\'")
 
 ; Functionality
+
+(use-package flx)
+(use-package counsel
+  :defer t
+  :commands (counsel-M-x
+             counsel-git
+             counsel-describe-function
+             counsel-describe-key
+             counsel-describe-variable
+             )
+  :init
+  (setq ivy-use-virtual-buffers t
+        ivy-count-format "(%d/%d) "
+        enable-recursive-minibuffers t
+        ; Fuzzy
+        ivy-initial-inputs-alist nil
+        ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+  (general-define-key "<SPC>" 'counsel-M-x)
+
+  (general-define-key "f" 'counsel-git)
+  (general-define-key "c" 'ivy-resume)
+
+  (general-define-key "hf" 'counsel-describe-function)
+  (general-define-key "hk" 'counsel-describe-key)
+  (general-define-key "hv" 'counsel-describe-variable)
+
+  :config (ivy-mode))
 
 (use-package magit
   :commands magit-status
