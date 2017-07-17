@@ -8,8 +8,9 @@
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-(require 'packages)
+(require 'bootstrap-use-package)
 (require 'devil)
+(require 'packages) ; overrides evil's key maps
 (require 'ui)
 
 (setq custom-file "~/.emacs.d/custom.el")
