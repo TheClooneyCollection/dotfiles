@@ -26,5 +26,3 @@
     (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
     (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
 )
-
-(provide 'bootstrap-use-package)

@@ -17,5 +17,3 @@
 (use-package evil-magit
   :after evil
   :config (evil-magit-init))
-
-(provide 'devil)

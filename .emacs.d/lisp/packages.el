@@ -100,5 +100,3 @@
   :config
   (show-smartparens-global-mode)
   (smartparens-global-mode))
-
-(provide 'packages)

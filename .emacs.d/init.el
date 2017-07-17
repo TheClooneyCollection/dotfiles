@@ -5,13 +5,12 @@
 
 (package-initialize)
 
-
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-
-(require 'bootstrap-use-package)
-(require 'devil)
-(require 'packages) ; overrides evil's key maps
-(require 'ui)
+(defun load-directory (dir)
+  (let ((load-it (lambda (f)
+                   (load-file (concat (file-name-as-directory dir) f)))
+                 ))
+    (mapc load-it (directory-files dir nil "\\.el$"))))
+(load-directory "~/.emacs.d/lisp/")
 
 (setq custom-file "~/.emacs.d/custom.el")
 (setq-default indent-tabs-mode nil) ; Don't indent with tabs.

@@ -30,5 +30,3 @@
                                   ("America/New_York" "New York")
                                   ))
   :config (display-time-mode))
-
-(provide 'ui)
