@@ -15,7 +15,7 @@ set history=10000
 " UI
 syntax enable
 
-set number relativenumber
+set number
 set cursorline
 set winwidth=81
 set scrolloff=5
