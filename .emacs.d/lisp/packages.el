@@ -123,7 +123,13 @@
 
 (use-package helm-gtags
   :commands (helm-gtags-select)
-  :init (general-define-key :prefix nil "t" 'helm-gtags-select))
+  :bind (
+        :map evil-normal-state-map
+        ("t" . helm-gtags-select)
+        :map evil-visual-state-map
+        ("t" . helm-gtags-select)
+        :map evil-operator-state-map
+        ("t" . helm-gtags-select)))
 
 (use-package auto-complete
   :diminish auto-complete-mode
