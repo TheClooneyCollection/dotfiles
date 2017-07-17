@@ -109,10 +109,16 @@
 ; and when it does work in visual selection mode (v), it selects the line before selection.
 (use-package avy
   :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
+  :bind (
+        :map evil-normal-state-map
+        ("f" . avy-goto-char-2)
+        :map evil-visual-state-map
+        ("f" . avy-goto-char-2)
+        :map evil-operator-state-map
+        ("f" . avy-goto-char-2))
   :init
   (setq avy-background t)
   (setq avy-keys (number-sequence ?a ?z))
-  (general-define-key :prefix nil "f" 'avy-goto-char-2)
   )
 
 (use-package helm-gtags
