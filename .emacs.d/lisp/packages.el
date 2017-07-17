@@ -18,6 +18,16 @@
 ; to bind keys easily in a tidy way
 (require 'bind-key)
 
+; Asynchronous compilation
+
+(use-package async
+  :init (setq async-bytecomp-allowed-packages '(all))
+  :config
+    (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
+    (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
+)
+
+
 ; Packages
 
 ; Keys
@@ -118,13 +128,6 @@
   :config
   (show-smartparens-global-mode)
   (smartparens-global-mode))
-
-(use-package async
-  :init (setq async-bytecomp-allowed-packages '(all))
-  :config
-    (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
-    (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
-)
 
 ; Helm
 (use-package helm
