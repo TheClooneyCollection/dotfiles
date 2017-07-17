@@ -8,7 +8,8 @@
   (require 'use-package))
 
 ; Always install all the packages
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure t
+      use-package-verbose t)
 
 ; Use :diminish with use-package
 ; to remove/abbreviate a mode indicator in the modeline
