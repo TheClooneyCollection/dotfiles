@@ -93,12 +93,7 @@
 
 (use-package helm-gtags
   :commands (helm-gtags-select)
-  :bind (
-        :map evil-normal-state-map
-        ("t" . helm-gtags-select)
-        :map evil-visual-state-map
-        ("t" . helm-gtags-select)
-        :map evil-operator-state-map
+  :bind (:map evil-normal-state-map
         ("t" . helm-gtags-select)))
 
 (use-package auto-complete
