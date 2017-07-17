@@ -77,7 +77,8 @@
 (use-package ruby-mode ; Built-in
   :mode ("\\.rb\\'" "\\Brewfile\\'"))
 
-(use-package fish-mode)
+(use-package fish-mode
+  :mode "\\.fish\\'")
 
 ; Functionality
 
