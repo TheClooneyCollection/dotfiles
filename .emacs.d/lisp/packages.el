@@ -111,6 +111,17 @@
 
   :config (ivy-mode))
 
+(use-package counsel-osx-app
+  :commands counsel-osx-app
+  :init (general-define-key "ca" 'counsel-osx-app))
+
+(use-package counsel-gtags)
+
+(use-package projectile
+  :init (setq projectile-enable-caching t))
+
+(use-package counsel-projectile)
+
 (use-package magit
   :commands magit-status
   :init (general-define-key "s" 'magit-status))
