@@ -101,7 +101,7 @@
         ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
   (general-define-key "<SPC>" 'counsel-M-x)
 
-  (general-define-key "c" 'ivy-resume)
+  (general-define-key "cc" 'ivy-resume)
   (general-define-key "b" 'ivy-switch-buffer)
   (general-define-key "f" 'counsel-git)
 
