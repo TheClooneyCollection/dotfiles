@@ -95,6 +95,10 @@ function install_python_packages
     pip2 install $packages
     pip3 install $packages
 
+    echo "Installing pygments with system default python (need sudo)"
+    echo ""
+    sudo /usr/bin/easy_install pygments
+
     echo ""
     echo "Done!"
     echo ""
