@@ -1,8 +1,8 @@
 set -x PATH $PATH ~/bin/
 
 # fzf
-set -U FZF_DEFAULT_COMMAND 'git ls-files'
-set -U FZF_DEFAULT_OPTS '--height 40%'
+set -g FZF_DEFAULT_COMMAND 'git ls-files'
+set -g FZF_DEFAULT_OPTS '--height 40%'
 fzf_key_bindings
 
 alias b 'bundle'
