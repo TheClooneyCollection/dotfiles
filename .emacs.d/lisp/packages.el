@@ -145,6 +145,9 @@
   :commands magit-status
   :init (general-define-key "s" 'magit-status))
 
+(use-package ggtags
+  :commands (ggtags-update-tags))
+
 (use-package auto-complete
   :diminish auto-complete-mode
   :config
