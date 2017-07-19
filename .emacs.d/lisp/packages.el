@@ -118,7 +118,10 @@
 
 (use-package counsel-gtags
   :after counsel
-  :defer t)
+  :defer t
+  :bind (:map evil-normal-state-map
+         ("t" . counsel-gtags-find-definition))
+  :init)
 
 (use-package projectile
   :init
