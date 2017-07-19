@@ -113,10 +113,13 @@
   :config (ivy-mode))
 
 (use-package counsel-osx-app
+  :after counsel
   :commands counsel-osx-app
   :init (general-define-key "ca" 'counsel-osx-app))
 
-(use-package counsel-gtags)
+(use-package counsel-gtags
+  :after counsel
+  :defer t)
 
 (use-package projectile
   :init (setq projectile-enable-caching t))
