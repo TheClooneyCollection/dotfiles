@@ -28,6 +28,8 @@
     (general-define-key "wo" 'other-window)
     (general-define-key "qq" 'save-buffers-kill-terminal)
 
+    (general-define-key "hk" 'describe-key)
+
     (defun dot-emacs/edit (filename)
       (find-file (concat (concat user-emacs-directory "lisp/") filename)))
 
@@ -106,7 +108,6 @@
   (general-define-key "f" 'counsel-git)
 
   (general-define-key "hf" 'counsel-describe-function)
-  (general-define-key "hk" 'counsel-describe-key)
   (general-define-key "hv" 'counsel-describe-variable)
 
   :config (ivy-mode))
