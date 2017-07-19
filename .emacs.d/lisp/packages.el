@@ -91,7 +91,6 @@
   :commands (counsel-M-x
              counsel-git
              counsel-describe-function
-             counsel-describe-key
              counsel-describe-variable
              )
   :init
