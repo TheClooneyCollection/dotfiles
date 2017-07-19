@@ -122,7 +122,14 @@
   :defer t)
 
 (use-package projectile
-  :init (setq projectile-enable-caching t))
+  :init
+  (setq projectile-enable-caching t
+        projectile-switch-project-action 'counsel-git)
+
+  :config
+  (projectile-discover-projects-in-directory "~/work")
+  (projectile-discover-projects-in-directory "~/proj")
+  (projectile-global-mode))
 
 (use-package counsel-projectile)
 
