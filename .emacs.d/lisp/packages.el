@@ -130,7 +130,13 @@
   (projectile-discover-projects-in-directory "~/proj")
   (projectile-global-mode))
 
-(use-package counsel-projectile)
+(use-package counsel-projectile
+  :after counsel
+  :defer t
+  :commands (counsel-projectile-switch-project)
+  :init
+  (general-define-key "cp" 'counsel-projectile-switch-project)
+  )
 
 (use-package magit
   :commands magit-status
