@@ -75,7 +75,13 @@
 
 (use-package swift-mode
   :mode "\\.swift\\'"
-  :interpreter "swift")
+  :interpreter "swift"
+  :config
+
+  (define-key swift-mode-map (kbd ";") '(lambda () (interactive) (insert ":")))
+  (define-key swift-mode-map (kbd ":") '(lambda () (interactive) (insert ";")))
+
+)
 
 (use-package ruby-mode ; Built-in
   :mode ("\\.rb\\'" "\\Brewfile\\'"))
