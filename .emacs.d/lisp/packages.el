@@ -78,9 +78,17 @@
   :interpreter "swift"
   :config
 
-  (define-key swift-mode-map (kbd ";") '(lambda () (interactive) (insert ":")))
-  (define-key swift-mode-map (kbd ":") '(lambda () (interactive) (insert ";")))
+  (general-define-key :prefix nil
+                      :keymaps 'swift-mode-map
+                      :states '(insert emacs)
+                      ";" '(lambda () (interactive) (insert ":"))
+                      ":" '(lambda () (interactive) (insert ";")))
 
+  ; The following two lines are kept here for comparison reasons.
+  ; Seems much easier to use define-key.
+
+  ;(define-key swift-mode-map (kbd ";") '(lambda () (interactive) (insert ":")))
+  ;(define-key swift-mode-map (kbd ":") '(lambda () (interactive) (insert ";")))
 )
 
 (use-package ruby-mode ; Built-in
