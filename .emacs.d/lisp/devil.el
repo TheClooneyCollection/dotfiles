@@ -2,7 +2,9 @@
 
 (use-package evil
   :init
-    (setq evil-want-C-u-scroll t) ; Enable <c-u> to scroll up
+  (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
+        evil-regexp-search t ; Enable regexp search
+        )
   :config
     (define-key evil-normal-state-map ";" #'evil-ex)
     (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
