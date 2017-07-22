@@ -1,3 +1,9 @@
+(setq gc-cons-threshold 100000000) ; Do GC when every 100MB are allocated
+
+(setq-default indent-tabs-mode nil) ; Don't indent with tabs.
+(setq custom-file "~/.emacs.d/custom.el")
+
+; Load packages
 (require 'package)
 (setq package-enable-at-startup nil
       load-prefer-newer t)
@@ -12,6 +18,3 @@
     (mapc load-it (directory-files dir nil "\\.el$"))))
 (load-directory "~/.emacs.d/lisp/")
 
-(setq custom-file "~/.emacs.d/custom.el")
-(setq-default indent-tabs-mode nil) ; Don't indent with tabs.
-(setq gc-cons-threshold 50000000) ; Do GC when every 50MB are allocated
