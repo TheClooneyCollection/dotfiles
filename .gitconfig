@@ -62,7 +62,7 @@
 
     # Pen Pineapple Apple Pen
     # No seriously: pull --rebase and push
-    ppap = !git ppr && git p
+    ppap = !echo "Pen Pineapple Apple Pen" && git ppr && git p
 
     ppr = pull --rebase
     pt = push --tags
