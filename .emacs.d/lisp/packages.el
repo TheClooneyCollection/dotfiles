@@ -99,42 +99,6 @@
 ; Functionality
 
 (use-package flx)
-(use-package counsel
-  :defer t
-  :commands (counsel-M-x
-             counsel-git
-             counsel-describe-function
-             counsel-describe-variable
-             )
-  :init
-  (setq ivy-use-virtual-buffers t
-        ivy-count-format "(%d/%d) "
-        enable-recursive-minibuffers t
-        ; Fuzzy
-        ivy-initial-inputs-alist nil
-        ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-  (general-define-key "<SPC>" 'counsel-M-x)
-
-  (general-define-key "cc" 'ivy-resume)
-  (general-define-key "b" 'ivy-switch-buffer)
-  (general-define-key "f" 'counsel-git)
-
-  (general-define-key "hf" 'counsel-describe-function)
-  (general-define-key "hv" 'counsel-describe-variable)
-
-  :config (ivy-mode))
-
-(use-package counsel-osx-app
-  :after counsel
-  :commands counsel-osx-app
-  :init (general-define-key "ca" 'counsel-osx-app))
-
-(use-package counsel-gtags
-  :after counsel
-  :defer t
-  :bind (:map evil-normal-state-map
-         ("t" . counsel-gtags-find-definition))
-  :init)
 
 (use-package projectile
   :init
@@ -145,14 +109,6 @@
   (projectile-discover-projects-in-directory "~/work")
   (projectile-discover-projects-in-directory "~/proj")
   (projectile-global-mode))
-
-(use-package counsel-projectile
-  :after counsel
-  :defer t
-  :commands (counsel-projectile-switch-project)
-  :init
-  (general-define-key "cp" 'counsel-projectile-switch-project)
-  )
 
 (use-package magit
   :commands magit-status
