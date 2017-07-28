@@ -137,3 +137,27 @@
   :commands (alert)
   :init
   (setq alert-default-style 'notifier))
+
+; Helm
+(use-package helm
+  :diminish helm-mode
+  :commands (helm-M-x)
+  :bind ("M-x" . helm-M-x)
+  :init
+    ; ; Enable fuzzy matching globally
+    ; (setq helm-mode-fuzzy-match t
+    ;       helm-completion-in-region-fuzzy-match t)
+    (general-define-key "<SPC>" 'helm-M-x)
+    (general-define-key "b" 'helm-buffers-list)
+  :config
+    (helm-mode))
+
+(use-package helm-ls-git
+  :commands helm-ls-git-ls
+  :init
+    (general-define-key "f" 'helm-ls-git-ls))
+
+(use-package helm-gtags
+  :commands (helm-gtags-select)
+  :bind (:map evil-normal-state-map
+        ("t" . helm-gtags-select)))
