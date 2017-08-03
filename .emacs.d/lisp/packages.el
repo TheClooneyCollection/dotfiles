@@ -76,7 +76,7 @@
         ("f" . avy-goto-char-2))
   :init
   (setq avy-background t)
-  (setq avy-keys (number-sequence ?a ?z))
+  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s))
 )
 
 ; Languages
