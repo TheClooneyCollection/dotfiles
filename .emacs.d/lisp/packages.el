@@ -28,6 +28,8 @@
     (general-define-key "qq" 'save-buffers-kill-terminal)
 
     (general-define-key "hk" 'describe-key)
+    (general-define-key "hf" 'describe-function)
+    (general-define-key "hv" 'describe-variable)
 
     (defun dot-emacs/edit (filename)
       (find-file (concat (concat user-emacs-directory "lisp/") filename)))
