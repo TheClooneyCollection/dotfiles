@@ -142,8 +142,8 @@
 
 ; Helm
 (use-package helm
+  :demand t
   :diminish helm-mode
-  :commands (helm-M-x)
   :bind ("M-x" . helm-M-x)
   :init
   (setq helm-mode-fuzzy-match t
