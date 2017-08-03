@@ -23,6 +23,13 @@
       (load-file (concat user-emacs-directory "init.el")))
 
     (general-define-key "r" 'dot-emacs/reload)
+
+    (defun dot-emacs/copy-to-clipboard ()
+      (interactive)
+      (shell-command-on-region "pbcopy"))
+
+    (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+
     (general-define-key "w" 'save-buffer)
     (general-define-key "0" 'delete-other-windows)
     (general-define-key "qq" 'save-buffers-kill-terminal)
