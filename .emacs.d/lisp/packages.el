@@ -160,6 +160,13 @@
     (general-define-key "f" 'helm-ls-git-ls))
 
 (use-package helm-gtags
-  :commands (helm-gtags-select)
+  :commands (helm-gtags-select
+             helm-gtags-find-rtag
+             helm-gtags-parse-file)
   :bind (:map evil-normal-state-map
-        ("t" . helm-gtags-select)))
+              ("t" . helm-gtags-select)
+              ("r" . helm-gtags-find-rtag))
+  :init
+  (setq helm-gtags-fuzzy-match t)
+  (general-define-key "t" 'helm-gtags-parse-file)
+)
