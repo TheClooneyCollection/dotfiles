@@ -18,40 +18,40 @@
         general-default-prefix "<SPC>")
   :config
 
-    (defun dot-emacs/reload ()
-      (interactive)
-      (load-file (concat user-emacs-directory "init.el")))
+  (defun dot-emacs/reload ()
+    (interactive)
+    (load-file (concat user-emacs-directory "init.el")))
 
-    (general-define-key "r" 'dot-emacs/reload)
+  (general-define-key "r" 'dot-emacs/reload)
 
-    (defun dot-emacs/copy-to-clipboard ()
-      (interactive)
-      (shell-command-on-region "pbcopy"))
+  (defun dot-emacs/copy-to-clipboard ()
+    (interactive)
+    (shell-command-on-region "pbcopy"))
 
-    (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
 
-    (general-define-key "w" 'save-buffer)
-    (general-define-key "0" 'delete-other-windows)
-    (general-define-key "qq" 'save-buffers-kill-terminal)
+  (general-define-key "w" 'save-buffer)
+  (general-define-key "0" 'delete-other-windows)
+  (general-define-key "qq" 'save-buffers-kill-terminal)
 
-    (general-define-key "hk" 'describe-key)
-    (general-define-key "hf" 'describe-function)
-    (general-define-key "hv" 'describe-variable)
+  (general-define-key "hk" 'describe-key)
+  (general-define-key "hf" 'describe-function)
+  (general-define-key "hv" 'describe-variable)
 
-    (defun dot-emacs/edit (filename)
-      (find-file (concat (concat user-emacs-directory "lisp/") filename)))
+  (defun dot-emacs/edit (filename)
+    (find-file (concat (concat user-emacs-directory "lisp/") filename)))
 
-    (defun dot-emacs/edit-packages ()
-      (interactive)
-      (dot-emacs/edit "packages.el"))
+  (defun dot-emacs/edit-packages ()
+    (interactive)
+    (dot-emacs/edit "packages.el"))
 
-    (general-define-key "ee" 'dot-emacs/edit-packages)
+  (general-define-key "ee" 'dot-emacs/edit-packages)
 
-    (defun dot-emacs/edit-ui ()
-      (interactive)
-      (dot-emacs/edit "ui.el"))
+  (defun dot-emacs/edit-ui ()
+    (interactive)
+    (dot-emacs/edit "ui.el"))
 
-    (general-define-key "eu" 'dot-emacs/edit-ui)
+  (general-define-key "eu" 'dot-emacs/edit-ui)
 )
 
 (use-package evil-easymotion
@@ -77,7 +77,7 @@
   :init
   (setq avy-background t)
   (setq avy-keys (number-sequence ?a ?z))
-  )
+)
 
 ; Languages
 
@@ -129,7 +129,7 @@
 (use-package auto-complete
   :diminish auto-complete-mode
   :config
-    (ac-config-default))
+  (ac-config-default))
 
 (use-package smartparens
   :config
@@ -161,7 +161,7 @@
   (general-define-key "<SPC>" 'helm-M-x)
   (general-define-key "b" 'helm-buffers-list)
   :config
-    (helm-mode))
+  (helm-mode))
 
 (use-package helm-flx
   :after (helm flx)
