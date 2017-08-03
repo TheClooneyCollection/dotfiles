@@ -146,18 +146,29 @@
   :commands (helm-M-x)
   :bind ("M-x" . helm-M-x)
   :init
-    ; ; Enable fuzzy matching globally
-    ; (setq helm-mode-fuzzy-match t
-    ;       helm-completion-in-region-fuzzy-match t)
-    (general-define-key "<SPC>" 'helm-M-x)
-    (general-define-key "b" 'helm-buffers-list)
+  (setq helm-mode-fuzzy-match t
+        helm-completion-in-region-fuzzy-match t
+        helm-M-x-fuzzy-match t
+        helm-buffers-fuzzy-match t
+        helm-candidate-number-limit 20)
+  (general-define-key "<SPC>" 'helm-M-x)
+  (general-define-key "b" 'helm-buffers-list)
   :config
     (helm-mode))
+
+(use-package helm-flx
+  :after (helm flx)
+  :init
+  (setq helm-flx-for-helm-find-files t
+        helm-flx-for-helm-locate t)
+  :config (helm-flx-mode))
 
 (use-package helm-ls-git
   :commands helm-ls-git-ls
   :init
-    (general-define-key "f" 'helm-ls-git-ls))
+  ;(setq helm-ls-git-fuzzy-match t)
+  (general-define-key "f" 'helm-ls-git-ls)
+)
 
 (use-package helm-gtags
   :commands (helm-gtags-select
