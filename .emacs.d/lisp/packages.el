@@ -26,10 +26,24 @@
 
   (defun dot-emacs/copy-to-clipboard ()
     (interactive)
-    (shell-command-on-region "pbcopy"))
+    (if (region-active-p)
+        (progn
+          (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+          (message "Yanked region to clipboard!")
+          (deactivate-mark))
+      (message "No region active; can't yank to clipboard!")))
 
   (general-define-key "y" 'dot-emacs/copy-to-clipboard)
 
+  (defun dot-emacs/paste-from-clipboard ()
+    (interactive)
+      (insert (shell-command-to-string "pbpaste")))
+
+  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
+
+  (defun paste-from-clipboard ()
+    (interactive)
+      (insert (shell-command-to-string "pbpaste")))
   (general-define-key "w" 'save-buffer)
   (general-define-key "0" 'delete-other-windows)
   (general-define-key "qq" 'save-buffers-kill-terminal)
