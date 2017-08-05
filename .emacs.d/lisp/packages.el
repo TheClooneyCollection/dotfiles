@@ -1,4 +1,13 @@
 ; Packages
+(require 'diminish)
+
+(setq diminishing-modes '(
+                          auto-revert-mode
+                          undo-tree-mode
+                          ))
+(mapcar
+ (lambda (mode) (diminish mode))
+ diminishing-modes)
 
 ; Keys
 
