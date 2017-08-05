@@ -196,6 +196,12 @@
         helm-flx-for-helm-locate t)
   :config (helm-flx-mode))
 
+(use-package helm-projectile
+  :after (helm helm-flx)
+  :commands (helm-projectile-switch-project)
+  :config
+  (general-define-key "c" 'helm-projectile-switch-project))
+
 (use-package helm-ls-git
   :commands helm-ls-git-ls
   :init
