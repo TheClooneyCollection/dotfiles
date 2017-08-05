@@ -20,3 +20,9 @@
                                   ("America/New_York" "New York")
                                   ))
   :config (display-time-mode))
+
+(use-package powerline
+  :config (powerline-default-theme))
+
+(use-package airline-themes
+  :after powerline)
