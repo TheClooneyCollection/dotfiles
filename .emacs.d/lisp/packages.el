@@ -157,7 +157,10 @@
 
 (use-package smartparens
   :config
-  (require 'smartparens-config))
+  (require 'smartparens-config)
+  (show-smartparens-global-mode)
+  (smartparens-global-mode)
+  )
 
 (use-package slack
   :commands (slack-start)
