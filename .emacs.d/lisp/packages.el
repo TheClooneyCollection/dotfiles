@@ -135,7 +135,7 @@
 (use-package projectile
   :init
   (setq projectile-enable-caching t
-        projectile-switch-project-action 'counsel-git
+        projectile-switch-project-action 'helm-ls-git-ls
         projectile-mode-line '(:eval (format "[%s]" (projectile-project-name))))
 
   :config
