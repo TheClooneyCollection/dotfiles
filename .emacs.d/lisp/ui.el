@@ -25,4 +25,5 @@
   :config (powerline-default-theme))
 
 (use-package airline-themes
-  :after powerline)
+  :after powerline
+  :config (load-theme 'airline-light t))
