@@ -19,10 +19,10 @@
 
 (use-package general
   :init
-  (setq general-default-keymaps (list
-                                 'evil-normal-state-map
-                                 'evil-visual-state-map
-                                 'evil-operator-state-map
+  (setq general-default-keymaps '(
+                                 evil-normal-state-map
+                                 evil-visual-state-map
+                                 evil-operator-state-map
                                  )
         general-default-prefix "<SPC>")
   :config
@@ -145,7 +145,8 @@
 
 (use-package magit
   :commands magit-status
-  :init (general-define-key "s" 'magit-status))
+  :init
+  (general-define-key "s" 'magit-status))
 
 (use-package ggtags
   :commands (ggtags-update-tags))
