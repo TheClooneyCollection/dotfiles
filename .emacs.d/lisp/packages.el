@@ -31,7 +31,7 @@
     (interactive)
     (load-file (concat user-emacs-directory "init.el")))
 
-  (general-define-key "r" 'dot-emacs/reload)
+  (general-define-key "r" 'eval-buffer)
 
   (defun dot-emacs/copy-to-clipboard ()
     (interactive)
