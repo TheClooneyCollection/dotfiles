@@ -159,8 +159,7 @@
   :config
   (require 'smartparens-config)
   (show-smartparens-global-mode)
-  (smartparens-global-mode)
-  )
+  (smartparens-global-mode))
 
 (use-package slack
   :commands (slack-start)
@@ -200,8 +199,7 @@
   :commands helm-ls-git-ls
   :init
   ;(setq helm-ls-git-fuzzy-match t)
-  (general-define-key "f" 'helm-ls-git-ls)
-)
+  (general-define-key "f" 'helm-ls-git-ls))
 
 (use-package helm-gtags
   :commands (helm-gtags-select
@@ -212,5 +210,4 @@
               ("r" . helm-gtags-find-rtag))
   :init
   (setq helm-gtags-fuzzy-match t)
-  (general-define-key "t" 'helm-gtags-parse-file)
-)
+  (general-define-key "t" 'helm-gtags-parse-file))
