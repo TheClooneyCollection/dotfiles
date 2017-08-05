@@ -32,6 +32,7 @@ cask 'iterm2'
 cask 'NicholasTD07/lychee-gold/dash' # v2
 cask 'reveal'
 cask 'paw'
+cask 'charles'
 
 ## ios
 
