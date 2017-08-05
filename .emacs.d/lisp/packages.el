@@ -135,7 +135,8 @@
 (use-package projectile
   :init
   (setq projectile-enable-caching t
-        projectile-switch-project-action 'counsel-git)
+        projectile-switch-project-action 'counsel-git
+        projectile-mode-line '(:eval (format "[%s]" (projectile-project-name))))
 
   :config
   (projectile-discover-projects-in-directory "~/work")
