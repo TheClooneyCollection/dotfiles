@@ -136,7 +136,7 @@
   :init
   (setq projectile-enable-caching t
         projectile-switch-project-action 'helm-ls-git-ls
-        projectile-mode-line '(:eval (format "[%s]" (projectile-project-name))))
+        projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 
   :config
   (projectile-discover-projects-in-directory "~/work")
@@ -156,6 +156,7 @@
   (ac-config-default))
 
 (use-package smartparens
+  :diminish smartparens-mode
   :config
   (require 'smartparens-config)
   (show-smartparens-global-mode)
