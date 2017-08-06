@@ -23,7 +23,8 @@
   :config
   (add-to-list 'org-structure-template-alist
                '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
-  (add-hook 'org-mode-hook (lambda () (org-indent-mode t))))
+  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+  (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 
 ; Load all other configurations in the configuration.org file
 
