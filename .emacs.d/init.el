@@ -82,7 +82,8 @@
 (use-package guide-key
   :diminish guide-key-mode
   :config
-  (setq guide-key/guide-key-sequence t) ; Enable guide-key for all key sequences
+  (setq guide-key/guide-key-sequence t ; Enable guide-key for all key sequences
+        guide-key/popup-window-position 'bottom)
   (guide-key-mode)) ; Enable guide-key-mode
 
 (use-package general
