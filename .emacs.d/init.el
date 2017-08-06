@@ -232,6 +232,9 @@
 
 (use-package org
   :mode ("\\.org\\'" . org-mode))
+  :mode ("\\.org\\'" . org-mode)
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-indent-mode t))))
 
 (use-package evil-org
   :after (org evil)
