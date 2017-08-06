@@ -88,7 +88,6 @@ To bind keys easily in a tidy way
 ** Keys
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package guide-key
     :diminish guide-key-mode
     :config
@@ -143,12 +142,11 @@ To bind keys easily in a tidy way
     (defun dot-emacs/edit (filename)
       (find-file (concat user-emacs-directory filename)))
 
-    (defun dot-emacs/edit-packages ()
+    (defun dot-emacs/edit-configuration ()
       (interactive)
-      (dot-emacs/edit "init.el"))
+      (dot-emacs/edit "configuration.org"))
 
-    (general-define-key "ee" 'dot-emacs/edit-packages)
-    )
+    (general-define-key "ee" 'dot-emacs/edit-configuration))
 
   (use-package time ; Built-in
     :diminish display-time-mode
