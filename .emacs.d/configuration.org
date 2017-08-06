@@ -20,12 +20,13 @@
 #+BEGIN_SRC emacs-lisp
   (setq ring-bell-function #'ignore
 #+END_SRC
+
 #+BEGIN_SRC emacs-lisp
-        inhibit-startup-screen t ; Skip the startup screen
+  inhibit-startup-screen t ; Skip the startup screen
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-        initial-scratch-message "; Hello there!\n; Happy hacking!\n")
+  initial-scratch-message "; Hello there!\n; Happy hacking!\n")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -73,12 +74,12 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
+  (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
-    )
+  (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
+  )
 #+END_SRC
 
 ** UI
@@ -97,19 +98,19 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :init (setq powerline-utf-8-separator-left        #xe0b0
-                powerline-utf-8-separator-right       #xe0b2
-                airline-utf-glyph-separator-left      #xe0b0
-                airline-utf-glyph-separator-right     #xe0b2
-                airline-utf-glyph-subseparator-left   #xe0b1
-                airline-utf-glyph-subseparator-right  #xe0b3
-                airline-utf-glyph-branch              #xe0a0
-                airline-utf-glyph-readonly            #xe0a2
-                airline-utf-glyph-linenumber          #xe0a1)
+  :init (setq powerline-utf-8-separator-left        #xe0b0
+              powerline-utf-8-separator-right       #xe0b2
+              airline-utf-glyph-separator-left      #xe0b0
+              airline-utf-glyph-separator-right     #xe0b2
+              airline-utf-glyph-subseparator-left   #xe0b1
+              airline-utf-glyph-subseparator-right  #xe0b3
+              airline-utf-glyph-branch              #xe0a0
+              airline-utf-glyph-readonly            #xe0a2
+              airline-utf-glyph-linenumber          #xe0a1)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config (load-theme 'airline-light t))
+  :config (load-theme 'airline-light t))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -125,13 +126,12 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq guide-key/guide-key-sequence t ; Enable guide-key for all key sequences
+  (setq guide-key/guide-key-sequence t ; Enable guide-key for all key sequences
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-          guide-key/popup-window-position 'bottom)
-    (guide-key-mode)) ; Enable guide-key-mode
-
+  guide-key/popup-window-position 'bottom)
+  (guide-key-mode)) ; Enable guide-key-mode
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -140,60 +140,60 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq general-default-keymaps '(evil-normal-state-map
-                                    evil-visual-state-map
-                                    evil-operator-state-map)
+  (setq general-default-keymaps '(evil-normal-state-map
+                                  evil-visual-state-map
+                                  evil-operator-state-map)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-          general-default-prefix "<SPC>")
+  general-default-prefix "<SPC>")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config
+  :config
 
-    (general-define-key "r" 'eval-buffer)
+  (general-define-key "r" 'eval-buffer)
 
-    (general-define-key "w" 'save-buffer)
-    (general-define-key "0" 'delete-other-windows)
-    (general-define-key "qq" 'save-buffers-kill-terminal)
+  (general-define-key "w" 'save-buffer)
+  (general-define-key "0" 'delete-other-windows)
+  (general-define-key "qq" 'save-buffers-kill-terminal)
 
-    (general-define-key "hk" 'describe-key)
-    (general-define-key "hf" 'describe-function)
-    (general-define-key "hv" 'describe-variable)
+  (general-define-key "hk" 'describe-key)
+  (general-define-key "hf" 'describe-function)
+  (general-define-key "hv" 'describe-variable)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (defun dot-emacs/copy-to-clipboard ()
-      (interactive)
-      (if (region-active-p)
-          (progn
-            (shell-command-on-region (region-beginning) (region-end) "pbcopy")
-            (message "Yanked region to clipboard!")
-            (deactivate-mark))
-        (message "No region active; can't yank to clipboard!")))
+  (defun dot-emacs/copy-to-clipboard ()
+    (interactive)
+    (if (region-active-p)
+        (progn
+          (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+          (message "Yanked region to clipboard!")
+          (deactivate-mark))
+      (message "No region active; can't yank to clipboard!")))
 
-    (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
 
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (defun dot-emacs/paste-from-clipboard ()
-      (interactive)
-      (insert (shell-command-to-string "pbpaste")))
+  (defun dot-emacs/paste-from-clipboard ()
+    (interactive)
+    (insert (shell-command-to-string "pbpaste")))
 
-    (general-define-key "p" 'dot-emacs/paste-from-clipboard)
+  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (defun dot-emacs/edit (filename)
-      (find-file (concat user-emacs-directory filename)))
+  (defun dot-emacs/edit (filename)
+    (find-file (concat user-emacs-directory filename)))
 
-    (defun dot-emacs/edit-configuration ()
-      (interactive)
-      (dot-emacs/edit "configuration.org"))
+  (defun dot-emacs/edit-configuration ()
+    (interactive)
+    (dot-emacs/edit "configuration.org"))
 
-    (general-define-key "ee" 'dot-emacs/edit-configuration))
+  (general-define-key "ee" 'dot-emacs/edit-configuration))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -203,26 +203,26 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (general-define-key "it" 'display-time-world)
+  (general-define-key "it" 'display-time-world)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq display-time-world-list '(
-                                    ("Australia/Sydney" "Sydney")
-                                    ("Asia/Chongqing" "Chongqing")
-                                    ("PST8PDT" "San Francisco")
-                                    ("Asia/Calcutta" "Bangalore")
-                                    ("Australia/Melbourne" "Melbourne")
-                                    ("Europe/London" "London")
-                                    ("Europe/Paris" "Paris")
-                                    ("Asia/Tokyo" "Tokyo")
-                                    ("America/Los_Angeles" "Los Angeles")
-                                    ("America/New_York" "New York")
-                                    ))
+  (setq display-time-world-list '(
+                                  ("Australia/Sydney" "Sydney")
+                                  ("Asia/Chongqing" "Chongqing")
+                                  ("PST8PDT" "San Francisco")
+                                  ("Asia/Calcutta" "Bangalore")
+                                  ("Australia/Melbourne" "Melbourne")
+                                  ("Europe/London" "London")
+                                  ("Europe/Paris" "Paris")
+                                  ("Asia/Tokyo" "Tokyo")
+                                  ("America/Los_Angeles" "Los Angeles")
+                                  ("America/New_York" "New York")
+                                  ))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config (display-time-mode))
+  :config (display-time-mode))
 #+END_SRC
 
 ** Evil
@@ -234,29 +234,29 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
+  (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-          evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
+  evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-          evil-regexp-search t ; Enable regexp search
-          )
+  evil-regexp-search t ; Enable regexp search
+  )
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config
+  :config
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (define-key evil-normal-state-map ";" #'evil-ex)
-    (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
+  (define-key evil-normal-state-map ";" #'evil-ex)
+  (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (evil-mode))
+  (evil-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -266,12 +266,12 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :init (setq-default evil-escape-key-sequence "kj")
+  :init (setq-default evil-escape-key-sequence "kj")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config
-    (evil-escape-mode))
+  :config
+  (evil-escape-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -286,39 +286,40 @@ To bind keys easily in a tidy way
 
 #+BEGIN_SRC emacs-lisp
                                           ; Evil-easymotion's line movements work perfectly with evil.
-    (general-define-key "j" (evilem-create 'evil-next-line))
-    (general-define-key "k" (evilem-create 'evil-previous-line)))
+  (general-define-key "j" (evilem-create 'evil-next-line))
+  (general-define-key "k" (evilem-create 'evil-previous-line)))
 #+END_SRC
 
 
-                                          ; Avy's line movements do not work with evil too well
-                                          ; For example, when in visual line selection mode (V), avy does not work at all;
-                                          ; and when it does work in visual selection mode (v), it selects the line before selection.
+; Avy's line movements do not work with evil too well
+; For example, when in visual line selection mode (V), avy does not work at all;
+; and when it does work in visual selection mode (v), it selects the line before selection.
+
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :bind (
-           :map evil-normal-state-map
-                ("f" . avy-goto-char-2)
-                :map evil-visual-state-map
-                ("f" . avy-goto-char-2)
-                :map evil-operator-state-map
-                ("f" . avy-goto-char-2))
+  :bind (
+         :map evil-normal-state-map
+              ("f" . avy-goto-char-2)
+              :map evil-visual-state-map
+              ("f" . avy-goto-char-2)
+              :map evil-operator-state-map
+              ("f" . avy-goto-char-2))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :init
+  :init
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq avy-background t)
+  (setq avy-background t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
+  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
 ** Languages
@@ -331,18 +332,18 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (general-define-key :prefix nil
-                        :keymaps 'swift-mode-map
-                        :states '(insert emacs)
-                        ";" '(lambda () (interactive) (insert ":"))
-                        ":" '(lambda () (interactive) (insert ";")))
+  (general-define-key :prefix nil
+                      :keymaps 'swift-mode-map
+                      :states '(insert emacs)
+                      ";" '(lambda () (interactive) (insert ":"))
+                      ":" '(lambda () (interactive) (insert ";")))
 
                                           ; The following two lines are kept here for comparison reasons.
                                           ; Seems much easier to use define-key.
 
                                           ;(define-key swift-mode-map (kbd ";") '(lambda () (interactive) (insert ":")))
                                           ;(define-key swift-mode-map (kbd ":") '(lambda () (interactive) (insert ";")))
-    )
+  )
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -364,10 +365,10 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (add-hook 'org-mode-hook 'evil-org-mode)
-    (add-hook 'evil-org-mode-hook
-              (lambda ()
-                (evil-org-set-key-theme '(navigation insert textobjects additional)))))
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -380,25 +381,25 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq projectile-enable-caching t
+  (setq projectile-enable-caching t
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-          projectile-switch-project-action 'helm-ls-git-ls
+  projectile-switch-project-action 'helm-ls-git-ls
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-          projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+  projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config
-    (projectile-discover-projects-in-directory "~/work")
-    (projectile-discover-projects-in-directory "~/proj")
+  :config
+  (projectile-discover-projects-in-directory "~/work")
+  (projectile-discover-projects-in-directory "~/proj")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (projectile-global-mode))
+  (projectile-global-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -446,18 +447,18 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq helm-mode-fuzzy-match t
-          helm-completion-in-region-fuzzy-match t
-          helm-M-x-fuzzy-match t
-          helm-buffers-fuzzy-match t
-          helm-candidate-number-limit 20)
+  (setq helm-mode-fuzzy-match t
+        helm-completion-in-region-fuzzy-match t
+        helm-M-x-fuzzy-match t
+        helm-buffers-fuzzy-match t
+        helm-candidate-number-limit 20)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (general-define-key "<SPC>" 'helm-M-x)
-    (general-define-key "b" 'helm-buffers-list)
-    :config
-    (helm-mode))
+  (general-define-key "<SPC>" 'helm-M-x)
+  (general-define-key "b" 'helm-buffers-list)
+  :config
+  (helm-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -467,13 +468,12 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq helm-flx-for-helm-find-files t
-          helm-flx-for-helm-locate t)
+  (setq helm-flx-for-helm-find-files t
+        helm-flx-for-helm-locate t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :config (helm-flx-mode))
-
+  :config (helm-flx-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -496,13 +496,13 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :bind (:map evil-normal-state-map
-                ("t" . helm-gtags-select)
-                ("r" . helm-gtags-find-rtag))
+  :bind (:map evil-normal-state-map
+              ("t" . helm-gtags-select)
+              ("r" . helm-gtags-find-rtag))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    :init
-    (setq helm-gtags-fuzzy-match t)
-    (general-define-key "t" 'helm-gtags-parse-file))
+  :init
+  (setq helm-gtags-fuzzy-match t)
+  (general-define-key "t" 'helm-gtags-parse-file))
 #+END_SRC
