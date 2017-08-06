@@ -233,6 +233,8 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode))
   :mode ("\\.org\\'" . org-mode)
+  :init
+  (setq org-ellipsis "⤵"
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t))))
 
