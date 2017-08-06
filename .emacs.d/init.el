@@ -240,7 +240,7 @@
   (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
             (lambda ()
-              (evil-org-set-key-theme '(navigation insert textobjects rsi additional shift todo heading)))))
+              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
 
 (use-package flx)
 
