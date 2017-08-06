@@ -99,6 +99,8 @@
   (defun dot-emacs/reload ()
     (interactive)
     (load-file (concat user-emacs-directory "init.el")))
+  (general-define-key "d" 'evil-scroll-down)
+  (general-define-key "u" 'evil-scroll-up)
 
   (general-define-key "r" 'eval-buffer)
 
