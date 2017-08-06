@@ -158,6 +158,7 @@
   :config (display-time-mode))
 
 (use-package evil
+  :diminish undo-tree-mode
   :init
   (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
         evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
