@@ -234,13 +234,13 @@
   :mode ("\\.org\\'" . org-mode))
 
 (use-package evil-org
-  :ensure t
   :after (org evil)
   :mode ("\\.org\\'" . org-mode)
   :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
             (lambda ()
-              (evil-org-set-key-theme))))
+              (evil-org-set-key-theme '(navigation insert textobjects rsi additional shift todo heading)))))
 
 (use-package flx)
 
