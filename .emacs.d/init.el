@@ -231,10 +231,10 @@
 ; Functionality
 
 (use-package org
-  :mode ("\\.org\\'" . org-mode))
   :mode ("\\.org\\'" . org-mode)
   :init
   (setq org-ellipsis "⤵"
+        org-src-tab-acts-natively t)
   :config
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t))))
 
