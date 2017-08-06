@@ -236,6 +236,8 @@
   (setq org-ellipsis "⤵"
         org-src-tab-acts-natively t)
   :config
+  (add-to-list 'org-structure-template-alist
+               '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t))))
 
 (use-package evil-org
