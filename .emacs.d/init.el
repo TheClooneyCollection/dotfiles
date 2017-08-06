@@ -1,3 +1,4 @@
+; Basic
 (setq gc-cons-threshold 100000000) ; Do GC when every 100MB are allocated
 
 (setq-default indent-tabs-mode nil) ; Don't indent with tabs.
@@ -96,13 +97,18 @@
         general-default-prefix "<SPC>")
   :config
 
-  (defun dot-emacs/reload ()
-    (interactive)
-    (load-file (concat user-emacs-directory "init.el")))
   (general-define-key "d" 'evil-scroll-down)
   (general-define-key "u" 'evil-scroll-up)
 
   (general-define-key "r" 'eval-buffer)
+
+  (general-define-key "w" 'save-buffer)
+  (general-define-key "0" 'delete-other-windows)
+  (general-define-key "qq" 'save-buffers-kill-terminal)
+
+  (general-define-key "hk" 'describe-key)
+  (general-define-key "hf" 'describe-function)
+  (general-define-key "hv" 'describe-variable)
 
   (defun dot-emacs/copy-to-clipboard ()
     (interactive)
@@ -120,17 +126,6 @@
       (insert (shell-command-to-string "pbpaste")))
 
   (general-define-key "p" 'dot-emacs/paste-from-clipboard)
-
-  (defun paste-from-clipboard ()
-    (interactive)
-      (insert (shell-command-to-string "pbpaste")))
-  (general-define-key "w" 'save-buffer)
-  (general-define-key "0" 'delete-other-windows)
-  (general-define-key "qq" 'save-buffers-kill-terminal)
-
-  (general-define-key "hk" 'describe-key)
-  (general-define-key "hf" 'describe-function)
-  (general-define-key "hv" 'describe-variable)
 
   (defun dot-emacs/edit (filename)
     (find-file (concat user-emacs-directory filename)))
