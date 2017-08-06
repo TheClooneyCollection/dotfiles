@@ -130,6 +130,8 @@
 
 ; Functionality
 
+(use-package org)
+
 (use-package flx)
 
 (use-package projectile
