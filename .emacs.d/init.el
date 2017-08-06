@@ -160,6 +160,7 @@
 (use-package evil
   :init
   (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
+        evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
         evil-regexp-search t ; Enable regexp search
         )
   :config
