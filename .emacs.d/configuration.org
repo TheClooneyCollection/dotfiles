@@ -243,31 +243,47 @@ To bind keys easily in a tidy way
                org-store-link
                org-iswitchb)
     :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
     (setq org-ellipsis "⤵")
     (setq org-src-tab-acts-natively t)
     (setq org-log-done 'time)
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (defun org-summary-todo (n-done n-not-done)
       "Switch entry to DONE when all subentries are done, to TODO otherwise."
       (let (org-log-done org-log-states)   ; turn off logging
         (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
     (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (setq org-directory "~/Dropbox/data/org/")
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (defun org-file-path (filename)
       "Return the absolute address of an org file, given its relative name."
       (let ((file-path (concat (file-name-as-directory org-directory) filename)))
         (if (file-exists-p file-path)
             file-path nil)))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (setq org-default-notes-file (org-file-path "notes.org"))
     (setq org-agenda-files (cl-remove-if #'null (list org-directory
                                                       (org-file-path "work/"))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
     (setq org-archive-location
           (concat (org-file-path "archive.org") "::* From %s"))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (general-define-key "oa" 'org-agenda)
     (general-define-key "oc" 'org-capture)
     (general-define-key "ol" 'org-store-link)
@@ -276,7 +292,9 @@ To bind keys easily in a tidy way
     (general-define-key "on" '(lambda ()
                                 (interactive)
                                 (find-file org-default-notes-file)))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (defun evil-org-eol-call (fun &rest arguments)
       "Go to end of line and call provided function.
   FUN function callback
@@ -293,15 +311,24 @@ To bind keys easily in a tidy way
                                (interactive)
                                (evil-org-eol-call
                                 #'org-insert-todo-heading-respect-content)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
     :config
     (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                     ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
       (add-to-list 'org-structure-template-alist item))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
     (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
 
