@@ -85,14 +85,17 @@ To bind keys easily in a tidy way
 ** UI
 
 #+BEGIN_SRC emacs-lisp
-  (use-package whitespace ; Built-in
-    :diminish (whitespace-mode global-whitespace-mode)
-    :init (setq whitespace-style '(face tabs trailing empty tab-mark))
-    :config (global-whitespace-mode))
+  (use-package zenburn-theme)
+#+END_SRC
 
+#+BEGIN_SRC emacs-lisp
   (use-package powerline
     :config (powerline-default-theme))
+#+END_SRC
 
+*** airline
+
+#+BEGIN_SRC emacs-lisp
   (use-package airline-themes
     :after powerline
 #+END_SRC
@@ -113,8 +116,13 @@ To bind keys easily in a tidy way
   :config (load-theme 'airline-light t))
 #+END_SRC
 
+*** whitespace
+
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme)
+  (use-package whitespace ; Built-in
+    :diminish (whitespace-mode global-whitespace-mode)
+    :init (setq whitespace-style '(face tabs trailing empty tab-mark))
+    :config (global-whitespace-mode))
 #+END_SRC
 
 ** Keys
