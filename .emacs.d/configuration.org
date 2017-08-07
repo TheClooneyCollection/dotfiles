@@ -356,6 +356,7 @@ To bind keys easily in a tidy way
 
 ** Functionality
 
+*** evil org
 #+BEGIN_SRC emacs-lisp
   (use-package evil-org
     :after (org evil)
@@ -370,6 +371,8 @@ To bind keys easily in a tidy way
             (lambda ()
               (evil-org-set-key-theme '(navigation insert textobjects additional)))))
 #+END_SRC
+
+*** flx
 
 #+BEGIN_SRC emacs-lisp
   (use-package flx)
