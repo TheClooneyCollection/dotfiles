@@ -242,6 +242,17 @@ To bind keys easily in a tidy way
     (setq org-ellipsis "⤵"
           org-src-tab-acts-natively t)
 
+    (setq org-directory "~/Dropbox/data/org/")
+
+    (defun org-file-path (filename)
+      "Return the absolute address of an org file, given its relative name."
+      (concat (file-name-as-directory org-directory) filename))
+
+    (setq org-default-notes-file (org-file-path "note.org"))
+    (setq org-archive-location
+          (concat (org-file-path "archive.org") "::* From %s"))
+
+    (general-define-key "oc" 'org-capture)
     :config
     (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                     ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
