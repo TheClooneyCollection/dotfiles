@@ -249,7 +249,8 @@ To bind keys easily in a tidy way
       "Return the absolute address of an org file, given its relative name."
       (concat (file-name-as-directory org-directory) filename))
 
-    (setq org-default-notes-file (org-file-path "note.org"))
+    (setq org-default-notes-file (org-file-path "notes.org"))
+    (setq org-agenda-files (list org-default-notes-file))
     (setq org-archive-location
           (concat (org-file-path "archive.org") "::* From %s"))
 
