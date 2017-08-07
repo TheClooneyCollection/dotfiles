@@ -238,7 +238,10 @@ To bind keys easily in a tidy way
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :commands (org-capture)
+    :commands (org-agenda
+               org-capture
+               org-store-link
+               org-iswitchb)
     :init
     (setq org-ellipsis "⤵"
           org-src-tab-acts-natively t)
@@ -254,7 +257,10 @@ To bind keys easily in a tidy way
     (setq org-archive-location
           (concat (org-file-path "archive.org") "::* From %s"))
 
+    (general-define-key "oa" 'org-agenda)
     (general-define-key "oc" 'org-capture)
+    (general-define-key "ol" 'org-store-link)
+    (general-define-key "ob" 'org-iswitchb)
 
     (general-define-key "on" '(lambda ()
                                 (interactive)
