@@ -160,7 +160,8 @@ To bind keys easily in a tidy way
 #+BEGIN_SRC emacs-lisp
   :config
 
-  (general-define-key "r" 'eval-buffer)
+  (general-define-key "rb" 'eval-buffer)
+  (general-define-key "rr" 'eval-region)
 
   (general-define-key "w" 'save-buffer)
   (general-define-key "0" 'delete-other-windows)
