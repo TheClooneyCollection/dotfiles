@@ -375,6 +375,8 @@ To bind keys easily in a tidy way
   (use-package flx)
 #+END_SRC
 
+*** projectile
+
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :init
@@ -401,6 +403,16 @@ To bind keys easily in a tidy way
 #+BEGIN_SRC emacs-lisp
   (projectile-global-mode))
 #+END_SRC
+
+*** projectile-ripgrep
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile-ripgrep
+    :after (projectile)
+    :commands (projectile-ripgrep))
+#+END_SRC
+
+*** Other
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -438,6 +450,8 @@ To bind keys easily in a tidy way
 
 ** Helm
 
+*** helm
+
 #+BEGIN_SRC emacs-lisp
   (use-package helm
     :demand t
@@ -461,6 +475,8 @@ To bind keys easily in a tidy way
   (helm-mode))
 #+END_SRC
 
+*** helm-flx
+
 #+BEGIN_SRC emacs-lisp
   (use-package helm-flx
     :after (helm flx)
@@ -476,19 +492,30 @@ To bind keys easily in a tidy way
   :config (helm-flx-mode))
 #+END_SRC
 
+*** helm-projectile
+
 #+BEGIN_SRC emacs-lisp
   (use-package helm-projectile
     :after (helm helm-flx)
     :commands (helm-projectile-switch-project)
     :config
     (general-define-key "c" 'helm-projectile-switch-project))
+#+END_SRC
 
+*** helm-ls-git
+
+#+BEGIN_SRC emacs-lisp
   (use-package helm-ls-git
     :commands helm-ls-git-ls
     :init
                                           ;(setq helm-ls-git-fuzzy-match t)
     (general-define-key "f" 'helm-ls-git-ls))
 
+#+END_SRC
+
+*** helm-gtags
+
+#+BEGIN_SRC emacs-lisp
   (use-package helm-gtags
     :commands (helm-gtags-select
                helm-gtags-find-rtag
