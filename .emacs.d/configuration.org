@@ -274,11 +274,22 @@ To bind keys easily in a tidy way
                                 (interactive)
                                 (find-file org-default-notes-file)))
 
+    (defun evil-org-eol-call (fun &rest arguments)
+      "Go to end of line and call provided function.
+  FUN function callback
+  Optional argument ARGUMENTS arguments to pass to FUN."
+      (end-of-visible-line)
+      (apply fun arguments)
+      (evil-insert nil))
+
     (general-define-key :prefix nil
                         :keymaps 'org-mode-map
                         :states '(normal)
                         "tt" 'org-set-tags
-                        "ti" 'org-insert-todo-heading-respect-content)
+                        "ti" (lambda ()
+                               (interactive)
+                               (evil-org-eol-call
+                                #'org-insert-todo-heading-respect-content)))
     :config
     (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                     ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
