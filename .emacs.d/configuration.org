@@ -258,10 +258,13 @@ To bind keys easily in a tidy way
 
     (defun org-file-path (filename)
       "Return the absolute address of an org file, given its relative name."
-      (concat (file-name-as-directory org-directory) filename))
+      (let ((file-path (concat (file-name-as-directory org-directory) filename)))
+        (if (file-exists-p file-path)
+            file-path nil)))
 
     (setq org-default-notes-file (org-file-path "notes.org"))
-    (setq org-agenda-files (list org-default-notes-file))
+    (setq org-agenda-files (cl-remove-if #'null (list org-directory
+                                                      (org-file-path "work/"))))
     (setq org-archive-location
           (concat (org-file-path "archive.org") "::* From %s"))
 
