@@ -245,6 +245,8 @@ To bind keys easily in a tidy way
     :init
     (setq org-ellipsis "⤵")
     (setq org-src-tab-acts-natively t)
+    (setq org-log-done 'time)
+
 
     (setq org-directory "~/Dropbox/data/org/")
 
