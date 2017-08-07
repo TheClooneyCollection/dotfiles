@@ -15,17 +15,9 @@
   (require 'use-package))
 
 ; Bootstrap org
+; All configuration for org is in the configuration.org file
 (use-package org
-  :mode ("\\.org\\'" . org-mode)
-  :init
-  (setq org-ellipsis "⤵"
-        org-src-tab-acts-natively t)
-  :config
-  (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
-                  ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
-    (add-to-list 'org-structure-template-alist item))
-  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
-  (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
+  :mode ("\\.org\\'" . org-mode))
 
 ; Load all other configurations in the configuration.org file
 
