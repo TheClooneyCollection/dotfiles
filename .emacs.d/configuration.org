@@ -587,11 +587,10 @@ To bind keys easily in a tidy way
   (setq helm-gtags-fuzzy-match t)
 
   (general-define-key :prefix nil
-                      :keymaps 'prog-mode
+                      :keymaps '(swift-mode-map)
                       :states '(normal)
                       "t" 'helm-gtags-select
                       "r" 'helm-gtags-find-rtag)
 
-  (general-define-key :keymaps 'prog-mode
-                      "t" 'helm-gtags-parse-file))
+  (general-define-key "t" 'helm-gtags-parse-file))
 #+END_SRC
