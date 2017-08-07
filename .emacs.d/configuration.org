@@ -260,7 +260,6 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package evil-escape
     :diminish evil-escape-mode
 #+END_SRC
