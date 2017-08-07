@@ -21,4 +21,8 @@
 
 ; Load all other configurations in the configuration.org file
 
-(org-babel-load-file "~/.emacs.d/configuration.org")
+(defun dot-emacs/load-configuration-dot-org ()
+  (interactive)
+  (org-babel-load-file "~/.emacs.d/configuration.org"))
+
+(dot-emacs/load-configuration-dot-org)
