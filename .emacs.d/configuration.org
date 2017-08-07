@@ -255,6 +255,10 @@ To bind keys easily in a tidy way
           (concat (org-file-path "archive.org") "::* From %s"))
 
     (general-define-key "oc" 'org-capture)
+
+    (general-define-key "on" '(lambda ()
+                                (interactive)
+                                (find-file org-default-notes-file)))
     :config
     (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                     ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
