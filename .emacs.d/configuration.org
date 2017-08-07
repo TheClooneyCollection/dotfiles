@@ -162,6 +162,7 @@ To bind keys easily in a tidy way
 
   (general-define-key "rb" 'eval-buffer)
   (general-define-key "rr" 'eval-region)
+  (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
 
   (general-define-key "w" 'save-buffer)
   (general-define-key "0" 'delete-other-windows)
