@@ -243,8 +243,8 @@ To bind keys easily in a tidy way
                org-store-link
                org-iswitchb)
     :init
-    (setq org-ellipsis "⤵"
-          org-src-tab-acts-natively t)
+    (setq org-ellipsis "⤵")
+    (setq org-src-tab-acts-natively t)
 
     (setq org-directory "~/Dropbox/data/org/")
 
