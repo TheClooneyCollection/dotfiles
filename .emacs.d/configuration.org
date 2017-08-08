@@ -266,10 +266,10 @@ To bind keys easily in a tidy way
            (file+headline org-default-notes-file "Tasks")
            "* TODO %?\nCREATED: %u\n%i\n%l")
 
-          ("w" "Todo :work:"
+          ("w" "TODO :work:"
            entry
-           (file+headline org-default-notes-file "Tasks")
-           "* TODO %?\t:work:\nCREATED: %u\n%i\n%l")
+           (file+headline org-default-notes-file "Work")
+           "* TODO %?\nCREATED: %u\n%i\n%l")
 
           ("s" "Investing in myself"
            entry
