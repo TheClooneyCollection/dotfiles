@@ -252,6 +252,8 @@ To bind keys easily in a tidy way
         '((sequence "TODO" "STARTED" "DONE")))
 #+END_SRC
 
+** Capture templates
+
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
         '(("t" "Todo"
@@ -303,14 +305,7 @@ To bind keys easily in a tidy way
            (file (org-file-path "to-read.org")))))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-    (defun org-summary-todo (n-done n-not-done)
-      "Switch entry to DONE when all subentries are done, to TODO otherwise."
-      (let (org-log-done org-log-states)   ; turn off logging
-        (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-    (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-#+END_SRC
+** Set up locations
 
 #+BEGIN_SRC emacs-lisp
     (setq org-directory "~/Dropbox/data/org/")
@@ -334,6 +329,21 @@ To bind keys easily in a tidy way
     (setq org-archive-location
           (concat (org-file-path "archive.org") "::* From %s"))
 #+END_SRC
+
+** Magic: "It is done after its all subentries are done"
+
+Switch entry to DONE when all subentries are done, to TODO otherwise.
+
+#+BEGIN_SRC emacs-lisp
+    (defun org-summary-todo (n-done n-not-done)
+      "Switch entry to DONE when all subentries are done, to TODO otherwise."
+      (let (org-log-done org-log-states)   ; turn off logging
+        (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+    (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+#+END_SRC
+
+** Keybindings
 
 #+BEGIN_SRC emacs-lisp
   (general-define-key "oa" 'org-agenda)
@@ -365,12 +375,16 @@ To bind keys easily in a tidy way
                                 #'org-insert-todo-heading-respect-content)))
 #+END_SRC
 
+** Add structure templates
+
 #+BEGIN_SRC emacs-lisp
     :config
     (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                     ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
       (add-to-list 'org-structure-template-alist item))
 #+END_SRC
+
+** Add hooks
 
 #+BEGIN_SRC emacs-lisp
     (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
