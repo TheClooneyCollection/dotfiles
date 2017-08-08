@@ -395,6 +395,34 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/org-clock-in-if-starting ()
+    "Clock in when the task is marked STARTED."
+    (when (and (string= org-state "STARTED")
+               (not (string= org-last-state org-state)))
+      (org-clock-in)))
+
+  (add-hook 'org-after-todo-state-change-hook
+            'dot-emacs/org-clock-in-if-starting)
+
+  (defadvice org-clock-in (after dot-emacs activate)
+    "Set this task's status to 'STARTED'."
+    (org-todo "STARTED"))
+
+  (defun dot-emacs/org-clock-out-if-waiting ()
+    "Clock out when the task is marked WAITING."
+    (when (and (string= org-state "WAITING")
+               (equal (marker-buffer org-clock-marker) (current-buffer))
+               (< (point) org-clock-marker)
+               (> (save-excursion (outline-next-heading) (point))
+                  org-clock-marker)
+               (not (string= org-last-state org-state)))
+      (org-clock-out)))
+
+  (add-hook 'org-after-todo-state-change-hook
+            'dot-emacs/org-clock-out-if-waiting)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
     (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
 
