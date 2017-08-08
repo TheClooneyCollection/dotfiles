@@ -278,8 +278,8 @@ To bind keys easily in a tidy way
 
           ("e" "Emacs: Investing in myself"
            entry
-           (file+headline org-default-notes-file "Self-investment")
-           "* TODO %?\t:emacs:\nCREATED: %u\n%i")
+           (file+headline org-default-notes-file "Self-investment" "emacs")
+           "* TODO %?\nCREATED: %u\n%i")
 
           ("b" "Blog idea"
            entry
