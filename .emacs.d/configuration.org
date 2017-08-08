@@ -449,9 +449,9 @@ To bind keys easily in a tidy way
          :map evil-normal-state-map
               ("f" . avy-goto-char-2)
               :map evil-visual-state-map
-              ("f" . avy-goto-char-2)
+              ("f" . avy-goto-char-in-line)
               :map evil-operator-state-map
-              ("f" . avy-goto-char-2))
+              ("f" . avy-goto-char-in-line))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
