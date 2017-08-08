@@ -410,7 +410,8 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
   (defun dot-emacs/org-clock-out-if-waiting ()
     "Clock out when the task is marked WAITING."
-    (when (and (string= org-state "WAITING")
+    (when (and (or (string= org-state "DONE")
+                   (string= org-state "BLOCKED"))
                (equal (marker-buffer org-clock-marker) (current-buffer))
                (< (point) org-clock-marker)
                (> (save-excursion (outline-next-heading) (point))
