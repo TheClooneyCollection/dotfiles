@@ -567,6 +567,10 @@ To bind keys easily in a tidy way
     :diminish auto-revert-mode
     :commands magit-status
     :init
+    ;(defun t ()
+    ;  (message (buffer-string)))
+
+    ;(add-hook 'git-commit-mode-hook 't)
     (general-define-key "s" 'magit-status))
 
   (use-package ggtags
