@@ -249,7 +249,7 @@ To bind keys easily in a tidy way
   (setq org-src-tab-acts-natively t)
   (setq org-log-done 'time)
   (setq org-todo-keywords
-        '((sequence "TODO" "STARTED" "DONE")))
+        '((sequence "TODO" "STARTED" "|" "DONE" "BLOCKED")))
 #+END_SRC
 
 ** Capture templates
