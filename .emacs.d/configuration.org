@@ -258,12 +258,12 @@ To bind keys easily in a tidy way
   (setq org-capture-templates
         '(("t" "Todo"
            entry
-           (file+headline org-default-notes-file "Tasks")
+           (file+headline org-default-notes-file "Personal")
            "* TODO %?\nCREATED: %u\n%i")
 
           ("p" "Todo w/ a file path"
            entry
-           (file+headline org-default-notes-file "Tasks")
+           (file+headline org-default-notes-file "Personal")
            "* TODO %?\nCREATED: %u\n%i\n%l")
 
           ("w" "TODO :work:"
