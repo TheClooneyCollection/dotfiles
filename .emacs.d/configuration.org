@@ -279,14 +279,12 @@ To bind keys easily in a tidy way
           ("t" "Todo"
            entry
            (file+headline org-default-notes-file "Tasks")
-           "* TODO %?\nCREATED: %u\n"
-           ;"* TODO %?\n  %i\n  %a"
-           )
+           "* TODO %?\nCREATED: %u\n%i\n%l")
 
           ("w" "Todo :work:"
            entry
            (file+headline org-default-notes-file "Tasks")
-           "* TODO %?:work:\nCREATED: %u\n")))
+           "* TODO %?:work:\nCREATED: %u\n%i\n%l")))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
