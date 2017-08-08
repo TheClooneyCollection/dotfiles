@@ -1,7 +1,6 @@
 #+TITLE: Emacs Configuration
 
-* Settings
-** Basic
+* Basic
 
 #+BEGIN_SRC emacs-lisp
   (setq gc-cons-threshold 100000000) ; Do GC when every 100MB are allocated
@@ -15,7 +14,7 @@
   (setq custom-file "~/.emacs.d/custom.el")
 #+END_SRC
 
-** UI
+* UI
 
 #+BEGIN_SRC emacs-lisp
   (setq ring-bell-function #'ignore
@@ -41,15 +40,14 @@
   (menu-bar-mode -1) ; Hide menu bar at top
 #+END_SRC
 
-* Package management
-** Always install all the packages
+* Always install all the packages
 
 #+BEGIN_SRC emacs-lisp
   (setq use-package-always-ensure t
         use-package-verbose t)
 #+END_SRC
 
-** Use :diminish with use-package
+* Use :diminish with use-package
 
 To remove or abbreviate a mode indicator in the modeline
 
@@ -57,7 +55,7 @@ To remove or abbreviate a mode indicator in the modeline
   (require 'diminish)
 #+END_SRC
 
-** Use :bind-key with use-package
+* Use :bind-key with use-package
 
 To bind keys easily in a tidy way
 
@@ -65,7 +63,7 @@ To bind keys easily in a tidy way
   (require 'bind-key)
 #+END_SRC
 
-** Asynchronous compilation
+* Asynchronous compilation
 
 #+BEGIN_SRC emacs-lisp
   (use-package async
@@ -82,7 +80,7 @@ To bind keys easily in a tidy way
   )
 #+END_SRC
 
-** UI
+* UI
 
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme)
@@ -93,7 +91,7 @@ To bind keys easily in a tidy way
     :config (powerline-default-theme))
 #+END_SRC
 
-*** airline
+** airline
 
 #+BEGIN_SRC emacs-lisp
   (use-package airline-themes
@@ -116,7 +114,7 @@ To bind keys easily in a tidy way
   :config (load-theme 'airline-light t))
 #+END_SRC
 
-*** whitespace
+** whitespace
 
 #+BEGIN_SRC emacs-lisp
   (use-package whitespace ; Built-in
@@ -125,7 +123,7 @@ To bind keys easily in a tidy way
     :config (global-whitespace-mode))
 #+END_SRC
 
-** Keys
+* Keys
 
 #+BEGIN_SRC emacs-lisp
   (use-package guide-key
@@ -235,7 +233,7 @@ To bind keys easily in a tidy way
   :config (display-time-mode))
 #+END_SRC
 
-** Org
+* Org
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
@@ -368,7 +366,7 @@ To bind keys easily in a tidy way
     (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
 
-** Evil
+* Evil
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil
@@ -464,7 +462,7 @@ To bind keys easily in a tidy way
   (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
-** Languages
+* Languages
 
 #+BEGIN_SRC emacs-lisp
   (use-package swift-mode
@@ -496,9 +494,9 @@ To bind keys easily in a tidy way
     :mode "\\.fish\\'")
 #+END_SRC
 
-** Functionality
+* Functionality
 
-*** evil org
+** evil org
 #+BEGIN_SRC emacs-lisp
   (use-package evil-org
     :after (org evil)
@@ -514,13 +512,13 @@ To bind keys easily in a tidy way
               (evil-org-set-key-theme '(navigation insert textobjects additional)))))
 #+END_SRC
 
-*** flx
+** flx
 
 #+BEGIN_SRC emacs-lisp
   (use-package flx)
 #+END_SRC
 
-*** projectile
+** projectile
 
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
@@ -549,7 +547,7 @@ To bind keys easily in a tidy way
   (projectile-global-mode))
 #+END_SRC
 
-*** projectile-ripgrep
+** projectile-ripgrep
 
 #+BEGIN_SRC emacs-lisp
   (use-package projectile-ripgrep
@@ -557,7 +555,7 @@ To bind keys easily in a tidy way
     :commands (projectile-ripgrep))
 #+END_SRC
 
-*** Other
+** Other
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -593,9 +591,9 @@ To bind keys easily in a tidy way
     (setq alert-default-style 'notifier))
 #+END_SRC
 
-** Helm
+* Helm
 
-*** helm
+** helm
 
 #+BEGIN_SRC emacs-lisp
   (use-package helm
@@ -620,7 +618,7 @@ To bind keys easily in a tidy way
   (helm-mode))
 #+END_SRC
 
-*** helm-flx
+** helm-flx
 
 #+BEGIN_SRC emacs-lisp
   (use-package helm-flx
@@ -637,7 +635,7 @@ To bind keys easily in a tidy way
   :config (helm-flx-mode))
 #+END_SRC
 
-*** helm-projectile
+** helm-projectile
 
 #+BEGIN_SRC emacs-lisp
   (use-package helm-projectile
@@ -647,7 +645,7 @@ To bind keys easily in a tidy way
     (general-define-key "c" 'helm-projectile-switch-project))
 #+END_SRC
 
-*** helm-ls-git
+** helm-ls-git
 
 #+BEGIN_SRC emacs-lisp
   (use-package helm-ls-git
@@ -658,7 +656,7 @@ To bind keys easily in a tidy way
 
 #+END_SRC
 
-*** helm-gtags
+** helm-gtags
 
 #+BEGIN_SRC emacs-lisp
   (use-package helm-gtags
