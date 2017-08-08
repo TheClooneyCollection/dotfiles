@@ -23,6 +23,7 @@
 
 (defun dot-emacs/load-configuration-dot-org ()
   (interactive)
+  (save-some-buffers)
   (org-babel-load-file "~/.emacs.d/configuration.org"))
 
 (dot-emacs/load-configuration-dot-org)
