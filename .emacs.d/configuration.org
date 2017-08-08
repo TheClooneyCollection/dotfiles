@@ -579,6 +579,27 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (use-package flx)
 #+END_SRC
 
+** company
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+
+  (use-package company-flx
+    :after (company flx)
+    :config (company-flx-mode))
+#+END_SRC
+
+** auto-complete
+
+#+BEGIN_SRC emacs-lisp
+  ;(use-package auto-complete
+  ;  :diminish auto-complete-mode
+  ;  :config
+  ;  (ac-config-default))
+#+END_SRC
+
 ** projectile
 
 #+BEGIN_SRC emacs-lisp
@@ -632,11 +653,6 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (use-package ggtags
     :commands (ggtags-update-tags))
 
-  (use-package auto-complete
-    :diminish auto-complete-mode
-    :config
-    (ac-config-default))
-
   (use-package smartparens
     :diminish smartparens-mode
     :config
@@ -655,6 +671,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
     :init
     (setq alert-default-style 'notifier))
 #+END_SRC
+
 
 * Helm
 
