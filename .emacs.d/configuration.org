@@ -277,6 +277,11 @@ To bind keys easily in a tidy way
           ("t" "Todo"
            entry
            (file+headline org-default-notes-file "Tasks")
+           "* TODO %?\nCREATED: %u\n%i")
+
+          ("p" "Todo w/ a file path"
+           entry
+           (file+headline org-default-notes-file "Tasks")
            "* TODO %?\nCREATED: %u\n%i\n%l")
 
           ("w" "Todo :work:"
