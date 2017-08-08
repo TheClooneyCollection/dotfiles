@@ -253,6 +253,43 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+        '(("b" "Blog idea"
+           entry
+           (file (org-file-path "blog-ideas.org"))
+           "* %?\n")
+
+          ;("e" "Email" entry
+          ; (file+headline org-index-file "Inbox")
+          ; "* TODO %?\nCREATED: %u\n%a\n")
+
+          ("f" "Finished book"
+           table-line (org-file-path "books-read.org")
+           "| %^{Title} | %^{Author} | %u |")
+
+          ("r" "Reading"
+           checkitem
+           (file (org-file-path "to-read.org")))
+
+          ;("s" "Subscribe to an RSS feed"
+          ; plain
+          ; (file "~/documents/rss/urls")
+          ; "%^{Feed URL} \"~%^{Feed name}\"")
+
+          ("t" "Todo"
+           entry
+           (file+headline org-default-notes-file "Tasks")
+           "* TODO %?\nCREATED: %u\n"
+           ;"* TODO %?\n  %i\n  %a"
+           )
+
+          ("w" "Todo :work:"
+           entry
+           (file+headline org-default-notes-file "Tasks")
+           "* TODO %?:work:\nCREATED: %u\n")))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
     (defun org-summary-todo (n-done n-not-done)
       "Switch entry to DONE when all subentries are done, to TODO otherwise."
       (let (org-log-done org-log-states)   ; turn off logging
