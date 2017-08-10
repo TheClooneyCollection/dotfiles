@@ -557,6 +557,14 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 * Functionality
 
+** autorevert
+
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert ; Built-in
+    :config
+    (global-auto-revert-mode))
+#+END_SRC
+
 ** evil-org
 #+BEGIN_SRC emacs-lisp
   (use-package evil-org
@@ -671,7 +679,6 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
     :init
     (setq alert-default-style 'notifier))
 #+END_SRC
-
 
 * Helm
 
