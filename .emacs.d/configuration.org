@@ -523,10 +523,6 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (setq avy-background t)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
   (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
