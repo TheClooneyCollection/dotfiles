@@ -17,15 +17,15 @@
 * UI
 
 #+BEGIN_SRC emacs-lisp
-  (setq ring-bell-function #'ignore
+  (setq ring-bell-function #'ignore)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  inhibit-startup-screen t ; Skip the startup screen
+  (setq inhibit-startup-screen t) ; Skip the startup screen
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  initial-scratch-message "; Hello there!\n; Happy hacking!\n")
+  (setq initial-scratch-message "; Hello there!\n; Happy hacking!\n")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -38,6 +38,10 @@
 
 #+BEGIN_SRC emacs-lisp
   (menu-bar-mode -1) ; Hide menu bar at top
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode)
 #+END_SRC
 
 * Always install all the packages
@@ -83,12 +87,7 @@ To bind keys easily in a tidy way
 * UI
 
 #+BEGIN_SRC emacs-lisp
-  (use-package hl-mode ; built-in
-    :config (global-hl-line-mode))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme)
+  ;(use-package zenburn-theme)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -598,22 +597,22 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 ** company
 
 #+BEGIN_SRC emacs-lisp
-  (use-package company
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
+  ;(use-package company
+  ;  :config
+  ;  (add-hook 'after-init-hook 'global-company-mode))
 
-  (use-package company-flx
-    :after (company flx)
-    :config (company-flx-mode))
+  ;(use-package company-flx
+  ;  :after (company flx)
+  ;  :config (company-flx-mode))
 #+END_SRC
 
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
-  ;(use-package auto-complete
-  ;  :diminish auto-complete-mode
-  ;  :config
-  ;  (ac-config-default))
+  (use-package auto-complete
+    :diminish auto-complete-mode
+    :config
+    (ac-config-default))
 #+END_SRC
 
 ** projectile
@@ -669,12 +668,12 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (use-package ggtags
     :commands (ggtags-update-tags))
 
-  (use-package smartparens
-    :diminish smartparens-mode
-    :config
-    (require 'smartparens-config)
-    (show-smartparens-global-mode)
-    (smartparens-global-mode))
+  ;(use-package smartparens
+  ;  :diminish smartparens-mode
+  ;  :config
+  ;  (require 'smartparens-config)
+  ;  (show-smartparens-global-mode)
+  ;  (smartparens-global-mode))
 
   (use-package slack
     :commands (slack-start)
@@ -704,7 +703,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (setq helm-mode-fuzzy-match t
         helm-completion-in-region-fuzzy-match t
         helm-M-x-fuzzy-match t
-        helm-buffers-fuzzy-match t
+        helm-buffers-fuzzy-matching t
         helm-candidate-number-limit 20)
 #+END_SRC
 
