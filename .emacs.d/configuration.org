@@ -714,8 +714,20 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (setq helm-grep-ag-command "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s")
+  (setq helm-grep-ag-pipe-cmd-switches '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (general-define-key "<SPC>" 'helm-M-x)
   (general-define-key "b" 'helm-buffers-list)
+
+  (defun dot-emacs/grep-in-root ()
+    (interactive)
+    (projectile-with-default-dir (projectile-project-root)
+      (call-interactively 'helm-do-grep-ag)))
+
+  (general-define-key "g" 'dot-emacs/grep-in-root)
   :config
   (helm-mode))
 #+END_SRC
