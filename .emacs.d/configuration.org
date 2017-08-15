@@ -786,8 +786,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (general-define-key :prefix nil
                       :keymaps '(swift-mode-map)
                       :states '(normal)
-                      "t" 'helm-gtags-select
-                      "r" 'helm-gtags-find-rtag)
+                      "t" 'helm-gtags-select)
 
   (general-define-key "t" 'helm-gtags-parse-file))
 #+END_SRC
