@@ -604,22 +604,23 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 ** company
 
 #+BEGIN_SRC emacs-lisp
-  ;(use-package company
-  ;  :config
-  ;  (add-hook 'after-init-hook 'global-company-mode))
+  (use-package company
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
 
-  ;(use-package company-flx
-  ;  :after (company flx)
-  ;  :config (company-flx-mode))
+  (use-package company-flx
+    :after (company flx)
+    :config (company-flx-mode))
 #+END_SRC
 
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :diminish auto-complete-mode
-    :config
-    (ac-config-default))
+  ;(use-package auto-complete
+  ;  :diminish auto-complete-mode
+  ;  :init (setq ac-use-fuzzy t)
+  ;  :config
+  ;  (ac-config-default))
 #+END_SRC
 
 ** projectile
