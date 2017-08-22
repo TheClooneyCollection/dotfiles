@@ -602,23 +602,27 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 ** company
 
 #+BEGIN_SRC emacs-lisp
-  (use-package company
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
-
-  (use-package company-flx
-    :after (company flx)
-    :config (company-flx-mode))
+  ;(use-package company
+  ;  :init (setq company-backends '(company-bbdb company-nxml company-css company-eclim company-semantic company-clang company-xcode company-cmake company-capf company-files
+  ;                                              (company-dabbrev-code company-gtags company-keywords)
+  ;                                              company-oddmuse company-dabbrev)
+  ;              )
+  ;  :config
+  ;  (add-hook 'after-init-hook 'global-company-mode))
+  ;
+  ;(use-package company-flx
+  ;  :after (company flx)
+  ;  :config (company-flx-mode))
 #+END_SRC
 
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
-  ;(use-package auto-complete
-  ;  :diminish auto-complete-mode
-  ;  :init (setq ac-use-fuzzy t)
-  ;  :config
-  ;  (ac-config-default))
+  (use-package auto-complete
+    :diminish auto-complete-mode
+    ;:init (setq ac-use-fuzzy t)
+    :config
+    (ac-config-default))
 #+END_SRC
 
 ** projectile
@@ -674,12 +678,12 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (use-package ggtags
     :commands (ggtags-update-tags))
 
-  ;(use-package smartparens
-  ;  :diminish smartparens-mode
-  ;  :config
-  ;  (require 'smartparens-config)
-  ;  (show-smartparens-global-mode)
-  ;  (smartparens-global-mode))
+  (use-package smartparens
+    :diminish smartparens-mode
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode)
+    (show-smartparens-global-mode))
 
   (use-package slack
     :commands (slack-start)
