@@ -137,6 +137,8 @@ To bind keys easily in a tidy way
 
 * Keys
 
+** guide-key
+
 #+BEGIN_SRC emacs-lisp
   (use-package guide-key
     :diminish guide-key-mode
@@ -151,6 +153,8 @@ To bind keys easily in a tidy way
   guide-key/popup-window-position 'bottom)
   (guide-key-mode)) ; Enable guide-key-mode
 #+END_SRC
+
+** general
 
 #+BEGIN_SRC emacs-lisp
   (use-package general
@@ -216,6 +220,7 @@ To bind keys easily in a tidy way
   (general-define-key "ee" 'dot-emacs/edit-configuration))
 #+END_SRC
 
+* time
 #+BEGIN_SRC emacs-lisp
   (use-package time ; Built-in
     :diminish display-time-mode
@@ -441,6 +446,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 * Evil
 
+** evil
 #+BEGIN_SRC emacs-lisp
   (use-package evil
     :diminish undo-tree-mode
@@ -473,6 +479,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (evil-mode))
 #+END_SRC
 
+** evil-escape
 #+BEGIN_SRC emacs-lisp
   (use-package evil-escape
     :diminish evil-escape-mode
@@ -486,6 +493,8 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   :config
   (evil-escape-mode))
 #+END_SRC
+
+** evil-magit
 
 #+BEGIN_SRC emacs-lisp
   (use-package evil-magit
@@ -508,10 +517,11 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
                                          ;:scope 'line))
 #+END_SRC
 
+* avy
 
-; Avy's line movements do not work with evil too well
-; For example, when in visual line selection mode (V), avy does not work at all;
-; and when it does work in visual selection mode (v), it selects the line before selection.
+Avy's line movements do not work with evil too well.
+For example, when in visual line selection mode (V), avy does not work at all;
+and when it does work in visual selection mode (v), it selects the line before selection.
 
 #+BEGIN_SRC emacs-lisp
   (use-package avy
