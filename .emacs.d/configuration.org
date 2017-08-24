@@ -43,6 +43,14 @@
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode)
 #+END_SRC
+* Languages
+
+Use iPython if it is installed.
+
+#+BEGIN_SRC emacs-lisp
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
+#+END_SRC
 
 * Always install all the packages
 
@@ -528,7 +536,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
-* Languages
+* Packages for Languages
 
 ** Swift
 #+BEGIN_SRC emacs-lisp
