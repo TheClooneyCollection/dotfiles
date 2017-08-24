@@ -188,6 +188,18 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+  (general-define-key :prefix nil
+                      :keymaps '(swift-mode-map
+                                 python-mode-map
+                                 emacs-lisp-mode-map
+                                 org-mode-map
+                                 ruby-mode-map)
+                      :states '(insert emacs)
+                      ";" '(lambda () (interactive) (insert ":"))
+                      ":" '(lambda () (interactive) (insert ";")))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
   (defun dot-emacs/copy-to-clipboard ()
     (interactive)
     (if (region-active-p)
@@ -559,23 +571,7 @@ and when it does work in visual selection mode (v), it selects the line before s
 #+BEGIN_SRC emacs-lisp
   (use-package swift-mode
     :mode "\\.swift\\'"
-    :interpreter "swift"
-    :config
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (general-define-key :prefix nil
-                      :keymaps 'swift-mode-map
-                      :states '(insert emacs)
-                      ";" '(lambda () (interactive) (insert ":"))
-                      ":" '(lambda () (interactive) (insert ";")))
-
-                                          ; The following two lines are kept here for comparison reasons.
-                                          ; Seems much easier to use define-key.
-
-                                          ;(define-key swift-mode-map (kbd ";") '(lambda () (interactive) (insert ":")))
-                                          ;(define-key swift-mode-map (kbd ":") '(lambda () (interactive) (insert ";")))
-  )
+    :interpreter "swift")
 #+END_SRC
 
 ** Ruby
