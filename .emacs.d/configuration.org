@@ -264,6 +264,8 @@ To bind keys easily in a tidy way
 
 * Org
 
+** Load lazily based on the =:commands=
+
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :commands (org-agenda
@@ -272,6 +274,8 @@ To bind keys easily in a tidy way
                org-iswitchb)
     :init
 #+END_SRC
+
+** Settings
 
 #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis "⤵")
@@ -380,9 +384,18 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (general-define-key "ol" 'org-store-link)
   (general-define-key "ob" 'org-iswitchb)
 
-  (general-define-key "on" '(lambda ()
+  (general-define-key "oo" '(lambda ()
+                              (interactive)
+                              (org-capture nil "t"))
+                      "on" '(lambda ()
                               (interactive)
                               (find-file org-default-notes-file)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "tg" 'org-timer-start
+                      "ts" 'org-timer-stop
+                      "tp" 'org-timer-pause-or-continue)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -813,5 +826,6 @@ and when it does work in visual selection mode (v), it selects the line before s
                       :states '(normal)
                       "t" 'helm-gtags-select)
 
-  (general-define-key "t" 'helm-gtags-parse-file))
+  (general-define-key :keymaps '(swift-mode-map)
+                      "t" 'helm-gtags-parse-file))
 #+END_SRC
