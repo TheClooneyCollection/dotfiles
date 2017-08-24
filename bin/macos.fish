@@ -108,7 +108,7 @@ function install_ruby_gems
     echo "Installing Ruby gems"
     echo ""
 
-    gem install bundler cocoapods neovim
+    gem install bundler cocoapods neovim rcodetools
 
     echo ""
     echo "Done!"

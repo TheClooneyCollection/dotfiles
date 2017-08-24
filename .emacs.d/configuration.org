@@ -594,6 +594,10 @@ and when it does work in visual selection mode (v), it selects the line before s
     :mode ("\\.rb\\'" "\\Brewfile\\'"))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+  (use-package inf-ruby)
+#+END_SRC
+
 ** Fish
 
 #+BEGIN_SRC emacs-lisp
@@ -828,4 +832,116 @@ and when it does work in visual selection mode (v), it selects the line before s
 
   (general-define-key :keymaps '(swift-mode-map)
                       "t" 'helm-gtags-parse-file))
+#+END_SRC
+
+* rcodetools
+#+BEGIN_SRC emacs-lisp
+  ;;; rcodetools.el -- annotation / accurate completion / browsing documentation
+
+  ;;; Copyright (c) 2006-2008 rubikitch <rubikitch@ruby-lang.org>
+  ;;;
+  ;;; Use and distribution subject to the terms of the Ruby license.
+
+  (defvar xmpfilter-command-name "ruby -S xmpfilter --dev --fork --detect-rbtest"
+    "The xmpfilter command name.")
+  (defvar rct-doc-command-name "ruby -S rct-doc --dev --fork --detect-rbtest"
+    "The rct-doc command name.")
+  (defvar rct-complete-command-name "ruby -S rct-complete --dev --fork --detect-rbtest"
+    "The rct-complete command name.")
+  (defvar ruby-toggle-file-command-name "ruby -S ruby-toggle-file"
+    "The ruby-toggle-file command name.")
+  (defvar rct-fork-command-name "ruby -S rct-fork")
+  (defvar rct-option-history nil)                ;internal
+  (defvar rct-option-local nil)     ;internal
+  (make-variable-buffer-local 'rct-option-local)
+  (defvar rct-debug nil
+    "If non-nil, output debug message into *Messages*.")
+  ;; (setq rct-debug t)
+
+  (defadvice comment-dwim (around rct-hack activate)
+    "If comment-dwim is successively called, add => mark."
+    (if (and (eq major-mode 'ruby-mode)
+             (eq last-command 'comment-dwim)
+             ;; TODO =>check
+             )
+        (insert "=>")
+      ad-do-it))
+  ;; To remove this advice.
+  ;; (progn (ad-disable-advice 'comment-dwim 'around 'rct-hack) (ad-update 'comment-dwim)) 
+
+  (defun rct-current-line ()
+    "Return the vertical position of point..."
+    (+ (count-lines (point-min) (point))
+       (if (= (current-column) 0) 1 0)))
+
+  (defun rct-save-position (proc)
+    "Evaluate proc with saving current-line/current-column/window-start."
+    (let ((line (rct-current-line))
+          (col  (current-column))
+          (wstart (window-start)))
+      (funcall proc)
+      (goto-char (point-min))
+      (forward-line (1- line))
+      (move-to-column col)
+      (set-window-start (selected-window) wstart)))
+
+  (defun rct-interactive ()
+    "All the rcodetools-related commands with prefix args read rcodetools' common option. And store option into buffer-local variable."
+    (list
+     (let ((option (or rct-option-local "")))
+       (if current-prefix-arg
+           (setq rct-option-local
+                 (read-from-minibuffer "rcodetools option: " option nil nil 'rct-option-history))
+         option))))  
+
+  (defun rct-shell-command (command &optional buffer)
+    "Replacement for `(shell-command-on-region (point-min) (point-max) command buffer t' because of encoding problem."
+    (let ((input-rb (concat (make-temp-name "xmptmp-in") ".rb"))
+          (output-rb (concat (make-temp-name "xmptmp-out") ".rb"))
+          (coding-system-for-read buffer-file-coding-system))
+      (write-region (point-min) (point-max) input-rb nil 'nodisp)
+      (shell-command
+       (rct-debuglog (format "%s %s > %s" command input-rb output-rb))
+       t " *rct-error*")
+      (with-current-buffer (or buffer (current-buffer))
+        (insert-file-contents output-rb nil nil nil t))
+      (delete-file input-rb)
+      (delete-file output-rb)))
+
+  (defvar xmpfilter-command-function 'xmpfilter-command)
+  (defun xmp (&optional option)
+    "Run xmpfilter for annotation/test/spec on whole buffer.
+  See also `rct-interactive'. "
+    (interactive (rct-interactive))
+    (rct-save-position
+     (lambda ()
+       (rct-shell-command (funcall xmpfilter-command-function option)))))
+
+  (defun xmpfilter-command (&optional option)
+    "The xmpfilter command line, DWIM."
+    (setq option (or option ""))
+    (flet ((in-block (beg-re)
+                     (save-excursion
+                       (goto-char (point-min))
+                       (when (re-search-forward beg-re nil t)
+                         (let ((s (point)) e)
+                           (when (re-search-forward "^end\n" nil t)
+                             (setq e (point))
+                             (goto-char s)
+                             (re-search-forward "# => *$" e t)))))))
+      (cond ((in-block "^class.+< Test::Unit::TestCase$")
+             (format "%s --unittest %s" xmpfilter-command-name option))
+            ((in-block "^\\(describe\\|context\\).+do$")
+             (format "%s --spec %s" xmpfilter-command-name option))
+            (t
+             (format "%s %s" xmpfilter-command-name option)))))
+  (require 'cl)
+
+  (defun rct-debuglog (logmsg)
+    "if `rct-debug' is non-nil, output LOGMSG into *Messages*. Returns LOGMSG."
+    (if rct-debug
+        (message "%s" logmsg))
+  logmsg)
+
+  (provide 'rcodetools)
 #+END_SRC
