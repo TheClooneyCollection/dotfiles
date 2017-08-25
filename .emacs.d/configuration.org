@@ -831,6 +831,7 @@ and when it does work in visual selection mode (v), it selects the line before s
                       "t" 'helm-gtags-select)
 
   (general-define-key :keymaps '(swift-mode-map)
+                      :states '(normal)
                       "t" 'helm-gtags-parse-file))
 #+END_SRC
 
