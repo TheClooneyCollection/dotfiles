@@ -582,6 +582,17 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 * Packages for Languages
 
+** yasnippet
+
+Haven't figured a way to make this work with company-mode nicely yet...
+
+#+BEGIN_SRC emacs-lisp
+  ;(use-package yasnippet
+  ;  :config
+  ;  (yas-reload-all)
+  ;  (add-hook 'prog-mode-hook #'yas-minor-mode))
+#+END_SRC
+
 ** Swift
 #+BEGIN_SRC emacs-lisp
   (use-package swift-mode
@@ -591,7 +602,6 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 ** Ruby
 
-*** Ruby
 #+BEGIN_SRC emacs-lisp
   (use-package enh-ruby-mode
     :mode ("\\.rb\\'" "\\Brewfile\\'"))
@@ -605,11 +615,16 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 #+BEGIN_SRC emacs-lisp
   (use-package rspec-mode
-    :init (setq rspec-command-options "-f d"))
+    :config
+    (add-hook 'ruby-mode-hook 'rspec-mode)
+    (rspec-install-snippets))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (use-package minitest)
+  (use-package minitest
+    :config
+    (add-hook 'ruby-mode-hook 'minitest-mode)
+    (minitest-install-snippets))
 #+END_SRC
 
 *** Rake & Bundler
