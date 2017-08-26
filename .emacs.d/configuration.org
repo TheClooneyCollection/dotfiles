@@ -193,7 +193,7 @@ To bind keys easily in a tidy way
                                  python-mode-map
                                  emacs-lisp-mode-map
                                  org-mode-map
-                                 ruby-mode-map)
+                                 enh-ruby-mode-map)
                       :states '(insert emacs)
                       ";" '(lambda () (interactive) (insert ":"))
                       ":" '(lambda () (interactive) (insert ";")))
@@ -589,13 +589,36 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 ** Ruby
 
+*** Ruby
 #+BEGIN_SRC emacs-lisp
-  (use-package ruby-mode ; Built-in
+  (use-package enh-ruby-mode
     :mode ("\\.rb\\'" "\\Brewfile\\'"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (use-package inf-ruby)
+#+END_SRC
+
+*** Testing
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rspec-mode
+    :init (setq rspec-command-options "-f d"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package minitest)
+#+END_SRC
+
+*** Rake & Bundler
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rake
+    :init (setq rake-completion-system 'helm))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bundler)
 #+END_SRC
 
 ** Fish
