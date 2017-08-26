@@ -863,21 +863,8 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 * rcodetools
 #+BEGIN_SRC emacs-lisp
-  ;;; rcodetools.el -- annotation / accurate completion / browsing documentation
-
-  ;;; Copyright (c) 2006-2008 rubikitch <rubikitch@ruby-lang.org>
-  ;;;
-  ;;; Use and distribution subject to the terms of the Ruby license.
-
   (defvar xmpfilter-command-name "ruby -S xmpfilter --dev --fork --detect-rbtest"
     "The xmpfilter command name.")
-  (defvar rct-doc-command-name "ruby -S rct-doc --dev --fork --detect-rbtest"
-    "The rct-doc command name.")
-  (defvar rct-complete-command-name "ruby -S rct-complete --dev --fork --detect-rbtest"
-    "The rct-complete command name.")
-  (defvar ruby-toggle-file-command-name "ruby -S ruby-toggle-file"
-    "The ruby-toggle-file command name.")
-  (defvar rct-fork-command-name "ruby -S rct-fork")
   (defvar rct-option-history nil)                ;internal
   (defvar rct-option-local nil)     ;internal
   (make-variable-buffer-local 'rct-option-local)
