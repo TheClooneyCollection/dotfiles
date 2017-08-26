@@ -584,13 +584,11 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 ** yasnippet
 
-Haven't figured a way to make this work with company-mode nicely yet...
-
 #+BEGIN_SRC emacs-lisp
-  ;(use-package yasnippet
-  ;  :config
-  ;  (yas-reload-all)
-  ;  (add-hook 'prog-mode-hook #'yas-minor-mode))
+  (use-package yasnippet
+    :config
+    (yas-reload-all)
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
 #+END_SRC
 
 ** Swift
