@@ -684,6 +684,7 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 #+BEGIN_SRC emacs-lisp
   :config
+  (defalias 'run-command 'projectile-run-shell-command-in-root)
   (projectile-discover-projects-in-directory "~/work")
   (projectile-discover-projects-in-directory "~/proj")
 #+END_SRC
