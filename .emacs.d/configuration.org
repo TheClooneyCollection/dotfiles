@@ -52,14 +52,15 @@ Use iPython if it is installed.
   (setq python-shell-interpreter "ipython"))
 #+END_SRC
 
-* Always install all the packages
+* Set up =use-package=
+** Always install all the packages
 
 #+BEGIN_SRC emacs-lisp
   (setq use-package-always-ensure t
         use-package-verbose t)
 #+END_SRC
 
-* Use :diminish with use-package
+** Use :diminish with use-package
 
 To remove or abbreviate a mode indicator in the modeline
 
@@ -67,7 +68,7 @@ To remove or abbreviate a mode indicator in the modeline
   (require 'diminish)
 #+END_SRC
 
-* Use :bind-key with use-package
+** Use :bind-key with use-package
 
 To bind keys easily in a tidy way
 
@@ -83,13 +84,14 @@ To bind keys easily in a tidy way
     :config
 #+END_SRC
 
+Enable aysnc commands for directory editor, also for helm
 #+BEGIN_SRC emacs-lisp
-  (dired-async-mode 1) ; Enable aysnc commands for directory editor, also for helm
+  (dired-async-mode 1)
 #+END_SRC
 
+See https://github.com/jwiegley/emacs-async for explanation
 #+BEGIN_SRC emacs-lisp
-  (async-bytecomp-package-mode 1) ; See https://github.com/jwiegley/emacs-async for explanation
-  )
+  (async-bytecomp-package-mode 1))
 #+END_SRC
 
 * UI
