@@ -615,14 +615,14 @@ and when it does work in visual selection mode (v), it selects the line before s
   (use-package rspec-mode
     :config
     (add-hook 'ruby-mode-hook 'rspec-mode)
-    (rspec-install-snippets))
+    (eval-after-load 'yasnippet '(rspec-install-snippets)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   (use-package minitest
     :config
     (add-hook 'ruby-mode-hook 'minitest-mode)
-    (minitest-install-snippets))
+    (eval-after-load 'yasnippet '(minitest-install-snippets)))
 #+END_SRC
 
 *** Rake & Bundler
