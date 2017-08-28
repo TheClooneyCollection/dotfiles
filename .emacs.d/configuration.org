@@ -889,7 +889,10 @@ in this issue https://github.com/company-mode/company-mode/issues/526
                       "t" 'helm-gtags-parse-file))
 #+END_SRC
 
-* rcodetools
+* Custom code
+
+** TODO Regex match the whole file and shows matched results in a minibuffer
+** rcodetools
 #+BEGIN_SRC emacs-lisp
   (defvar xmpfilter-command-name "ruby -S xmpfilter --dev --fork --detect-rbtest"
     "The xmpfilter command name.")
