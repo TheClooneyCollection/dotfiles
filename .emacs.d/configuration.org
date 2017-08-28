@@ -645,6 +645,14 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 * Functionality
 
+** perspective
+
+#+BEGIN_SRC emacs-lisp
+  (use-package perspective)
+#+END_SRC
+
+*** TODO Add helm projectile perspective integration
+
 ** autorevert
 
 #+BEGIN_SRC emacs-lisp
