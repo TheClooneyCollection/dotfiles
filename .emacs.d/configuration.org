@@ -691,9 +691,9 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
-    :init (setq company-backends '(company-clang company-capf company-files company-yasnippet
-                                                 (company-dabbrev-code company-gtags company-keywords))
-                )
+    :init (setq company-backends '(company-clang company-capf company-files
+                                                 (company-dabbrev-code company-gtags company-keywords)
+                                                 company-yasnippet))
     :config
     (add-hook 'after-init-hook 'global-company-mode))
 
