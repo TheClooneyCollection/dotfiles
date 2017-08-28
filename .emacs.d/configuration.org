@@ -702,6 +702,10 @@ and when it does work in visual selection mode (v), it selects the line before s
     :config (company-flx-mode))
 #+END_SRC
 
+*** TODO Investigate tab completion backend
+
+in this issue https://github.com/company-mode/company-mode/issues/526
+
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
