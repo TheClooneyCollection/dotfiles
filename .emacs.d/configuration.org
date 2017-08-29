@@ -295,83 +295,80 @@ See https://github.com/jwiegley/emacs-async for explanation
 ** Capture templates
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-capture-templates
-        '(("t" "Todo"
-           entry
-           (file+headline org-default-notes-file "Personal")
-           "* TODO %?\nCREATED: %u\n%i")
+    (setq org-capture-templates
+          '(("t" "TODO"
+             entry
+             (file+headline org-default-notes-file "Personal")
+             "* TODO %?\nCREATED: %u\n%i")
 
-          ("p" "Todo w/ a file path"
-           entry
-           (file+headline org-default-notes-file "Personal")
-           "* TODO %?\nCREATED: %u\n%i\n%l")
             ("e" "TODO :emacs:"
              entry
              (file+headline "~/.emacs.d/configuration.org" "TODOs")
              "* TODO %?\nCREATED: %u\n%i")
 
-          ("w" "TODO :work:"
-           entry
-           (file+headline org-default-notes-file "Work")
-           "* TODO %?\nCREATED: %u\n%i\n%l")
+           
+            ("p" "Todo w/ a file path"
+             entry
+             (file+headline org-default-notes-file "Personal")
+             "* TODO %?\nCREATED: %u\n%i\n%l")
 
-          ("s" "Investing in myself"
-           entry
-           (file+headline org-default-notes-file "Self-investment")
-           "* TODO %?\nCREATED: %u\n%i")
+            ("w" "TODO :work:"
+             entry
+             (file+headline org-default-notes-file "Work")
+             "* TODO %?\nCREATED: %u\n%i\n%l")
 
-          ("e" "Emacs: Investing in myself"
-           entry
-           (file+headline org-default-notes-file "Self-investment" "emacs")
-           "* TODO %?\nCREATED: %u\n%i")
+            ("s" "Investing in myself"
+             entry
+             (file+headline org-default-notes-file "Self-investment")
+             "* TODO %?\nCREATED: %u\n%i")
 
-          ("b" "Blog idea"
-           entry
-           (file (org-file-path "blog-ideas.org"))
-           "* %?\n")
+            ("b" "Blog idea"
+             entry
+             (file (org-file-path "blog-ideas.org"))
+             "* %?\n")
 
-          ;("e" "Email" entry
-          ; (file+headline org-index-file "Inbox")
-          ; "* TODO %?\nCREATED: %u\n%a\n")
+                                            ;("e" "Email" entry
+                                            ; (file+headline org-index-file "Inbox")
+                                            ; "* TODO %?\nCREATED: %u\n%a\n")
 
 
-          ;("s" "Subscribe to an RSS feed"
-          ; plain
-          ; (file "~/documents/rss/urls")
-          ; "%^{Feed URL} \"~%^{Feed name}\"")
+                                            ;("s" "Subscribe to an RSS feed"
+                                            ; plain
+                                            ; (file "~/documents/rss/urls")
+                                            ; "%^{Feed URL} \"~%^{Feed name}\"")
 
-          ("f" "Finished book"
-           table-line (org-file-path "books-read.org")
-           "| %^{Title} | %^{Author} | %u |")
+            ("f" "Finished book"
+             table-line (org-file-path "books-read.org")
+             "| %^{Title} | %^{Author} | %u |")
 
-          ("r" "Reading"
-           checkitem
-           (file (org-file-path "to-read.org")))))
+            ("r" "Reading"
+             checkitem
+             (file (org-file-path "to-read.org")))))
 #+END_SRC
 
 ** Set up locations
 
 #+BEGIN_SRC emacs-lisp
-    (setq org-directory "~/Dropbox/data/org/")
+  (setq org-directory "~/Dropbox/data/org/")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (defun org-file-path (filename)
-      "Return the absolute address of an org file, given its relative name."
-      (let ((file-path (concat (file-name-as-directory org-directory) filename)))
-        (if (file-exists-p file-path)
-            file-path nil)))
+  (defun org-file-path (filename)
+    "Return the absolute address of an org file, given its relative name."
+    (let ((file-path (concat (file-name-as-directory org-directory) filename)))
+      (if (file-exists-p file-path)
+          file-path nil)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq org-default-notes-file (org-file-path "notes.org"))
-    (setq org-agenda-files (cl-remove-if #'null (list org-directory
-                                                      (org-file-path "work/"))))
+  (setq org-default-notes-file (org-file-path "notes.org"))
+  (setq org-agenda-files (cl-remove-if #'null (list org-directory
+                                                    (org-file-path "work/"))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (setq org-archive-location
-          (concat (org-file-path "archive.org") "::* From %s"))
+  (setq org-archive-location
+        (concat (org-file-path "archive.org") "::* From %s"))
 #+END_SRC
 
 ** Magic: "It is done after its all subentries are done"
@@ -379,12 +376,12 @@ See https://github.com/jwiegley/emacs-async for explanation
 Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 #+BEGIN_SRC emacs-lisp
-    (defun org-summary-todo (n-done n-not-done)
-      "Switch entry to DONE when all subentries are done, to TODO otherwise."
-      (let (org-log-done org-log-states)   ; turn off logging
-        (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)   ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
-    (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 #+END_SRC
 
 ** Keybindings
@@ -410,41 +407,41 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (defun evil-org-eol-call (fun &rest arguments)
-      "Go to end of line and call provided function.
+  (defun evil-org-eol-call (fun &rest arguments)
+    "Go to end of line and call provided function.
   FUN function callback
   Optional argument ARGUMENTS arguments to pass to FUN."
-      (end-of-visible-line)
-      (apply fun arguments)
-      (evil-insert nil))
+    (end-of-visible-line)
+    (apply fun arguments)
+    (evil-insert nil))
 
-    (general-define-key :prefix nil
-                        :keymaps 'org-mode-map
-                        :states '(normal)
-                        "tt" 'org-set-tags
-                        "ti" (lambda ()
-                               (interactive)
-                               (evil-org-eol-call
-                                #'org-insert-todo-heading-respect-content)))
+  (general-define-key :prefix nil
+                      :keymaps 'org-mode-map
+                      :states '(normal)
+                      "tt" 'org-set-tags
+                      "ti" (lambda ()
+                             (interactive)
+                             (evil-org-eol-call
+                              #'org-insert-todo-heading-respect-content)))
 #+END_SRC
 
 ** Add structure templates
 
 #+BEGIN_SRC emacs-lisp
-    :config
-    (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
-                    ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
-      (add-to-list 'org-structure-template-alist item))
+  :config
+  (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
+                  ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
+    (add-to-list 'org-structure-template-alist item))
 #+END_SRC
 
 ** Add hooks
 
 #+BEGIN_SRC emacs-lisp
-    (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (add-hook 'org-capture-mode-hook 'evil-insert-state)
+  (add-hook 'org-capture-mode-hook 'evil-insert-state)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -477,7 +474,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
+  (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
 
 * Evil
@@ -550,7 +547,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (general-define-key :prefix nil
                       :states '(motion operator)
                       "t" (evilem-create 'evil-repeat-find-char-to))
-                                         ;:scope 'line))
+                                          ;:scope 'line))
 #+END_SRC
 
 ** evil-surround
