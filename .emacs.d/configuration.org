@@ -629,6 +629,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
+    :diminish yas-minor-mode
     :config
     (yas-reload-all)
     (add-hook 'prog-mode-hook #'yas-minor-mode))
@@ -712,6 +713,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
+    :diminish company-mode
     :init (setq company-backends '(company-clang company-capf company-files
                                                  (company-dabbrev-code company-gtags company-keywords)
                                                  company-dabbrev company-yasnippet)
@@ -898,6 +900,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
+    :diminish flycheck-mode
     :config (global-flycheck-mode))
 #+END_SRC
 
