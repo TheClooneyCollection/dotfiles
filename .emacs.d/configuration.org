@@ -85,11 +85,13 @@ To bind keys easily in a tidy way
 #+END_SRC
 
 Enable aysnc commands for directory editor, also for helm
+
 #+BEGIN_SRC emacs-lisp
   (dired-async-mode 1)
 #+END_SRC
 
 See https://github.com/jwiegley/emacs-async for explanation
+
 #+BEGIN_SRC emacs-lisp
   (async-bytecomp-package-mode 1))
 #+END_SRC
@@ -667,8 +669,6 @@ and when it does work in visual selection mode (v), it selects the line before s
   (use-package perspective)
 #+END_SRC
 
-*** TODO Add helm projectile perspective integration
-
 ** autorevert
 
 #+BEGIN_SRC emacs-lisp
@@ -978,7 +978,6 @@ and when it does work in visual selection mode (v), it selects the line before s
   (use-package helm-ls-git
     :commands helm-ls-git-ls
     :init
-                                          ;(setq helm-ls-git-fuzzy-match t)
     (general-define-key "f" 'helm-ls-git-ls))
 
 #+END_SRC
@@ -1008,7 +1007,6 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 * Custom code
 
-** TODO Regex match the whole file and shows matched results in a minibuffer
 ** rcodetools
 #+BEGIN_SRC emacs-lisp
   (defvar xmpfilter-command-name "ruby -S xmpfilter --dev --fork --detect-rbtest"
@@ -1111,3 +1109,5 @@ and when it does work in visual selection mode (v), it selects the line before s
 ** TODO I wish company works with case insensitive inputs
 CREATED: [2017-08-29 Tue]
 CREATED: [2017-08-29 Tue]
+** TODO Add helm projectile perspective integration
+** TODO Regex match the whole file and shows matched results in a minibuffer
