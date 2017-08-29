@@ -655,6 +655,13 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 * Functionality
 
+** flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :config (global-flycheck-mode))
+#+END_SRC
+
 ** perspective
 
 #+BEGIN_SRC emacs-lisp
