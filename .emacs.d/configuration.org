@@ -871,11 +871,6 @@ and when it does work in visual selection mode (v), it selects the line before s
   (use-package magit
     :diminish auto-revert-mode
     :commands magit-status
-    :init
-    ;(defun t ()
-    ;  (message (buffer-string)))
-
-    ;(add-hook 'git-commit-mode-hook 't)
     (general-define-key "s" 'magit-status))
 
   (use-package ggtags
