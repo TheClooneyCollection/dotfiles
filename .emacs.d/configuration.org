@@ -226,13 +226,17 @@ See https://github.com/jwiegley/emacs-async for explanation
   (defun dot-emacs/edit (filename)
     (find-file (concat user-emacs-directory filename)))
 
-  (defun dot-emacs/edit-configuration-maybe ()
-    (interactive)
-    (org-capture nil "e"))
-
   (defun dot-emacs/edit-configuration ()
     (interactive)
     (dot-emacs/edit "configuration.org"))
+
+  (defun dot-emacs/edit-configuration-maybe ()
+    (interactive)
+    (let (hour (string-to-number (substring (current-time-string) 11 13)))
+
+      (if (member hour (number-sequence 9 17))
+          (org-capture nil "e"))
+        (dot-emacs/edit-configuration)))
 
   (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
   (general-define-key "e!" 'dot-emacs/edit-configuration))
