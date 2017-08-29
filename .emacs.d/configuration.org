@@ -697,12 +697,13 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
                                                  (company-dabbrev-code company-gtags company-keywords)
                                                  company-dabbrev company-yasnippet)
                 company-idle-delay 0.01
-                company-minimum-prefix-length 2)
+                company-minimum-prefix-length 3)
     :config
     (add-hook 'after-init-hook 'global-company-mode))
 
   (use-package company-flx
     :after (company flx)
+    :init (setq company-flx-limit 100)
     :config (company-flx-mode))
 #+END_SRC
 
