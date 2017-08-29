@@ -871,6 +871,7 @@ and when it does work in visual selection mode (v), it selects the line before s
   (use-package magit
     :diminish auto-revert-mode
     :commands magit-status
+    :config
     (general-define-key "s" 'magit-status))
 
   (use-package ggtags
