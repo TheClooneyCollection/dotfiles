@@ -1097,11 +1097,6 @@ and when it does work in visual selection mode (v), it selects the line before s
   (provide 'rcodetools)
 #+END_SRC
 * TODOs
-** TODO Test
-CREATED: [2017-08-29 Tue]
-** TODO I wish company-flx works with the words in the current buffer too :sad:
-CREATED: [2017-08-29 Tue]
 ** TODO I wish company works with case insensitive inputs
 CREATED: [2017-08-29 Tue]
-** TODO Use company-dabbrev or ...-code to solve the words in buffer completion problem I have
 CREATED: [2017-08-29 Tue]
