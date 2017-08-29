@@ -75,6 +75,21 @@ To bind keys easily in a tidy way
   (require 'bind-key)
 #+END_SRC
 
+** Diminish modes
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro diminish-minor-mode (filename mode &optional abbrev)
+    `(eval-after-load (symbol-name ,filename)
+       '(diminish ,mode ,abbrev)))
+
+  (defmacro diminish-major-mode (mode-hook abbrev)
+    `(add-hook ,mode-hook
+               (lambda () (setq mode-name ,abbrev))))
+
+  (diminish-minor-mode 'with-editor 'with-editor-mode)
+  (diminish-minor-mode 'simple 'auto-fill-function)
+  (diminish-minor-mode 'server 'server-buffer-clients)
+#+END_SRC
 * Asynchronous compilation
 
 #+BEGIN_SRC emacs-lisp
@@ -96,9 +111,13 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+END_SRC
 
 * UI
+** zenburn
+
 #+BEGIN_SRC emacs-lisp
   ;(use-package zenburn-theme)
 #+END_SRC
+
+** powerline
 
 #+BEGIN_SRC emacs-lisp
   (use-package powerline
