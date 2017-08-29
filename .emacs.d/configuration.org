@@ -227,11 +227,16 @@ See https://github.com/jwiegley/emacs-async for explanation
   (defun dot-emacs/edit (filename)
     (find-file (concat user-emacs-directory filename)))
 
+  (defun dot-emacs/edit-configuration-maybe ()
+    (interactive)
+    (org-capture nil "e"))
+
   (defun dot-emacs/edit-configuration ()
     (interactive)
     (dot-emacs/edit "configuration.org"))
 
-  (general-define-key "ee" 'dot-emacs/edit-configuration))
+  (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
+  (general-define-key "e!" 'dot-emacs/edit-configuration))
 #+END_SRC
 
 * time
@@ -300,6 +305,10 @@ See https://github.com/jwiegley/emacs-async for explanation
            entry
            (file+headline org-default-notes-file "Personal")
            "* TODO %?\nCREATED: %u\n%i\n%l")
+            ("e" "TODO :emacs:"
+             entry
+             (file+headline "~/.emacs.d/configuration.org" "TODOs")
+             "* TODO %?\nCREATED: %u\n%i")
 
           ("w" "TODO :work:"
            entry
