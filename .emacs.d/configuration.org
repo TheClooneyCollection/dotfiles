@@ -925,6 +925,8 @@ and when it does work in visual selection mode (v), it selects the line before s
   (general-define-key "<SPC>" 'helm-M-x)
   (general-define-key "b" 'helm-buffers-list)
 
+  (general-define-key "u" 'helm-resume)
+
   (defun dot-emacs/grep-in-root ()
     (interactive)
     (projectile-with-default-dir (projectile-project-root)
