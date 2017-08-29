@@ -241,6 +241,35 @@ See https://github.com/jwiegley/emacs-async for explanation
   (general-define-key "e!" 'dot-emacs/edit-configuration))
 #+END_SRC
 
+** avy
+
+Avy's line movements do not work with evil too well.
+For example, when in visual line selection mode (V), avy does not work at all;
+and when it does work in visual selection mode (v), it selects the line before selection.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :bind (
+         :map evil-normal-state-map
+              ("f" . avy-goto-char-2)
+              :map evil-visual-state-map
+              ("f" . avy-goto-char-in-line)
+              :map evil-operator-state-map
+              ("f" . avy-goto-char-in-line))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
+#+END_SRC
+
 * time
 #+BEGIN_SRC emacs-lisp
   (use-package time ; Built-in
@@ -572,35 +601,6 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (add-hook 'evil-org-mode-hook
             (lambda ()
               (evil-org-set-key-theme '(navigation insert textobjects additional)))))
-#+END_SRC
-
-* avy
-
-Avy's line movements do not work with evil too well.
-For example, when in visual line selection mode (V), avy does not work at all;
-and when it does work in visual selection mode (v), it selects the line before selection.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package avy
-    :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :bind (
-         :map evil-normal-state-map
-              ("f" . avy-goto-char-2)
-              :map evil-visual-state-map
-              ("f" . avy-goto-char-in-line)
-              :map evil-operator-state-map
-              ("f" . avy-goto-char-in-line))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :init
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
 * Packages for Languages
