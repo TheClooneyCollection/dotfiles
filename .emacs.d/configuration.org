@@ -431,8 +431,8 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 
 #+BEGIN_SRC emacs-lisp
   :config
-  (dolist (item '(("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
-                  ("re" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
+  (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
+                  ("r" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
     (add-to-list 'org-structure-template-alist item))
 #+END_SRC
 
