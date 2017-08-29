@@ -96,7 +96,6 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+END_SRC
 
 * UI
-
 #+BEGIN_SRC emacs-lisp
   ;(use-package zenburn-theme)
 #+END_SRC
@@ -139,7 +138,6 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+END_SRC
 
 * Keys
-
 ** guide-key
 
 #+BEGIN_SRC emacs-lisp
