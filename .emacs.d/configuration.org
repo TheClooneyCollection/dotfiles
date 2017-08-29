@@ -558,6 +558,22 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
     :after evil
     :config (global-evil-surround-mode))
 #+END_SRC
+** evil-org
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-org
+    :after (org evil)
+    :diminish (evil-org-mode)
+    :mode ("\\.org\\'" . org-mode)
+    :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
+#+END_SRC
+
 * avy
 
 Avy's line movements do not work with evil too well.
@@ -656,41 +672,14 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 * Functionality
 
-** flycheck
+** magit
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :config (global-flycheck-mode))
-#+END_SRC
-
-** perspective
-
-#+BEGIN_SRC emacs-lisp
-  (use-package perspective)
-#+END_SRC
-
-** autorevert
-
-#+BEGIN_SRC emacs-lisp
-  (use-package autorevert ; Built-in
+  (use-package magit
+    :diminish auto-revert-mode
+    :commands magit-status
     :config
-    (global-auto-revert-mode))
-#+END_SRC
-
-** evil-org
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-org
-    :after (org evil)
-    :diminish (evil-org-mode)
-    :mode ("\\.org\\'" . org-mode)
-    :config
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
+    (general-define-key "s" 'magit-status))
 #+END_SRC
 
 ** flx
@@ -825,15 +814,18 @@ and when it does work in visual selection mode (v), it selects the line before s
   (provide 'company-insert-selected)
 #+END_SRC
 
-** auto-complete
+** smartparens
 
 #+BEGIN_SRC emacs-lisp
-  ;(use-package auto-complete
-  ;  :diminish auto-complete-mode
-  ;  ;:init (setq ac-use-fuzzy t)
-  ;  :config
-  ;  (ac-config-default))
+  (use-package smartparens
+    :diminish smartparens-mode
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode)
+    (show-smartparens-global-mode))
 #+END_SRC
+
+
 
 ** projectile
 
@@ -873,35 +865,63 @@ and when it does work in visual selection mode (v), it selects the line before s
     :commands (projectile-ripgrep))
 #+END_SRC
 
-** Other
+** ggtags
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :diminish auto-revert-mode
-    :commands magit-status
-    :config
-    (general-define-key "s" 'magit-status))
-
   (use-package ggtags
     :commands (ggtags-update-tags))
+#+END_SRC
 
-  (use-package smartparens
-    :diminish smartparens-mode
+
+** flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :config (global-flycheck-mode))
+#+END_SRC
+
+** perspective
+
+#+BEGIN_SRC emacs-lisp
+  (use-package perspective)
+#+END_SRC
+
+** autorevert
+
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert ; Built-in
     :config
-    (require 'smartparens-config)
-    (smartparens-global-mode)
-    (show-smartparens-global-mode))
+    (global-auto-revert-mode))
+#+END_SRC
 
+
+** slack
+
+#+BEGIN_SRC emacs-lisp
   (use-package slack
     :commands (slack-start)
     :init
     (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
     (setq slack-prefer-current-team t))
+#+END_SRC
 
+** alert
+
+#+BEGIN_SRC emacs-lisp
   (use-package alert
     :commands (alert)
     :init
     (setq alert-default-style 'notifier))
+#+END_SRC
+
+** auto-complete
+
+#+BEGIN_SRC emacs-lisp
+  ;(use-package auto-complete
+  ;  :diminish auto-complete-mode
+  ;  ;:init (setq ac-use-fuzzy t)
+  ;  :config
+  ;  (ac-config-default))
 #+END_SRC
 
 * Helm
