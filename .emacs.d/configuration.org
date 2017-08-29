@@ -1,7 +1,6 @@
 #+TITLE: Emacs Configuration
 
 * Basic
-
 #+BEGIN_SRC emacs-lisp
   (setq gc-cons-threshold 100000000) ; Do GC when every 100MB are allocated
 #+END_SRC
@@ -878,12 +877,6 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :config (global-flycheck-mode))
-#+END_SRC
-
-** perspective
-
-#+BEGIN_SRC emacs-lisp
-  (use-package perspective)
 #+END_SRC
 
 ** autorevert
