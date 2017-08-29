@@ -542,12 +542,11 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 #+BEGIN_SRC emacs-lisp
                                           ; Evil-easymotion's line movements work perfectly with evil.
   (general-define-key "j" (evilem-create 'evil-next-line))
-  (general-define-key "k" (evilem-create 'evil-previous-line)))
+  (general-define-key "k" (evilem-create 'evil-previous-line))
 
   (general-define-key :prefix nil
                       :states '(motion operator)
-                      "t" (evilem-create 'evil-repeat-find-char-to))
-                                          ;:scope 'line))
+                      "t" (evilem-create 'evil-repeat-find-char-to)))
 #+END_SRC
 
 ** evil-surround
