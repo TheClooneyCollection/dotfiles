@@ -1101,3 +1101,5 @@ and when it does work in visual selection mode (v), it selects the line before s
 ** TODO I wish company works with case insensitive inputs
 CREATED: [2017-08-29 Tue]
 CREATED: [2017-08-29 Tue]
+** TODO Custom company to kick in earlier (less input, less delay to show the popup)
+CREATED: [2017-08-29 Tue]
