@@ -251,11 +251,13 @@ See https://github.com/jwiegley/emacs-async for explanation
 
   (defun dot-emacs/edit-configuration-maybe ()
     (interactive)
-    (let (hour (string-to-number (substring (current-time-string) 11 13)))
+    (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
 
       (if (member hour (number-sequence 9 17))
-          (org-capture nil "e"))
-        (dot-emacs/edit-configuration)))
+          (org-capture nil "e")
+        (dot-emacs/edit-configuration))))
+  ;; (message (format "working %S" hour))
+  ;; (message (format "not worknig %S" hour))))
 
   (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
   (general-define-key "e!" 'dot-emacs/edit-configuration))
