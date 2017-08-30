@@ -1150,3 +1150,16 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 CREATED: [2017-08-29 Tue]
 CREATED: [2017-08-29 Tue]
 ** TODO Regex match the whole file and shows matched results in a minibuffer
+** TODO Org-babel for swift with swiftenv support
+- v1: support /usr/bin/env swift
+- v2: support swiftenv
+- v3: support BEGIN_SRC swift* which generates results for "all" swift versions
+CREATED: [2017-08-31 Thu]
+** TODO org-mode: =C-c '= on elisp blocks goes into insert mode
+CREATED: [2017-08-31 Thu]
+** TODO integration with xcodebuild/xctool
+- v1 build
+- v2 run
+- v3 report errors
+- v4 can go to errors (like vim's quickfix window)
+CREATED: [2017-08-31 Thu]
