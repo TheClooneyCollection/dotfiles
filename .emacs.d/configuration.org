@@ -335,7 +335,9 @@ and when it does work in visual selection mode (v), it selects the line before s
     :init
 #+END_SRC
 
-** Settings
+** =init=
+
+*** Settings
 
 #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis "⤵")
@@ -345,7 +347,13 @@ and when it does work in visual selection mode (v), it selects the line before s
         '((sequence "TODO" "STARTED" "|" "DONE" "BLOCKED")))
 #+END_SRC
 
-** Capture templates
+Don't prompt me to confirm every time I want to evaluate a block.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+*** Capture templates
 
 #+BEGIN_SRC emacs-lisp
     (setq org-capture-templates
@@ -399,7 +407,7 @@ and when it does work in visual selection mode (v), it selects the line before s
              (file (org-file-path "to-read.org")))))
 #+END_SRC
 
-** Set up locations
+*** Set up locations
 
 #+BEGIN_SRC emacs-lisp
   (setq org-directory "~/Dropbox/data/org/")
@@ -424,7 +432,7 @@ and when it does work in visual selection mode (v), it selects the line before s
         (concat (org-file-path "archive.org") "::* From %s"))
 #+END_SRC
 
-** Magic: "It is done after its all subentries are done"
+*** Magic: "It is done after its all subentries are done"
 
 Switch entry to DONE when all subentries are done, to TODO otherwise.
 
@@ -437,7 +445,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 #+END_SRC
 
-** Keybindings
+*** Keybindings
 
 #+BEGIN_SRC emacs-lisp
   (general-define-key "oa" 'org-agenda)
@@ -478,7 +486,23 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
                               #'org-insert-todo-heading-respect-content)))
 #+END_SRC
 
-** Add structure templates
+** =config=
+
+#+BEGIN_SRC emacs-lisp
+  :config
+#+END_SRC
+
+*** =org-babel-do-load-languages=
+
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ruby . t)
+     ;; other languages..
+     ))
+#+END_SRC
+
+*** Add structure templates
 
 #+BEGIN_SRC emacs-lisp
   :config
@@ -487,7 +511,7 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
     (add-to-list 'org-structure-template-alist item))
 #+END_SRC
 
-** Add hooks
+*** Add hooks
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
