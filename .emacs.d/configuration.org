@@ -156,6 +156,12 @@ See https://github.com/jwiegley/emacs-async for explanation
     :config (global-whitespace-mode))
 #+END_SRC
 
+** golden-ratio
+#+BEGIN_SRC emacs-lisp
+  (use-package golden-ratio
+    :diminish golden-ratio-mode
+    :config (golden-ratio-mode))
+#+END_SRC
 * Keys
 ** guide-key
 
