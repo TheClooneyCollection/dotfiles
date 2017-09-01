@@ -510,12 +510,22 @@ Switch entry to DONE when all subentries are done, to TODO otherwise.
 org-babel-execute:swift
 
 #+BEGIN_SRC emacs-lisp
+  (defun run-swift (body)
+    "Get around `org-babel-eval' runs the swift REPL rather than the file problem"
+    (let ((filename (make-temp-file "ob-swift")))
+      (with-temp-file filename
+        (insert body))
+      (with-temp-buffer
+        (shell-command (format "swift %S" (org-babel-process-file-name filename)) (current-buffer))
+        (buffer-string))))
+
   (defun org-babel-execute:swift (body params)
     "Execute a block of Swift code with org-babel."
     (message "executing Swift source code block")
-    (org-babel-eval "swift" body))
+    ;; (org-babel-eval "swift" body))
+    (run-swift body))
 
-  (provide 'ob-swift)
+    (provide 'ob-swift)
 #+END_SRC
 
 Load languages
@@ -1222,5 +1232,4 @@ CREATED: [2017-08-31 Thu]
 - v3 report errors
 - v4 can go to errors (like vim's quickfix window)
 CREATED: [2017-08-31 Thu]
-** TODO Fix ob-swift is running the interpreter rather than running files
 CREATED: [2017-09-01 Fri]
