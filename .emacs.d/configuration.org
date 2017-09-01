@@ -538,13 +538,26 @@ Load languages
 
 *** Add hooks
 
+Enable =org-indent-mode= when in =org-mode= (but hide its modeline)
+
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+  (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
+
+Start in =insert= mode when editing source code in =org-mode=
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-src-mode-hook 'evil-insert-state)
+#+END_SRC
+
+Start in =insert= mode when capturing ideas
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
 #+END_SRC
+
+Automatic clock-in & clock-out when start or finish an item
 
 #+BEGIN_SRC emacs-lisp
   (defun dot-emacs/org-clock-in-if-starting ()
@@ -573,10 +586,6 @@ Load languages
 
   (add-hook 'org-after-todo-state-change-hook
             'dot-emacs/org-clock-out-if-waiting)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
 
 * Evil
@@ -1203,8 +1212,6 @@ CREATED: [2017-08-29 Tue]
 - v1: support /usr/bin/env swift
 - v2: support swiftenv
 - v3: support BEGIN_SRC swift* which generates results for "all" swift versions
-CREATED: [2017-08-31 Thu]
-** TODO org-mode: =C-c '= on elisp blocks goes into insert mode
 CREATED: [2017-08-31 Thu]
 ** TODO integration with xcodebuild/xctool
 - v1 build
