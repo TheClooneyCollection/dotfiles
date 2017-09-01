@@ -148,7 +148,7 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  :config (load-theme 'airline-light t))
+  :config (load-theme 'airline-cool t))
 #+END_SRC
 
 ** whitespace
