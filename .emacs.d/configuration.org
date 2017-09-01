@@ -75,7 +75,7 @@ To bind keys easily in a tidy way
   (require 'bind-key)
 #+END_SRC
 
-** Diminish modes
+* Diminish modes
 
 #+BEGIN_SRC emacs-lisp
   (defmacro diminish-minor-mode (filename mode &optional abbrev)
@@ -89,6 +89,10 @@ To bind keys easily in a tidy way
   (diminish-minor-mode 'with-editor 'with-editor-mode)
   (diminish-minor-mode 'simple 'auto-fill-function)
   (diminish-minor-mode 'server 'server-buffer-clients)
+
+  (diminish-minor-mode 'org-indent 'org-indent-mode)
+  (diminish-minor-mode 'org-src    'org-src-mode)
+
 #+END_SRC
 * Asynchronous compilation
 
@@ -538,11 +542,10 @@ Load languages
 
 *** Add hooks
 
-Enable =org-indent-mode= when in =org-mode= (but hide its modeline)
+Enable =org-indent-mode= when in =org-mode=
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
-  (eval-after-load 'org-indent '(diminish 'org-indent-mode)))
 #+END_SRC
 
 Start in =insert= mode when editing source code in =org-mode=
@@ -585,7 +588,7 @@ Automatic clock-in & clock-out when start or finish an item
       (org-clock-out)))
 
   (add-hook 'org-after-todo-state-change-hook
-            'dot-emacs/org-clock-out-if-waiting)
+            'dot-emacs/org-clock-out-if-waiting))
 #+END_SRC
 
 * Evil
