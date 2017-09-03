@@ -265,15 +265,23 @@ See https://github.com/jwiegley/emacs-async for explanation
     (interactive)
     (dot-emacs/edit "configuration.org"))
 
+  (defun dot-emacs/day-of-week ()
+    "Returns the day of week, an integer between 0 and 6, where 0 is
+  Sunday."
+    (nth 6 (decode-time)))
+
   (defun dot-emacs/edit-configuration-maybe ()
     (interactive)
-    (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
+    (if (member (dot-emacs/day-of-week) (number-sequence 1 5))
+        (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
 
-      (if (member hour (number-sequence 9 17))
-          (org-capture nil "e")
-        (dot-emacs/edit-configuration))))
-  ;; (message (format "working %S" hour))
-  ;; (message (format "not worknig %S" hour))))
+          (if (member hour (number-sequence 9 17))
+              ;; (message (format "working %S" hour))
+              ;; (message (format "not worknig %S" hour))))
+              (org-capture nil "e")
+            (dot-emacs/edit-configuration)))
+    (dot-emacs/edit-configuration)))
+
 
   (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
   (general-define-key "e!" 'dot-emacs/edit-configuration))
@@ -1237,3 +1245,5 @@ CREATED: [2017-08-31 Thu]
 CREATED: [2017-08-31 Thu]
 ** TODO org-babel-execute:swift v2 - handle errors with an error buffer
 CREATED: [2017-09-01 Fri]
+** TODO SPC ee differs depends on whether it's a weekday
+CREATED: [2017-09-03 Sun]
