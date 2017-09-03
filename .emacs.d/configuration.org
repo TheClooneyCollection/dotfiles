@@ -276,8 +276,6 @@ See https://github.com/jwiegley/emacs-async for explanation
         (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
 
           (if (member hour (number-sequence 9 17))
-              ;; (message (format "working %S" hour))
-              ;; (message (format "not worknig %S" hour))))
               (org-capture nil "e")
             (dot-emacs/edit-configuration)))
     (dot-emacs/edit-configuration)))
