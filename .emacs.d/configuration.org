@@ -93,6 +93,9 @@ To bind keys easily in a tidy way
   (diminish-minor-mode 'org-indent 'org-indent-mode)
   (diminish-minor-mode 'org-src    'org-src-mode)
 
+  (diminish-major-mode 'emacs-lisp-mode-hook "elisp")
+  (diminish-major-mode 'lisp-interaction-mode-hook "λ")
+  (diminish-major-mode 'python-mode-hook "Py") 
 #+END_SRC
 * Asynchronous compilation
 
