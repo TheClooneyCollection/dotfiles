@@ -817,6 +817,16 @@ When opening magit, the wait for magithub to refresh data, kills me...
 #+BEGIN_SRC emacs-lisp
   (magithub-go-offline))
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/magithub-refresh-in-offline-mode ()
+    (interactive)
+    (magithub-refresh t))
+
+  (magit-define-popup-action 'magithub-dispatch-popup
+                              ?g "Refresh all GitHub data in any mode"
+                              'dot-emacs/magithub-refresh-in-offline-mode)
+#+END_SRC
 ** flx
 
 #+BEGIN_SRC emacs-lisp
