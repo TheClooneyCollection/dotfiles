@@ -103,6 +103,8 @@ brew 'git-lfs'
 brew 'emacs'
 brew 'neovim'
 
+brew 'gpg'
+
 ### lang
 
 brew 'python'
