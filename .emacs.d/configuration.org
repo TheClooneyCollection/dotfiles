@@ -1060,7 +1060,8 @@ Automatic clock-in & clock-out when start or finish an item
     (projectile-with-default-dir (projectile-project-root)
       (call-interactively 'helm-do-grep-ag)))
 
-  (general-define-key "g" 'dot-emacs/grep-in-root)
+  (general-define-key "gr" 'dot-emacs/grep-in-root)
+  (general-define-key "gg" 'helm-do-grep-ag)
   :config
   (helm-mode))
 #+END_SRC
