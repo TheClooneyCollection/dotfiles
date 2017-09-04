@@ -789,6 +789,7 @@ Automatic clock-in & clock-out when start or finish an item
 #+BEGIN_SRC emacs-lisp
   (use-package magithub
     :after magit
+    :init (setq magithub-api-timeout 10)
     :config (magithub-feature-autoinject t))
 #+END_SRC
 ** flx
