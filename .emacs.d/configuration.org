@@ -795,14 +795,27 @@ Automatic clock-in & clock-out when start or finish an item
     :after magit
 #+END_SRC
 
-Wait a bit longer for API to return data please
+Wait a bit longer for API to return data, please.
 
 #+BEGIN_SRC emacs-lisp
   :init (setq magithub-api-timeout 10)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  :config (magithub-feature-autoinject t))
+  :config
+#+END_SRC
+
+Give me all the features, please.
+
+#+BEGIN_SRC emacs-lisp
+  (magithub-feature-autoinject t)
+#+END_SRC
+
+Don't start in online mode, please...
+When opening magit, the wait for magithub to refresh data, kills me...
+
+#+BEGIN_SRC emacs-lisp
+  (magithub-go-offline))
 #+END_SRC
 ** flx
 
