@@ -785,6 +785,12 @@ Automatic clock-in & clock-out when start or finish an item
     (general-define-key "s" 'magit-status))
 #+END_SRC
 
+** magithub
+#+BEGIN_SRC emacs-lisp
+  (use-package magithub
+    :after magit
+    :config (magithub-feature-autoinject t))
+#+END_SRC
 ** flx
 
 #+BEGIN_SRC emacs-lisp
