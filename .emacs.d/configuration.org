@@ -42,15 +42,6 @@
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode)
 #+END_SRC
-* Languages
-
-Use iPython if it is installed.
-
-#+BEGIN_SRC emacs-lisp
-(when (executable-find "ipython")
-  (setq python-shell-interpreter "ipython"))
-#+END_SRC
-
 * Set up =use-package=
 ** Always install all the packages
 
