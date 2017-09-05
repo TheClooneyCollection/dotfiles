@@ -544,10 +544,11 @@ Load languages
 *** Add structure templates
 
 #+BEGIN_SRC emacs-lisp
-  :config
-  (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
-                  ("r" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")))
-    (add-to-list 'org-structure-template-alist item))
+    :config
+    (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
+                    ("r" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")
+                    ("p" "#+BEGIN_SRC python\n?\n#+END_SRC")))
+      (add-to-list 'org-structure-template-alist item))
 #+END_SRC
 
 *** Add hooks
