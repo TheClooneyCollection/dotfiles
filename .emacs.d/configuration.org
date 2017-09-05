@@ -953,6 +953,12 @@ When opening magit, the wait for magithub to refresh data, kills me...
   (provide 'company-insert-selected)
 #+END_SRC
 
+** company-jedi
+#+BEGIN_SRC emacs-lisp
+  (use-package company-jedi
+    :after company
+    :config (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi))))
+#+END_SRC
 ** smartparens
 
 #+BEGIN_SRC emacs-lisp
