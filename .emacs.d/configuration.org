@@ -50,6 +50,47 @@
     (switch-to-buffer (get-buffer-create (format "*scratch - %S*" (projectile-project-name))))
     (lisp-interaction-mode))
 #+END_SRC
+
+** Copy and Paste
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/copy-to-clipboard ()
+    (interactive)
+    (if (region-active-p)
+        (progn
+          (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+          (message "Yanked region to clipboard!")
+          (deactivate-mark))
+      (message "No region active; can't yank to clipboard!")))
+
+  (defun dot-emacs/paste-from-clipboard ()
+    (interactive)
+    (insert (shell-command-to-string "pbpaste")))
+#+END_SRC
+
+** Edit Emacs's configuration
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/edit (filename)
+    (find-file (concat user-emacs-directory filename)))
+
+  (defun dot-emacs/edit-configuration ()
+    (interactive)
+    (dot-emacs/edit "configuration.org"))
+
+  (defun dot-emacs/day-of-week ()
+    "Returns the day of week, an integer between 0 and 6, where 0 is
+  Sunday."
+    (nth 6 (decode-time)))
+
+  (defun dot-emacs/edit-configuration-maybe ()
+    (interactive)
+    (if (member (dot-emacs/day-of-week) (number-sequence 1 5))
+        (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
+
+          (if (member hour (number-sequence 9 17))
+              (org-capture nil "e")
+            (dot-emacs/edit-configuration)))
+    (dot-emacs/edit-configuration)))
+#+END_SRC
 * Set up =use-package=
 ** Always install all the packages
 
@@ -220,6 +261,12 @@ See https://github.com/jwiegley/emacs-async for explanation
   (general-define-key "hk" 'describe-key)
   (general-define-key "hf" 'describe-function)
   (general-define-key "hv" 'describe-variable)
+
+  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
+
+  (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
+  (general-define-key "e!" 'dot-emacs/edit-configuration)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -234,56 +281,10 @@ See https://github.com/jwiegley/emacs-async for explanation
                       ":" '(lambda () (interactive) (insert ";")))
 #+END_SRC
 
+The end of =general=
 #+BEGIN_SRC emacs-lisp
-  (defun dot-emacs/copy-to-clipboard ()
-    (interactive)
-    (if (region-active-p)
-        (progn
-          (shell-command-on-region (region-beginning) (region-end) "pbcopy")
-          (message "Yanked region to clipboard!")
-          (deactivate-mark))
-      (message "No region active; can't yank to clipboard!")))
-
-  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
-
+  )
 #+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defun dot-emacs/paste-from-clipboard ()
-    (interactive)
-    (insert (shell-command-to-string "pbpaste")))
-
-  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defun dot-emacs/edit (filename)
-    (find-file (concat user-emacs-directory filename)))
-
-  (defun dot-emacs/edit-configuration ()
-    (interactive)
-    (dot-emacs/edit "configuration.org"))
-
-  (defun dot-emacs/day-of-week ()
-    "Returns the day of week, an integer between 0 and 6, where 0 is
-  Sunday."
-    (nth 6 (decode-time)))
-
-  (defun dot-emacs/edit-configuration-maybe ()
-    (interactive)
-    (if (member (dot-emacs/day-of-week) (number-sequence 1 5))
-        (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
-
-          (if (member hour (number-sequence 9 17))
-              (org-capture nil "e")
-            (dot-emacs/edit-configuration)))
-    (dot-emacs/edit-configuration)))
-
-
-  (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
-  (general-define-key "e!" 'dot-emacs/edit-configuration))
-#+END_SRC
-
 ** avy
 
 Avy's line movements do not work with evil too well.
