@@ -370,54 +370,10 @@ Don't prompt me to confirm every time I want to evaluate a block.
 
 #+BEGIN_SRC emacs-lisp
     (setq org-capture-templates
-          '(("t" "TODO"
-             entry
-             (file+headline org-default-notes-file "Personal")
-             "* TODO %?\nCREATED: %u\n%i")
-
-            ("e" "TODO :emacs:"
+          '(("e" "TODO :emacs:"
              entry
              (file+headline "~/.emacs.d/configuration.org" "TODOs")
-             "* TODO %?\nCREATED: %u\n%i")
-
-           
-            ("p" "Todo w/ a file path"
-             entry
-             (file+headline org-default-notes-file "Personal")
-             "* TODO %?\nCREATED: %u\n%i\n%l")
-
-            ("w" "TODO :work:"
-             entry
-             (file+headline org-default-notes-file "Work")
-             "* TODO %?\nCREATED: %u\n%i\n%l")
-
-            ("s" "Investing in myself"
-             entry
-             (file+headline org-default-notes-file "Self-investment")
-             "* TODO %?\nCREATED: %u\n%i")
-
-            ("b" "Blog idea"
-             entry
-             (file (org-file-path "blog-ideas.org"))
-             "* %?\n")
-
-                                            ;("e" "Email" entry
-                                            ; (file+headline org-index-file "Inbox")
-                                            ; "* TODO %?\nCREATED: %u\n%a\n")
-
-
-                                            ;("s" "Subscribe to an RSS feed"
-                                            ; plain
-                                            ; (file "~/documents/rss/urls")
-                                            ; "%^{Feed URL} \"~%^{Feed name}\"")
-
-            ("f" "Finished book"
-             table-line (org-file-path "books-read.org")
-             "| %^{Title} | %^{Author} | %u |")
-
-            ("r" "Reading"
-             checkitem
-             (file (org-file-path "to-read.org")))))
+             "* TODO %?\nCREATED: %u\n%i")))
 #+END_SRC
 
 *** Set up locations
