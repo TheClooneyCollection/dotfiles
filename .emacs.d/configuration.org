@@ -737,7 +737,7 @@ Automatic clock-in & clock-out when start or finish an item
 
 #+BEGIN_SRC emacs-lisp
   (use-package enh-ruby-mode
-    :mode ("\\.rb\\'" "\\Brewfile\\'"))
+     :mode ("\\.rb\\'" "\\Brewfile\\'" "\\Fastfile\\'"))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
