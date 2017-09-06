@@ -681,6 +681,12 @@ Automatic clock-in & clock-out when start or finish an item
     :after evil
     :config (global-evil-surround-mode))
 #+END_SRC
+** evil-visualstar
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-visualstar
+    :after evil
+    :config (global-evil-visualstar-mode))
+#+END_SRC
 ** evil-org
 #+BEGIN_SRC emacs-lisp
   (use-package evil-org
