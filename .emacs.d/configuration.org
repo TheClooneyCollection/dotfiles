@@ -42,6 +42,14 @@
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode)
 #+END_SRC
+* Functions
+** =*scratch*= buffer per project
+#+BEGIN_SRC emacs-lisp
+  (defun scratch-buffer-per-project ()
+    (interactive)
+    (switch-to-buffer (get-buffer-create (format "*scratch - %S*" (projectile-project-name))))
+    (lisp-interaction-mode))
+#+END_SRC
 * Set up =use-package=
 ** Always install all the packages
 
@@ -1129,7 +1137,7 @@ When opening magit, the wait for magithub to refresh data, kills me...
                       "t" 'helm-gtags-parse-file))
 #+END_SRC
 
-* Custom code
+* Third-party code
 
 ** rcodetools
 #+BEGIN_SRC emacs-lisp
