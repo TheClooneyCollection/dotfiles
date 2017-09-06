@@ -810,6 +810,13 @@ Give me all the features, please.
   (magithub-feature-autoinject t)
 #+END_SRC
 
+Don't start in online mode, please...
+When opening magit, the wait for magithub to refresh data, kills me...
+
+#+BEGIN_SRC emacs-lisp
+  (magithub-go-offline))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
   (defun dot-emacs/magithub-refresh-in-offline-mode ()
     (interactive)
