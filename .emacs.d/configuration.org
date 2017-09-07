@@ -1290,8 +1290,3 @@ CREATED: [2017-09-01 Fri]
 ** TODO Set up ace-jump correctly with evil-mode e.g. =t= in operator mode
 ** TODO SPC cc for switch project | SPC ca to run async shell command
 CREATED: [2017-09-04 Mon]
-** TODO v1 switch project and open the default scratch buffer per project
-CREATED: [2017-09-06 Wed]
-** TODO v2 switch project THEN in an scratch buffer that's in org mode
-maybe even use this instead of nvAlt for work
-CREATED: [2017-09-06 Wed]
