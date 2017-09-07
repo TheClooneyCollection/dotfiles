@@ -59,6 +59,14 @@
     (interactive)
     (switch-to-buffer (get-buffer-create (format "*scratch - %S*" (projectile-project-name))))
     (lisp-interaction-mode))
+          (insert (format ";; %S" (projectile-project-name)))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun zen ()
+    (interactive)
+    (delete-other-windows)
+    (switch-to-project-s-scratch-buffer))
 #+END_SRC
 
 ** Copy and Paste
@@ -101,6 +109,7 @@
             (dot-emacs/edit-configuration)))
     (dot-emacs/edit-configuration)))
 #+END_SRC
+
 * Set up =use-package=
 ** Always install all the packages
 
@@ -266,6 +275,7 @@ See https://github.com/jwiegley/emacs-async for explanation
 
   (general-define-key "w" 'save-buffer)
   (general-define-key "0" 'delete-other-windows)
+  (general-define-key "7" 'zen)
   (general-define-key "qq" 'save-buffers-kill-terminal)
 
   (general-define-key "hk" 'describe-key)
