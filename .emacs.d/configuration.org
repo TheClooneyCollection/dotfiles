@@ -188,36 +188,10 @@ See https://github.com/jwiegley/emacs-async for explanation
   ;(use-package zenburn-theme)
 #+END_SRC
 
-** powerline
-
 #+BEGIN_SRC emacs-lisp
-  (use-package powerline
-    :config (powerline-default-theme))
 #+END_SRC
-
-** airline
-
 #+BEGIN_SRC emacs-lisp
-  (use-package airline-themes
-    :after powerline
 #+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :init (setq powerline-utf-8-separator-left        #xe0b0
-              powerline-utf-8-separator-right       #xe0b2
-              airline-utf-glyph-separator-left      #xe0b0
-              airline-utf-glyph-separator-right     #xe0b2
-              airline-utf-glyph-subseparator-left   #xe0b1
-              airline-utf-glyph-subseparator-right  #xe0b3
-              airline-utf-glyph-branch              #xe0a0
-              airline-utf-glyph-readonly            #xe0a2
-              airline-utf-glyph-linenumber          #xe0a1)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :config (load-theme 'airline-cool t))
-#+END_SRC
-
 ** whitespace
 
 #+BEGIN_SRC emacs-lisp
