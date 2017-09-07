@@ -6,6 +6,7 @@ tap 'caskroom/fonts'
 tap 'neovim/neovim'
 tap 'facebook/fb'
 tap 'NicholasTD07/lychee-gold'
+tap 'd12frosted/emacs-plus'
 
 # essential
 
@@ -100,7 +101,8 @@ brew 'fish'
 brew 'git'
 brew 'git-lfs'
 
-brew 'emacs'
+# brew 'emacs'
+brew 'd12frosted/emacs-plus/emacs-plus'
 brew 'neovim'
 
 brew 'gpg'

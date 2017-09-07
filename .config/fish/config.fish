@@ -15,7 +15,8 @@ alias o 'open'
 alias oo 'open .'
 alias g 'git'
 
-alias e 'emacs'
+alias e 'emacs -nw'
+alias ee 'bash -c "HOME=~/.spacemacs/ emacs -nw"'
 alias v 'nvim'
 
 alias ig 'v (git rev-parse --show-toplevel)/.gitignore'

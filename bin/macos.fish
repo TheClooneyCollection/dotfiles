@@ -39,11 +39,16 @@ function mac_init
     install_fish_plugins
     install_python_packages
     install_ruby_gems
-    compile_vim_plugins
+    # compile_vim_plugins
+    clone_spacemacs
 
     disable_bouncing_dock_icons
 
     echo "Your mac is set up and ready!"
+end
+
+function clone_spacemacs
+    git clone https://github.com/syl20bnr/spacemacs.git ~/.spacemacs/.emacs.d/
 end
 
 function enable_xcode_indexing
