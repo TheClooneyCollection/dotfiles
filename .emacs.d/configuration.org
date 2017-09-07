@@ -54,11 +54,16 @@
     (setq debug-on-error nil))
 #+END_SRC
 ** =*scratch*= buffer per project
+
 #+BEGIN_SRC emacs-lisp
-  (defun scratch-buffer-per-project ()
+  (defun switch-to-project-s-scratch-buffer ()
     (interactive)
-    (switch-to-buffer (get-buffer-create (format "*scratch - %S*" (projectile-project-name))))
-    (lisp-interaction-mode))
+    (let ((buffer-name (format "*scratch - %S*" (projectile-project-name))))
+      (if-let (buffer (get-buffer buffer-name)) ; buffer exists
+          (switch-to-buffer buffer)
+        (progn                            ; buffer does not exist
+          (switch-to-buffer (get-buffer-create buffer-name))
+          (lisp-interaction-mode)
           (insert (format ";; %S" (projectile-project-name)))))))
 #+END_SRC
 
