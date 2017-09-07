@@ -43,6 +43,16 @@
   (global-hl-line-mode)
 #+END_SRC
 * Functions
+** =debug=
+#+BEGIN_SRC emacs-lisp
+  (defun start-debugging ()
+    (interactive)
+    (setq debug-on-error t))
+
+  (defun end-debugging ()
+    (interactive)
+    (setq debug-on-error nil))
+#+END_SRC
 ** =*scratch*= buffer per project
 #+BEGIN_SRC emacs-lisp
   (defun scratch-buffer-per-project ()
