@@ -20,6 +20,10 @@
 /.emacs.d/lisp/*
 !/.emacs.d/lisp/*.el
 
+!/.spacemacs
+.spacemacs/**/*
+!/.spacemacs/.spacemacs
+
 !/.vimrc
 !/.vim
 .vim/*
