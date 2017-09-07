@@ -978,7 +978,7 @@ When opening magit, the wait for magithub to refresh data, kills me...
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (setq projectile-switch-project-action 'helm-ls-git-ls)
+  (setq projectile-switch-project-action 'zen)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
