@@ -42,7 +42,8 @@ cask 'zeplin'
 ## fonts
 
 cask 'font-inconsolata-g-for-powerline' # disable iTerm thinner font on Retina
-
+cask 'font-source-code-pro'
+cask 'font-source-code-pro-for-powerline'
 ## utils
 
 cask 'alfred'
