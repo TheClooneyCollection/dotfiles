@@ -843,7 +843,8 @@ When opening magit, the wait for magithub to refresh data, kills me...
                                                  (company-dabbrev-code company-gtags company-keywords)
                                                  company-dabbrev company-yasnippet)
                 company-idle-delay 0.01
-                company-minimum-prefix-length 3)
+                company-minimum-prefix-length 3
+                company-dabbrev-downcase nil)
     :config
     (add-hook 'after-init-hook 'global-company-mode))
 
