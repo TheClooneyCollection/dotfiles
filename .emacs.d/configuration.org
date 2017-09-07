@@ -188,9 +188,19 @@ See https://github.com/jwiegley/emacs-async for explanation
   ;(use-package zenburn-theme)
 #+END_SRC
 
+** spacemacs-theme
 #+BEGIN_SRC emacs-lisp
+  (use-package spacemacs-common           ; hack to get spacemacs-themes loading...
+    :ensure spacemacs-theme
+    :config (load-theme 'spacemacs-dark t))
 #+END_SRC
+** spaceline
 #+BEGIN_SRC emacs-lisp
+  (use-package spaceline
+    :init (setq powerline-default-separator 'utf-8)
+    :config
+    (require 'spaceline-config)
+    (spaceline-spacemacs-theme))
 #+END_SRC
 ** whitespace
 
