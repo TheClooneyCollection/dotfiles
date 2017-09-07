@@ -58,7 +58,7 @@
 #+BEGIN_SRC emacs-lisp
   (defun switch-to-project-s-scratch-buffer ()
     (interactive)
-    (let ((buffer-name (format "*scratch - %S*" (projectile-project-name))))
+    (let ((buffer-name (format "*scratch: %S*" (projectile-project-name))))
       (if-let (buffer (get-buffer buffer-name)) ; buffer exists
           (switch-to-buffer buffer)
         (progn                            ; buffer does not exist
