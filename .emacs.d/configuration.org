@@ -718,7 +718,7 @@ Automatic clock-in & clock-out when start or finish an item
 #+BEGIN_SRC emacs-lisp
   (use-package company-jedi
     :after company
-    :config (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi))))
+    :config (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi t))))
 #+END_SRC
 ** Ruby
 
