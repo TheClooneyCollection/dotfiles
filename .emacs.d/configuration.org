@@ -714,11 +714,20 @@ Automatic clock-in & clock-out when start or finish an item
 #+END_SRC
 
 ** Python
+*** pyvenv
+#+BEGIN_SRC emacs-lisp
+  (use-package pyvenv)
+#+END_SRC
 *** company-jedi
 #+BEGIN_SRC emacs-lisp
   (use-package company-jedi
     :after company
     :config (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi t))))
+#+END_SRC
+*** tox
+#+BEGIN_SRC emacs-lisp
+    (use-package tox
+      :init (setq tox-runner 'py.test))
 #+END_SRC
 ** Ruby
 
