@@ -302,6 +302,7 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (setq spacemacs--custom-file "~/.emacs.d/spacemacs--custom.el")
   )
 
 (defun dotspacemacs/user-config ()
@@ -311,7 +312,6 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq spacemacs--custom-file "~/.emacs.d/spacemacs--custom.el")
   (setq-default evil-escape-key-sequence "kj")
 
   (when (configuration-layer/package-usedp 'projectile)
