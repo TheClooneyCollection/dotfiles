@@ -133,6 +133,8 @@ brew 'tree'
 brew 'ripgrep'
 brew 'aria2'
 
+brew 'ispell' # for emacs spell check
+
 ## iOS
 
 brew 'carthage'
