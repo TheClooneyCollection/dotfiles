@@ -302,7 +302,7 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  (setq spacemacs--custom-file "~/.emacs.d/spacemacs--custom.el")
+  (setq custom-file "~/.spacemacs.d/custom.el")
   )
 
 (defun dotspacemacs/user-config ()
@@ -319,4 +319,7 @@ you should place your code here."
       ;; `..' because of my parallel emacs + spacemacs set up
       (projectile-discover-projects-in-directory "~/../work")
       (projectile-discover-projects-in-directory "~/../proj")))
+
+  (when (file-exists-p custom-file)
+    (load-file custom-file))
   )
