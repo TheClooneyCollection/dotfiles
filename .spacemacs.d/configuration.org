@@ -90,9 +90,52 @@
     #+BEGIN_SRC emacs-lisp
         )
     #+END_SRC
+** projectile
+
+*** The Beginning
+
+   #+BEGIN_SRC emacs-lisp
+     (when (configuration-layer/package-used-p 'projectile)
+   #+END_SRC
+
+*** =*scratch*= buffer per project
+
+    #+BEGIN_SRC emacs-lisp
+      (defun switch-to-project-s-scratch-buffer ()
+        (interactive)
+        (let ((buffer-name (format "*scratch: %S*" (projectile-project-name))))
+          (if-let (buffer (get-buffer buffer-name)) ; buffer exists
+              (switch-to-buffer buffer)
+            (progn                            ; buffer does not exist
+              (switch-to-buffer (get-buffer-create buffer-name))
+              (lisp-interaction-mode)
+              (insert (format ";; %S\n\n" (projectile-project-name)))))))
+    #+END_SRC
+
+*** =zen=
+
+    #+BEGIN_SRC emacs-lisp
+      (defun zen ()
+        (interactive)
+        (delete-other-windows)
+        (switch-to-project-s-scratch-buffer))
+    #+END_SRC
+
+*** Settings
+
+    #+BEGIN_SRC emacs-lisp
+      (setq projectile-enable-caching t)
+      (setq projectile-switch-project-action 'zen)
+    #+END_SRC
+
+*** The End
+   #+BEGIN_SRC emacs-lisp
+     )
+   #+END_SRC
 * Mappings
 ** Edit configurations
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "fee" 'td/edit-configuration-maybe)
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
+     (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
