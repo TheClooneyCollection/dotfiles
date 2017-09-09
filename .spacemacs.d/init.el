@@ -41,6 +41,7 @@ values."
      swift
 
      helm
+     (markdown :packages markdown-mode)
      auto-completion
      ;; better-defaults
      emacs-lisp
