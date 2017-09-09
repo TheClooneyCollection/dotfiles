@@ -160,3 +160,7 @@
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
+* TODOs
+** Auto complete in text mode
+** fuzzy auto complete
+** YCM style autocompletion
