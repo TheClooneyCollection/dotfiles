@@ -34,13 +34,6 @@
 
 * Packages
 ** org
-
-*** The Beginning
-
-   #+BEGIN_SRC emacs-lisp
-   (when (configuration-layer/package-used-p 'org)
-   #+END_SRC
-
 *** Add structure templates
 
     #+BEGIN_SRC emacs-lisp
@@ -85,19 +78,8 @@
          ))
     #+END_SRC
 
-*** The End
 
-    #+BEGIN_SRC emacs-lisp
-        )
-    #+END_SRC
 ** projectile
-
-*** The Beginning
-
-   #+BEGIN_SRC emacs-lisp
-     (when (configuration-layer/package-used-p 'projectile)
-   #+END_SRC
-
 *** =*scratch*= buffer per project
 
     #+BEGIN_SRC emacs-lisp
@@ -128,10 +110,6 @@
       (setq projectile-switch-project-action 'zen)
     #+END_SRC
 
-*** The End
-   #+BEGIN_SRC emacs-lisp
-     )
-   #+END_SRC
 ** Diminish modes
    #+BEGIN_SRC emacs-lisp
      (defmacro diminish-minor-mode (filename mode &optional abbrev)
