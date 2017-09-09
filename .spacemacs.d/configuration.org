@@ -34,10 +34,20 @@
 
 * Packages
 ** company
+
 *** Enable company globally
+
     #+BEGIN_SRC emacs-lisp
       (global-company-mode)
     #+END_SRC
+
+*** Fuzzy autocompletion
+
+    #+BEGIN_SRC emacs-lisp
+      (setq company-flx-limit 100)
+      (company-flx-mode)
+    #+END_SRC
+
 ** helm
 
 *** Notes
@@ -177,5 +187,4 @@
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 * TODOs
-** fuzzy auto complete
 ** YCM style autocompletion
