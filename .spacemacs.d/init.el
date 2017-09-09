@@ -56,7 +56,9 @@ values."
      shell-scripts
      spell-checking
      syntax-checking
-     version-control
+
+     (version-control :packages git-gutter+
+                      :variables version-control-diff-tool 'git-gutter+)
 
      (spacemacs-navigation :packages golden-ratio)
      )
