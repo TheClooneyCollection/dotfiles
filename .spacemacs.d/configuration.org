@@ -1,15 +1,3 @@
-* Functions
-** =debug=
-
-    #+BEGIN_SRC emacs-lisp
-      (defun td/start-debugging ()
-        (interactive)
-        (setq debug-on-error t))
-
-      (defun td/end-debugging ()
-        (interactive)
-        (setq debug-on-error nil))
-    #+END_SRC
 #+TITLE: Spacemacs Configuration
 
 * Toggles
