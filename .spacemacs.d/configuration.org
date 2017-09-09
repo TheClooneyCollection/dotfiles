@@ -33,6 +33,11 @@
    #+END_SRC
 
 * Packages
+** company
+*** Enable company globally
+    #+BEGIN_SRC emacs-lisp
+      (global-company-mode)
+    #+END_SRC
 ** org
 *** Add structure templates
 
@@ -172,6 +177,5 @@
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 * TODOs
-** Auto complete in text mode
 ** fuzzy auto complete
 ** YCM style autocompletion
