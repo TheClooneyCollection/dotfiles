@@ -78,6 +78,30 @@
          ))
     #+END_SRC
 
+** helm
+
+*** Notes
+
+    - SPC / for search and replace, in many files!
+
+*** Settings
+
+    #+BEGIN_SRC emacs-lisp
+      (setq helm-mode-fuzzy-match t
+            helm-completion-in-region-fuzzy-match t
+            helm-M-x-fuzzy-match t
+            helm-buffers-fuzzy-matching t
+            helm-candidate-number-limit 20)
+    #+END_SRC
+
+*** ripgrep
+
+    Settings
+
+    #+BEGIN_SRC emacs-lisp
+      (setq helm-grep-ag-command "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s")
+      (setq helm-grep-ag-pipe-cmd-switches '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
+    #+END_SRC
 
 ** magit
    #+BEGIN_SRC emacs-lisp
