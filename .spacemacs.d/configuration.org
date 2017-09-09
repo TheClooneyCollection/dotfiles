@@ -1,0 +1,71 @@
+* Functions
+** =debug=
+
+    #+BEGIN_SRC emacs-lisp
+      (defun td/start-debugging ()
+        (interactive)
+        (setq debug-on-error t))
+
+      (defun td/end-debugging ()
+        (interactive)
+        (setq debug-on-error nil))
+    #+END_SRC
+
+* Packages
+** org
+
+*** The Beginning
+
+   #+BEGIN_SRC emacs-lisp
+   (when (configuration-layer/package-used-p 'org)
+   #+END_SRC
+
+*** Add structure templates
+
+    #+BEGIN_SRC emacs-lisp
+      (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
+                      ("r" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")
+                      ("p" "#+BEGIN_SRC python\n?\n#+END_SRC")))
+        (add-to-list 'org-structure-template-alist item))
+    #+END_SRC
+
+*** =org-babel-execute:swift=
+
+    #+BEGIN_SRC emacs-lisp
+      (defun run-swift (body)
+        "Get around `org-babel-eval' runs the swift REPL rather than the file problem"
+        (let ((filename (make-temp-file "ob-swift")))
+          (with-temp-file filename
+            (insert body))
+          (with-temp-buffer
+            (shell-command (format "swift %S" (org-babel-process-file-name filename)) (current-buffer))
+            (buffer-string))))
+
+      (defun org-babel-execute:swift (body params)
+        "Execute a block of Swift code with org-babel."
+        (message "executing Swift source code block")
+        ;; (org-babel-eval "swift" body))
+        (run-swift body))
+
+        (provide 'ob-swift)
+    #+END_SRC
+
+*** =org-babel-do-load-languages=
+    Load languages
+
+    #+BEGIN_SRC emacs-lisp
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '(
+         (swift . t)
+         (python . t)
+         (ruby . t)
+         ;; other languages..
+         ))
+    #+END_SRC
+
+*** The End
+
+    #+BEGIN_SRC emacs-lisp
+        )
+    #+END_SRC
