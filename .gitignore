@@ -16,6 +16,7 @@
 .spacemacs.d/*
 !/.spacemacs.d/init.el
 !/.spacemacs.d/configuration.org
+!/.spacemacs.d/configuration.emacs.org
 
 !/.spacemacs
 .spacemacs/**/*

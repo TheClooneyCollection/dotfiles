@@ -1,0 +1,1276 @@
+#+TITLE: Emacs Configuration
+
+* Basic
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold 100000000) ; Do GC when every 100MB are allocated
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil) ; Don't indent with tabs.
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+#+END_SRC
+
+* UI
+
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function #'ignore)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t) ; Skip the startup screen
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq initial-scratch-message "; Hello there!\n; Happy hacking!\n")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p #'y-or-n-p) ; Change yes/no -> y/n
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'display-startup-echo-area-message #'ignore) ; No more startup message
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (menu-bar-mode -1) ; Hide menu bar at top
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode)
+#+END_SRC
+* Functions
+** =debug=
+#+BEGIN_SRC emacs-lisp
+  (defun start-debugging ()
+    (interactive)
+    (setq debug-on-error t))
+
+  (defun end-debugging ()
+    (interactive)
+    (setq debug-on-error nil))
+#+END_SRC
+** =*scratch*= buffer per project
+
+#+BEGIN_SRC emacs-lisp
+  (defun switch-to-project-s-scratch-buffer ()
+    (interactive)
+    (let ((buffer-name (format "*scratch: %S*" (projectile-project-name))))
+      (if-let (buffer (get-buffer buffer-name)) ; buffer exists
+          (switch-to-buffer buffer)
+        (progn                            ; buffer does not exist
+          (switch-to-buffer (get-buffer-create buffer-name))
+          (lisp-interaction-mode)
+          (insert (format ";; %S" (projectile-project-name)))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun zen ()
+    (interactive)
+    (delete-other-windows)
+    (switch-to-project-s-scratch-buffer))
+#+END_SRC
+
+** Copy and Paste
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/copy-to-clipboard ()
+    (interactive)
+    (if (region-active-p)
+        (progn
+          (shell-command-on-region (region-beginning) (region-end) "pbcopy")
+          (message "Yanked region to clipboard!")
+          (deactivate-mark))
+      (message "No region active; can't yank to clipboard!")))
+
+  (defun dot-emacs/paste-from-clipboard ()
+    (interactive)
+    (insert (shell-command-to-string "pbpaste")))
+#+END_SRC
+
+** Edit Emacs's configuration
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/edit (filename)
+    (find-file (concat user-emacs-directory filename)))
+
+  (defun dot-emacs/edit-configuration ()
+    (interactive)
+    (dot-emacs/edit "configuration.org"))
+
+  (defun dot-emacs/day-of-week ()
+    "Returns the day of week, an integer between 0 and 6, where 0 is
+  Sunday."
+    (nth 6 (decode-time)))
+
+  (defun dot-emacs/edit-configuration-maybe ()
+    (interactive)
+    (if (member (dot-emacs/day-of-week) (number-sequence 1 5))
+        (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
+
+          (if (member hour (number-sequence 9 17))
+              (org-capture nil "e")
+            (dot-emacs/edit-configuration)))
+    (dot-emacs/edit-configuration)))
+#+END_SRC
+
+* Set up =use-package=
+** Always install all the packages
+
+#+BEGIN_SRC emacs-lisp
+  (setq use-package-always-ensure t
+        use-package-verbose t)
+#+END_SRC
+
+** Use :diminish with use-package
+
+To remove or abbreviate a mode indicator in the modeline
+
+#+BEGIN_SRC emacs-lisp
+  (require 'diminish)
+#+END_SRC
+
+** Use :bind-key with use-package
+
+To bind keys easily in a tidy way
+
+#+BEGIN_SRC emacs-lisp
+  (require 'bind-key)
+#+END_SRC
+
+* Diminish modes
+
+#+BEGIN_SRC emacs-lisp
+  (defmacro diminish-minor-mode (filename mode &optional abbrev)
+    `(eval-after-load (symbol-name ,filename)
+       '(diminish ,mode ,abbrev)))
+
+  (defmacro diminish-major-mode (mode-hook abbrev)
+    `(add-hook ,mode-hook
+               (lambda () (setq mode-name ,abbrev))))
+
+  (diminish-minor-mode 'with-editor 'with-editor-mode)
+  (diminish-minor-mode 'simple 'auto-fill-function)
+  (diminish-minor-mode 'server 'server-buffer-clients)
+
+  (diminish-minor-mode 'org-indent 'org-indent-mode)
+  (diminish-minor-mode 'org-src    'org-src-mode)
+
+  (diminish-major-mode 'emacs-lisp-mode-hook "elisp")
+  (diminish-major-mode 'lisp-interaction-mode-hook "λ")
+  (diminish-major-mode 'python-mode-hook "Py") 
+#+END_SRC
+* Asynchronous compilation
+
+#+BEGIN_SRC emacs-lisp
+  (use-package async
+    :init (setq async-bytecomp-allowed-packages '(all))
+    :config
+#+END_SRC
+
+Enable aysnc commands for directory editor, also for helm
+
+#+BEGIN_SRC emacs-lisp
+  (dired-async-mode 1)
+#+END_SRC
+
+See https://github.com/jwiegley/emacs-async for explanation
+
+#+BEGIN_SRC emacs-lisp
+  (async-bytecomp-package-mode 1))
+#+END_SRC
+
+* UI
+** zenburn
+
+#+BEGIN_SRC emacs-lisp
+  ;(use-package zenburn-theme)
+#+END_SRC
+
+** spacemacs-theme
+#+BEGIN_SRC emacs-lisp
+  (use-package spacemacs-common           ; hack to get spacemacs-themes loading...
+    :ensure spacemacs-theme
+    :config (load-theme 'spacemacs-dark t))
+#+END_SRC
+** spaceline
+#+BEGIN_SRC emacs-lisp
+  (use-package spaceline
+    :init (setq powerline-default-separator 'utf-8)
+    :config
+    (require 'spaceline-config)
+    (spaceline-spacemacs-theme))
+#+END_SRC
+** whitespace
+
+#+BEGIN_SRC emacs-lisp
+  (use-package whitespace ; Built-in
+    :diminish (whitespace-mode global-whitespace-mode)
+    :init (setq whitespace-style '(face tabs trailing empty tab-mark))
+    :config (global-whitespace-mode))
+#+END_SRC
+
+** golden-ratio
+#+BEGIN_SRC emacs-lisp
+  (use-package golden-ratio
+    :diminish golden-ratio-mode
+    :config
+    (add-to-list 'window-size-change-functions 'golden-ratio)
+    (golden-ratio-mode))
+#+END_SRC
+* Keys
+** guide-key
+
+#+BEGIN_SRC emacs-lisp
+  (use-package guide-key
+    :diminish guide-key-mode
+    :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq guide-key/guide-key-sequence t ; Enable guide-key for all key sequences
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  guide-key/popup-window-position 'bottom)
+  (guide-key-mode)) ; Enable guide-key-mode
+#+END_SRC
+
+** general
+
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq general-default-keymaps '(evil-normal-state-map
+                                  evil-visual-state-map
+                                  evil-operator-state-map)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  general-default-prefix "<SPC>")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+
+  (general-define-key "rb" 'eval-buffer)
+  (general-define-key "rr" 'eval-region)
+  (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
+
+  (general-define-key "w" 'save-buffer)
+  (general-define-key "0" 'delete-other-windows)
+  (general-define-key "7" 'zen)
+  (general-define-key "qq" 'save-buffers-kill-terminal)
+
+  (general-define-key "hk" 'describe-key)
+  (general-define-key "hf" 'describe-function)
+  (general-define-key "hv" 'describe-variable)
+
+  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
+
+  (general-define-key "ee" 'dot-emacs/edit-configuration-maybe)
+  (general-define-key "e!" 'dot-emacs/edit-configuration)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key :prefix nil
+                      :keymaps '(swift-mode-map
+                                 python-mode-map
+                                 emacs-lisp-mode-map
+                                 org-mode-map
+                                 enh-ruby-mode-map)
+                      :states '(insert emacs)
+                      ";" '(lambda () (interactive) (insert ":"))
+                      ":" '(lambda () (interactive) (insert ";")))
+#+END_SRC
+
+The end of =general=
+#+BEGIN_SRC emacs-lisp
+  )
+#+END_SRC
+** avy
+
+Avy's line movements do not work with evil too well.
+For example, when in visual line selection mode (V), avy does not work at all;
+and when it does work in visual selection mode (v), it selects the line before selection.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :bind (
+         :map evil-normal-state-map
+              ("f" . avy-goto-char-2)
+              :map evil-visual-state-map
+              ("f" . avy-goto-char-in-line)
+              :map evil-operator-state-map
+              ("f" . avy-goto-char-in-line))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
+#+END_SRC
+
+* time
+#+BEGIN_SRC emacs-lisp
+  (use-package time ; Built-in
+    :diminish display-time-mode
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "it" 'display-time-world)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq display-time-world-list '(
+                                  ("Australia/Sydney" "Sydney")
+                                  ("Asia/Chongqing" "Chongqing")
+                                  ("PST8PDT" "San Francisco")
+                                  ("Asia/Calcutta" "Bangalore")
+                                  ("Australia/Melbourne" "Melbourne")
+                                  ("Europe/London" "London")
+                                  ("Europe/Paris" "Paris")
+                                  ("Asia/Tokyo" "Tokyo")
+                                  ("America/Los_Angeles" "Los Angeles")
+                                  ("America/New_York" "New York")
+                                  ))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config (display-time-mode))
+#+END_SRC
+
+* Org
+
+** Load lazily based on the =:commands=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :commands (org-agenda
+               org-capture
+               org-store-link
+               org-iswitchb)
+    :init
+#+END_SRC
+
+** =init=
+
+*** Settings
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-ellipsis "⤵")
+  (setq org-src-tab-acts-natively t)
+  (setq org-log-done 'time)
+  (setq org-todo-keywords
+        '((sequence "TODO" "STARTED" "|" "DONE" "BLOCKED")))
+#+END_SRC
+
+Don't prompt me to confirm every time I want to evaluate a block.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+*** Capture templates
+
+#+BEGIN_SRC emacs-lisp
+    (setq org-capture-templates
+          '(("e" "TODO :emacs:"
+             entry
+             (file+headline "~/.emacs.d/configuration.org" "TODOs")
+             "* TODO %?\nCREATED: %u\n%i")))
+#+END_SRC
+
+*** Set up locations
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-directory "~/Dropbox/data/org/")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun org-file-path (filename)
+    "Return the absolute address of an org file, given its relative name."
+    (let ((file-path (concat (file-name-as-directory org-directory) filename)))
+      (if (file-exists-p file-path)
+          file-path nil)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-default-notes-file (org-file-path "notes.org"))
+  (setq org-agenda-files (cl-remove-if #'null (list org-directory
+                                                    (org-file-path "work/"))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-archive-location
+        (concat (org-file-path "archive.org") "::* From %s"))
+#+END_SRC
+
+*** Magic: "It is done after its all subentries are done"
+
+Switch entry to DONE when all subentries are done, to TODO otherwise.
+
+#+BEGIN_SRC emacs-lisp
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)   ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+#+END_SRC
+
+*** Keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "oa" 'org-agenda)
+  (general-define-key "oc" 'org-capture)
+  (general-define-key "ol" 'org-store-link)
+  (general-define-key "ob" 'org-iswitchb)
+
+  (general-define-key "oo" '(lambda ()
+                              (interactive)
+                              (find-file org-default-notes-file)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "tg" 'org-timer-start
+                      "ts" 'org-timer-stop
+                      "tp" 'org-timer-pause-or-continue)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun evil-org-eol-call (fun &rest arguments)
+    "Go to end of line and call provided function.
+  FUN function callback
+  Optional argument ARGUMENTS arguments to pass to FUN."
+    (end-of-visible-line)
+    (apply fun arguments)
+    (evil-insert nil))
+
+  (general-define-key :prefix nil
+                      :keymaps 'org-mode-map
+                      :states '(normal)
+                      "tt" 'org-set-tags
+                      "ti" (lambda ()
+                             (interactive)
+                             (evil-org-eol-call
+                              #'org-insert-todo-heading-respect-content)))
+#+END_SRC
+
+** =config=
+
+#+BEGIN_SRC emacs-lisp
+  :config
+#+END_SRC
+
+*** =org-babel-do-load-languages=
+
+org-babel-execute:swift
+
+#+BEGIN_SRC emacs-lisp
+  (defun run-swift (body)
+    "Get around `org-babel-eval' runs the swift REPL rather than the file problem"
+    (let ((filename (make-temp-file "ob-swift")))
+      (with-temp-file filename
+        (insert body))
+      (with-temp-buffer
+        (shell-command (format "swift %S" (org-babel-process-file-name filename)) (current-buffer))
+        (buffer-string))))
+
+  (defun org-babel-execute:swift (body params)
+    "Execute a block of Swift code with org-babel."
+    (message "executing Swift source code block")
+    ;; (org-babel-eval "swift" body))
+    (run-swift body))
+
+    (provide 'ob-swift)
+#+END_SRC
+
+Load languages
+
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     (swift . t)
+     (python . t)
+     (ruby . t)
+     ;; other languages..
+     ))
+#+END_SRC
+
+*** Add structure templates
+
+#+BEGIN_SRC emacs-lisp
+    :config
+    (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
+                    ("r" "#+END_SRC\n?\n#+BEGIN_SRC emacs-lisp")
+                    ("p" "#+BEGIN_SRC python\n?\n#+END_SRC")))
+      (add-to-list 'org-structure-template-alist item))
+#+END_SRC
+
+*** Add hooks
+
+Enable =org-indent-mode= when in =org-mode=
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+#+END_SRC
+
+Start in =insert= mode when editing source code in =org-mode=
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-src-mode-hook 'evil-insert-state)
+#+END_SRC
+
+Start in =insert= mode when capturing ideas
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-capture-mode-hook 'evil-insert-state)
+#+END_SRC
+
+Automatic clock-in & clock-out when start or finish an item
+
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/org-clock-in-if-starting ()
+    "Clock in when the task is marked STARTED."
+    (when (and (string= org-state "STARTED")
+               (not (string= org-last-state org-state)))
+      (org-clock-in)))
+
+  (add-hook 'org-after-todo-state-change-hook
+            'dot-emacs/org-clock-in-if-starting)
+
+  (defadvice org-clock-in (after dot-emacs activate)
+    "Set this task's status to 'STARTED'."
+    (org-todo "STARTED"))
+
+  (defun dot-emacs/org-clock-out-if-waiting ()
+    "Clock out when the task is marked WAITING."
+    (when (and (or (string= org-state "DONE")
+                   (string= org-state "BLOCKED"))
+               (equal (marker-buffer org-clock-marker) (current-buffer))
+               (< (point) org-clock-marker)
+               (> (save-excursion (outline-next-heading) (point))
+                  org-clock-marker)
+               (not (string= org-last-state org-state)))
+      (org-clock-out)))
+
+  (add-hook 'org-after-todo-state-change-hook
+            'dot-emacs/org-clock-out-if-waiting))
+#+END_SRC
+
+* Evil
+
+** evil
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :diminish undo-tree-mode
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  evil-regexp-search t ; Enable regexp search
+  )
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (define-key evil-normal-state-map ";" #'evil-ex)
+  (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (evil-mode))
+#+END_SRC
+
+** evil-escape
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-escape
+    :diminish evil-escape-mode
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :init (setq-default evil-escape-key-sequence "kj")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+  (evil-escape-mode))
+#+END_SRC
+
+** evil-magit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-magit
+    :after evil
+    :config (evil-magit-init))
+
+  (use-package evil-easymotion
+    :after evil
+    :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+                                          ; Evil-easymotion's line movements work perfectly with evil.
+  (general-define-key "j" (evilem-create 'evil-next-line))
+  (general-define-key "k" (evilem-create 'evil-previous-line))
+
+  (general-define-key :prefix nil
+                      :states '(motion operator)
+                      "t" (evilem-create 'evil-repeat-find-char-to)))
+#+END_SRC
+
+** evil-surround
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :config (global-evil-surround-mode))
+#+END_SRC
+** evil-visualstar
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-visualstar
+    :after evil
+    :config (global-evil-visualstar-mode))
+#+END_SRC
+** evil-org
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-org
+    :after (org evil)
+    :diminish (evil-org-mode)
+    :mode ("\\.org\\'" . org-mode)
+    :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
+#+END_SRC
+
+* Packages for Languages
+
+** yasnippet
+
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :diminish yas-minor-mode
+    :config
+    (yas-reload-all)
+    (add-hook 'prog-mode-hook #'yas-minor-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-yasnippet)
+#+END_SRC
+
+** Swift
+#+BEGIN_SRC emacs-lisp
+  (use-package swift-mode
+    :mode "\\.swift\\'"
+    :interpreter "swift")
+#+END_SRC
+
+** Python
+*** pyvenv
+#+BEGIN_SRC emacs-lisp
+  (use-package pyvenv)
+#+END_SRC
+*** company-jedi
+#+BEGIN_SRC emacs-lisp
+  (use-package company-jedi
+    :after company
+    :config (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi t))))
+#+END_SRC
+*** tox
+#+BEGIN_SRC emacs-lisp
+    (use-package tox
+      :init (setq tox-runner 'py.test))
+#+END_SRC
+** Ruby
+
+#+BEGIN_SRC emacs-lisp
+  (use-package enh-ruby-mode
+     :mode ("\\.rb\\'" "\\Brewfile\\'" "\\Fastfile\\'"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package inf-ruby)
+#+END_SRC
+
+*** Testing
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rspec-mode
+    :config
+    (add-hook 'ruby-mode-hook 'rspec-mode)
+    (eval-after-load 'yasnippet '(rspec-install-snippets)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package minitest
+    :config
+    (add-hook 'ruby-mode-hook 'minitest-mode)
+    (eval-after-load 'yasnippet '(minitest-install-snippets)))
+#+END_SRC
+
+*** Rake & Bundler
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rake
+    :init (setq rake-completion-system 'helm))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bundler)
+#+END_SRC
+
+** Fish
+
+#+BEGIN_SRC emacs-lisp
+  (use-package fish-mode
+    :mode "\\.fish\\'")
+#+END_SRC
+
+* Functionality
+
+** magit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :diminish auto-revert-mode
+    :commands magit-status
+    :config
+    (general-define-key "s" 'magit-status))
+#+END_SRC
+
+** magithub
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magithub
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+    :after magit
+#+END_SRC
+
+Wait a bit longer for API to return data, please.
+
+#+BEGIN_SRC emacs-lisp
+  :init (setq magithub-api-timeout 10)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+#+END_SRC
+
+Give me all the features, please.
+
+#+BEGIN_SRC emacs-lisp
+  (magithub-feature-autoinject t)
+#+END_SRC
+
+Don't start in online mode, please...
+When opening magit, the wait for magithub to refresh data, kills me...
+
+#+BEGIN_SRC emacs-lisp
+  (magithub-go-offline))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/magithub-refresh-in-offline-mode ()
+    (interactive)
+    (magithub-refresh t))
+
+  (magit-define-popup-action 'magithub-dispatch-popup
+                              ?g "Refresh all GitHub data in any mode"
+                              'dot-emacs/magithub-refresh-in-offline-mode)
+#+END_SRC
+** flx
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flx)
+#+END_SRC
+
+** company
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :diminish company-mode
+    :init (setq company-backends '(company-clang company-capf company-files
+                                                 (company-dabbrev-code company-gtags company-keywords)
+                                                 company-dabbrev company-yasnippet)
+                company-idle-delay 0.01
+                company-minimum-prefix-length 3
+                company-dabbrev-downcase nil)
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+
+  (use-package company-flx
+    :after (company flx)
+    :init (setq company-flx-limit 100)
+    :config (company-flx-mode))
+#+END_SRC
+
+*** Complete with tab
+
+#+BEGIN_SRC emacs-lisp
+  (use-package company-insert-selected
+    :ensure nil
+    :pin manual
+    :after company
+    :bind (:map company-active-map
+                ("TAB" . company-select-first-then-next)
+                ("<tab>" . company-select-first-then-next)
+                ("<S-tab>" . company-select-previous-then-none)
+                ("<backtab>" . company-select-previous-then-none))
+    :config
+    (unbind-key "<return>" company-active-map)
+    (unbind-key "RET" company-active-map)
+
+    (setq company-frontends '(company-insert-selected-frontend
+                              company-pseudo-tooltip-frontend
+                              company-echo-metadata-frontend))
+    (setq company-selection-wrap-around t))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  ;;; company-insert-selected.el
+  ;;
+  ;; Similar to the way neocomplete package from Vim deals with autocompletion
+  ;;
+
+  (defvar-local company-insert-selected--overlay nil)
+  (defvar company-insert-selected--complete-func 'company-complete-selection)
+
+  (defun company--company-command-p (keys)
+    "Checks if the keys are part of company's overriding keymap"
+    (or (equal [company-dummy-event] keys)
+        (lookup-key company-my-keymap keys)))
+
+  (defun company-insert-selected-frontend (command)
+    "When the user changes the selection at least once, this
+  frontend will display the candidate in the buffer as if it's
+  already there and any key outside of `company-active-map' will
+  confirm the selection and finish the completion."
+    (cl-case command
+      (show
+       (setq company-insert-selected--overlay (make-overlay (point) (point)))
+       (overlay-put company-insert-selected--overlay 'priority 2)
+       (advice-add 'company-fill-propertize :filter-args 'company-insert-selected//adjust-tooltip-highlight))
+      (update
+       (let ((ov company-insert-selected--overlay)
+             (selected (nth company-selection company-candidates))
+             (prefix (length company-prefix)))
+         (move-overlay ov (- (point) prefix) (point))
+         (overlay-put ov 'display (and company-selection-changed selected))))
+      (hide
+       (advice-remove 'company-fill-propertize 'company-insert-selected//adjust-tooltip-highlight)
+       (when company-insert-selected--overlay
+         (delete-overlay company-insert-selected--overlay)))
+      (pre-command
+       (when (and company-selection-changed
+                  (not (company--company-command-p (this-command-keys))))
+         (funcall company-insert-selected--complete-func)))))
+
+  (defun company-insert-selected//adjust-tooltip-highlight (args)
+    "Don't allow the tooltip to highlight the current selection if
+  it wasn't made explicitly (i.e. `company-selection-changed' is
+  true)"
+    (unless company-selection-changed
+      ;; The 4th arg of `company-fill-propertize' is selected
+      (setf (nth 3 args) nil))
+    args)
+
+  (defun company-select-first-then-next (&optional arg)
+    (interactive "p")
+    (if company-selection-changed
+        (company-select-next arg)
+      (company-set-selection (1- (or arg 1)) 'force-update)))
+
+  (defun company-select-previous-then-none (&optional arg)
+    (interactive "p")
+    (if (or (not company-selection-changed)
+            (> company-selection (1- (or arg 1))))
+        (company-select-previous arg)
+      (company-set-selection 0)
+      (setq company-selection-changed nil)
+      (company-call-frontends 'update)))
+
+  ;; Integrate with evil if it's present
+  (eval-after-load 'evil
+    '(progn
+       (defun company-insert-selected//complete-with-repeat ()
+         "Call `company-complete-selection' but also invoke evil's
+  pre and post command hooks to monitor for the changes that the
+  completion function will do.
+  Because the completion function is called from a pre-command hook
+  it won't be caught by evil's repeat monitoring, as evil itself
+  relies on pre-command and post-command hooks to install it's own
+  monitoring hooks."
+         (let ((this-command 'company-complete-selection))
+           (evil-repeat-pre-hook)
+           (company-complete-selection)
+           (evil-repeat-post-hook)))
+       (setq company-insert-selected--complete-func 'company-insert-selected//complete-with-repeat)
+
+       ;; See evil/evil-integration.el, same thing is done for other company functions
+       (evil-declare-ignore-repeat 'company-select-first-then-next)
+       (evil-declare-ignore-repeat 'company-select-previous-then-none)))
+
+  (provide 'company-insert-selected)
+#+END_SRC
+
+** smartparens
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :diminish smartparens-mode
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode)
+    (show-smartparens-global-mode))
+#+END_SRC
+
+
+
+** projectile
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq projectile-enable-caching t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq projectile-switch-project-action 'zen)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+  (defalias 'run-command 'projectile-run-async-shell-command-in-root)
+  (projectile-discover-projects-in-directory "~/work")
+  (projectile-discover-projects-in-directory "~/proj")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (projectile-global-mode))
+#+END_SRC
+
+** projectile-ripgrep
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile-ripgrep
+    :after (projectile)
+    :commands (projectile-ripgrep))
+#+END_SRC
+
+** ggtags
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ggtags
+    :commands (ggtags-update-tags))
+#+END_SRC
+
+
+** flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :diminish flycheck-mode
+    :config (global-flycheck-mode))
+#+END_SRC
+
+** autorevert
+
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert ; Built-in
+    :config
+    (global-auto-revert-mode))
+#+END_SRC
+
+
+** slack
+
+#+BEGIN_SRC emacs-lisp
+  (use-package slack
+    :commands (slack-start)
+    :init
+    (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+    (setq slack-prefer-current-team t))
+#+END_SRC
+
+** alert
+
+#+BEGIN_SRC emacs-lisp
+  (use-package alert
+    :commands (alert)
+    :init
+    (setq alert-default-style 'notifier))
+#+END_SRC
+
+** auto-complete
+
+#+BEGIN_SRC emacs-lisp
+  ;(use-package auto-complete
+  ;  :diminish auto-complete-mode
+  ;  ;:init (setq ac-use-fuzzy t)
+  ;  :config
+  ;  (ac-config-default))
+#+END_SRC
+
+* Helm
+
+** helm
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :demand t
+    :diminish helm-mode
+    :bind ("M-x" . helm-M-x)
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq helm-mode-fuzzy-match t
+        helm-completion-in-region-fuzzy-match t
+        helm-M-x-fuzzy-match t
+        helm-buffers-fuzzy-matching t
+        helm-candidate-number-limit 20)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq helm-grep-ag-command "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s")
+  (setq helm-grep-ag-pipe-cmd-switches '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "<SPC>" 'helm-M-x)
+  (general-define-key "b" 'helm-buffers-list)
+
+  (general-define-key "u" 'helm-resume)
+
+  (defun dot-emacs/grep-in-root ()
+    (interactive)
+    (projectile-with-default-dir (projectile-project-root)
+      (call-interactively 'helm-do-grep-ag)))
+
+  (general-define-key "gr" 'dot-emacs/grep-in-root)
+  (general-define-key "gg" 'helm-do-grep-ag)
+  :config
+  (helm-mode))
+#+END_SRC
+
+** helm-flx
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-flx
+    :after (helm flx)
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq helm-flx-for-helm-find-files t
+        helm-flx-for-helm-locate t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config (helm-flx-mode))
+#+END_SRC
+
+** helm-projectile
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-projectile
+    :after (helm helm-flx projectile)
+    :commands (helm-projectile-switch-project)
+    :config
+    (general-define-key "c" 'helm-projectile-switch-project))
+#+END_SRC
+
+** helm-ls-git
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-ls-git
+    :commands helm-ls-git-ls
+    :init
+    (general-define-key "f" 'helm-ls-git-ls))
+
+#+END_SRC
+
+** helm-gtags
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-gtags
+    :commands (helm-gtags-select
+               helm-gtags-find-rtag
+               helm-gtags-parse-file)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :init
+  (setq helm-gtags-fuzzy-match t)
+
+  (general-define-key :prefix nil
+                      :keymaps '(swift-mode-map)
+                      :states '(normal)
+                      "t" 'helm-gtags-select)
+
+  (general-define-key :keymaps '(swift-mode-map)
+                      :states '(normal)
+                      "t" 'helm-gtags-parse-file))
+#+END_SRC
+
+* Third-party code
+
+** rcodetools
+#+BEGIN_SRC emacs-lisp
+  (defvar xmpfilter-command-name "ruby -S xmpfilter --dev --fork --detect-rbtest"
+    "The xmpfilter command name.")
+  (defvar rct-option-history nil)                ;internal
+  (defvar rct-option-local nil)     ;internal
+  (make-variable-buffer-local 'rct-option-local)
+  (defvar rct-debug nil
+    "If non-nil, output debug message into *Messages*.")
+  ;; (setq rct-debug t)
+
+  (defadvice comment-dwim (around rct-hack activate)
+    "If comment-dwim is successively called, add => mark."
+    (if (and (eq major-mode 'ruby-mode)
+             (eq last-command 'comment-dwim)
+             ;; TODO =>check
+             )
+        (insert "=>")
+      ad-do-it))
+  ;; To remove this advice.
+  ;; (progn (ad-disable-advice 'comment-dwim 'around 'rct-hack) (ad-update 'comment-dwim)) 
+
+  (defun rct-current-line ()
+    "Return the vertical position of point..."
+    (+ (count-lines (point-min) (point))
+       (if (= (current-column) 0) 1 0)))
+
+  (defun rct-save-position (proc)
+    "Evaluate proc with saving current-line/current-column/window-start."
+    (let ((line (rct-current-line))
+          (col  (current-column))
+          (wstart (window-start)))
+      (funcall proc)
+      (goto-char (point-min))
+      (forward-line (1- line))
+      (move-to-column col)
+      (set-window-start (selected-window) wstart)))
+
+  (defun rct-interactive ()
+    "All the rcodetools-related commands with prefix args read rcodetools' common option. And store option into buffer-local variable."
+    (list
+     (let ((option (or rct-option-local "")))
+       (if current-prefix-arg
+           (setq rct-option-local
+                 (read-from-minibuffer "rcodetools option: " option nil nil 'rct-option-history))
+         option))))  
+
+  (defun rct-shell-command (command &optional buffer)
+    "Replacement for `(shell-command-on-region (point-min) (point-max) command buffer t' because of encoding problem."
+    (let ((input-rb (concat (make-temp-name "xmptmp-in") ".rb"))
+          (output-rb (concat (make-temp-name "xmptmp-out") ".rb"))
+          (coding-system-for-read buffer-file-coding-system))
+      (write-region (point-min) (point-max) input-rb nil 'nodisp)
+      (shell-command
+       (rct-debuglog (format "%s %s > %s" command input-rb output-rb))
+       t " *rct-error*")
+      (with-current-buffer (or buffer (current-buffer))
+        (insert-file-contents output-rb nil nil nil t))
+      (delete-file input-rb)
+      (delete-file output-rb)))
+
+  (defvar xmpfilter-command-function 'xmpfilter-command)
+  (defun xmp (&optional option)
+    "Run xmpfilter for annotation/test/spec on whole buffer.
+  See also `rct-interactive'. "
+    (interactive (rct-interactive))
+    (rct-save-position
+     (lambda ()
+       (rct-shell-command (funcall xmpfilter-command-function option)))))
+
+  (defun xmpfilter-command (&optional option)
+    "The xmpfilter command line, DWIM."
+    (setq option (or option ""))
+    (flet ((in-block (beg-re)
+                     (save-excursion
+                       (goto-char (point-min))
+                       (when (re-search-forward beg-re nil t)
+                         (let ((s (point)) e)
+                           (when (re-search-forward "^end\n" nil t)
+                             (setq e (point))
+                             (goto-char s)
+                             (re-search-forward "# => *$" e t)))))))
+      (cond ((in-block "^class.+< Test::Unit::TestCase$")
+             (format "%s --unittest %s" xmpfilter-command-name option))
+            ((in-block "^\\(describe\\|context\\).+do$")
+             (format "%s --spec %s" xmpfilter-command-name option))
+            (t
+             (format "%s %s" xmpfilter-command-name option)))))
+  (require 'cl)
+
+  (defun rct-debuglog (logmsg)
+    "if `rct-debug' is non-nil, output LOGMSG into *Messages*. Returns LOGMSG."
+    (if rct-debug
+        (message "%s" logmsg))
+    logmsg)
+
+  (provide 'rcodetools)
+#+END_SRC
+* TODOs
+** TODO I wish company works with case insensitive inputs
+CREATED: [2017-08-29 Tue]
+CREATED: [2017-08-29 Tue]
+** TODO Regex match the whole file and shows matched results in a minibuffer
+** TODO Org-babel for swift with swiftenv support
+- v1: support /usr/bin/env swift
+- v2: support swiftenv
+- v3: support BEGIN_SRC swift* which generates results for "all" swift versions
+CREATED: [2017-08-31 Thu]
+** TODO integration with xcodebuild/xctool
+- v1 build
+- v2 run
+- v3 report errors
+- v4 can go to errors (like vim's quickfix window)
+CREATED: [2017-08-31 Thu]
+** TODO org-babel-execute:swift v2 - handle errors with an error buffer
+CREATED: [2017-09-01 Fri]
+** TODO Set up ace-jump correctly with evil-mode e.g. =t= in operator mode
+** TODO SPC cc for switch project | SPC ca to run async shell command
+CREATED: [2017-09-04 Mon]
