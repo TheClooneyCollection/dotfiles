@@ -321,8 +321,11 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default evil-escape-key-sequence "kj")
 
-  (when (configuration-layer/package-used-p 'org)
+  (defun td/reload-config ()
+    (interactive)
     (org-babel-load-file "~/.spacemacs.d/configuration.org"))
+
+  (td/reload-config)
 
   (when (file-exists-p custom-file)
     (load-file custom-file))
