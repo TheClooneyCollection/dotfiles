@@ -37,25 +37,27 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
 
+     emacs-lisp
+     org
      python
+     shell-scripts
      swift
 
-     helm
      (markdown :packages markdown-mode)
+
      auto-completion
-     ;; better-defaults
-     emacs-lisp
      git
-     ;; markdown
-     org
+     helm
+
+
+     spell-checking
+     syntax-checking
+
      (shell :variables
             shell-enable-smart-eshell t
             shell-default-term-shell "/usr/local/bin/fish"
             shell-default-height 30
             shell-default-position 'bottom)
-     shell-scripts
-     spell-checking
-     syntax-checking
 
      (version-control :packages git-gutter+
                       :variables version-control-diff-tool 'git-gutter+)
