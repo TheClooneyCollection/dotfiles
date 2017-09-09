@@ -43,11 +43,12 @@ values."
      git
      ;; markdown
      org
-      (shell :variables
-             shell-enable-smart-eshell t
-             shell-default-term-shell "/usr/local/bin/fish"
-             shell-default-height 30
-             shell-default-position 'bottom)
+     (shell :variables
+            shell-enable-smart-eshell t
+            shell-default-term-shell "/usr/local/bin/fish"
+            shell-default-height 30
+            shell-default-position 'bottom)
+     shell-scripts
      spell-checking
      syntax-checking
      version-control
