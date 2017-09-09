@@ -12,13 +12,9 @@
 !/requirements.in
 !/requirements.txt
 
-!/.emacs.d
-.emacs.d/*
-!/.emacs.d/init.el
-!/.emacs.d/configuration.org
-!/.emacs.d/lisp/
-/.emacs.d/lisp/*
-!/.emacs.d/lisp/*.el
+!/.spacemacs.d
+.spacemacs.d/*
+!/.spacemacs.d/init.el
 
 !/.spacemacs
 .spacemacs/**/*

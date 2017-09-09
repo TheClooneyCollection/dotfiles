@@ -316,9 +316,8 @@ you should place your code here."
 
   (when (configuration-layer/package-usedp 'projectile)
     (progn
-      ;; `..' because of my parallel emacs + spacemacs set up
-      (projectile-discover-projects-in-directory "~/../work")
-      (projectile-discover-projects-in-directory "~/../proj")))
+      (projectile-discover-projects-in-directory "~/work")
+      (projectile-discover-projects-in-directory "~/proj")))
 
   (when (file-exists-p custom-file)
     (load-file custom-file))
