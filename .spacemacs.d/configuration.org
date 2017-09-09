@@ -79,6 +79,10 @@
     #+END_SRC
 
 
+** magit
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "gg" 'magit-status)
+   #+END_SRC
 ** projectile
 *** =*scratch*= buffer per project
 
