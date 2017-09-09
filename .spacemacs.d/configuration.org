@@ -94,4 +94,5 @@
 ** Edit configurations
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "fee" 'td/edit-configuration-maybe)
+     (spacemacs/set-leader-keys "0" 'delete-other-windows)
    #+END_SRC
