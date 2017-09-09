@@ -110,6 +110,11 @@
       (setq projectile-switch-project-action 'zen)
     #+END_SRC
 
+*** Discover projects
+    #+BEGIN_SRC emacs-lisp
+      (projectile-discover-projects-in-directory "~/work")
+      (projectile-discover-projects-in-directory "~/proj")
+    #+END_SRC
 ** Diminish modes
    #+BEGIN_SRC emacs-lisp
      (defmacro diminish-minor-mode (filename mode &optional abbrev)

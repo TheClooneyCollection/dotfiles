@@ -321,11 +321,6 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq-default evil-escape-key-sequence "kj")
 
-  (when (configuration-layer/package-usedp 'projectile)
-    (progn
-      (projectile-discover-projects-in-directory "~/work")
-      (projectile-discover-projects-in-directory "~/proj")))
-
   (when (configuration-layer/package-used-p 'org)
     (org-babel-load-file "~/.spacemacs.d/configuration.org"))
 
