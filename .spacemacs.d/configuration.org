@@ -132,6 +132,27 @@
    #+BEGIN_SRC emacs-lisp
      )
    #+END_SRC
+** Diminish modes
+   #+BEGIN_SRC emacs-lisp
+     (defmacro diminish-minor-mode (filename mode &optional abbrev)
+       `(eval-after-load (symbol-name ,filename)
+          '(diminish ,mode ,abbrev)))
+
+     (defmacro diminish-major-mode (mode-hook abbrev)
+       `(add-hook ,mode-hook
+                  (lambda () (setq mode-name ,abbrev))))
+
+     (diminish-minor-mode 'with-editor 'with-editor-mode)
+     (diminish-minor-mode 'simple 'auto-fill-function)
+     (diminish-minor-mode 'server 'server-buffer-clients)
+
+     (diminish-minor-mode 'org-indent 'org-indent-mode)
+     (diminish-minor-mode 'org-src    'org-src-mode)
+
+     (diminish-major-mode 'emacs-lisp-mode-hook "elisp")
+     (diminish-major-mode 'lisp-interaction-mode-hook "λ")
+     (diminish-major-mode 'python-mode-hook "Py")
+   #+END_SRC
 * Mappings
 ** Edit configurations
    #+BEGIN_SRC emacs-lisp
