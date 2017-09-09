@@ -159,7 +159,7 @@ brew 'sqlite'        # python
 brew 'libyaml'       # ruby
 brew 'pcre2'         # fish
 brew 'cmake'         # plugin YCM needs it
-brew 'ghc'           # haskell
+# brew 'ghc'           # haskell
 brew 'cabal-install' # haskell
 
 brew 'libtool'       # neovim
