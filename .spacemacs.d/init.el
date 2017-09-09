@@ -319,6 +319,9 @@ you should place your code here."
       (projectile-discover-projects-in-directory "~/work")
       (projectile-discover-projects-in-directory "~/proj")))
 
+  (when (configuration-layer/package-used-p 'org)
+    (org-babel-load-file "~/.spacemacs.d/configuration.org"))
+
   (when (file-exists-p custom-file)
     (load-file custom-file))
   )
