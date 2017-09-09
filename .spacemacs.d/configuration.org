@@ -41,6 +41,14 @@
       (global-company-mode)
     #+END_SRC
 
+*** Enable company in text mode too
+
+    #+BEGIN_SRC emacs-lisp
+      (spacemacs|add-company-backends
+        :backends company-capf
+        :modes text-mode)
+    #+END_SRC
+
 *** Fuzzy autocompletion
 
     #+BEGIN_SRC emacs-lisp
@@ -74,9 +82,11 @@
     #+END_SRC
 
 ** magit
+
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "gg" 'magit-status)
    #+END_SRC
+
 ** org
 *** Add structure templates
 
