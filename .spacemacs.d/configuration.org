@@ -1,7 +1,7 @@
 #+TITLE: Spacemacs Configuration
 
 * Toggles
-** golden-ration
+** golden-ratio
    #+BEGIN_SRC emacs-lisp
      (spacemacs/toggle-golden-ratio-on)
    #+END_SRC
