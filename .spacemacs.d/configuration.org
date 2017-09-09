@@ -10,7 +10,14 @@
         (interactive)
         (setq debug-on-error nil))
     #+END_SRC
+#+TITLE: Spacemacs Configuration
 
+* Toggles
+** golden-ration
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/toggle-golden-ratio-on)
+   #+END_SRC
+* Functions
 * Packages
 ** org
 
