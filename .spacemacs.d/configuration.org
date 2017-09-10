@@ -210,10 +210,21 @@
      (define-key evil-normal-state-map "f" 'evil-avy-goto-char-2)
      (define-key evil-visual-state-map "f" 'evil-avy-goto-char-in-line)
 
+     ;(define-key evil-visual-state-map "t" 'evil-avy-goto-char-in-line)
+   #+END_SRC
+
+** Line motions
+
+   #+BEGIN_SRC emacs-lisp
+
+     (evil-define-avy-motion avy-goto-line-above line)
+     (evil-define-avy-motion avy-goto-line-below line)
+
+     (spacemacs/set-leader-keys "jj" 'evil-avy-goto-line-below)
+     (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
 
 * TODOs
-** SPC jj SPC jk for jumping to a line
 ** t in motion mode should be avy-char-1 variant
 ** YCM style autocompletion
 ** SPC gc should do magit commit
