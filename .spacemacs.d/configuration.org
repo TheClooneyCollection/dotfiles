@@ -210,7 +210,13 @@
      (define-key evil-normal-state-map "f" 'evil-avy-goto-char-2)
      (define-key evil-visual-state-map "f" 'evil-avy-goto-char-in-line)
 
-     ;(define-key evil-visual-state-map "t" 'evil-avy-goto-char-in-line)
+     (defun evil-avy-find-char-to-in-line ()
+       "Somehow this magically makes `evil-avy-goto-char' works as `evil-find-char-to'"
+       (interactive)
+       (evil-avy-goto-char-in-line))
+
+     (define-key evil-visual-state-map "t" 'evil-avy-find-char-to-in-line)
+     (define-key evil-operator-state-map "t" 'evil-avy-find-char-to-in-line)
    #+END_SRC
 
 ** Line motions
@@ -225,7 +231,6 @@
    #+END_SRC
 
 * TODOs
-** t in motion mode should be avy-char-1 variant
 ** YCM style autocompletion
 ** SPC gc should do magit commit
    SPC gC should be magit clone
