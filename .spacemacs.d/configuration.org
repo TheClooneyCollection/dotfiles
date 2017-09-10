@@ -205,4 +205,9 @@
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 * TODOs
+** SPC jj SPC jk for jumping to a line
+** f in Normal mode should be avy-char-2 variant
+** t in motion mode should be avy-char-1 variant
 ** YCM style autocompletion
+** SPC gc should do magit commit
+   SPC gC should be magit clone
