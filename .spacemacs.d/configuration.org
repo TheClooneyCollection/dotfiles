@@ -49,6 +49,14 @@
         :modes text-mode)
     #+END_SRC
 
+*** Enable company in swift mode too
+
+    #+BEGIN_SRC emacs-lisp
+      (spacemacs|add-company-backends
+        :backends company-capf
+        :modes swift-mode)
+    #+END_SRC
+
 *** Fuzzy autocompletion
 
     #+BEGIN_SRC emacs-lisp
