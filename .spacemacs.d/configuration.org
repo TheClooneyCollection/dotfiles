@@ -204,9 +204,16 @@
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
+** =f= and =t=
+
+   #+BEGIN_SRC emacs-lisp
+     (define-key evil-normal-state-map "f" 'evil-avy-goto-char-2)
+     (define-key evil-visual-state-map "f" 'evil-avy-goto-char-in-line)
+
+   #+END_SRC
+
 * TODOs
 ** SPC jj SPC jk for jumping to a line
-** f in Normal mode should be avy-char-2 variant
 ** t in motion mode should be avy-char-1 variant
 ** YCM style autocompletion
 ** SPC gc should do magit commit
