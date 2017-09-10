@@ -48,7 +48,7 @@ function mac_init
 end
 
 function clone_spacemacs
-    git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.spacemacs/.emacs.d/
+    git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/
 end
 
 function enable_xcode_indexing
