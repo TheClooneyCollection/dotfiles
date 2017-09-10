@@ -77,7 +77,7 @@
             helm-completion-in-region-fuzzy-match t
             helm-M-x-fuzzy-match t
             helm-buffers-fuzzy-matching t
-            helm-candidate-number-limit 20)
+            helm-candidate-number-limit 100)
     #+END_SRC
 
 *** ripgrep
