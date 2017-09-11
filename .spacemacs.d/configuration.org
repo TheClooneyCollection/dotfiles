@@ -213,6 +213,11 @@
    #+END_SRC
 
 ** org
+
+   #+BEGIN_SRC emacs-lisp
+     (with-eval-after-load 'org
+   #+END_SRC
+
 *** Add structure templates
 
     #+BEGIN_SRC emacs-lisp
@@ -314,6 +319,11 @@
      (diminish-major-mode 'lisp-interaction-mode-hook "λ")
      (diminish-major-mode 'python-mode-hook "Py")
    #+END_SRC
+*** The End
+
+    #+BEGIN_SRC emacs-lisp
+    )
+    #+END_SRC
 * Mappings
 ** Edit configurations
    #+BEGIN_SRC emacs-lisp
