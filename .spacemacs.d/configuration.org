@@ -241,6 +241,12 @@
         (add-to-list 'org-structure-template-alist item))
     #+END_SRC
 
+*** Don't prompt me to confirm every time I want to evaluate a block.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-confirm-babel-evaluate nil)
+    #+END_SRC
+
 *** =org-babel-execute:swift=
 
     #+BEGIN_SRC emacs-lisp
@@ -256,7 +262,6 @@
       (defun org-babel-execute:swift (body params)
         "Execute a block of Swift code with org-babel."
         (message "executing Swift source code block")
-        ;; (org-babel-eval "swift" body))
         (run-swift body))
 
         (provide 'ob-swift)
