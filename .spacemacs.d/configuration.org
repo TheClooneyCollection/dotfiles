@@ -218,6 +218,20 @@
      (with-eval-after-load 'org
    #+END_SRC
 
+*** Settings
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-directory "~/Dropbox/data/org/")
+
+      (defun org-file-path (filename)
+        "Return the absolute address of an org file, given its relative name."
+        (let ((file-path (concat (file-name-as-directory org-directory) filename)))
+          (if (file-exists-p file-path)
+              file-path nil)))
+
+      (setq org-default-notes-file (org-file-path "notes.org"))
+    #+END_SRC
+
 *** Add structure templates
 
     #+BEGIN_SRC emacs-lisp
