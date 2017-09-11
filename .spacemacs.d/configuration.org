@@ -350,6 +350,15 @@
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
+
+** Edit =org-default-notes-file=
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "oo" '(lambda ()
+                                        (interactive)
+                                        (find-file org-default-notes-file)))
+   #+END_SRC
+
 ** =f= and =t=
 
    #+BEGIN_SRC emacs-lisp
