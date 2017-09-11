@@ -344,6 +344,13 @@
     )
     #+END_SRC
 * Mappings
+** =;= <-> =:= in every modes
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key ":" (lambda () (interactive) (insert ";")))
+     (global-set-key ";" (lambda () (interactive) (insert ":")))
+   #+END_SRC
+
 ** Edit configurations
 
    #+BEGIN_SRC emacs-lisp
