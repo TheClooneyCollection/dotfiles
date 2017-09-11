@@ -48,7 +48,7 @@ values."
      auto-completion
      git
      helm
-
+     ;; slack ; not sure why but this causes fatal error when successfully authorized
 
      spell-checking
      syntax-checking
