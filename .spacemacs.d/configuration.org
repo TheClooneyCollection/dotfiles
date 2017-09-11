@@ -345,8 +345,9 @@
     #+END_SRC
 * Mappings
 ** Edit configurations
+
    #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys "fee" 'td/edit-configuration-maybe)
+     (spacemacs/set-leader-keys "fee" 'td/edit-configuration)
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
@@ -384,7 +385,6 @@
      (spacemacs/set-leader-keys "jj" 'evil-avy-goto-line-below)
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
-
 * TODOs
 ** SPC gc should do magit commit
    SPC gC should be magit clone
