@@ -343,7 +343,7 @@
     #+BEGIN_SRC emacs-lisp
     )
     #+END_SRC
-* Mappings
+* Keybindings
 ** =;= <-> =:= in every modes
 
    #+BEGIN_SRC emacs-lisp
@@ -355,7 +355,11 @@
 
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "fee" 'td/edit-configuration)
+   #+END_SRC
+** =SPC [0-9]=
+   #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
+     (spacemacs/set-leader-keys "7" 'async-shell-command)
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 
