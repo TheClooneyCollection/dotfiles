@@ -206,6 +206,12 @@
       (setq helm-grep-ag-pipe-cmd-switches '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
     #+END_SRC
 
+** helm-ls-git
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "ff" 'helm-ls-git-ls)
+   #+END_SRC
+
 ** magit
 
    #+BEGIN_SRC emacs-lisp
