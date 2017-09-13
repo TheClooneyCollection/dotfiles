@@ -323,6 +323,12 @@
       (projectile-discover-projects-in-directory "~/work")
       (projectile-discover-projects-in-directory "~/proj")
     #+END_SRC
+** tox
+
+   #+BEGIN_SRC emacs-lisp
+     (setq tox-runner 'py.test)
+   #+END_SRC
+
 ** Diminish modes
    #+BEGIN_SRC emacs-lisp
      (defmacro diminish-minor-mode (filename mode &optional abbrev)
@@ -404,6 +410,5 @@
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
 * TODOs
-** tox set up
 ** SPC gc should do magit commit
    SPC gC should be magit clone
