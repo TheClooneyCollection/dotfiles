@@ -50,6 +50,7 @@ values."
      helm
      ;; slack ; not sure why but this causes fatal error when successfully authorized
 
+     osx
      spell-checking
      syntax-checking
 
