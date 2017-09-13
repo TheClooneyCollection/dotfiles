@@ -33,6 +33,13 @@
    #+END_SRC
 
 * Packages
+
+** alert
+
+   #+BEGIN_SRC emacs-lisp
+     (setq alert-default-style 'notifier)
+   #+END_SRC
+
 ** company
 
 *** Enable company globally
@@ -412,5 +419,8 @@
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
 * TODOs
+** alert
+*** compilation finish
+*** git push finish
 ** SPC gc should do magit commit
    SPC gC should be magit clone
