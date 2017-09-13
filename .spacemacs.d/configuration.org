@@ -363,6 +363,7 @@
      (spacemacs/set-leader-keys "fee" 'td/edit-configuration)
    #+END_SRC
 ** =SPC [0-9]=
+
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "7" 'async-shell-command)
@@ -403,5 +404,6 @@
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
 * TODOs
+** tox set up
 ** SPC gc should do magit commit
    SPC gC should be magit clone
