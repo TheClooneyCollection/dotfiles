@@ -1,10 +1,18 @@
 #+TITLE: Spacemacs Configuration
 
 * Toggles
+
+** auto-fill-mode
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/toggle-auto-fill-mode-on)
+   #+END_SRC
 ** golden-ratio
+
    #+BEGIN_SRC emacs-lisp
      (spacemacs/toggle-golden-ratio-on)
    #+END_SRC
+
 * Functions
 ** Edit Spacemacs's configuration
    #+BEGIN_SRC emacs-lisp
@@ -364,7 +372,7 @@
     #+BEGIN_SRC emacs-lisp
     )
     #+END_SRC
-* Keybindings
+* Key bindings
 ** =;= <-> =:= in every modes
 
    #+BEGIN_SRC emacs-lisp
@@ -418,7 +426,7 @@
      (spacemacs/set-leader-keys "jj" 'evil-avy-goto-line-below)
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
-* TODOs
+* TODO
 ** alert
 *** compilation finish
 *** git push finish
