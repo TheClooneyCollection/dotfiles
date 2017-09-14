@@ -38,6 +38,7 @@ values."
      ;; ----------------------------------------------------------------
 
      emacs-lisp
+     (javascript :packages json-mode)
      org
      python
      shell-scripts
