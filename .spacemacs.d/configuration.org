@@ -315,8 +315,8 @@
               (switch-to-buffer buffer)
             (progn                            ; buffer does not exist
               (switch-to-buffer (get-buffer-create buffer-name))
-              (lisp-interaction-mode)
-              (insert (format ";; %S\n\n" (projectile-project-name)))))))
+              (org-mode)
+              (insert (format "#+TITLE %S\n\n" (projectile-project-name)))))))
     #+END_SRC
 
 *** =zen=
