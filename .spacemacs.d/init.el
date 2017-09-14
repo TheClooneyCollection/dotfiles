@@ -48,7 +48,7 @@ values."
      auto-completion
      git
      helm
-     ;; slack ; not sure why but this causes fatal error when successfully authorized
+     slack ; Got to use the GUI version on work laptop otherwise... FATAL ERROR...
 
      osx
      spell-checking
