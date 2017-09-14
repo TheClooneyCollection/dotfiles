@@ -16,7 +16,7 @@
 cd ~
 git init
 git remote add origin https://github.com/NicholasTD07/dotfiles.git
-git pull
+git pull origin master
 
 # You should have all the files :)
 ```
