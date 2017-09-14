@@ -132,6 +132,7 @@ brew 'coreutils' # gln for relative symlink
 brew 'tree'
 brew 'ripgrep'
 brew 'aria2'
+brew 'mosh'
 
 brew 'ispell' # for emacs spell check
 
