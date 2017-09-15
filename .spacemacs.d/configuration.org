@@ -342,6 +342,32 @@
       (projectile-discover-projects-in-directory "~/work")
       (projectile-discover-projects-in-directory "~/proj")
     #+END_SRC
+** slack
+
+   #+BEGIN_SRC emacs-lisp
+     (setq slack-prefer-current-team t)
+   #+END_SRC
+
+*** Set up slack for =work=
+
+  #+BEGIN_SRC emacs-lisp
+    (let* ((auth-info (car (auth-source-search :max 1
+                                               :user "work"
+                                               :host "slack")))
+
+           (team-name (plist-get auth-info :team-name))
+           (client-id (plist-get auth-info :client-id))
+           (client-secret (plist-get auth-info :client-secret))
+           (token (plist-get auth-info :token)))
+
+      (slack-register-team
+       :default t
+       :name team-name
+       :client-id client-id
+       :client-secret client-secret
+       :token token))
+  #+END_SRC
+
 ** tox
 
    #+BEGIN_SRC emacs-lisp
@@ -434,3 +460,4 @@
 *** git push finish
 ** SPC gc should do magit commit
    SPC gC should be magit clone
+
