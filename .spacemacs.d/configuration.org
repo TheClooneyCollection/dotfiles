@@ -311,7 +311,9 @@
       (defun td/projectile-switch-project-action ()
         (interactive)
         (magit-status) ;; Do this first otherwise end up in the magit buffer
-        (switch-to-project-s-scratch-buffer))
+        (purpose-set-window-purpose-dedicated-p nil t)
+        (switch-to-project-s-scratch-buffer)
+        (purpose-set-window-purpose-dedicated-p nil t))
     #+END_SRC
 
 *** Settings
