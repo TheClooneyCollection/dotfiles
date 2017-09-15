@@ -338,10 +338,24 @@
     #+END_SRC
 
 *** Discover projects
+
     #+BEGIN_SRC emacs-lisp
       (projectile-discover-projects-in-directory "~/work")
       (projectile-discover-projects-in-directory "~/proj")
     #+END_SRC
+
+** purpose
+
+   #+BEGIN_SRC emacs-lisp
+     (setq purpose-user-mode-purposes '((magit-mode . magit)
+                                        (slack-mode . slack)))
+     (setq purpose-user-regexp-purposes '(
+                                          ;("^*scratch: [\"a-zA-Z0-9]" . edit)
+                                          ))
+
+     (purpose-compile-user-configuration)
+   #+END_SRC
+
 ** slack
 
    #+BEGIN_SRC emacs-lisp

@@ -65,6 +65,7 @@ values."
                       :variables version-control-diff-tool 'git-gutter+)
 
      (spacemacs-navigation :packages golden-ratio)
+     spacemacs-purpose
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
