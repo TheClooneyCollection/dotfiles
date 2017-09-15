@@ -460,6 +460,11 @@
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
 * TODOs
+** layout with purpose
+*** Ref: https://emacs.stackexchange.com/questions/9995/set-windows-layout-by-a-function
+*** Save a window layout (say, code + git) with purpose and copy it into emacs's config
+*** Set =dedicated= to =t=
+*** When switching project, load that config and open the buffers (and let purpose do its work)
 ** alert
 *** compilation finish
 *** git push finish
