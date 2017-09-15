@@ -305,13 +305,12 @@
               (org-mode)
               (insert (format "#+TITLE %S\n\n" (projectile-project-name)))))))
     #+END_SRC
-
-*** =zen=
+*** =td/projectile-switch-project-action=
 
     #+BEGIN_SRC emacs-lisp
-      (defun zen ()
+      (defun td/projectile-switch-project-action ()
         (interactive)
-        (delete-other-windows)
+        (magit-status) ;; Do this first otherwise end up in the magit buffer
         (switch-to-project-s-scratch-buffer))
     #+END_SRC
 
@@ -319,7 +318,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq projectile-enable-caching t)
-      (setq projectile-switch-project-action 'zen)
+      (setq projectile-switch-project-action 'td/projectile-switch-project-action)
     #+END_SRC
 
 *** Discover projects
@@ -418,7 +417,7 @@
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "7" 'async-shell-command)
-     (spacemacs/set-leader-keys "9" 'zen)
+     (spacemacs/set-leader-keys "9" 'td/projectile-switch-project-action)
    #+END_SRC
 
 ** Edit =org-default-notes-file=
