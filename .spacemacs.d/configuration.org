@@ -23,21 +23,6 @@
        (interactive)
        (td/edit "configuration.emacs.org")
        (td/edit "configuration.org"))
-
-     (defun td/day-of-week ()
-       "Returns the day of week, an integer between 0 and 6, where 0 is
-     Sunday."
-       (nth 6 (decode-time)))
-
-     (defun td/edit-configuration-maybe ()
-       (interactive)
-       (if (member (td/day-of-week) (number-sequence 1 5))
-           (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
-
-             (if (member hour (number-sequence 9 17))
-                 (org-capture nil "e")
-               (td/edit-configuration)))
-       (td/edit-configuration)))
    #+END_SRC
 
 * Packages
