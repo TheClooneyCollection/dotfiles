@@ -242,6 +242,8 @@
 *** Settings
 
     #+BEGIN_SRC emacs-lisp
+      (setq org-ellipsis "⤵")
+
       (setq org-M-RET-may-split-line nil)
 
       (setq org-directory "~/Dropbox/data/org/")
