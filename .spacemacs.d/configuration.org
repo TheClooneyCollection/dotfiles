@@ -359,7 +359,8 @@
 ** slack
 
    #+BEGIN_SRC emacs-lisp
-     (setq slack-prefer-current-team t)
+     (setq slack-prefer-current-team t
+           slack-buffer-function #'switch-to-buffer)
    #+END_SRC
 
 *** Set up slack for =work=
