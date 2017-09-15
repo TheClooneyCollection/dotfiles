@@ -428,7 +428,7 @@
      (spacemacs/set-leader-keys "jj" 'evil-avy-goto-line-below)
      (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
    #+END_SRC
-* TODO
+* TODOs
 ** alert
 *** compilation finish
 *** git push finish
