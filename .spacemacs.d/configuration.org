@@ -352,21 +352,23 @@
 *** Set up slack for =work=
 
   #+BEGIN_SRC emacs-lisp
-    (let* ((auth-info (car (auth-source-search :max 1
-                                               :user "work"
-                                               :host "slack")))
+    (spacemacs|use-package-add-hook slack
+      :post-config
+      (let* ((auth-info (car (auth-source-search :max 1
+                                                 :user "work"
+                                                 :host "slack")))
 
-           (team-name (plist-get auth-info :team-name))
-           (client-id (plist-get auth-info :client-id))
-           (client-secret (plist-get auth-info :client-secret))
-           (token (plist-get auth-info :token)))
+             (team-name (plist-get auth-info :team-name))
+             (client-id (plist-get auth-info :client-id))
+             (client-secret (plist-get auth-info :client-secret))
+             (token (plist-get auth-info :token)))
 
-      (slack-register-team
-       :default t
-       :name team-name
-       :client-id client-id
-       :client-secret client-secret
-       :token token))
+        (slack-register-team
+         :default t
+         :name team-name
+         :client-id client-id
+         :client-secret client-secret
+         :token token)))
   #+END_SRC
 
 ** tox
