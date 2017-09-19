@@ -313,9 +313,9 @@
         (interactive)
         (magit-status) ;; Do this first otherwise end up in the magit buffer
         (purpose-set-window-purpose-dedicated-p nil t)
-        (winum-get-window-by-number 1)
-        (switch-to-project-s-scratch-buffer)
-        (purpose-set-window-purpose-dedicated-p nil t))
+        (with-selected-window (winum-get-window-by-number 1)
+          (switch-to-project-s-scratch-buffer)
+          (purpose-set-window-purpose-dedicated-p nil t)))
     #+END_SRC
 
 *** Settings
