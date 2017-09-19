@@ -142,7 +142,6 @@ brew 'carthage'
 brew 'swiftlint'
 brew 'swiftplate', args: ['HEAD']
 
-brew 'xctool'
 # brew 'fbsimctl' #, args: ['HEAD'] # facebook's open source simulator control tool
 
 ## make tools
