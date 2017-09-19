@@ -193,10 +193,12 @@
       (setq helm-mode-fuzzy-match t
             helm-completion-in-region-fuzzy-match t
             helm-M-x-fuzzy-match t
-            helm-buffers-fuzzy-matching t
-            helm-candidate-number-limit 100)
+            helm-buffers-fuzzy-matching t)
     #+END_SRC
 
+    #+BEGIN_SRC emacs-lisp
+      (setq helm-candidate-number-limit 20)
+    #+END_SRC
 *** ripgrep
 
     Settings
