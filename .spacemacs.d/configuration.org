@@ -10,7 +10,6 @@
 ** golden-ratio
 
    #+BEGIN_SRC emacs-lisp
-     (setq golden-ratio-auto-scale t)
      (spacemacs/toggle-golden-ratio-on)
    #+END_SRC
 
