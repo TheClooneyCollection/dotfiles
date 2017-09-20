@@ -315,24 +315,21 @@
               (org-mode)
               (insert (format "#+TITLE %S\n\n" (projectile-project-name)))))))
     #+END_SRC
-*** =td/projectile-switch-project-action=
+*** =zen=
 
     #+BEGIN_SRC emacs-lisp
-      (defun td/projectile-switch-project-action ()
-        "Supper buggy... I only want two windows maybe three. One for coding, one for git and one for slack maybe..."
+      (defun zen ()
         (interactive)
-        (magit-status) ;; Do this first otherwise end up in the magit buffer
-        (purpose-set-window-purpose-dedicated-p nil t)
-        (with-selected-window (winum-get-window-by-number 1)
-          (switch-to-project-s-scratch-buffer)
-          (purpose-set-window-purpose-dedicated-p nil t)))
+        (progn
+          (delete-other-windows)
+          (switch-to-project-s-scratch-buffer)))
     #+END_SRC
 
 *** Settings
 
     #+BEGIN_SRC emacs-lisp
       (setq projectile-enable-caching t)
-      (setq projectile-switch-project-action 'td/projectile-switch-project-action)
+      (setq projectile-switch-project-action 'zen)
     #+END_SRC
 
 *** Discover projects
@@ -433,7 +430,7 @@
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "0" 'delete-other-windows)
      (spacemacs/set-leader-keys "7" 'async-shell-command)
-     (spacemacs/set-leader-keys "9" 'td/projectile-switch-project-action)
+     (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 
 ** Edit =org-default-notes-file=
