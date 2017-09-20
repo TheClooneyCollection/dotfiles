@@ -322,7 +322,9 @@
         (interactive)
         (progn
           (delete-other-windows)
-          (switch-to-project-s-scratch-buffer)))
+          (switch-to-project-s-scratch-buffer)
+          (unless (purpose-window-purpose-dedicated-p)
+            (purpose-toggle-window-purpose-dedicated))))
     #+END_SRC
 
 *** Settings
