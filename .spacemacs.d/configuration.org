@@ -256,6 +256,12 @@
         (add-to-list 'org-structure-template-alist item))
     #+END_SRC
 
+*** Turn on =auto-fill-mode= for =org-mode=
+    
+    #+BEGIN_SRC emacs-lisp
+      (add-hook 'org-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
+    #+END_SRC
+
 *** Don't prompt me to confirm every time I want to evaluate a block.
 
     #+BEGIN_SRC emacs-lisp
