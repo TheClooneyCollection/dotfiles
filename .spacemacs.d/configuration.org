@@ -242,6 +242,8 @@
               file-path nil)))
 
       (setq org-default-notes-file (org-file-path "notes.org"))
+      (setq org-agenda-files (cl-remove-if #'null (list org-directory
+                                                        (org-file-path "work/"))))
     #+END_SRC
 
 *** Add structure templates
