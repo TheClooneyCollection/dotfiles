@@ -41,6 +41,8 @@ values."
      (javascript :packages json-mode)
      org
      python
+     (ruby :variables ruby-enable-enh-ruby-mode t
+           :packages enh-ruby-mode)
      shell-scripts
      swift
 
