@@ -21,7 +21,7 @@
 
      (defun td/edit-configuration ()
        (interactive)
-       (td/edit "configuration.emacs.org")
+       ;(td/edit "configuration.emacs.org")
        (td/edit "configuration.org"))
    #+END_SRC
 ** Dedicate a window's purpose
