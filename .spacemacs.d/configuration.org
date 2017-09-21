@@ -24,7 +24,14 @@
        (td/edit "configuration.emacs.org")
        (td/edit "configuration.org"))
    #+END_SRC
+** Dedicate a window's purpose
 
+   #+BEGIN_SRC emacs-lisp
+     (defun td/dedicate-window-purpose ()
+       (interactive)
+       (unless (purpose-window-purpose-dedicated-p)
+         (purpose-toggle-window-purpose-dedicated)))
+   #+END_SRC
 * Packages
 
 ** alert
@@ -323,8 +330,7 @@
         (progn
           (delete-other-windows)
           (switch-to-project-s-scratch-buffer)
-          (unless (purpose-window-purpose-dedicated-p)
-            (purpose-toggle-window-purpose-dedicated))))
+          (td/dedicate-window-purpose)))
     #+END_SRC
 
 *** Settings
@@ -344,7 +350,7 @@
 ** purpose
 
    #+BEGIN_SRC emacs-lisp
-     (setq purpose-user-mode-purposes '((magit-mode . magit)
+     (setq purpose-user-mode-purposes '((magit-mode . magit!)
                                         (slack-mode . slack)))
      (setq purpose-user-regexp-purposes '(
                                           ;("^*scratch: [\"a-zA-Z0-9]" . edit)
