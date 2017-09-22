@@ -29,9 +29,9 @@
    #+BEGIN_SRC emacs-lisp
      (defun td/dedicate-window-purpose ()
        (interactive)
-       (unless (purpose-window-purpose-dedicated-p)
-         (purpose-toggle-window-purpose-dedicated)))
+       (purpose-set-window-purpose-dedicated-p nil t))
    #+END_SRC
+
 * Packages
 
 ** alert
@@ -357,6 +357,10 @@
                                           ))
 
      (purpose-compile-user-configuration)
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'magit-mode-setup-hook 'td/dedicate-window-purpose)
    #+END_SRC
 
 ** slack
