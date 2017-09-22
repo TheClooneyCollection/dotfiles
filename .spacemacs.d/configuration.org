@@ -432,11 +432,12 @@
      (global-set-key ";" (lambda () (interactive) (insert ":")))
    #+END_SRC
 
-** Edit configurations
+** =SPC fee= to edit configurations
 
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "fee" 'td/edit-configuration)
    #+END_SRC
+
 ** =SPC [0-9]=
 
    #+BEGIN_SRC emacs-lisp
@@ -445,7 +446,7 @@
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 
-** Edit =org-default-notes-file=
+** =SPC oo= to edit =org-default-notes-file=
 
    #+BEGIN_SRC emacs-lisp
      (spacemacs/set-leader-keys "oo" '(lambda ()
@@ -468,17 +469,27 @@
      (define-key evil-operator-state-map "t" 'evil-avy-find-char-to-in-line)
    #+END_SRC
 
-** Line motions
+** =SPC jj= and =SPC jk=
 
    #+BEGIN_SRC emacs-lisp
 
      (evil-define-avy-motion avy-goto-line-above line)
      (evil-define-avy-motion avy-goto-line-below line)
 
-     (spacemacs/set-leader-keys "jj" 'evil-avy-goto-line-below)
-     (spacemacs/set-leader-keys "jk" 'evil-avy-goto-line-above)
+     (spacemacs/set-leader-keys
+       "jj" 'evil-avy-goto-line-below
+       "jk" 'evil-avy-goto-line-above)
    #+END_SRC
+** =SPC gc= and =SPC gC=
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys
+       "gc" 'magit-commit
+       "gC" 'magit-clone)
+   #+END_SRC
+
 * TODOs
+** ace-jump-line-mode render marks on the same column as the cursor
 ** layout with purpose
 *** Ref: https://emacs.stackexchange.com/questions/9995/set-windows-layout-by-a-function
 *** Save a window layout (say, code + git) with purpose and copy it into emacs's config
