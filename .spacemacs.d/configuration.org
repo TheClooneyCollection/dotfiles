@@ -40,6 +40,12 @@
      (setq alert-default-style 'notifier)
    #+END_SRC
 
+** avy
+
+   #+BEGIN_SRC emacs-lisp
+     (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s))
+   #+END_SRC
+
 ** company
 
 *** Enable company globally
