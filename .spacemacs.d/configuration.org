@@ -257,6 +257,8 @@
       (setq org-default-notes-file (org-file-path "notes.org"))
       (setq org-agenda-files (cl-remove-if #'null (list org-directory
                                                         (org-file-path "work/"))))
+      (setq org-archive-location (format "%s::"
+            (org-file-path "archive.org")))
     #+END_SRC
 
 *** Add structure templates
