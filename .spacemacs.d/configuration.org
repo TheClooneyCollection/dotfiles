@@ -294,21 +294,18 @@
 **** =org-babel-execute:swift=
 
      #+BEGIN_SRC emacs-lisp
-       (defun run-swift (body)
-         "Get around `org-babel-eval' runs the swift REPL rather than the file problem"
-         (let ((filename (make-temp-file "ob-swift")))
-           (with-temp-file filename
-             (insert body))
-           (with-temp-buffer
-             (shell-command (format "swift %S" (org-babel-process-file-name filename)) (current-buffer))
-             (buffer-string))))
-
        (defun org-babel-execute:swift (body params)
          "Execute a block of Swift code with org-babel."
          (message "executing Swift source code block")
-         (run-swift body))
+         (ob-swift--eval body))
 
-         (provide 'ob-swift)
+       (defun ob-swift--eval (body)
+         (with-temp-buffer
+           (insert body)
+           (shell-command-on-region (point-min) (point-max) "swift -" nil 't)
+           (buffer-string)))
+
+       (provide 'ob-swift)
      #+END_SRC
 
 **** =org-babel-do-load-languages=
