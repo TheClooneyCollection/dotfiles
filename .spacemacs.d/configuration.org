@@ -276,45 +276,51 @@
       (add-hook 'org-mode-hook 'spacemacs/toggle-auto-fill-mode-on)
     #+END_SRC
 
-*** Don't prompt me to confirm every time I want to evaluate a block.
+*** Babel
 
     #+BEGIN_SRC emacs-lisp
-      (setq org-confirm-babel-evaluate nil)
+      (setq org-babel-python-command "/usr/local/bin/python3")
     #+END_SRC
 
-*** =org-babel-execute:swift=
+**** Don't prompt me to confirm every time I want to evaluate a block.
 
-    #+BEGIN_SRC emacs-lisp
-      (defun run-swift (body)
-        "Get around `org-babel-eval' runs the swift REPL rather than the file problem"
-        (let ((filename (make-temp-file "ob-swift")))
-          (with-temp-file filename
-            (insert body))
-          (with-temp-buffer
-            (shell-command (format "swift %S" (org-babel-process-file-name filename)) (current-buffer))
-            (buffer-string))))
+     #+BEGIN_SRC emacs-lisp
+       (setq org-confirm-babel-evaluate nil)
+     #+END_SRC
 
-      (defun org-babel-execute:swift (body params)
-        "Execute a block of Swift code with org-babel."
-        (message "executing Swift source code block")
-        (run-swift body))
+**** =org-babel-execute:swift=
 
-        (provide 'ob-swift)
-    #+END_SRC
+     #+BEGIN_SRC emacs-lisp
+       (defun run-swift (body)
+         "Get around `org-babel-eval' runs the swift REPL rather than the file problem"
+         (let ((filename (make-temp-file "ob-swift")))
+           (with-temp-file filename
+             (insert body))
+           (with-temp-buffer
+             (shell-command (format "swift %S" (org-babel-process-file-name filename)) (current-buffer))
+             (buffer-string))))
 
-*** =org-babel-do-load-languages=
-    Load languages
+       (defun org-babel-execute:swift (body params)
+         "Execute a block of Swift code with org-babel."
+         (message "executing Swift source code block")
+         (run-swift body))
 
-    #+BEGIN_SRC emacs-lisp
-      (org-babel-do-load-languages
-       'org-babel-load-languages
-       '(
-         (swift . t)
-         (python . t)
-         (ruby . t)
-         ;; other languages..
-         ))
-    #+END_SRC
+         (provide 'ob-swift)
+     #+END_SRC
+
+**** =org-babel-do-load-languages=
+     Load languages
+
+     #+BEGIN_SRC emacs-lisp
+       (org-babel-do-load-languages
+        'org-babel-load-languages
+        '(
+          (swift . t)
+          (python . t)
+          (ruby . t)
+          ;; other languages..
+          ))
+     #+END_SRC
 
 ** projectile
 *** =*scratch*= buffer per project
