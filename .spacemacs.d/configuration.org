@@ -257,7 +257,7 @@
           (if (file-exists-p file-path)
               file-path nil)))
 
-      (setq org-default-notes-file (org-file-path-or-nil "notes.org"))
+      (setq org-default-notes-file (org-file-path "notes.org"))
       (setq org-agenda-files (cl-remove-if #'null (list org-directory
                                                         (org-file-path-or-nil "work/"))))
       (setq org-archive-location (format "%s::"
