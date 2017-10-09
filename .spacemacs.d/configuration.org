@@ -270,7 +270,7 @@
       (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                       ("s" "#+BEGIN_SRC swift\n?\n#+END_SRC")
                       ("ss" "#+BEGIN_SRC ?\n\n#+END_SRC")
-                      ("p" "#+BEGIN_SRC python\n?\n#+END_SRC")))
+                      ("p" "#+BEGIN_SRC python :results output\n?\n#+END_SRC")))
         (add-to-list 'org-structure-template-alist item))
     #+END_SRC
 
