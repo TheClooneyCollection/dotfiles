@@ -319,7 +319,8 @@
           (swift . t)
           (python . t)
           (ruby . t)
-          ;; other languages..
+
+          (shell . t)
           ))
      #+END_SRC
 
