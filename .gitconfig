@@ -42,7 +42,7 @@
     l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
     la = !git l --all
     ls = ls-files
-    ; lsd = ls-tree -d HEAD
+    lsd = ls-tree -d HEAD
     lso = ls-files --others
     lp = log -p
     m = merge
