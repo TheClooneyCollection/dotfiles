@@ -77,7 +77,6 @@ values."
      company-flx
      helm-ls-git
      tox
-     alert
 
      org-cliplink
      )
