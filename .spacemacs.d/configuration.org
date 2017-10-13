@@ -269,7 +269,7 @@
     #+BEGIN_SRC emacs-lisp
       (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
                       ("s" "#+BEGIN_SRC swift\n?\n#+END_SRC")
-                      ("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC")
+                      ("sh" "#+BEGIN_SRC sh :results raw\n?\n#+END_SRC")
                       ("ss" "#+BEGIN_SRC ?\n\n#+END_SRC")
                       ("p" "#+BEGIN_SRC python :results output\n?\n#+END_SRC")))
         (add-to-list 'org-structure-template-alist item))
