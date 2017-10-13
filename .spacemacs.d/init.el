@@ -31,22 +31,16 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
 
      emacs-lisp
      (javascript :packages json-mode)
+     (markdown :packages markdown-mode)
      org
      python
-     (ruby :variables ruby-enable-enh-ruby-mode t
-           :packages enh-ruby-mode)
+     (ruby :variables ruby-enable-enh-ruby-mode t)
      shell-scripts
      swift
-
-     (markdown :packages markdown-mode)
+     yaml
 
      auto-completion
      git
