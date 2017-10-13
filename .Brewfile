@@ -44,6 +44,7 @@ cask 'zeplin'
 cask 'font-inconsolata-g-for-powerline' # disable iTerm thinner font on Retina
 cask 'font-source-code-pro'
 cask 'font-source-code-pro-for-powerline'
+
 ## utils
 
 cask 'alfred'
@@ -102,7 +103,6 @@ brew 'fish'
 brew 'git'
 brew 'git-lfs'
 
-# brew 'emacs'
 brew 'd12frosted/emacs-plus/emacs-plus'
 brew 'neovim'
 
