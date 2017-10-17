@@ -12,6 +12,11 @@
    #+BEGIN_SRC emacs-lisp
      (spacemacs/toggle-golden-ratio-on)
    #+END_SRC
+** centered-cursor
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/toggle-centered-point-on)
+   #+END_SRC
 
 * Functions
 ** Edit Spacemacs's configuration
