@@ -48,7 +48,7 @@
 ** avy
 
    #+BEGIN_SRC emacs-lisp
-     (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s))
+     (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s ?y))
    #+END_SRC
 
 ** company
