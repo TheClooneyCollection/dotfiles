@@ -447,6 +447,12 @@
     )
     #+END_SRC
 * Key bindings
+** =TAB= to toggle fold
+
+   #+BEGIN_SRC emacs-lisp
+   (define-key evil-normal-state-map (kbd "TAB") 'evil-toggle-fold)
+   #+END_SRC
+
 ** =;= <-> =:= in every modes
 
    #+BEGIN_SRC emacs-lisp
