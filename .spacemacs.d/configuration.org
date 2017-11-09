@@ -219,6 +219,12 @@
           ))
      #+END_SRC
 
+*** THE END
+
+    #+BEGIN_SRC emacs-lisp
+    )
+    #+END_SRC
+
 ** projectile
 *** =*scratch*= buffer per project
 
