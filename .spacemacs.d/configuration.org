@@ -1,5 +1,10 @@
 #+TITLE: Spacemacs Configuration
 
+#+name: org-bable-execute does not work anymore?
+#+BEGIN_SRC emacs-lisp
+  (spacemacs/recompile-elpa)
+#+END_SRC
+
 * Toggles
 
 ** auto-fill-mode
