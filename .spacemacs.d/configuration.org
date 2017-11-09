@@ -275,68 +275,6 @@
    #+BEGIN_SRC emacs-lisp
      (add-hook 'magit-mode-setup-hook 'td/dedicate-window-purpose)
    #+END_SRC
-
-** slack
-
-   #+BEGIN_SRC emacs-lisp
-     (setq slack-prefer-current-team t
-           slack-buffer-function #'switch-to-buffer)
-   #+END_SRC
-
-*** Set up slack for =work=
-
-  #+BEGIN_SRC emacs-lisp
-    (spacemacs|use-package-add-hook slack
-      :post-config
-      (let* ((auth-info (car (auth-source-search :max 1
-                                                 :user "work"
-                                                 :host "slack")))
-
-             (team-name (plist-get auth-info :team-name))
-             (client-id (plist-get auth-info :client-id))
-             (client-secret (plist-get auth-info :client-secret))
-             (token (plist-get auth-info :token)))
-
-        (slack-register-team
-         :default t
-         :name team-name
-         :client-id client-id
-         :client-secret client-secret
-         :token token)))
-  #+END_SRC
-
-** tox
-
-   #+BEGIN_SRC emacs-lisp
-     (setq tox-runner 'py.test)
-   #+END_SRC
-
-** Diminish modes
-   #+BEGIN_SRC emacs-lisp
-     (defmacro diminish-minor-mode (filename mode &optional abbrev)
-       `(eval-after-load (symbol-name ,filename)
-          '(diminish ,mode ,abbrev)))
-
-     (defmacro diminish-major-mode (mode-hook abbrev)
-       `(add-hook ,mode-hook
-                  (lambda () (setq mode-name ,abbrev))))
-
-     (diminish-minor-mode 'with-editor 'with-editor-mode)
-     (diminish-minor-mode 'simple 'auto-fill-function)
-     (diminish-minor-mode 'server 'server-buffer-clients)
-
-     (diminish-minor-mode 'org-indent 'org-indent-mode)
-     (diminish-minor-mode 'org-src    'org-src-mode)
-
-     (diminish-major-mode 'emacs-lisp-mode-hook "elisp")
-     (diminish-major-mode 'lisp-interaction-mode-hook "λ")
-     (diminish-major-mode 'python-mode-hook "Py")
-   #+END_SRC
-*** The End
-
-    #+BEGIN_SRC emacs-lisp
-    )
-    #+END_SRC
 * Key bindings
 ** =TAB= to toggle fold
 
