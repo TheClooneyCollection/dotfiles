@@ -322,6 +322,7 @@
    #+BEGIN_SRC emacs-lisp
      (define-key evil-normal-state-map "f" 'evil-avy-goto-char-2)
      (define-key evil-visual-state-map "f" 'evil-avy-goto-char-in-line)
+     (define-key evil-operator-state-map "f" 'evil-avy-goto-char-in-line)
 
      (defun evil-avy-find-char-to-in-line ()
        "Somehow this magically makes `evil-avy-goto-char' works as `evil-find-char-to'"
