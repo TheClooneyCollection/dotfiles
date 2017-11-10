@@ -2,7 +2,7 @@
 
 #+name: org-bable-execute does not work anymore?
 #+BEGIN_SRC emacs-lisp
-  (spacemacs/recompile-elpa)
+  ;(spacemacs/recompile-elpa)
 #+END_SRC
 
 * Toggles
