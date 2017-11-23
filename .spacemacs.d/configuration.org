@@ -96,9 +96,13 @@
 ** compile
 
    #+BEGIN_SRC emacs-lisp
-     (add-to-list 'compilation-error-regexp-alist-alist
-                  '(swift-fastlane "^\\(.*?\\).swift:\\([0-9]+\\)" 1 2))
-     (add-to-list 'compilation-error-regexp-alist 'swift-fastlane)
+   #+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (with-eval-after-load 'compile
+       (add-to-list 'compilation-error-regexp-alist-alist
+                    '(swift-fastlane "^\\(\\/.*?\\.swift\\):\\([0-9]+\\)" 1 2))
+       (add-to-list 'compilation-error-regexp-alist 'swift-fastlane)
+       )
    #+END_SRC
 
 ** helm
