@@ -55,8 +55,7 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom)
 
-     (version-control :packages git-gutter+
-                      :variables version-control-diff-tool 'git-gutter+)
+     (version-control :variables version-control-diff-tool 'git-gutter+)
 
      (spacemacs-navigation :packages golden-ratio)
      spacemacs-purpose
