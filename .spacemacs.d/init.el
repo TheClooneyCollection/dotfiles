@@ -45,9 +45,11 @@ This function should only modify configuration layer settings."
      git
      (helm :variables helm-use-fuzzy 'source)
 
-     osx
      spell-checking
      syntax-checking
+
+     osx
+     slack
 
      (shell :variables
             shell-enable-smart-eshell t
