@@ -278,6 +278,12 @@
            :client-id client-id
            :client-secret client-secret
            :token token))
+
+        (defun td/slack-update-all ()
+          (interactive)
+          (slack-im-list-update)
+          (slack-group-list-update)
+          (slack-channel-list-update))
         ))
   #+END_SRC
 
