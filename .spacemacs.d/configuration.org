@@ -255,6 +255,14 @@
     (spacemacs|use-package-add-hook slack
       :post-config
       (progn
+        ;; Workaround for channels containing unsupported message format
+        (defun sbw/slack-mode--catch-message-to-string-error (orig-fun &rest args)
+          (condition-case nil
+              (apply orig-fun args)
+            (error "<error parsing message>\n")))
+
+        (advice-add 'slack-message-to-string :around #'sbw/slack-mode--catch-message-to-string-error)
+
         (let* ((auth-info (car (auth-source-search :max 1
                                                    :user "work"
                                                    :host "slack")))
