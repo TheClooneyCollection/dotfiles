@@ -255,6 +255,10 @@
     (spacemacs|use-package-add-hook slack
       :post-config
       (progn
+        ;; TODO Use a notifier:
+        ;; 1. It shows the notification in an obvious place (like 'notifier or 'osx-notifire)
+        ;; 2. It hides the notification after certain seconds
+
         ;; Workaround for channels containing unsupported message format
         (defun sbw/slack-mode--catch-message-to-string-error (orig-fun &rest args)
           (condition-case nil
