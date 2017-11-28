@@ -47,7 +47,21 @@
 ** alert
 
    #+BEGIN_SRC emacs-lisp
-     (setq alert-default-style 'notifier)
+     (defun td/alert-notifier-notify (info)
+       "Derived from the `alert-notifier-notify' function with added `-timeout' parameter"
+       (if alert-notifier-command
+           (let ((args
+                  (list "-title"   (alert-encode-string (plist-get info :title))
+                        "-appIcon" (or (plist-get info :icon) alert-notifier-default-icon)
+                        "-message" (alert-encode-string (plist-get info :message))
+                        "-timeout" (number-to-string alert-fade-time))))
+             (apply #'call-process alert-notifier-command nil nil nil args))
+         (alert-message-notify info)))
+
+     (alert-define-style 'td-notifier :title "Notify using terminal-notifier"
+                         :notifier #'td/alert-notifier-notify)
+
+     (setq alert-default-style 'td-notifier)
    #+END_SRC
 
 ** avy
