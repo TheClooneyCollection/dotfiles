@@ -272,6 +272,9 @@
     (spacemacs|use-package-add-hook slack
       :post-config
       (progn
+        ;; Turn off centered-point-mode in slack mode
+        (add-hook 'slack-mode-hook '(lambda () (centered-cursor-mode -1)))
+
         ;; Workaround for channels containing unsupported message format
         (defun sbw/slack-mode--catch-message-to-string-error (orig-fun &rest args)
           (condition-case nil
