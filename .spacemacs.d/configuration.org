@@ -425,14 +425,6 @@
        "jj" 'evil-avy-goto-line-below
        "jk" 'evil-avy-goto-line-above)
    #+END_SRC
-** =SPC gc= and =SPC gC=
-
-   #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys
-       "gc" 'magit-commit
-       "gC" 'magit-clone)
-   #+END_SRC
-
 * TODOs
 ** ace-jump-line-mode render marks on the same column as the cursor
 ** layout with purpose
