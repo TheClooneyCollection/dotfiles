@@ -421,6 +421,13 @@
        "jj" 'evil-avy-goto-line-below
        "jk" 'evil-avy-goto-line-above)
    #+END_SRC
+** =SPC mu= in slack-mode for selecting unread messages
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys-for-major-mode 'slack-mode
+       "u" 'slack-select-unread-rooms)
+   #+END_SRC
+
 * TODOs
 ** ace-jump-line-mode render marks on the same column as the cursor
 ** layout with purpose
