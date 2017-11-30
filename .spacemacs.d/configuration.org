@@ -55,6 +55,8 @@
                         "-appIcon" (or (plist-get info :icon) alert-notifier-default-icon)
                         "-message" (alert-encode-string (plist-get info :message))
                         "-timeout" (number-to-string alert-fade-time))))
+             ;; Adding the `timeout' param will cause `terminal-notifier' to block the process.
+             ;; Thus we are calling `async-start-process' here.
              (apply #'async-start-process "emamcs-alert" alert-notifier-command nil args)
          (alert-message-notify info))))
 
