@@ -55,10 +55,8 @@
                         "-appIcon" (or (plist-get info :icon) alert-notifier-default-icon)
                         "-message" (alert-encode-string (plist-get info :message))
                         "-timeout" (number-to-string alert-fade-time))))
-             (async-start (lambda ()
-                            (apply #'call-process alert-notifier-command nil nil nil args))))
-         (alert-message-notify info)))
-
+             (apply #'async-start-process "emamcs-alert" alert-notifier-command nil args)
+         (alert-message-notify info))))
 
      (with-eval-after-load 'alert
        (alert-define-style 'td-notifier :title "Notify using terminal-notifier"
