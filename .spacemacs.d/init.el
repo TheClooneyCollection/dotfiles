@@ -31,15 +31,18 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(
 
+     ;; Major languages
      emacs-lisp
-     (javascript :packages json-mode)
-     (markdown :packages markdown-mode)
      haskell
      org
      python
+     swift
+
+     ;; Minor languages
+     (javascript :packages json-mode)
+     (markdown :packages markdown-mode)
      (ruby :variables ruby-enable-enh-ruby-mode t)
      shell-scripts
-     swift
      yaml
 
      auto-completion
