@@ -34,6 +34,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      (javascript :packages json-mode)
      (markdown :packages markdown-mode)
+     haskell
      org
      python
      (ruby :variables ruby-enable-enh-ruby-mode t)
