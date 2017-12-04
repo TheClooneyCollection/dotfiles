@@ -376,6 +376,12 @@
                                     '("~/.spacemacs.d/snippets")))
    #+END_SRC
 
+   #+BEGIN_SRC emacs-lisp
+     ;; Bind `SPC' to `yas-expand' when snippet expansion available (it
+     ;; will still call `self-insert-command' otherwise).
+     (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
+   #+END_SRC
+
 * Key bindings
 ** =TAB= to toggle fold
 
