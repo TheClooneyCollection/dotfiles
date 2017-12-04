@@ -265,54 +265,6 @@
      (setq persp-nil-name "@home")
    #+END_SRC
 
-** slack
-
-   #+BEGIN_SRC emacs-lisp
-     (setq slack-prefer-current-team t
-           slack-buffer-function #'switch-to-buffer)
-   #+END_SRC
-
-*** Set up slack for =work=
-
-  #+BEGIN_SRC emacs-lisp
-    (spacemacs|use-package-add-hook slack
-      :post-config
-      (progn
-        ;; Turn off centered-point-mode in slack mode
-        (add-hook 'slack-mode-hook '(lambda () (centered-cursor-mode -1)))
-
-        ;; Workaround for channels containing unsupported message format
-        (defun sbw/slack-mode--catch-message-to-string-error (orig-fun &rest args)
-          (condition-case nil
-              (apply orig-fun args)
-            (error "<error parsing message>\n")))
-
-        (advice-add 'slack-message-to-string :around #'sbw/slack-mode--catch-message-to-string-error)
-
-        (let* ((auth-info (car (auth-source-search :max 1
-                                                   :user "work"
-                                                   :host "slack")))
-
-               (team-name (plist-get auth-info :team-name))
-               (client-id (plist-get auth-info :client-id))
-               (client-secret (plist-get auth-info :client-secret))
-               (token (plist-get auth-info :token)))
-
-          (slack-register-team
-           :default t
-           :name team-name
-           :client-id client-id
-           :client-secret client-secret
-           :token token))
-
-        (defun td/slack-update-all ()
-          (interactive)
-          (slack-im-list-update)
-          (slack-group-list-update)
-          (slack-channel-list-update))
-        ))
-  #+END_SRC
-
 ** projectile
 *** =*scratch*= buffer per project
 
@@ -369,6 +321,54 @@
    #+BEGIN_SRC emacs-lisp
      (add-hook 'magit-mode-setup-hook 'td/dedicate-window-purpose)
    #+END_SRC
+** slack
+
+   #+BEGIN_SRC emacs-lisp
+     (setq slack-prefer-current-team t
+           slack-buffer-function #'switch-to-buffer)
+   #+END_SRC
+
+*** Set up slack for =work=
+
+  #+BEGIN_SRC emacs-lisp
+    (spacemacs|use-package-add-hook slack
+      :post-config
+      (progn
+        ;; Turn off centered-point-mode in slack mode
+        (add-hook 'slack-mode-hook '(lambda () (centered-cursor-mode -1)))
+
+        ;; Workaround for channels containing unsupported message format
+        (defun sbw/slack-mode--catch-message-to-string-error (orig-fun &rest args)
+          (condition-case nil
+              (apply orig-fun args)
+            (error "<error parsing message>\n")))
+
+        (advice-add 'slack-message-to-string :around #'sbw/slack-mode--catch-message-to-string-error)
+
+        (let* ((auth-info (car (auth-source-search :max 1
+                                                   :user "work"
+                                                   :host "slack")))
+
+               (team-name (plist-get auth-info :team-name))
+               (client-id (plist-get auth-info :client-id))
+               (client-secret (plist-get auth-info :client-secret))
+               (token (plist-get auth-info :token)))
+
+          (slack-register-team
+           :default t
+           :name team-name
+           :client-id client-id
+           :client-secret client-secret
+           :token token))
+
+        (defun td/slack-update-all ()
+          (interactive)
+          (slack-im-list-update)
+          (slack-group-list-update)
+          (slack-channel-list-update))
+        ))
+  #+END_SRC
+
 * Key bindings
 ** =TAB= to toggle fold
 
