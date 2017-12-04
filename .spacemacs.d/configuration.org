@@ -259,6 +259,12 @@
     )
     #+END_SRC
 
+** persp
+
+   #+BEGIN_SRC emacs-lisp
+     (setq persp-nil-name "@home")
+   #+END_SRC
+
 ** slack
 
    #+BEGIN_SRC emacs-lisp
