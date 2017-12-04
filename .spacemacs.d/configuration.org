@@ -372,8 +372,7 @@
 ** yasnippet
 
    #+BEGIN_SRC emacs-lisp
-     (setq yas-snippet-dirs (append yas-snippet-dirs
-                                    '("~/.spacemacs.d/snippets")))
+     (setq yas-snippet-dirs '("~/.spacemacs.d/snippets"))
    #+END_SRC
 
    #+BEGIN_SRC emacs-lisp
