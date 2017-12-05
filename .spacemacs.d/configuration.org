@@ -192,6 +192,11 @@
      (setq compilation-filter-hook nil)
    #+END_SRC
 
+   #+NAME: Set alert fade time
+   #+BEGIN_SRC emacs-lisp
+     (setq alert-fade-time 10)
+   #+END_SRC
+
    #+NAME: Add swift-fastlane error format to `compilation-error-regex-alist'
    #+BEGIN_SRC emacs-lisp
        (add-to-list 'compilation-error-regexp-alist-alist
@@ -203,7 +208,7 @@
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'compilation-finish-functions
                   (lambda (buffer string)
-                    (alert (format "Compilation finished: %S" string))))
+                    (alert string :title "Compilation finished")))
    #+END_SRC
 
    #+BEGIN_SRC emacs-lisp
