@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: let
+# key: ll
+# --
+let $1 = $0
