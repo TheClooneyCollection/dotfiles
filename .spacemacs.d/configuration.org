@@ -5,6 +5,77 @@
   ;(spacemacs/recompile-elpa)
 #+END_SRC
 
+* Key bindings
+** =TAB= to toggle fold
+
+   #+BEGIN_SRC emacs-lisp
+   (define-key evil-normal-state-map (kbd "TAB") 'evil-toggle-fold)
+   #+END_SRC
+
+** =;= <-> =:= in every modes
+
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key ":" (lambda () (interactive) (insert ";")))
+     (global-set-key ";" (lambda () (interactive) (insert ":")))
+   #+END_SRC
+
+** =SPC fee= to edit configurations
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "fee" 'td/edit-configuration)
+   #+END_SRC
+
+** =SPC [0-9]=
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "0" 'delete-other-windows)
+     (spacemacs/set-leader-keys "7" 'async-shell-command)
+     (spacemacs/set-leader-keys "9" 'zen)
+   #+END_SRC
+
+** =SPC oo= to edit =org-default-notes-file=
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "oo" '(lambda ()
+                                        (interactive)
+                                        (find-file org-default-notes-file)))
+   #+END_SRC
+
+** =f= and =t=
+
+   #+BEGIN_SRC emacs-lisp
+     (define-key evil-normal-state-map "f" 'evil-avy-goto-char-2)
+     (define-key evil-motion-state-map "f" 'evil-avy-goto-char-2)
+     (define-key evil-visual-state-map "f" 'evil-avy-goto-char-in-line)
+     (define-key evil-operator-state-map "f" 'evil-avy-goto-char-in-line)
+
+     (defun evil-avy-find-char-to-in-line ()
+       "Somehow this magically makes `evil-avy-goto-char' works as `evil-find-char-to'"
+       (interactive)
+       (evil-avy-goto-char-in-line))
+
+     (define-key evil-visual-state-map "t" 'evil-avy-find-char-to-in-line)
+     (define-key evil-operator-state-map "t" 'evil-avy-find-char-to-in-line)
+   #+END_SRC
+
+** =SPC jj= and =SPC jk=
+
+   #+BEGIN_SRC emacs-lisp
+
+     (evil-define-avy-motion avy-goto-line-above line)
+     (evil-define-avy-motion avy-goto-line-below line)
+
+     (spacemacs/set-leader-keys
+       "jj" 'evil-avy-goto-line-below
+       "jk" 'evil-avy-goto-line-above)
+   #+END_SRC
+** =SPC mu= in slack-mode for selecting unread messages
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys-for-major-mode 'slack-mode
+       "u" 'slack-select-unread-rooms)
+   #+END_SRC
+
 * Toggles
 
 ** auto-fill-mode
@@ -385,75 +456,7 @@
      (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
    #+END_SRC
 
-* Key bindings
-** =TAB= to toggle fold
-
    #+BEGIN_SRC emacs-lisp
-   (define-key evil-normal-state-map (kbd "TAB") 'evil-toggle-fold)
-   #+END_SRC
-
-** =;= <-> =:= in every modes
-
-   #+BEGIN_SRC emacs-lisp
-     (global-set-key ":" (lambda () (interactive) (insert ";")))
-     (global-set-key ";" (lambda () (interactive) (insert ":")))
-   #+END_SRC
-
-** =SPC fee= to edit configurations
-
-   #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys "fee" 'td/edit-configuration)
-   #+END_SRC
-
-** =SPC [0-9]=
-
-   #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys "0" 'delete-other-windows)
-     (spacemacs/set-leader-keys "7" 'async-shell-command)
-     (spacemacs/set-leader-keys "9" 'zen)
-   #+END_SRC
-
-** =SPC oo= to edit =org-default-notes-file=
-
-   #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys "oo" '(lambda ()
-                                        (interactive)
-                                        (find-file org-default-notes-file)))
-   #+END_SRC
-
-** =f= and =t=
-
-   #+BEGIN_SRC emacs-lisp
-     (define-key evil-normal-state-map "f" 'evil-avy-goto-char-2)
-     (define-key evil-motion-state-map "f" 'evil-avy-goto-char-2)
-     (define-key evil-visual-state-map "f" 'evil-avy-goto-char-in-line)
-     (define-key evil-operator-state-map "f" 'evil-avy-goto-char-in-line)
-
-     (defun evil-avy-find-char-to-in-line ()
-       "Somehow this magically makes `evil-avy-goto-char' works as `evil-find-char-to'"
-       (interactive)
-       (evil-avy-goto-char-in-line))
-
-     (define-key evil-visual-state-map "t" 'evil-avy-find-char-to-in-line)
-     (define-key evil-operator-state-map "t" 'evil-avy-find-char-to-in-line)
-   #+END_SRC
-
-** =SPC jj= and =SPC jk=
-
-   #+BEGIN_SRC emacs-lisp
-
-     (evil-define-avy-motion avy-goto-line-above line)
-     (evil-define-avy-motion avy-goto-line-below line)
-
-     (spacemacs/set-leader-keys
-       "jj" 'evil-avy-goto-line-below
-       "jk" 'evil-avy-goto-line-above)
-   #+END_SRC
-** =SPC mu= in slack-mode for selecting unread messages
-
-   #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys-for-major-mode 'slack-mode
-       "u" 'slack-select-unread-rooms)
    #+END_SRC
 
 * TODOs
