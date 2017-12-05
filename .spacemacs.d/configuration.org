@@ -447,6 +447,10 @@
 ** yasnippet
 
    #+BEGIN_SRC emacs-lisp
+     (with-eval-after-load 'yasnippet
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
      (setq yas-snippet-dirs '("~/.spacemacs.d/snippets"))
    #+END_SRC
 
@@ -457,5 +461,6 @@
    #+END_SRC
 
    #+BEGIN_SRC emacs-lisp
+     )
    #+END_SRC
 
