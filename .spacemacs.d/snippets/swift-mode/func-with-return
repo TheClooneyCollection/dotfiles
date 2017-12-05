@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: func (with return)
+# key: fff
+# --
+func $1($2) -> $3 {
+    $0
+}
