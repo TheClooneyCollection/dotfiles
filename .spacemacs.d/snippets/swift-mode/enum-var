@@ -4,6 +4,6 @@
 # --
 var $1: $2 {
     switch self {
-    case $0
+    $0
     }
 }
