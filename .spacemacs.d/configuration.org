@@ -96,15 +96,16 @@
 
 * Functions
 ** Edit Spacemacs's configuration
+
    #+BEGIN_SRC emacs-lisp
      (defun td/edit (filename)
        (find-file (concat dotspacemacs-directory filename)))
 
      (defun td/edit-configuration ()
        (interactive)
-       ;(td/edit "configuration.emacs.org")
        (td/edit "configuration.org"))
    #+END_SRC
+
 ** Dedicate a window's purpose
 
    #+BEGIN_SRC emacs-lisp
