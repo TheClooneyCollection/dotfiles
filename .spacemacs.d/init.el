@@ -53,6 +53,7 @@ This function should only modify configuration layer settings."
      syntax-checking
 
      osx
+     pdf-tools
      slack
 
      (shell :variables
