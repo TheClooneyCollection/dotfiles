@@ -261,6 +261,12 @@
      (with-eval-after-load 'org
    #+END_SRC
 
+*** Load packages
+
+    #+BEGIN_SRC emacs-lisp
+      (require 'org-eww)
+    #+END_SRC
+
 *** Settings
 
     #+BEGIN_SRC emacs-lisp
