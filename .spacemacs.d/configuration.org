@@ -581,7 +581,7 @@
 *** =*scratch*= buffer per project
 
     #+BEGIN_SRC emacs-lisp
-      (defun switch-to-project-s-scratch-buffer ()
+      (defun td/switch-to-project-s-scratch-buffer ()
         (interactive)
         (let ((buffer-name (format "*scratch: %S*" (projectile-project-name))))
           (if-let (buffer (get-buffer buffer-name)) ; buffer exists
@@ -598,7 +598,7 @@
         (interactive)
         (progn
           (delete-other-windows)
-          (switch-to-project-s-scratch-buffer)
+          (td/switch-to-project-s-scratch-buffer)
           (td/dedicate-window-purpose)))
     #+END_SRC
 
