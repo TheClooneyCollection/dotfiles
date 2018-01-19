@@ -44,6 +44,12 @@
      (spacemacs/set-leader-keys "9" 'zen)
    #+END_SRC
 
+** =SPC bs= to open project's scratch buffer
+
+   #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "bs" 'td/switch-to-project-s-scratch-buffer)
+   #+END_SRC
+
 ** =SPC fee= to edit configurations
 
    #+BEGIN_SRC emacs-lisp
