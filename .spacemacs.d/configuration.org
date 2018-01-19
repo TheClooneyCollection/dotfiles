@@ -507,6 +507,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC")
+                      ("ex" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
                       ("s" "#+BEGIN_SRC swift\n?\n#+END_SRC")
                       ("sh" "#+BEGIN_SRC sh :results output\n?\n#+END_SRC")
                       ("ss" "#+BEGIN_SRC ?\n\n#+END_SRC")
