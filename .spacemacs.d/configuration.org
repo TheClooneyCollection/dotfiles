@@ -120,6 +120,14 @@
        (purpose-set-window-purpose-dedicated-p nil t))
    #+END_SRC
 
+* Behaviors
+
+** Save buffers when losing focus
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+   #+END_SRC
+
 * Packages
 
 ** alert
