@@ -1,0 +1,7 @@
+# key: 1sm
+# name: SnapKit - makeConstraints
+# --
+
+${1:view}.snp.makeConstraints { make in
+    ${0:layout}
+}
