@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Array - forEach
+# key: 1fe
+# --
+[${1:array}].forEach {
+    $0
+}
