@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: SnapKit - equalTo
+# key: 1set
+# --
+make.${attributes}.equalTo(${anotherView})$0
