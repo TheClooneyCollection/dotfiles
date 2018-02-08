@@ -2,6 +2,6 @@
 # name: Array - forEach
 # key: 1fe
 # --
-[${1:array}].forEach {
+${1:array}.forEach {
     $0
 }

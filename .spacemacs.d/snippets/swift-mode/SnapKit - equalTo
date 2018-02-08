@@ -2,4 +2,4 @@
 # name: SnapKit - equalTo
 # key: 1set
 # --
-make.${attributes}.equalTo(${anotherView})$0
+make.${attributes}.equalTo(${something})$0
