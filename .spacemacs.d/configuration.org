@@ -122,12 +122,6 @@
 
 * Behaviors
 
-** Enter normal mode when losing focus
-
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'focus-out-hook 'evil-normal-state)
-   #+END_SRC
-
 ** Save buffers when losing focus
 
    #+BEGIN_SRC emacs-lisp
