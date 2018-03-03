@@ -57,6 +57,8 @@ cask 'moom'
 
 cask 'gfxCardStatus' # for work laptop
 
+cask 'squirrel'
+
 ## games
 
 cask 'minecraft'
