@@ -369,11 +369,16 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
+  (defun dont-use-spacelpa ()
+    (setq configuration-layer-elpa-archives
+          '(("melpa"    . "melpa.org/packages/")
+            ("org"      . "orgmode.org/elpa/")
+            ("gnu"      . "elpa.gnu.org/packages/"))))
+
   (setq custom-file "~/.spacemacs.d/custom.el")
 
   ;; Fix no prompt for GPG in the GUI version of Emacs
-  (setq epa-pinentry-mode 'loopback)
-  )
+  (setq epa-pinentry-mode 'loopback))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
