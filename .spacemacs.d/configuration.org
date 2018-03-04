@@ -474,6 +474,20 @@
      (spacemacs/set-leader-keys "gg" 'magit-status)
    #+END_SRC
 
+** magithub
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package magithub
+       :after magit
+       :ensure t
+       :init
+       (setq magithub-dir (concat spacemacs-cache-directory "magithub/"))
+       :config
+       (progn
+         (magithub-feature-autoinject t)
+         (define-key magit-status-mode-map "@" #'magithub-dispatch-popup)))
+   #+END_SRC
+
 ** org
 
    #+BEGIN_SRC emacs-lisp

@@ -73,6 +73,8 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
+     magithub
+
      company-flx
      helm-ls-git
      tox
