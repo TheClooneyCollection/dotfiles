@@ -498,7 +498,7 @@
    #+BEGIN_SRC emacs-lisp
      ;; Bind `SPC' to `yas-expand' when snippet expansion available (it
      ;; will still call `self-insert-command' otherwise).
-     ;; (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
+     (define-key yas-minor-mode-map (kbd "C-c C-c") yas-maybe-expand)
    #+END_SRC
 
    #+BEGIN_SRC emacs-lisp
