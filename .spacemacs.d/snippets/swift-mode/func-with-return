@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: func (with return)
-# key: fff
+# key: f
 # --
 func $1($2) -> $3 {
     $0

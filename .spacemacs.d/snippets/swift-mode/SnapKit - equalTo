@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: SnapKit - equalTo
-# key: 1set
+# key: s
 # --
 make.${attributes}.equalTo(${something})$0

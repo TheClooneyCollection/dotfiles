@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: struct
-# key: ss
+# key: s
 # --
 struct $0 {
 }

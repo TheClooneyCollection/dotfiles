@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: UI - init
-# key: 1ui
+# key: i
 # --
 init(${params}) {
     $0

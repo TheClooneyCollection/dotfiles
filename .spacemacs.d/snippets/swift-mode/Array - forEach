@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: Array - forEach
-# key: 1fe
+# key: f
 # --
 ${1:array}.forEach {
     $0

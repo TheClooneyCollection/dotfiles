@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: SnapKit - equalToSuperview
-# key: 1ses
+# key: s
 # --
 make.${attributes}.equalToSuperview()$0

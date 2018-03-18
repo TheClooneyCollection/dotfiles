@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: enum var
-# key: ev
+# key: e
 # --
 var $1: $2 {
     switch self {
