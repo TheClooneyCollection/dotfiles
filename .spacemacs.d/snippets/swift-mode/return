@@ -2,4 +2,4 @@
 # name: return
 # key: r
 # --
-return $0
+return${1: $0}

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: reduce
+# key: r
+# --
+${1:array}.reduce(${2:initial}) {
+     $0
+}

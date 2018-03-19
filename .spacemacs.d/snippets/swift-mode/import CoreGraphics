@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: import CoreGraphics
+# key: i
+# --
+import CoreGraphics

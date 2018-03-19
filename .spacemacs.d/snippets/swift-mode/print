@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: private
+# name: print
 # key: p
 # --
-private $0
+print($0)
