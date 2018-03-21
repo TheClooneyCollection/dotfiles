@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: if else
+# key: i
+# --
+if ${1:condition} {
+    ${2:code}
+} else {
+    $0
+}

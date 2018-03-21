@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: computed var
+# key: v
+# --
+var ${1:name}: ${2:Type} {
+    $0
+}
