@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: var as a property
+# key: v
+# --
+var ${1:name}: ${2:Type}${3: = $0}

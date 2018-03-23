@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: guard
+# key: g
+# --
+guard ${1:condition} else { ${2:otherwise} }
