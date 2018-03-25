@@ -105,12 +105,12 @@
     default = simple
 [credential]
 	helper = osxkeychain
-[filter "lfs"]
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
 [filter "media"]
 	clean = git media clean %f
 	smudge = git media smudge %f
+	required = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
 	required = true
