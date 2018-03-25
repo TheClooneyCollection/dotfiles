@@ -2,6 +2,4 @@
 # name: forEach
 # key: f
 # --
-forEach {
-    $0
-}
+forEach { $0 }
