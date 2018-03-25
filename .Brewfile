@@ -26,6 +26,7 @@ cask 'google-drive'
 # drivers
 
 cask 'scansnap-manager' # for ScanSnap S1300i
+cask 'kensington-trackball-works' # for Kensington Trackballs
 
 ## devtools
 
