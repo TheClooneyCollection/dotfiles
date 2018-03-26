@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: UI - addSubview
-# key: a
+# key: add
 # --
-${superview}.addSubview($0)
+addSubview($0)

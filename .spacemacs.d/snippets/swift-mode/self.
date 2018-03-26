@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: self.
-# key: s
+# key: s.
 # --
 self.$0

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: enum
+# key: e
+# --
+enum ${1:name} {
+    $0
+}
