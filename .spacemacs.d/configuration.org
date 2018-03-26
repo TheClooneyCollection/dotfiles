@@ -161,6 +161,9 @@
 
 ** company
 
+   #+BEGIN_SRC emacs-lisp
+     (with-eval-after-load 'company
+   #+END_SRC
 *** Enable company globally
 
     #+BEGIN_SRC emacs-lisp
@@ -170,30 +173,38 @@
 *** Use Tab and Go
 
     #+BEGIN_SRC emacs-lisp
-      (company-tng-configure-default)
+      ;; (company-tng-configure-default)
     #+END_SRC
 
 *** Enable company in text mode too
 
     #+BEGIN_SRC emacs-lisp
-      (spacemacs|add-company-backends
-        :backends company-capf
-        :modes text-mode)
+      ;; (spacemacs|add-company-backends
+      ;;   :backends company-capf
+      ;;   :modes text-mode)
     #+END_SRC
 
 *** Enable company in swift mode too
 
     #+BEGIN_SRC emacs-lisp
-      (spacemacs|add-company-backends
-        :backends company-capf
-        :modes swift-mode)
+      ;; (spacemacs|add-company-backends
+      ;;   :backends company-capf
+      ;;   :modes swift-mode)
     #+END_SRC
 
 *** Fuzzy autocompletion
 
     #+BEGIN_SRC emacs-lisp
+      (add-hook 'company-mode-hook (lambda ()
+                                     (add-to-list 'company-backends 'company-capf)))
       (setq company-flx-limit 100)
       (company-flx-mode)
+    #+END_SRC
+
+*** The End
+
+    #+BEGIN_SRC emacs-lisp
+      )
     #+END_SRC
 
 ** compile
