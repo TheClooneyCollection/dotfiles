@@ -10,6 +10,7 @@ alias bb 'brew bundle --global'
 
 alias clean_derived_data 'rm -rf ~/Library/Developer/Xcode/DerivedData'
 alias xo 'open -a Xcode *.xcworkspace'
+alias xoo 'open -a Xcode *.xcodeproj'
 
 alias o 'open'
 alias oo 'open .'
