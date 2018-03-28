@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: @escaping
+# key: e
+# --
+@escaping $0

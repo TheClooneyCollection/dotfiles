@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: UITapGestureRecognizer
+# key: tap
+# --
+UITapGestureRecognizer(target: ${1:self}, action: #selector(${2:method}))

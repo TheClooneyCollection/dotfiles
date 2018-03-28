@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: [weak self]
+# key: w
+# --
+[weak self] $0

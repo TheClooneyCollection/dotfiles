@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: UI - addGestureRecognizer
+# key: add
+# --
+addGestureRecognizer($0)

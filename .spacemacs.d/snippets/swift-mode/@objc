@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: @objc
+# key: o
+# --
+@objc $0

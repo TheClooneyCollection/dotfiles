@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: spacemacs
+# key: s
+# --
+[spacemacs] $0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: fish
+# key: f
+# --
+[fish] $0
