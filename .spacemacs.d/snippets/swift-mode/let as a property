@@ -2,4 +2,4 @@
 # name: let as a property
 # key: l
 # --
-let ${1:name}: ${2:Type}${3: = $0}
+let ${1:name}${2:: ${3:Type}}${4: = $0}

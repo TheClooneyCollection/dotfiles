@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: convenience
+# key: c
+# --
+convenience $0
