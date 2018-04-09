@@ -46,7 +46,7 @@ This function should only modify configuration layer settings."
      yaml
 
      auto-completion
-     git
+     (git :packages (not magit-gitflow))
      (helm :variables helm-use-fuzzy 'source)
 
      spell-checking
