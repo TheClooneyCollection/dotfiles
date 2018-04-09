@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: func (no return)
+# name: func returns none
 # key: f
 # --
 func $1($2) {

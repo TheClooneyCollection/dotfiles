@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: func (with return)
+# name: func returns something
 # key: f
 # --
 func $1($2) -> $3 {

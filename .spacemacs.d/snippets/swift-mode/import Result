@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: import Result
+# key: i
+# --
+import Result

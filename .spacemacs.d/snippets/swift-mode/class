@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: class
+# key: c
+# --
+class ${1:ClassName}${2:: ${3:ParentClass}} {
+    $0
+}
