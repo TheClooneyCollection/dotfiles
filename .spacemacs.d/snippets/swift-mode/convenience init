@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: convenience init
+# key: i
+# --
+convenience init(${1:params}) {
+    self.init(${2:params})
+
+    $0
+}
