@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: UIView.animate
+# key: animate
+# --
+UIView.animate(withDuration: ${1:0.3}) {
+    $0
+}

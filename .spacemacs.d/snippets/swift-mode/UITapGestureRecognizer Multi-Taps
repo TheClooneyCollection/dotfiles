@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: UITapGestureRecognizer Multi-Taps
+# key: taps
+# --
+let ${1:name} = UITapGestureRecognizer(target: ${2:self}, action: #selector(${3:method}))
+$1.numberOfTapsRequired = ${4:taps}
+
+${5:view}.addGestureRecognizer($1)
