@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: func returns something
-# key: f
-# --
-func $1($2) -> $3 {
-    $0
-}

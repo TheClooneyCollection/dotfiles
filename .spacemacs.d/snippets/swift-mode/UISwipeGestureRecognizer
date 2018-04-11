@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: UISwipeGestureRecognizer
+# key: swipe
+# --
+let ${1:name} = UISwipeGestureRecognizer(target: ${2:self}, action: #selector(${3:method}))
+$1.direction = ${4:direction}
+
+${5:view}.addGestureRecognizer($1)

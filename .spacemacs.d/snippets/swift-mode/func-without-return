@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: func returns none
-# key: f
-# --
-func $1($2) {
-    $0
-}
