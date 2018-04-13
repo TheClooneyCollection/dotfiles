@@ -39,12 +39,30 @@ function mac_init
     install_fish_plugins
     install_python_packages
     install_ruby_gems
+    install_chisel
     # compile_vim_plugins
     clone_spacemacs
 
     disable_bouncing_dock_icons
 
     echo "Your mac is set up and ready!"
+end
+
+function install_chisel
+    if test -e ~/.lldbinit
+        echo "~/.lldbinit file exists"
+    else
+        echo "~/.lldbinit file does not exists... Creating one..."
+        touch ~/.lldbinit
+    end
+
+    grep -Fxq "command script import /usr/local/opt/chisel/libexec/fblldb.py" ~/.lldbinit
+    if test $status -eq 0
+        echo "Chisel is already instaled"
+    else
+        echo "command script import /usr/local/opt/chisel/libexec/fblldb.py" >> ~/.lldbinit
+        echo "Added chisel to ~/.lldbinit"
+    end
 end
 
 function clone_spacemacs
