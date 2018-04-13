@@ -142,6 +142,7 @@ brew 'ispell' # for emacs spell check
 brew 'carthage'
 brew 'swiftlint'
 brew 'swiftplate', args: ['HEAD']
+brew 'chisel'
 
 # brew 'fbsimctl' #, args: ['HEAD'] # facebook's open source simulator control tool
 
