@@ -330,6 +330,14 @@
       (setq org-babel-python-command "/usr/local/bin/python3")
     #+END_SRC
 
+
+**** Add =fish= shell to =org-babel-shell-names=
+
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'org-babel-shell-names "fish")
+       (org-babel-shell-initialize)
+     #+END_SRC
+
 **** Don't prompt me to confirm every time I want to evaluate a block.
 
      #+BEGIN_SRC emacs-lisp
