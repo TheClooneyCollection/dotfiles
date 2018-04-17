@@ -408,8 +408,8 @@
       (defun zen ()
         (interactive)
         (progn
-          (delete-other-windows)
           (td/switch-to-project-s-scratch-buffer)
+          (delete-other-windows)
           (td/dedicate-window-purpose)))
     #+END_SRC
 
