@@ -400,7 +400,25 @@
             (progn                            ; buffer does not exist
               (switch-to-buffer (get-buffer-create buffer-name))
               (org-mode)
-              (insert (format "#+TITLE %S\n\n" (projectile-project-name)))))))
+              (insert (format "\
+      ,#+TITLE %S
+
+      ,#+BEGIN_SRC swift
+
+      ,#+END_SRC
+
+      ,#+BEGIN_SRC emacs-lisp
+
+      ,#+END_SRC
+
+      ,#+BEGIN_SRC python :results output
+
+      ,#+END_SRC
+
+      ,#+BEGIN_SRC fish :results output
+
+      ,#+END_SRC
+      " (projectile-project-name)))))))
     #+END_SRC
 *** =zen=
 
