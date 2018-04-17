@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: typed let
-# key: l
+# key: ll
 # --
 let ${1:name}${2:: ${3:Type}}${4: = $0}

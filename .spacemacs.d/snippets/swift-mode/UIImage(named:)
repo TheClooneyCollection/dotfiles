@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: UIImage(named:)
+# key: u
+# --
+UIImage(named: "$0")

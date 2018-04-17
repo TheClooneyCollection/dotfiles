@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: override func
+# key: o
+# --
+override func ${1:name}()${2: -> ${3:Value }}{
+    super.$1()
+
+    $0
+}

@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: protocol
-# key: p
+# key: P
 # --
 protocol $0 {
 

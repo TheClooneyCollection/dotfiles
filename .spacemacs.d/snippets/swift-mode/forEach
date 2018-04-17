@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: forEach
-# key: f
+# key: ff
 # --
 forEach { $0 }
