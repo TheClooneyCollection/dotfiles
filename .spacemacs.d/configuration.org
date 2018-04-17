@@ -499,6 +499,10 @@
    #+END_SRC
 
    #+BEGIN_SRC emacs-lisp
+     (add-hook 'text-mode-hook 'yas-minor-mode)
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
      (setq yas-snippet-dirs '("~/.spacemacs.d/snippets"))
      (yas-reload-all)
    #+END_SRC
