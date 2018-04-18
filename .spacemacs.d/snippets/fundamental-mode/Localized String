@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Localized String
+# key: ls
+# --
+"${1:name}" = "${2:string}";

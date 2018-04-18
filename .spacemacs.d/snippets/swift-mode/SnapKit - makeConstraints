@@ -1,4 +1,4 @@
-# name: snp.makeConstraints
+# name: SnapKit - makeConstraints
 # key: m
 # --
 snp.makeConstraints { make in

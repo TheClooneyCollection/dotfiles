@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: NSLocalizedString
+# key: ls
+# --
+NSLocalizedString("${1:name}", comment: "")$0

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: SnapKit - greaterThanOrEqualTo
-# key: m
+# key: mg
 # --
 make.${attributes}.greaterThanOrEqualTo(${something})$0
