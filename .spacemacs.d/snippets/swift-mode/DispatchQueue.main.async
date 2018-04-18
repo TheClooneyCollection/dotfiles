@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: DispatchQueue.main.async
-# key: async
+# key: aa
 # --
 DispatchQueue.main.async {$0}
