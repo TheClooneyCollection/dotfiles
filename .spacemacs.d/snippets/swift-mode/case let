@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: case let
+# key: cl
+# --
+case let $0
