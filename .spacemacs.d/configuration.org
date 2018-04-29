@@ -279,6 +279,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (require 'org-eww)
+      (require 'ob-shell)
     #+END_SRC
 
 *** Settings
