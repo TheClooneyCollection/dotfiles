@@ -5,8 +5,8 @@ tap 'caskroom/cask'
 tap 'caskroom/fonts'
 tap 'neovim/neovim'
 tap 'facebook/fb'
-tap 'NicholasTD07/lychee-gold'
 tap 'd12frosted/emacs-plus'
+tap 'caskroom/drivers'
 
 # essential
 
@@ -22,6 +22,7 @@ cask 'macid'
 cask 'nvalt'
 cask 'sketch'
 cask 'google-drive'
+cask 'google-drive-file-stream'
 
 # drivers
 
@@ -31,7 +32,6 @@ cask 'kensington-trackball-works' # for Kensington Trackballs
 ## devtools
 
 cask 'iterm2'
-cask 'NicholasTD07/lychee-gold/dash' # v2
 cask 'reveal'
 cask 'paw'
 cask 'charles'
@@ -76,6 +76,7 @@ cask 'vagrant'
 mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
 mas 'DaisyDisk', id: 411643860
+# mas '1Keyboard', id:766939888
 
 ## utils
 
@@ -114,7 +115,7 @@ brew 'gpg'
 brew 'python'
 brew 'python3' # httpie
 brew 'ruby'
-brew 'haskell-stack'
+# brew 'haskell-stack'
 
 ## utils
 
