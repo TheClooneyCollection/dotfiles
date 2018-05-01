@@ -511,6 +511,14 @@
         ))
   #+END_SRC
 
+** swift-mode
+
+   #+BEGIN_SRC emacs-lisp
+     (setq
+      swift-mode:multiline-statement-offset 4
+      swift-mode:parenthesized-expression-offset 4)
+   #+END_SRC
+
 ** yasnippet
 
    #+BEGIN_SRC emacs-lisp
