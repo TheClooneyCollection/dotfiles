@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: switch self
+# key: ss
+# --
+switch self {
+    $0
+}

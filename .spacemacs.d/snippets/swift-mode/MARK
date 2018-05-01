@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: MARK
+# key: ma
+# --
+// MARK: $0

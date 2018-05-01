@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: switch case
+# key: c.
+# --
+case .${1:name}: $0

@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: reduce
-# key: r
+# key: rr
 # --
 ${1:array}.reduce(${2:initial}) {
      $0

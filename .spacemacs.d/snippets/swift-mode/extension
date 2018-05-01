@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name: extension
-# key: e
+# key: ex
 # --
-extension $0 {
+extension ${1:name} {
+    $0
 }

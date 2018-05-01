@@ -2,5 +2,4 @@
 # name: NSLocalizedString
 # key: ls
 # --
-NSLocalizedString("${1:name}", comment: "")
-"$1" = "${2:text}";
+NSLocalizedString("${1:name}", comment: "") // "$1" = "${2:text}";
