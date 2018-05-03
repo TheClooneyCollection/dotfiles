@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pprint
+# key: pp
+# --
+pprint.pprint($0, indent=2)
