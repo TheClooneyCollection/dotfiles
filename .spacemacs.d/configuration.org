@@ -521,9 +521,25 @@
 
 ** yasnippet
 
+*** Extended Functionality
 
+    #+BEGIN_SRC emacs-lisp
+      (defun td/yas-swift/lets-from (string)
+        (let*
+            ((string-pairs (split-string string ", "))
+             (pairs (mapcar (lambda (string) (split-string string ": ")) string-pairs))
+             (lets (mapcar (lambda (pair) (format "let %s: %s" (car pair) (nth 1 pair))) pairs)))
 
+             (string-join lets "\n")))
 
+      (defun td/yas-swift/assigns-from (string)
+        (let*
+            ((string-pairs (split-string string ", "))
+             (pairs (mapcar (lambda (string) (split-string string ": ")) string-pairs))
+             (assigns (mapcar (lambda (pair) (format "self.%s = %s" (car pair) (car pair))) pairs)))
+
+             (string-join assigns "\n")))
+    #+END_SRC
 
 *** Settings
     #+BEGIN_SRC emacs-lisp

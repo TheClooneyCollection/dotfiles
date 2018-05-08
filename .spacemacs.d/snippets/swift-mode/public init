@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: public init
+# key: pi
+# --
+${1:$(td/yas-swift/lets-from yas-text)}
+
+public init(${1:params}) {
+    ${1:$(td/yas-swift/assigns-from yas-text)}
+}
