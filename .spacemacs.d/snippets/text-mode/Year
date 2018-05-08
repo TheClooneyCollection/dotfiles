@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Year
+# key: y
+# --
+${1:`(format-time-string "%Y")`$0}
