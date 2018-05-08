@@ -192,8 +192,8 @@
 *** Fuzzy autocompletion
 
     #+BEGIN_SRC emacs-lisp
-      (setq company-flx-limit 100)
-      (company-flx-mode)
+      ;; (setq company-flx-limit 20)
+      ;; (company-flx-mode)
     #+END_SRC
 
 ** compile
