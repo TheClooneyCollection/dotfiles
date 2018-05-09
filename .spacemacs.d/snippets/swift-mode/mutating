@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: mutating
+# key: mu
+# --
+mutating $0
