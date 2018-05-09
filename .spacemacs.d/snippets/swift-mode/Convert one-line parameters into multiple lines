@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Convert one-line parameters into multiple lines
+# expand-env: ((yas-wrap-around-region 'nil))
+# --
+${0:`(td/yas-swift/convert-oneline-params-into-multiline (yas-selected-text))`}
