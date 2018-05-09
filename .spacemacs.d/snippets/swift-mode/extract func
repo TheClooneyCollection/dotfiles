@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: extract func
+# expand-env: ((yas-wrap-around-region 'nil))
+# --
+${1:name}()
+
+func $1 {
+    `yas-selected-text`}
