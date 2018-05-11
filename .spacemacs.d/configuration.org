@@ -128,6 +128,67 @@
      (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
    #+END_SRC
 
+* My own code
+** Refactoring Swift
+
+*** Format one-line parameters into multi-lines
+
+    #+BEGIN_SRC emacs-lisp
+      (defun td/swift/convert-oneline-params-into-multiline (string)
+        (let*
+            ((params (split-string string ", "))
+             (multiline-params (string-join params ",\n")))
+
+          (format "\n%s\n" multiline-params)))
+    #+END_SRC
+
+*** Tired of writing =public init= (generate lets and assigns automatically)
+
+    #+BEGIN_SRC emacs-lisp
+      (defun td/swift/param-pairs-from (param-string)
+        (let*
+            ((string-pairs (split-string param-string ", ")))
+
+          (mapcar (lambda (string) (split-string string ": ")) string-pairs))
+      )
+
+      (defun td/swift/lets-from (param-string)
+        (let*
+            ((param-pairs (td/swift/param-pairs-from param-string))
+             (lets (mapcar (lambda (pair) (format "let %s: %s" (car pair) (cadr pair))) param-pairs)))
+
+          (string-join lets "\n")))
+
+      (defun td/swift/assigns-from (param-string)
+        (let*
+            ((param-pairs (td/swift/param-pairs-from param-string))
+             (assigns (mapcar (lambda (pair) (format "self.%s = %s" (car pair) (car pair))) param-pairs)))
+
+          (string-join assigns "\n")))
+    #+END_SRC
+
+    #+name: tests
+    #+BEGIN_SRC emacs-lisp :results output
+      (print
+       (td/swift/assigns-from "name: String, age: Int, sex: Sex")
+       )
+
+      (print
+       (td/swift/lets-from "name: String, age: Int, sex: Sex")
+       )
+    #+END_SRC
+
+    #+RESULTS: tests
+    :
+    : "self.name = name
+    : self.age = age
+    : self.sex = sex"
+    :
+    : "let name: String
+    : let age: Int
+    : let sex: Sex"
+
+
 * Packages
 
 ** alert
@@ -513,67 +574,6 @@
    #+END_SRC
 
 ** yasnippet
-
-*** Extended Functionality
-
-**** Swift
-
-***** Format one-line parameters into multi-lines
-
-      #+BEGIN_SRC emacs-lisp
-        (defun td/swift/convert-oneline-params-into-multiline (string)
-          (let*
-              ((params (split-string string ", "))
-               (multiline-params (string-join params ",\n")))
-
-            (format "\n%s\n" multiline-params)))
-      #+END_SRC
-
-***** Tired of writing =public init= (generate lets and assigns automatically)
-
-      #+BEGIN_SRC emacs-lisp
-        (defun td/swift/param-pairs-from (param-string)
-          (let*
-              ((string-pairs (split-string param-string ", ")))
-
-            (mapcar (lambda (string) (split-string string ": ")) string-pairs))
-        )
-
-        (defun td/swift/lets-from (param-string)
-          (let*
-              ((param-pairs (td/swift/param-pairs-from param-string))
-               (lets (mapcar (lambda (pair) (format "let %s: %s" (car pair) (cadr pair))) param-pairs)))
-
-            (string-join lets "\n")))
-
-        (defun td/swift/assigns-from (param-string)
-          (let*
-              ((param-pairs (td/swift/param-pairs-from param-string))
-               (assigns (mapcar (lambda (pair) (format "self.%s = %s" (car pair) (car pair))) param-pairs)))
-
-            (string-join assigns "\n")))
-      #+END_SRC
-
-      #+name: tests
-      #+BEGIN_SRC emacs-lisp :results output
-        (print
-         (td/swift/assigns-from "name: String, age: Int, sex: Sex")
-         )
-
-        (print
-         (td/swift/lets-from "name: String, age: Int, sex: Sex")
-         )
-      #+END_SRC
-
-      #+RESULTS: tests
-      :
-      : "self.name = name
-      : self.age = age
-      : self.sex = sex"
-      :
-      : "let name: String
-      : let age: Int
-      : let sex: Sex"
 
 *** Settings
     #+BEGIN_SRC emacs-lisp
