@@ -235,7 +235,6 @@
     : let age: Int
     : let sex: Sex"
 
-
 * Packages
 
 ** alert
@@ -564,6 +563,12 @@
    #+BEGIN_SRC emacs-lisp
      (add-hook 'magit-mode-setup-hook 'td/dedicate-window-purpose)
    #+END_SRC
+** refactor
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (add-hook 'prog-mode-hook 'emr-initialize)
+   #+END_SRC
+
 ** slack
 
    #+BEGIN_SRC emacs-lisp
