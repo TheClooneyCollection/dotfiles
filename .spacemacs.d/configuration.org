@@ -131,6 +131,10 @@
 * My own code
 ** Refactoring Swift
 
+
+    [[https://github.com/ajvargo/ruby-refactor/blob/master/ruby-refactor.el][ruby-refactor/ruby-refactor.el at master · ajvargo/ruby-refactor · GitHub]]
+    [[https://github.com/Wilfred/emacs-refactor/blob/master/emr.el][emacs-refactor/emr.el at master · Wilfred/emacs-refactor · GitHub]]
+
 *** Format one-line parameters into multi-lines
 
     #+BEGIN_SRC emacs-lisp
@@ -141,7 +145,7 @@
     #+RESULTS:
     : td/swift/format-oneline-params-into-multiline
 
-    #+name: test
+    #+name: test formatting
     #+BEGIN_SRC emacs-lisp :results output
       (print
        (td/swift/format-oneline-params-into-multiline "name: String,age: Int, sex: Sex")
@@ -170,6 +174,60 @@
     #+BEGIN_SRC swift
       (name: String, age: Int, sex: Sex)
     #+END_SRC
+
+*** Split one-line parameters into multi-lines (universal)
+
+    #+BEGIN_SRC emacs-lisp :results output
+      (defun td/swift/current-line-has-parentheses-p ()
+        (interactive)
+        (let ((line (thing-at-point 'line)))
+          (td/swift//line-has-parentheses-p line)))
+
+      (defun td/swift//line-has-parentheses-p (line)
+        (let* ((index-of-start (string-match-p "(" line))
+               (index-of-end (string-match-p ")" line)))
+
+           (and index-of-start
+                index-of-end
+                (< index-of-start index-of-end))))
+
+
+      (defun td/swift/split-oneline-params-into-multiline ()
+        (interactive)
+        (let* ((line (buffer-substring-no-properties (line-beginning-position) (line-end-position)))
+               (has-starting-parenthesis (string-match-p "(" line))
+               (has-ending-parenthesis (string-match-p ")" line)))
+
+          (print has-starting-parenthesis)
+          (print has-ending-parenthesis)
+          )
+        )
+    #+END_SRC
+
+    #+RESULTS:
+
+    #+name: test line has parens
+    #+BEGIN_SRC emacs-lisp :results output
+      (print
+       (td/swift//line-has-parentheses-p "()"))
+      (print
+       (td/swift//line-has-parentheses-p "("))
+      (print
+       (td/swift//line-has-parentheses-p ")"))
+      (print
+       (td/swift//line-has-parentheses-p ")("))
+    #+END_SRC
+
+    #+RESULTS: test line has parens
+    :
+    : t
+    :
+    : nil
+    :
+    : nil
+    :
+    : nil
+
 
 *** Split one-line parameters into multi-lines (when selected in evil-visual mode)
 
@@ -214,7 +272,7 @@
           (string-join assigns "\n")))
     #+END_SRC
 
-    #+name: tests
+    #+name: test generations
     #+BEGIN_SRC emacs-lisp :results output
       (print
        (td/swift/assigns-from "name: String, age: Int, sex: Sex")
