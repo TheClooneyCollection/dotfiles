@@ -142,6 +142,32 @@
           (format "\n%s\n" multiline-params)))
     #+END_SRC
 
+    #+BEGIN_SRC swift
+      (
+          name: String,
+          age: Int,
+          sex: Sex
+      )
+    #+END_SRC
+
+*** Split one-line parameters into multi-lines (when selected in evil-visual mode)
+
+    #+BEGIN_SRC emacs-lisp :results output
+      (defun td/swift/visual/split-oneline-params-into-multiline ()
+        (interactive)
+        (let* ((visual-range (evil-visual-range))
+               (start (evil-range-beginning visual-range))
+               (end (evil-range-end visual-range))
+               (param-string (buffer-substring start end))
+               (multiline-param-string (td/swift/convert-oneline-params-into-multiline param-string)))
+
+          (delete-region start end)
+          (insert multiline-param-string)
+          (forward-line)
+
+          (indent-region start (point))))
+    #+END_SRC
+
 *** Tired of writing =public init= (generate lets and assigns automatically)
 
     #+BEGIN_SRC emacs-lisp
