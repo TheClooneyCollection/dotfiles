@@ -2,4 +2,4 @@
 # name: Convert one-line parameters into multiple lines
 # expand-env: ((yas-wrap-around-region 'nil))
 # --
-${0:`(td/swift/convert-oneline-params-into-multiline (yas-selected-text))`}
+${0:`(td/swift/format-oneline-params-into-multiline (yas-selected-text))`}

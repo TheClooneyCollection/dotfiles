@@ -134,20 +134,41 @@
 *** Format one-line parameters into multi-lines
 
     #+BEGIN_SRC emacs-lisp
-      (defun td/swift/convert-oneline-params-into-multiline (string)
-        (let*
-            ((params (split-string string ", "))
-             (multiline-params (string-join params ",\n")))
-
-          (format "\n%s\n" multiline-params)))
+      (defun td/swift/format-oneline-params-into-multiline (param-string)
+        (format "\n%s\n" (replace-regexp-in-string ", *" ",\n" param-string)))
     #+END_SRC
 
+    #+RESULTS:
+    : td/swift/format-oneline-params-into-multiline
+
+    #+name: test
+    #+BEGIN_SRC emacs-lisp :results output
+      (print
+       (td/swift/format-oneline-params-into-multiline "name: String,age: Int, sex: Sex")
+       )
+      (print
+       (td/swift/format-oneline-params-into-multiline "name: String, age: Int, sex: Sex")
+       )
+    #+END_SRC
+
+    #+RESULTS: test
+    #+begin_example
+
+    "
+    name: String,
+    age: Int,
+    sex: Sex
+    "
+
+    "
+    name: String,
+    age: Int,
+    sex: Sex
+    "
+    #+end_example
+
     #+BEGIN_SRC swift
-      (
-          name: String,
-          age: Int,
-          sex: Sex
-      )
+      (name: String, age: Int, sex: Sex)
     #+END_SRC
 
 *** Split one-line parameters into multi-lines (when selected in evil-visual mode)
@@ -159,7 +180,7 @@
                (start (evil-range-beginning visual-range))
                (end (evil-range-end visual-range))
                (param-string (buffer-substring start end))
-               (multiline-param-string (td/swift/convert-oneline-params-into-multiline param-string)))
+               (multiline-param-string (td/swift/format-oneline-params-into-multiline param-string)))
 
           (delete-region start end)
           (insert multiline-param-string)
