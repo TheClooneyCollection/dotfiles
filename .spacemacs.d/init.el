@@ -73,11 +73,12 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
-     company-flx
      helm-ls-git
      tox
 
      org-cliplink
+
+     emr
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
