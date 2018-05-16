@@ -685,41 +685,6 @@
 
 ** yasnippet
 
-*** Extended Functionality
-
-**** Swift
-
-***** Format one-line parameters into multi-lines
-
-      #+BEGIN_SRC emacs-lisp
-        (defun td/yas-swift/convert-oneline-params-into-multiline (string)
-          (let*
-              ((params (split-string string ", "))
-               (multiline-params (string-join params ",\n")))
-
-               (format "\n%s\n" multiline-params)))
-      #+END_SRC
-
-***** Tired of writing =public init= (generate lets and assigns automatically)
-
-      #+BEGIN_SRC emacs-lisp
-        (defun td/yas-swift/lets-from (string)
-          (let*
-              ((string-pairs (split-string string ", "))
-               (pairs (mapcar (lambda (string) (split-string string ": ")) string-pairs))
-               (lets (mapcar (lambda (pair) (format "public let %s: %s" (car pair) (nth 1 pair))) pairs)))
-
-               (string-join lets "\n")))
-
-        (defun td/yas-swift/assigns-from (string)
-          (let*
-              ((string-pairs (split-string string ", "))
-               (pairs (mapcar (lambda (string) (split-string string ": ")) string-pairs))
-               (assigns (mapcar (lambda (pair) (format "self.%s = %s" (car pair) (car pair))) pairs)))
-
-               (string-join assigns "\n")))
-      #+END_SRC
-
 *** Settings
     #+BEGIN_SRC emacs-lisp
       (with-eval-after-load 'yasnippet
