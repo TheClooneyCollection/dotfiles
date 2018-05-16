@@ -260,7 +260,7 @@
       (defun td/swift/lets-from (param-string)
         (let*
             ((param-pairs (td/swift/param-pairs-from param-string))
-             (lets (mapcar (lambda (pair) (format "let %s: %s" (car pair) (cadr pair))) param-pairs)))
+             (lets (mapcar (lambda (pair) (format "public let %s: %s" (car pair) (cadr pair))) param-pairs)))
 
           (string-join lets "\n")))
 
