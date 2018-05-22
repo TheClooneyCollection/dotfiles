@@ -396,6 +396,15 @@
      )
    #+END_SRC
 
+** gtags
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (add-hook 'swift-mode #'(lambda ()
+                              (progn
+                                (ggtags-mode)
+                                )))
+   #+END_SRC
+
 ** helm
 
 *** Notes
@@ -603,8 +612,6 @@
     #+BEGIN_SRC emacs-lisp
       (setq projectile-enable-caching t)
       (setq projectile-switch-project-action 'zen)
-
-      (setq projectile-tags-backend 'etag-select)
     #+END_SRC
 
 *** Discover projects

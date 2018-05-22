@@ -61,6 +61,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-sort-by-usage t)
      (git :packages (not magit-gitflow))
      (github :packages magithub)
+     gtags
      (helm :variables helm-use-fuzzy 'source)
 
      spell-checking
