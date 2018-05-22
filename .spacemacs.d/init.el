@@ -39,7 +39,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      haskell
      org
-     python
+     (python :variables python-backend 'anaconda)
      swift
 
      ;; Minor languages

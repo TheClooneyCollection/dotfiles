@@ -438,6 +438,12 @@
      (spacemacs/set-leader-keys "ff" 'helm-ls-git-ls)
    #+END_SRC
 
+** irc
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (setq rcirc-server-alist '(("irc.freenode.net" :channels ("#emacs") :nick "nickTD")))
+   #+END_SRC
+
 ** magit
 
    #+BEGIN_SRC emacs-lisp
