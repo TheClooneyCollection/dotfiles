@@ -49,7 +49,16 @@ This function should only modify configuration layer settings."
      shell-scripts
      yaml
 
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence "jk"
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-idle-delay 0.3
+                      auto-completion-private-snippets-directory nil
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-sort-by-usage t)
      (git :packages (not magit-gitflow))
      (github :packages magithub)
      (helm :variables helm-use-fuzzy 'source)
@@ -79,6 +88,7 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
+     company-flx
      helm-ls-git
      tox
 
