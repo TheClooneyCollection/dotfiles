@@ -427,6 +427,14 @@
     #+BEGIN_SRC emacs-lisp
       (setq helm-candidate-number-limit 20)
     #+END_SRC
+
+*** C-u and C-d to scroll up and down
+
+    #+BEGIN_SRC emacs-lisp :results output
+      (define-key helm-map (kbd "C-u") 'helm-previous-page)
+      (define-key helm-map (kbd "C-d") 'helm-next-page)
+    #+END_SRC
+
 *** ripgrep
 
     Settings
