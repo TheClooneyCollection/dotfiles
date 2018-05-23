@@ -15,8 +15,8 @@
 ** =;= <-> =:= in every modes
 
    #+BEGIN_SRC emacs-lisp
-     (global-set-key ":" (lambda () (interactive) (insert ";")))
-     (global-set-key ";" (lambda () (interactive) (insert ":")))
+     (global-set-key ":" #'(lambda () (interactive) (insert ";")))
+     (global-set-key ";" #'(lambda () (interactive) (insert ":")))
    #+END_SRC
 
 ** =f= and =t=
@@ -77,7 +77,7 @@
 ** =SPC oo= to edit =org-default-notes-file=
 
    #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys "oo" '(lambda ()
+     (spacemacs/set-leader-keys "oo" #'(lambda ()
                                         (interactive)
                                         (find-file org-default-notes-file)))
    #+END_SRC
@@ -125,7 +125,7 @@
 ** Save buffers when losing focus
 
    #+BEGIN_SRC emacs-lisp
-     (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+     (add-hook 'focus-out-hook #'(lambda () (save-some-buffers t)))
    #+END_SRC
 
 * My own code
@@ -254,20 +254,20 @@
         (let*
             ((string-pairs (split-string param-string ", ")))
 
-          (mapcar (lambda (string) (split-string string ": ")) string-pairs))
+          (mapcar #'(lambda (string) (split-string string ": ")) string-pairs))
       )
 
       (defun td/swift/lets-from (param-string)
         (let*
             ((param-pairs (td/swift/param-pairs-from param-string))
-             (lets (mapcar (lambda (pair) (format "public let %s: %s" (car pair) (cadr pair))) param-pairs)))
+             (lets (mapcar #'(lambda (pair) (format "public let %s: %s" (car pair) (cadr pair))) param-pairs)))
 
           (string-join lets "\n")))
 
       (defun td/swift/assigns-from (param-string)
         (let*
             ((param-pairs (td/swift/param-pairs-from param-string))
-             (assigns (mapcar (lambda (pair) (format "self.%s = %s" (car pair) (car pair))) param-pairs)))
+             (assigns (mapcar#'(lambda (pair) (format "self.%s = %s" (car pair) (car pair))) param-pairs)))
 
           (string-join assigns "\n")))
     #+END_SRC
@@ -388,7 +388,7 @@
    #+NAME: Add alert for when compilations finish
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'compilation-finish-functions
-                  (lambda (buffer string)
+                 #'(lambda (buffer string)
                     (alert string :title "Compilation finished")))
    #+END_SRC
 
