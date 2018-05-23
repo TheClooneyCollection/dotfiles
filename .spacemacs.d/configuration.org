@@ -399,6 +399,10 @@
 ** gtags
 
    #+BEGIN_SRC emacs-lisp :results output
+     (add-hook 'org-mode #'(lambda ()
+                               (progn
+                                 (ggtags-mode)
+                                 )))
      (add-hook 'swift-mode #'(lambda ()
                               (progn
                                 (ggtags-mode)
@@ -431,6 +435,13 @@
       (setq helm-grep-ag-command "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s")
       (setq helm-grep-ag-pipe-cmd-switches '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
     #+END_SRC
+
+** helm-gtags
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (spacemacs/helm-gtags-define-keys-for-mode 'swift-mode)
+     (spacemacs/helm-gtags-define-keys-for-mode 'org-mode)
+   #+END_SRC
 
 ** helm-ls-git
 
