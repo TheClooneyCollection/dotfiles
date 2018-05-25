@@ -406,7 +406,8 @@
      (add-hook 'swift-mode #'(lambda ()
                               (progn
                                 (ggtags-mode)
-                                )))
+                                (define-key evil-normal-state-map (kbd "<return>") 'helm-gtags-find-tag)
+                                (define-key evil-normal-state-map (kbd "<C-return>") 'helm-gtags-find-symbol))))
    #+END_SRC
 
 ** helm
@@ -590,6 +591,7 @@
    #+END_SRC
 
 ** projectile
+
 *** =*scratch*= buffer per project
 
     #+BEGIN_SRC emacs-lisp
