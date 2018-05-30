@@ -52,7 +52,6 @@ This function should only modify configuration layer settings."
      auto-completion
      (git :packages (not magit-gitflow))
      (github :packages magithub)
-     gtags
      (helm :variables helm-use-fuzzy 'source)
 
      spell-checking
