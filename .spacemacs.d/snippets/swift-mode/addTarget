@@ -2,4 +2,4 @@
 # name: addTarget
 # key: aa
 # --
-.addTarget(${1:self}, action: #selector(${2:method}), for: ${3:.touchUpInside})
+addTarget(${1:self}, action: #selector(${2:method}), for: ${3:.touchUpInside})
