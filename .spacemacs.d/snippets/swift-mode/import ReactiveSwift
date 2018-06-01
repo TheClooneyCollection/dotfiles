@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: import ReactiveSwift
+# key: i
+# --
+import ReactiveSwift
