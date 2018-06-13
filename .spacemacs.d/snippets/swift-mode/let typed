@@ -2,4 +2,4 @@
 # name: typed let
 # key: ll
 # --
-let ${1:name}${2:: ${3:Type}}${4: = $0}
+let ${1:name}${2:: ${3:Type}}$0
