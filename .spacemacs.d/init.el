@@ -44,6 +44,7 @@ This function should only modify configuration layer settings."
 
      ;; Minor languages
      csv
+     (javascript :variables javascript-backend 'tern)
      json
      (markdown :packages markdown-mode)
      (ruby :variables ruby-enable-enh-ruby-mode t)

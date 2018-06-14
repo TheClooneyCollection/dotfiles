@@ -115,6 +115,7 @@ brew 'gpg'
 brew 'python'
 brew 'python3' # httpie
 brew 'ruby'
+brew 'npm'
 # brew 'haskell-stack'
 
 ## utils
@@ -175,3 +176,5 @@ brew 'libtermkey'    # neovim
 brew 'libvterm'      # neovim
 brew 'gettext'       # neovim
 brew 'jemalloc'      # neovim
+
+brew 'icu4c'         # npm

@@ -48,6 +48,11 @@ function mac_init
     echo "Your mac is set up and ready!"
 end
 
+function install_node_packages
+    npm install -g js-beautify tern eslint
+    # npm install -g jshint
+end
+
 function install_chisel
     if test -e ~/.lldbinit
         echo "~/.lldbinit file exists"
