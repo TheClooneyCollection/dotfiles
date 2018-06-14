@@ -123,12 +123,6 @@
 
 * Behaviors
 
-** Be Zen when Emacs loads
-
-   #+BEGIN_SRC emacs-lisp :results output
-     (td/zen)
-   #+END_SRC
-
 ** Save buffers when losing focus
 
    #+BEGIN_SRC emacs-lisp
@@ -746,3 +740,11 @@
     #+BEGIN_SRC emacs-lisp
       )
     #+END_SRC
+
+* Behaviors
+
+** Be Zen when Emacs loads
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (td/zen)
+   #+END_SRC
