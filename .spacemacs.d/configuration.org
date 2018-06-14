@@ -403,6 +403,12 @@
      )
    #+END_SRC
 
+** csv
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (add-hook 'csv-mode-hook #'csv-align-fields)
+   #+END_SRC
+
 ** helm
 
 *** Notes

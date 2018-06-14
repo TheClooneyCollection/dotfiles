@@ -43,6 +43,7 @@ This function should only modify configuration layer settings."
      swift
 
      ;; Minor languages
+     csv
      json
      (markdown :packages markdown-mode)
      (ruby :variables ruby-enable-enh-ruby-mode t)
