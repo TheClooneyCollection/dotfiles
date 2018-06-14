@@ -122,6 +122,12 @@
 
 * Behaviors
 
+** Be Zen when Emacs loads
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (td/zen)
+   #+END_SRC
+
 ** Save buffers when losing focus
 
    #+BEGIN_SRC emacs-lisp
@@ -606,7 +612,7 @@
 *** =zen=
 
     #+BEGIN_SRC emacs-lisp
-      (defun zen ()
+      (defun td/zen ()
         (interactive)
         (progn
           (td/switch-to-project-s-scratch-buffer)
@@ -618,7 +624,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (setq projectile-enable-caching t)
-      (setq projectile-switch-project-action 'zen)
+      (setq projectile-switch-project-action #'td/zen)
 
       (setq projectile-tags-backend 'etags)
     #+END_SRC
