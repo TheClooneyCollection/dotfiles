@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: context
+# key: ct
+# --
+context("when $1") {
+    $0
+}

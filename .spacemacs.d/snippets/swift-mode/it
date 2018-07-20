@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: it
+# key: ii
+# --
+it("$1") { $0 }

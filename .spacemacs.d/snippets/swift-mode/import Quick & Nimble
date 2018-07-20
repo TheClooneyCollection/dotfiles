@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: import Quick & Nimble
+# key: i
+# --
+import Quick
+import Nimble

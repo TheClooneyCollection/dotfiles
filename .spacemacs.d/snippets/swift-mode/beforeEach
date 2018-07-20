@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: beforeEach
+# key: bb
+# --
+beforeEach { $0 }
