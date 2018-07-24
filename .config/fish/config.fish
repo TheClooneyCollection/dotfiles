@@ -26,7 +26,7 @@ alias vu 'va up'
 alias vup 'va up --provision'
 alias vsh 'va ssh'
 
-# brew 
+# brew
 function update_casks --description "Update outdated casks"
     brew cask outdated
 
