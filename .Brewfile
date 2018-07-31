@@ -16,8 +16,9 @@ brew 'mas' # cli for Mac App Store
 
 ## apps
 
-cask 'opera'
+cask 'google-chrome' # bloody hangout
 cask 'firefox'
+cask 'franz'
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
