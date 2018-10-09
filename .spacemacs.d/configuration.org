@@ -425,8 +425,9 @@
 *** C-u and C-d to scroll up and down
 
     #+BEGIN_SRC emacs-lisp :results output
-      (define-key helm-map (kbd "C-u") #'helm-previous-page)
-      (define-key helm-map (kbd "C-d") #'helm-next-page)
+      (with-eval-after-load 'helm
+        (define-key helm-map (kbd "C-u") #'helm-previous-page)
+        (define-key helm-map (kbd "C-d") #'helm-next-page))
     #+END_SRC
 
 *** ripgrep
@@ -646,7 +647,8 @@
                                           ;("^*scratch: [\"a-zA-Z0-9]" . edit)
                                           ))
 
-     (purpose-compile-user-configuration)
+     (with-eval-after-load 'purpose
+       (purpose-compile-user-configuration))
    #+END_SRC
 
    #+BEGIN_SRC emacs-lisp
