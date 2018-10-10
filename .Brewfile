@@ -29,6 +29,8 @@ cask 'google-drive-file-stream'
 
 cask 'scansnap-manager' # for ScanSnap S1300i
 cask 'kensington-trackball-works' # for Kensington Trackballs
+cask 'evoluent-vertical-mouse-device-controller'
+
 
 ## devtools
 
@@ -121,7 +123,6 @@ brew 'npm'
 
 ## utils
 
-brew 'fzf'       # fuzzy finder
 brew 'ctags'
 brew 'cdiff'
 
