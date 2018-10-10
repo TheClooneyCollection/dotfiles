@@ -98,7 +98,7 @@
 ** centered-cursor
 
    #+BEGIN_SRC emacs-lisp
-     ;; (spacemacs/toggle-centered-point-globally-on)
+     (spacemacs/toggle-centered-point-globally-on)
    #+END_SRC
 
 * Functions
