@@ -1,10 +1,5 @@
 set -x PATH $PATH ~/bin/
 
-# fzf
-set -g FZF_DEFAULT_COMMAND 'git ls-files'
-set -g FZF_DEFAULT_OPTS '--height 40%'
-fzf_key_bindings
-
 alias b 'bundle'
 alias bb 'brew bundle --global'
 
