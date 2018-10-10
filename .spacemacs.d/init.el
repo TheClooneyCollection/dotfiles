@@ -69,7 +69,7 @@ This function should only modify configuration layer settings."
 
      (version-control :variables version-control-diff-tool 'git-gutter+)
 
-     (spacemacs-navigation :packages golden-ratio)
+     spacemacs-navigation
      spacemacs-purpose
      )
 
