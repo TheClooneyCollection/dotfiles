@@ -1,0 +1,5 @@
+## games
+
+cask 'minecraft'
+cask 'league-of-legends'
+cask 'eve-launcher'

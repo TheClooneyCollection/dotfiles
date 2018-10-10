@@ -63,10 +63,6 @@ cask 'gfxCardStatus' # for work laptop
 
 cask 'squirrel'
 
-## games
-
-cask 'minecraft'
-
 ## virtual machine environments
 
 cask 'virtualbox'
