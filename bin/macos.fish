@@ -80,9 +80,9 @@ end
 
 function is_xcode_indexing
     if test (defaults read com.apple.dt.XCode IDEIndexDisable) -eq 0
-        echo "NOPE"
-    else
         echo "Yes, it is"
+    else
+        echo "NOPE"
     end
 end
 
