@@ -76,9 +76,18 @@ end
 
 function enable_xcode_indexing
     defaults write com.apple.dt.XCode IDEIndexDisable 0
+    defaults delete com.apple.dt.XCode IDEIndexDisable
+    echo "Remember to double check with is_xcode_indexing"
 end
 
 function is_xcode_indexing
+    defaults read com.apple.dt.XCode IDEIndexDisable 1>/dev/null 2>1
+
+    if test $status -eq 1 # cannot find the key. Must be enabled!
+        echo "Yes, it is"
+        return
+    end
+
     if test (defaults read com.apple.dt.XCode IDEIndexDisable) -eq 0
         echo "Yes, it is"
     else
