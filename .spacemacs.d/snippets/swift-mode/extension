@@ -2,6 +2,5 @@
 # name: extension
 # key: ex
 # --
-extension ${1:name} {
-    $0
+extension $0 {
 }
