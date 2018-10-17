@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Date time
+# key: dt
+# --
+`(format-time-string "%A, %d %B %Y, Week %W")`

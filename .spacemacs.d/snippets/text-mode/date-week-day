@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: date - number of week - day
-# key: dt
-# --
-${1:`(format-time-string "%Y-%m-%d Week %W %A")`$0}

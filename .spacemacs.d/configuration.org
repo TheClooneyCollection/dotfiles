@@ -102,6 +102,25 @@
    #+END_SRC
 
 * Functions
+** Date and Time
+*** Yesterday
+
+    #+BEGIN_SRC emacs-lisp :results output
+      (defun td/yesterday ()
+        "The time now, but yesterday"
+        (let ((day (* (* 60 60) 24)))
+          (time-subtract (current-time) day)))
+    #+END_SRC
+
+*** Format time into string
+
+    #+BEGIN_SRC emacs-lisp :results output
+      (defun td/format-time-string (&optional time)
+        "Format the time TIME, or now if omitted or nil,
+      into strings like \"Tuesday, 16 October 2018, Week 42\"."
+        (format-time-string "%A, %d %B %Y, Week %W" time))
+    #+END_SRC
+
 ** Edit Spacemacs's configuration
 
    #+BEGIN_SRC emacs-lisp
