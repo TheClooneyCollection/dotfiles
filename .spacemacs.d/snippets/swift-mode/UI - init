@@ -2,7 +2,9 @@
 # name: UI - init
 # key: i
 # --
-init(${params}) {
+convenience init(${params}) {
+    self.init(frame: .zero)
+
     $0
 }
 
