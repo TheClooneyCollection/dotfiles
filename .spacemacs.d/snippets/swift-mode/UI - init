@@ -2,8 +2,8 @@
 # name: UI - init
 # key: i
 # --
-convenience init(${params}) {
-    self.init(frame: .zero)
+init(${params}) {
+    super.init(frame: .zero)
 
     $0
 }
