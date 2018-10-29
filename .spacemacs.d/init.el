@@ -331,7 +331,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
@@ -476,7 +476,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
   ;; Fix no prompt for GPG in the GUI version of Emacs
   (setq epa-pinentry-mode 'loopback))
-  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
