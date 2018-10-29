@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: MARK
-# key: ma
+# key: mk
 # --
-// MARK: $0
+// MARK: - $0
