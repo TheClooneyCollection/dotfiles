@@ -2,4 +2,4 @@
 # name: weak var
 # key: wv
 # --
-weak var
+weak var $0
