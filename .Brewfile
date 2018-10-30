@@ -19,7 +19,7 @@ brew 'mas' # cli for Mac App Store
 cask 'google-chrome' # bloody hangout
 cask 'firefox'
 cask 'franz'
-cask 'unlox'
+cask 'macid'
 cask 'nvalt'
 cask 'sketch'
 cask 'google-drive'
