@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: Date time - yesterday
-# key: dty
+# key: yt
 # --
-`(td/format-time-string (yesterday))`
+`(td/format-time-string (td/yesterday))`

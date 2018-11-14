@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: typealias
-# key: t
+# key: ta
 # --
 typealias ${1:Name} = ${2:Type}
