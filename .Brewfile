@@ -6,6 +6,7 @@ tap 'caskroom/fonts'
 tap 'facebook/fb'
 tap 'd12frosted/emacs-plus'
 tap 'caskroom/drivers'
+tap 'NicholasTD07/lychee-gold'
 
 # essential
 
@@ -21,7 +22,6 @@ cask 'franz'
 cask 'macid'
 cask 'nvalt'
 cask 'sketch'
-cask 'google-drive'
 cask 'google-drive-file-stream'
 
 # drivers
@@ -64,8 +64,8 @@ cask 'squirrel'
 
 ## virtual machine environments
 
-cask 'virtualbox'
-cask 'vagrant'
+# cask 'virtualbox'
+# cask 'vagrant'
 
 # mas
 
