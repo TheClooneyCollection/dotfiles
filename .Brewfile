@@ -3,7 +3,6 @@
 tap 'homebrew/bundle'
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
-tap 'neovim/neovim'
 tap 'facebook/fb'
 tap 'd12frosted/emacs-plus'
 tap 'caskroom/drivers'
@@ -105,7 +104,6 @@ brew 'git'
 brew 'git-lfs'
 
 brew 'd12frosted/emacs-plus/emacs-plus'
-brew 'neovim'
 
 brew 'gpg'
 
@@ -165,14 +163,5 @@ brew 'pcre2'         # fish
 brew 'cmake'         # plugin YCM needs it
 # brew 'ghc'           # haskell
 brew 'cabal-install' # haskell
-
-brew 'libtool'       # neovim
-brew 'libuv'         # neovim
-brew 'msgpack'       # neovim
-brew 'unibilium'     # neovim
-brew 'libtermkey'    # neovim
-brew 'libvterm'      # neovim
-brew 'gettext'       # neovim
-brew 'jemalloc'      # neovim
 
 brew 'icu4c'         # npm
