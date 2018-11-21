@@ -145,7 +145,7 @@ function install_ruby_gems
     echo "Installing Ruby gems"
     echo ""
 
-    gem install bundler cocoapods neovim rcodetools
+    gem install bundler cocoapods rcodetools jekyll
 
     echo ""
     echo "Done!"
