@@ -112,7 +112,6 @@ brew 'gpg'
 brew 'python'
 brew 'python3' # httpie
 brew 'ruby'
-brew 'npm'
 # brew 'haskell-stack'
 
 ## utils
