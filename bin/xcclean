@@ -2,6 +2,12 @@
 
 """
 Removes files too small (length=0) in xcode's intermediate build folder
+
+Inputs:
+
+ld: file too small (length=0) file '/Users/nicholas.tian/Library/Developer/Xcode/DerivedData/path/to/some/object/file.o' for architecture x86_64
+
+Note: Hit enter five times to start the program.
 """
 
 import re
