@@ -127,7 +127,7 @@ function install_python_packages
     echo "Installing Python packages"
     echo ""
 
-    set packages cdiff ipython virtualenv pip-tools tox jedi pygments pelican markdown
+    set packages cdiff ipython virtualenv pip-tools tox jedi pygments pelican markdown invoke
 
     pip2 install $packages
     pip3 install $packages
