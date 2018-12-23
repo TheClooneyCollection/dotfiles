@@ -145,9 +145,10 @@
 ** Dedicate a window's purpose
 
    #+BEGIN_SRC emacs-lisp
-     (defun td/dedicate-window-purpose ()
-       (interactive)
-       (purpose-set-window-purpose-dedicated-p nil t))
+     (with-eval-after-load 'window-purpose-core
+       (defun td/dedicate-window-purpose ()
+         (interactive)
+         (purpose-set-window-purpose-dedicated-p nil t)))
    #+END_SRC
 
 * Behaviors
