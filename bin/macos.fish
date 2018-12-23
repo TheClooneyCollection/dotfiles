@@ -42,6 +42,7 @@ function mac_init
     install_chisel
     # compile_vim_plugins
     clone_spacemacs
+    install_pelican
 
     disable_bouncing_dock_icons
 
@@ -127,7 +128,7 @@ function install_python_packages
     echo "Installing Python packages"
     echo ""
 
-    set packages cdiff ipython virtualenv pip-tools tox jedi pygments pelican markdown invoke
+    set packages cdiff ipython virtualenv pip-tools tox jedi pygments
 
     pip2 install $packages
     pip3 install $packages
@@ -150,6 +151,15 @@ function install_ruby_gems
     echo ""
     echo "Done!"
     echo ""
+end
+
+function install_pelican
+    set packages pelican markdown invoke
+
+    pip2 install $packages
+    pip3 install $packages
+
+    brew install pandoc
 end
 
 function disable_bouncing_dock_icons
