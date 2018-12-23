@@ -43,6 +43,7 @@ This function should only modify configuration layer settings."
      swift
 
      ;; Minor languages
+     html
      csv
      (javascript :variables javascript-backend 'tern)
      json
