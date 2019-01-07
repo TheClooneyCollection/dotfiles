@@ -184,9 +184,12 @@
       (print
        (td/swift/format-oneline-params-into-multiline "name: String, age: Int, sex: Sex")
        )
+      (print
+       (td/swift/format-oneline-params-into-multiline "either: Either<Left, right>, name: String, age: Int")
+       )
     #+END_SRC
 
-    #+RESULTS: test
+    #+RESULTS: test formatting
     #+begin_example
 
     "
@@ -199,6 +202,13 @@
     name: String,
     age: Int,
     sex: Sex
+    "
+
+    "
+    either: Either<Left,
+    right>,
+    name: String,
+    age: Int
     "
     #+end_example
 
