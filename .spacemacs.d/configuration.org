@@ -399,7 +399,7 @@
 *** Fuzzy autocompletion
 
     #+BEGIN_SRC emacs-lisp
-      (setq company-flx-limit 20)
+      ;(setq company-flx-limit 20)
 
       (add-hook 'emacs-lisp-mode-hook #'company-flx-mode)
     #+END_SRC
