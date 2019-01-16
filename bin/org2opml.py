@@ -77,6 +77,8 @@ class OrgParser(object):
             match = self.ROOT_RE.search(line)
             if match:
                 self.root_name = match.group('root')
+                # NOTE|HACK: This makes the output files work with the MindNode app on macOS
+                self.title = self.root_name
 
     def add_node(self, line):
         """Create a node. Set the level and text. Assigns the parent Node
