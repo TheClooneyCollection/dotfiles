@@ -83,6 +83,8 @@ mas 'Keynote', id: 409183694
 
 mas 'Disk Care', id: 913724705
 
+mas 'MindNode 5', id: 1289197285
+
 ## iOS
 
 mas 'GIPHY CAPTURE', id: 668208984
