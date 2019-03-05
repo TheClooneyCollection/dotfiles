@@ -74,7 +74,7 @@ cask 'squirrel'
 mas '1Password', id: 443987910
 mas 'Day One', id: 1055511498
 mas 'DaisyDisk', id: 411643860
-# mas '1Keyboard', id:766939888
+mas 'Agenda.', id: 1287445660
 
 ## utils
 
