@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: updateConstraints
-# key: update
+# key: upd
 # --
 snp.updateConstraints { make in
     $0
