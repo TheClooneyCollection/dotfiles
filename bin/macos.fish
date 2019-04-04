@@ -32,6 +32,8 @@ function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
 
+    touch ~/.config/fish/local.fish
+
     disable_xcode_indexing
 
     set_fish_as_default_shell

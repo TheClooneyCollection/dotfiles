@@ -1,3 +1,5 @@
+source ~/.config/fish/local.fish
+
 set -x PATH $PATH ~/bin/
 
 alias b 'bundle'
