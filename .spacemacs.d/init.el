@@ -62,6 +62,7 @@ This function should only modify configuration layer settings."
      syntax-checking
 
      osx
+     emoji
 
      (shell :variables
             shell-enable-smart-eshell t
