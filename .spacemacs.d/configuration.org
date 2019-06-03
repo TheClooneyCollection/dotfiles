@@ -543,6 +543,7 @@
                       ("ex" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
                       ("s" "#+BEGIN_SRC swift\n?\n#+END_SRC")
                       ("f" "#+BEGIN_SRC sh :results output\n?\n#+END_SRC")
+                      ("sh" "#+BEGIN_SRC sh :results output\n?\n#+END_SRC")
                       ("ss" "#+BEGIN_SRC ?\n\n#+END_SRC")
                       ("r" "#+BEGIN_SRC ruby :results output\n?\n#+END_SRC")
                       ("p" "#+BEGIN_SRC python :results output\n?\n#+END_SRC")))
