@@ -32,7 +32,7 @@ function mac_init
     echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
 
-    touch ~/.config/fish/local.fish
+    init_local_fish_config
 
     disable_xcode_indexing
 
@@ -49,6 +49,10 @@ function mac_init
     disable_bouncing_dock_icons
 
     echo "Your mac is set up and ready!"
+end
+
+function init_local_fish_config
+    touch ~/.config/fish/local.fish
 end
 
 function install_node_packages
