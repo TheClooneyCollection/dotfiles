@@ -21,6 +21,10 @@ git pull origin master
 # You should have all the files :)
 ```
 
+#### Log into Your Apple ID in App Store
+
+Log into your Apple ID in App Store.
+
 #### Install tools and apps with Homebrew Bundle
 
 `brew bundle --global -v`
