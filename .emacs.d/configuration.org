@@ -115,6 +115,16 @@
     (dot-emacs/edit-configuration)))
 #+END_SRC
 
+** Switch to Messages buffer
+#+BEGIN_SRC emacs-lisp
+  (defun dot-emacs/switch-to-messages-buffer ()
+    (interactive)
+    (switch-to-buffer "*Messages*"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+#+END_SRC
 * Set up =use-package=
 ** Always install all the packages
 
@@ -268,8 +278,10 @@ See https://github.com/jwiegley/emacs-async for explanation
   (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
 
   (general-define-key "fs" 'save-buffer)
+
   (general-define-key "0" 'delete-other-windows)
   (general-define-key "9" 'zen)
+
   (general-define-key "qq" 'save-buffers-kill-terminal)
 
   (general-define-key "hk" 'describe-key)
