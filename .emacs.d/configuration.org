@@ -232,6 +232,11 @@ See https://github.com/jwiegley/emacs-async for explanation
     (add-to-list 'window-size-change-functions 'golden-ratio)
     (golden-ratio-mode))
 #+END_SRC
+** hl-todo
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-todo
+    :config (global-hl-todo-mode))
+#+END_SRC
 * Keys
 ** guide-key
 
