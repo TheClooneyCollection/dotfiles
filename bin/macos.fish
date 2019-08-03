@@ -35,7 +35,7 @@ function mac_init
     init_local_fish_config
     init_folders
 
-    disable_xcode_indexing
+    # disable_xcode_indexing
 
     set_fish_as_default_shell
 
@@ -44,8 +44,8 @@ function mac_init
     install_ruby_gems
     install_chisel
     # compile_vim_plugins
-    clone_spacemacs
-    install_pelican
+    # clone_spacemacs
+    # install_pelican
 
     disable_bouncing_dock_icons
     only_show_running_apps_in_dock
