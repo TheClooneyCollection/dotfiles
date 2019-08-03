@@ -994,6 +994,14 @@ When opening magit, the wait for magithub to refresh data, kills me...
 
 
 
+** restart-emacs
+#+BEGIN_SRC emacs-lisp
+  (use-package restart-emacs
+    :defer t
+    :init
+    (general-define-key "qr" #'restart-emacs))
+#+END_SRC
+
 ** winum
 #+BEGIN_SRC emacs-lisp
   (use-package winum
