@@ -59,6 +59,7 @@ end
 
 function init_folders
     mkdir ~/proj
+    mkdir ~/fork
     mkdir ~/work
 end
 

@@ -51,7 +51,7 @@ end
 
 # shell
 
-function mkdir
+function md
     command mkdir -p $argv
     cd $argv
 end
