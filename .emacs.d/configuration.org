@@ -122,9 +122,6 @@
     (switch-to-buffer "*Messages*"))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
-#+END_SRC
 * Set up =use-package=
 ** Always install all the packages
 
@@ -273,6 +270,7 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+BEGIN_SRC emacs-lisp
   :config
 
+  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
   (general-define-key "rb" 'eval-buffer)
   (general-define-key "rr" 'eval-region)
   (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
