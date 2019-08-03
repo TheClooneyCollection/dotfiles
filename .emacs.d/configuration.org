@@ -1210,7 +1210,12 @@ When opening magit, the wait for magithub to refresh data, kills me...
                       :states '(normal)
                       "t" 'helm-gtags-parse-file))
 #+END_SRC
-
+** helm-themes
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-themes
+    :config
+    (general-define-key "tt" #'helm-themes))
+#+END_SRC
 * Third-party code
 
 ** rcodetools
