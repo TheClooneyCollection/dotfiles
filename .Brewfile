@@ -26,7 +26,7 @@ cask 'google-drive-file-stream'
 
 # drivers
 
-cask 'scansnap-manager' # for ScanSnap S1300i
+cask 'fujitsu-scansnap-manager-s1300' # for ScanSnap S1300i
 cask 'kensington-trackball-works' # for Kensington Trackballs
 cask 'evoluent-vertical-mouse-device-controller'
 
@@ -67,6 +67,48 @@ cask 'squirrel'
 # cask 'virtualbox'
 # cask 'vagrant'
 
+# brews
+
+## core
+
+brew 'fish'
+brew 'git'
+brew 'git-lfs'
+
+brew 'vim'
+brew 'd12frosted/emacs-plus/emacs-plus'
+
+brew 'gpg'
+
+### lang
+
+brew 'python@2'
+brew 'python'
+brew 'ruby'
+# brew 'haskell-stack'
+
+## utils
+
+brew 'ctags'
+brew 'ydiff'
+
+brew 'httpie'
+
+brew 'coreutils' # gln for relative symlink
+brew 'tree'
+brew 'ripgrep'
+brew 'aria2'
+brew 'mosh'
+
+brew 'ispell' # for emacs spell check
+
+## iOS
+
+brew 'carthage'
+brew 'swiftlint'
+brew 'swiftplate', args: ['HEAD']
+brew 'chisel'
+
 # mas
 
 ## essential
@@ -97,72 +139,3 @@ mas 'GIPHY CAPTURE', id: 668208984
 
 mas 'Mini Metro', id: 1047760200 # Resource planning game
 
-# brews
-
-## core
-
-brew 'fish'
-brew 'git'
-brew 'git-lfs'
-
-brew 'd12frosted/emacs-plus/emacs-plus'
-
-brew 'gpg'
-
-### lang
-
-brew 'python'
-brew 'python3' # httpie
-brew 'ruby'
-# brew 'haskell-stack'
-
-## utils
-
-brew 'ctags'
-brew 'cdiff'
-
-brew 'global', args: [
-       "--with-ctags", # neovim still needs ctags
-       "--with-pygments",
-     ]
-
-brew 'httpie'
-
-brew 'coreutils' # gln for relative symlink
-brew 'tree'
-brew 'ripgrep'
-brew 'aria2'
-brew 'mosh'
-
-brew 'ispell' # for emacs spell check
-
-## iOS
-
-brew 'carthage'
-brew 'swiftlint'
-brew 'swiftplate', args: ['HEAD']
-brew 'chisel'
-
-# brew 'fbsimctl' #, args: ['HEAD'] # facebook's open source simulator control tool
-
-## make tools
-
-brew 'autoconf'
-brew 'automake'
-brew 'pkg-config'
-
-## dependencies
-
-brew 'openssl'       # python python3 ruby
-brew 'readline'      # python python3 ruby
-brew 'gdbm'          # python python3
-brew 'xz'            # python3 the_silver_searcher
-brew 'pcre'          # the_silver_searcher
-brew 'sqlite'        # python
-brew 'libyaml'       # ruby
-brew 'pcre2'         # fish
-brew 'cmake'         # plugin YCM needs it
-# brew 'ghc'           # haskell
-brew 'cabal-install' # haskell
-
-brew 'icu4c'         # npm

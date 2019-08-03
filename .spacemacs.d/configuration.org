@@ -384,7 +384,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (spacemacs|add-company-backends
-        :backends company-capf
+        :backends (company-capf company-dabbrev)
         :modes text-mode)
     #+END_SRC
 
@@ -392,9 +392,20 @@
 
     #+BEGIN_SRC emacs-lisp
       (spacemacs|add-company-backends
-        :backends company-capf
+        :backends (company-capf company-dabbrev)
         :modes swift-mode)
     #+END_SRC
+
+*** Enable company in fish-shell mode too
+
+    #+BEGIN_SRC emacs-lisp
+      (spacemacs|add-company-backends
+        :backends (company-capf company-dabbrev)
+        :modes fish-mode)
+    #+END_SRC
+
+    #+RESULTS:
+    | spacemacs//init-company-fish-mode | company-mode |
 
 *** Fuzzy autocompletion
 

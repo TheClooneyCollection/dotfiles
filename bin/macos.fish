@@ -33,6 +33,7 @@ function mac_init
     echo "Initializing your Mac :)"
 
     init_local_fish_config
+    init_folders
 
     disable_xcode_indexing
 
@@ -47,12 +48,18 @@ function mac_init
     install_pelican
 
     disable_bouncing_dock_icons
+    only_show_running_apps_in_dock
 
     echo "Your mac is set up and ready!"
 end
 
 function init_local_fish_config
     touch ~/.config/fish/local.fish
+end
+
+function init_folders
+    mkdir ~/proj
+    mkdir ~/work
 end
 
 function install_node_packages
@@ -177,6 +184,10 @@ function disable_bouncing_dock_icons
     echo ""
     echo "Disabled bouncing dock icons. 😝"
     echo ""
+end
+
+function only_show_running_apps_in_dock
+    defaults write com.apple.dock static-only -bool TRUE; killall Dock
 end
 
 function compile_vim_plugins
