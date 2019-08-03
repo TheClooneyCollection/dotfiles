@@ -265,17 +265,20 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+BEGIN_SRC emacs-lisp
   (setq general-default-keymaps '(evil-normal-state-map
                                   evil-visual-state-map
-                                  evil-operator-state-map)
+                                  evil-operator-state-map
+                                  ;magit-mode-map ; TODO
+                                  ))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  general-default-prefix "<SPC>")
+  (setq general-default-prefix "<SPC>")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
   :config
 
   (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+
   (general-define-key "rb" 'eval-buffer)
   (general-define-key "rr" 'eval-region)
   (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
