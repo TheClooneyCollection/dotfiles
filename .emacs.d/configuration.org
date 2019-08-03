@@ -1025,6 +1025,7 @@ When opening magit, the wait for magithub to refresh data, kills me...
     :config
     (general-define-key "wu" #'winner-undo))
 #+END_SRC
+
 ** swiper
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
@@ -1155,27 +1156,22 @@ When opening magit, the wait for magithub to refresh data, kills me...
   (general-define-key "bb" 'helm-buffers-list)
 
   (general-define-key "rl" 'helm-resume)
-
-  (defun dot-emacs/grep-in-root ()
-    (interactive)
-    (projectile-with-default-dir (projectile-project-root)
-      (call-interactively 'helm-rg)))
-
-  (general-define-key "sr" 'dot-emacs/grep-in-root)
   :config
   (helm-mode))
 #+END_SRC
 
 ** helm-rg
-
 #+BEGIN_SRC emacs-lisp
   (use-package helm-rg
     :demand t
-    ;:diminish helm-mode
-    ;:bind ("M-x" . helm-M-x)
+    :diminish helm-mode
+    :bind ("M-x" . helm-M-x)
     :init
-    (general-define-key "*" 'helm-rg)
-  )
+    (defun dot-emacs/grep-in-root ()
+      (interactive)
+      (projectile-with-default-dir (projectile-project-root)
+        (call-interactively #'helm-rg)))
+    (general-define-key "*" #'dot-emacs/grep-in-root))
 #+END_SRC
 ** helm-flx
 
