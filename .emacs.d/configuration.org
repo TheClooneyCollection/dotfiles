@@ -207,7 +207,7 @@ See https://github.com/jwiegley/emacs-async for explanation
     :init
     (setq general-default-keymaps '(evil-normal-state-map
                                     evil-visual-state-map
-                                    ;magit-mode-map ; TODO
+                                          ;magit-mode-map ; TODO
                                     evil-operator-state-map)
           general-default-prefix "<SPC>"))
 #+END_SRC
@@ -219,53 +219,8 @@ and when it does work in visual selection mode (v), it selects the line before s
 
 #+BEGIN_SRC emacs-lisp
   (use-package avy
-    :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
-    :bind (
-           :map evil-normal-state-map
-           ("f" . avy-goto-char-2)
-           :map evil-visual-state-map
-           ("f" . avy-goto-char-in-line)
-           :map evil-operator-state-map
-           ("f" . avy-goto-char-in-line))
-    :init (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
-#+END_SRC
-
-** Keybindings
-#+BEGIN_SRC emacs-lisp
-  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
-
-  (general-define-key "jf" 'find-function)
-  (general-define-key "jv" 'find-variable)
-
-  (general-define-key "rb" 'eval-buffer)
-  (general-define-key "rr" 'eval-region)
-  (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
-  (general-define-key "ry" 'dot-emacs/copy-to-clipboard)
-  (general-define-key "rp" 'dot-emacs/paste-from-clipboard)
-
-
-  (general-define-key "fs" 'save-buffer)
-
-  (general-define-key "0" 'delete-other-windows)
-  (general-define-key "9" 'zen)
-
-  (general-define-key "qq" 'save-buffers-kill-terminal)
-
-  (general-define-key "hdk" 'describe-key)
-  (general-define-key "hdf" 'describe-function)
-  (general-define-key "hdv" 'describe-variable)
-
-  (general-define-key "fee" 'dot-emacs/edit-configuration-after-work-OR-add-todo)
-  (general-define-key "feE" 'dot-emacs/edit-configuration)
-  (general-define-key :prefix nil
-                      :keymaps '(swift-mode-map
-                                 python-mode-map
-                                 emacs-lisp-mode-map
-                                 org-mode-map
-                                 enh-ruby-mode-map)
-                      :states '(insert emacs)
-                      ";" '(lambda () (interactive) (insert ":"))
-                      ":" '(lambda () (interactive) (insert ";")))
+    :init (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)
+                avy-background t))
 #+END_SRC
 * Evil
 
@@ -374,6 +329,78 @@ Evil-easymotion's line movements work perfectly with evil.
               (evil-org-set-key-theme '(navigation insert textobjects additional)))))
 #+END_SRC
 
+* Keybindings
+** =TAB= to toggle fold
+
+#+BEGIN_SRC emacs-lisp
+  (define-key evil-normal-state-map (kbd "TAB") #'evil-toggle-fold)
+#+END_SRC
+
+** =f= and =t=
+#+BEGIN_SRC emacs-lisp
+  (let ((goto-char #'evil-avy-goto-char-timer))
+    (define-key evil-normal-state-map "f" goto-char)
+    (define-key evil-motion-state-map "f" goto-char))
+  (define-key evil-visual-state-map "f" #'evil-avy-goto-char-in-line)
+  (define-key evil-operator-state-map "f" #'evil-avy-goto-char-in-line)
+
+  (defun evil-avy-find-char-to-in-line ()
+    "Somehow this magically makes `evil-avy-goto-char' works as `evil-find-char-to'"
+    (interactive)
+    (evil-avy-goto-char-in-line))
+
+  (define-key evil-visual-state-map "t" #'evil-avy-find-char-to-in-line)
+  (define-key evil-operator-state-map "t" #'evil-avy-find-char-to-in-line)
+#+END_SRC
+
+** =SPC jj= and =SPC jk=
+
+#+BEGIN_SRC emacs-lisp
+
+  (evil-define-avy-motion avy-goto-line-above line)
+  (evil-define-avy-motion avy-goto-line-below line)
+
+  (general-define-key
+   "jj" #'evil-avy-goto-line-below
+   "jk" #'evil-avy-goto-line-above)
+#+END_SRC
+** Keybindings
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+
+  (general-define-key "jf" 'find-function)
+  (general-define-key "jv" 'find-variable)
+
+  (general-define-key "rb" 'eval-buffer)
+  (general-define-key "rr" 'eval-region)
+  (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
+  (general-define-key "ry" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "rp" 'dot-emacs/paste-from-clipboard)
+
+
+  (general-define-key "fs" 'save-buffer)
+
+  (general-define-key "0" 'delete-other-windows)
+  (general-define-key "9" 'zen)
+
+  (general-define-key "qq" 'save-buffers-kill-terminal)
+
+  (general-define-key "hdk" 'describe-key)
+  (general-define-key "hdf" 'describe-function)
+  (general-define-key "hdv" 'describe-variable)
+
+  (general-define-key "fee" 'dot-emacs/edit-configuration-after-work-OR-add-todo)
+  (general-define-key "feE" 'dot-emacs/edit-configuration)
+  (general-define-key :prefix nil
+                      :keymaps '(swift-mode-map
+                                 python-mode-map
+                                 emacs-lisp-mode-map
+                                 org-mode-map
+                                 enh-ruby-mode-map)
+                      :states '(insert emacs)
+                      ";" '(lambda () (interactive) (insert ":"))
+                      ":" '(lambda () (interactive) (insert ";")))
+#+END_SRC
 * UI
 ** zenburn
 #+BEGIN_SRC emacs-lisp
