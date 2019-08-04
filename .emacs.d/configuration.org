@@ -104,7 +104,7 @@
   Sunday."
     (nth 6 (decode-time)))
 
-  (defun dot-emacs/edit-configuration-maybe ()
+  (defun dot-emacs/edit-configuration-after-work-OR-add-todo ()
     (interactive)
     (if (member (dot-emacs/day-of-week) (number-sequence 1 5))
         (let ((hour (string-to-number (substring (current-time-string) 11 13))) )
@@ -136,7 +136,6 @@ To remove or abbreviate a mode indicator in the modeline
 
 #+BEGIN_SRC emacs-lisp
   (use-package diminish)
-  (require 'diminish)
 #+END_SRC
 
 ** Use :bind-key with use-package
@@ -287,6 +286,9 @@ and when it does work in visual selection mode (v), it selects the line before s
   (general-define-key "rb" 'eval-buffer)
   (general-define-key "rr" 'eval-region)
   (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
+  (general-define-key "ry" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "rp" 'dot-emacs/paste-from-clipboard)
+
 
   (general-define-key "fs" 'save-buffer)
 
@@ -299,11 +301,8 @@ and when it does work in visual selection mode (v), it selects the line before s
   (general-define-key "hf" 'describe-function)
   (general-define-key "hv" 'describe-variable)
 
-  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
-  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
-
-  (general-define-key "fee" 'dot-emacs/edit-configuration-maybe)
-  (general-define-key "e!" 'dot-emacs/edit-configuration)
+  (general-define-key "fee" 'dot-emacs/edit-configuration-after-work-OR-add-todo)
+  (general-define-key "feE" 'dot-emacs/edit-configuration)
   (general-define-key :prefix nil
                       :keymaps '(swift-mode-map
                                  python-mode-map
