@@ -418,8 +418,8 @@ Evil-easymotion's line movements work perfectly with evil.
   (general-define-key "fS" 'evil-write-all)
   (general-define-key "fR" 'spacemacs/rename-current-buffer-file)
 
-  (general-define-key "wh" 'split-window-below
-                      "wv" 'split-window-right)
+  (general-define-key "wv" 'split-window-below
+                      "wh" 'split-window-right)
 
   (general-define-key :prefix nil
                       :keymaps '(swift-mode-map
