@@ -122,6 +122,35 @@
     (switch-to-buffer "*Messages*"))
 #+END_SRC
 
+** Rename current buffer file
+#+BEGIN_SRC emacs-lisp
+  (defun spacemacs/rename-current-buffer-file ()
+    "Renames current buffer and file it is visiting."
+    (interactive)
+    (let* ((name (buffer-name))
+           (filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (error "Buffer '%s' is not visiting a file!" name)
+        (let* ((dir (file-name-directory filename))
+               (new-name (read-file-name "New name: " dir)))
+          (cond ((get-buffer new-name)
+                 (error "A buffer named '%s' already exists!" new-name))
+                (t
+                 (let ((dir (file-name-directory new-name)))
+                   (when (and (not (file-exists-p dir)) (yes-or-no-p (format "Create directory '%s'?" dir)))
+                     (make-directory dir t)))
+                 (rename-file filename new-name 1)
+                 (rename-buffer new-name)
+                 (set-visited-file-name new-name)
+                 (set-buffer-modified-p nil)
+                 (when (fboundp 'recentf-add-file)
+                   (recentf-add-file new-name)
+                   (recentf-remove-if-non-kept filename))
+                 (when (projectile-project-p)
+                   (call-interactively #'projectile-invalidate-cache))
+                 (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
+
+#+END_SRC
 * Set up =use-package=
 ** Always install all the packages
 
@@ -361,6 +390,7 @@ Evil-easymotion's line movements work perfectly with evil.
 ** Keybindings
 #+BEGIN_SRC emacs-lisp
   (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+  (general-define-key "bd" 'evil-delete-buffer)
 
   (general-define-key "jf" 'find-function)
   (general-define-key "jv" 'find-variable)
@@ -371,8 +401,6 @@ Evil-easymotion's line movements work perfectly with evil.
   (general-define-key "ry" 'dot-emacs/copy-to-clipboard)
   (general-define-key "rp" 'dot-emacs/paste-from-clipboard)
 
-
-  (general-define-key "fs" 'save-buffer)
 
   (general-define-key "0" 'delete-other-windows)
   (general-define-key "9" 'zen)
@@ -385,6 +413,11 @@ Evil-easymotion's line movements work perfectly with evil.
 
   (general-define-key "fee" 'dot-emacs/edit-configuration-after-work-OR-add-todo)
   (general-define-key "feE" 'dot-emacs/edit-configuration)
+  (general-define-key "fer" 'dot-emacs/load-configuration-dot-org)
+  (general-define-key "fs" 'save-buffer)
+  (general-define-key "fS" 'evil-write-all)
+  (general-define-key "fR" 'spacemacs/rename-current-buffer-file)
+
   (general-define-key :prefix nil
                       :keymaps '(swift-mode-map
                                  python-mode-map
