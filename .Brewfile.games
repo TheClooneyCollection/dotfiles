@@ -1,5 +1,9 @@
-## games
+# cask
 
 cask 'minecraft'
 cask 'league-of-legends'
 cask 'eve-launcher'
+
+# mas
+
+mas 'Mini Metro', id: 1047760200 # Resource planning game

@@ -1,0 +1,35 @@
+# AKA tier zero
+
+# taps
+
+tap 'homebrew/bundle'
+tap 'caskroom/cask'
+
+# brews
+
+brew 'mas' # cli for Mac App Store
+
+brew 'fish'
+brew 'git'
+brew 'git-lfs'
+
+brew 'ydiff' # needed by git for diffing
+
+brew 'vim'
+brew 'emacs'
+
+brew 'ripgrep' # rg needed by emacs for searching
+brew 'ispell' # for emacs spell check
+
+brew 'python'
+brew 'ruby'
+
+# casks
+
+cask 'iterm2'
+cask 'firefox'
+cask 'dropbox'
+
+# mas
+
+mas '1Password', id: 443987910

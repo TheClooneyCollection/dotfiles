@@ -1,0 +1,40 @@
+# taps
+
+tap 'caskroom/drivers'
+tap 'NicholasTD07/lychee-gold' # for macid
+
+# brews
+
+brew 'haskell-stack'
+brew 'aria2'
+brew 'mosh'
+brew 'chisel'
+
+
+# casks
+
+cask 'virtualbox'
+cask 'vagrant'
+
+## apps
+
+cask 'zeplin'
+cask 'macid'
+cask 'squirrel'
+
+cask 'paw'
+cask 'charles'
+
+## drivers
+
+# TODO: Move these into install script
+cask 'fujitsu-scansnap-manager-s1300' # for ScanSnap S1300i
+cask 'kensington-trackball-works' # for Kensington Trackballs
+cask 'evoluent-vertical-mouse-device-controller'
+
+# mas
+
+mas 'Day One', id: 1055511498
+
+
+mas 'Tweetbot for Twitter', id: 557168941
