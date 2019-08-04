@@ -315,11 +315,7 @@ and when it does work in visual selection mode (v), it selects the line before s
 ** hl-todo
 #+BEGIN_SRC emacs-lisp
   (use-package hl-todo
-    :config
-    (general-define-key "stn" 'hl-todo-next)
-    (general-define-key "stp" 'hl-todo-previous)
-    (general-define-key "sto" 'hl-todo-occur)
-    (global-hl-todo-mode))
+    :config (global-hl-todo-mode))
 #+END_SRC
 * time
 #+BEGIN_SRC emacs-lisp
