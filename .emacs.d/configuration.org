@@ -278,11 +278,6 @@ and when it does work in visual selection mode (v), it selects the line before s
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-  (general-define-key "wh" #'evil-window-split
-                      "wv" #'evil-window-vsplit)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
   (define-key evil-normal-state-map ";" #'evil-ex)
   (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
 #+END_SRC
@@ -417,6 +412,9 @@ Evil-easymotion's line movements work perfectly with evil.
   (general-define-key "fs" 'save-buffer)
   (general-define-key "fS" 'evil-write-all)
   (general-define-key "fR" 'spacemacs/rename-current-buffer-file)
+
+  (general-define-key "wh" 'split-window-below
+                      "wv" 'split-window-right)
 
   (general-define-key :prefix nil
                       :keymaps '(swift-mode-map
