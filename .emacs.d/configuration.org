@@ -320,13 +320,7 @@ Evil-easymotion's line movements work perfectly with evil.
     :diminish (evil-org-mode)
     :mode ("\\.org\\'" . org-mode)
     :config
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
+    (add-hook 'org-mode-hook 'evil-org-mode))
 #+END_SRC
 
 * Keybindings
