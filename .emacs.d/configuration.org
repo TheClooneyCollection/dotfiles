@@ -1395,5 +1395,3 @@ CREATED: [2017-08-31 Thu]
 CREATED: [2017-08-31 Thu]
 ** TODO org-babel-execute:swift v2 - handle errors with an error buffer
 CREATED: [2017-09-01 Fri]
-** TODO SPC cc for switch project | SPC ca to run async shell command
-CREATED: [2017-09-04 Mon]
