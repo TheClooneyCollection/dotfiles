@@ -42,7 +42,7 @@ function mac_init
     install_fish_plugins
     install_python_packages
     install_ruby_gems
-    install_chisel
+    # install_chisel
     # compile_vim_plugins
     # clone_spacemacs
     # install_pelican
