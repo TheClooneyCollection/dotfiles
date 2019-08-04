@@ -468,7 +468,6 @@ Evil-easymotion's line movements work perfectly with evil.
   (use-package golden-ratio
     :diminish golden-ratio-mode
     :config
-    (add-to-list 'window-size-change-functions 'golden-ratio)
     (golden-ratio-mode))
 #+END_SRC
 ** hl-todo
@@ -1027,7 +1026,6 @@ When opening magit, the wait for magithub to refresh data, kills me...
     :init (setq winum-format "<%s>")
     :config
     (progn
-      (winum-mode)
       (general-define-key "1" 'winum-select-window-1
                           "2" 'winum-select-window-2
                           "3" 'winum-select-window-3
@@ -1035,7 +1033,11 @@ When opening magit, the wait for magithub to refresh data, kills me...
                           "5" 'winum-select-window-5
                           "6" 'winum-select-window-6
                           "7" 'winum-select-window-7
-                          "8" 'winum-select-window-8)))
+                          "8" 'winum-select-window-8)
+      (defadvice winum-select-window-by-number
+                (after golden-ratio-resize-window activate)
+              (golden-ratio) nil)
+      (winum-mode)))
 #+END_SRC
 
 ** winner
