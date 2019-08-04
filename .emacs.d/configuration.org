@@ -1044,7 +1044,9 @@ When opening magit, the wait for magithub to refresh data, kills me...
 #+BEGIN_SRC emacs-lisp
   (use-package winner
     :config
-    (general-define-key "wu" #'winner-undo))
+    (general-define-key "wu" 'winner-undo
+                        "wr" 'winner-redo)
+    (winner-mode))
 #+END_SRC
 
 ** swiper
