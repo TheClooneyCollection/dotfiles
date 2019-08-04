@@ -463,8 +463,10 @@ Evil-easymotion's line movements work perfectly with evil.
   (use-package golden-ratio
     :diminish golden-ratio-mode
     :config
-    (add-to-list 'window-size-change-functions 'golden-ratio)
-    (golden-ratio-mode))
+    (define-advice select-window (:after (window &optional no-record) golden-ratio-resize-window)
+      (golden-ratio)
+      nil)
+    (golden-ratio-mode t))
 #+END_SRC
 ** hl-todo
 #+BEGIN_SRC emacs-lisp
