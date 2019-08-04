@@ -244,15 +244,9 @@ See https://github.com/jwiegley/emacs-async for explanation
   (use-package guide-key
     :diminish guide-key-mode
     :config
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq guide-key/guide-key-sequence t ; Enable guide-key for all key sequences
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  guide-key/popup-window-position 'bottom)
-  (guide-key-mode)) ; Enable guide-key-mode
+    (setq guide-key/guide-key-sequence t ; Enable guide-key for all key sequences
+          guide-key/popup-window-position 'bottom)
+    (guide-key-mode)) ; Enable guide-key-mode
 #+END_SRC
 
 ** general
@@ -260,45 +254,38 @@ See https://github.com/jwiegley/emacs-async for explanation
 #+BEGIN_SRC emacs-lisp
   (use-package general
     :init
-#+END_SRC
+    (setq general-default-keymaps '(evil-normal-state-map
+                                    evil-visual-state-map
+                                    evil-operator-state-map
+                                          ;magit-mode-map ; TODO
+                                    )
+          general-default-prefix "<SPC>")
 
-#+BEGIN_SRC emacs-lisp
-  (setq general-default-keymaps '(evil-normal-state-map
-                                  evil-visual-state-map
-                                  evil-operator-state-map
-                                  ;magit-mode-map ; TODO
-                                  ))
-#+END_SRC
+    ,#+BEGIN_SRC emacs-lisp
+    :config
 
-#+BEGIN_SRC emacs-lisp
-  (setq general-default-prefix "<SPC>")
-#+END_SRC
+    (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
 
-#+BEGIN_SRC emacs-lisp
-  :config
+    (general-define-key "rb" 'eval-buffer)
+    (general-define-key "rr" 'eval-region)
+    (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
 
-  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+    (general-define-key "fs" 'save-buffer)
 
-  (general-define-key "rb" 'eval-buffer)
-  (general-define-key "rr" 'eval-region)
-  (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
+    (general-define-key "0" 'delete-other-windows)
+    (general-define-key "9" 'zen)
 
-  (general-define-key "fs" 'save-buffer)
+    (general-define-key "qq" 'save-buffers-kill-terminal)
 
-  (general-define-key "0" 'delete-other-windows)
-  (general-define-key "9" 'zen)
+    (general-define-key "hk" 'describe-key)
+    (general-define-key "hf" 'describe-function)
+    (general-define-key "hv" 'describe-variable)
 
-  (general-define-key "qq" 'save-buffers-kill-terminal)
+    (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+    (general-define-key "p" 'dot-emacs/paste-from-clipboard)
 
-  (general-define-key "hk" 'describe-key)
-  (general-define-key "hf" 'describe-function)
-  (general-define-key "hv" 'describe-variable)
-
-  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
-  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
-
-  (general-define-key "fee" 'dot-emacs/edit-configuration-maybe)
-  (general-define-key "e!" 'dot-emacs/edit-configuration)
+    (general-define-key "fee" 'dot-emacs/edit-configuration-maybe)
+    (general-define-key "e!" 'dot-emacs/edit-configuration)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -326,24 +313,15 @@ and when it does work in visual selection mode (v), it selects the line before s
 #+BEGIN_SRC emacs-lisp
   (use-package avy
     :commands (avy-goto-char-2 avy-goto-line-above avy-goto-line-below)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :bind (
-         :map evil-normal-state-map
-              ("f" . avy-goto-char-2)
-              :map evil-visual-state-map
-              ("f" . avy-goto-char-in-line)
-              :map evil-operator-state-map
-              ("f" . avy-goto-char-in-line))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :init
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
+    :bind (
+           :map evil-normal-state-map
+           ("f" . avy-goto-char-2)
+           :map evil-visual-state-map
+           ("f" . avy-goto-char-in-line)
+           :map evil-operator-state-map
+           ("f" . avy-goto-char-in-line))
+    :init
+    (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
 * time
