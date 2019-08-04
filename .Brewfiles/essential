@@ -23,7 +23,6 @@ cask 'istat-menus'
 cask 'google-chrome' # bloody hangout
 cask 'google-drive-file-stream'
 
-cask 'alfred'
 cask 'caffeine'
 cask 'moom'
 cask 'gfxCardStatus' # for work laptop

@@ -29,21 +29,23 @@ Log into your Apple ID in App Store.
 
 `brew bundle --global -v`
 
-#### Prep
-
-- Start vim once
-- Add fishshell to `/etc/shells`
-
 #### Init your Mac
 
 ```sh
 fish
-source bin/macos.fish
+source bin/init.fish
 
-# sets fish as default shell | compiles vim plugins | disables dock bouncing icons
-# it also disables xcode indexing
+# sets fish as default shell | disables dock bouncing icons | etc.
 mac_init
 
+# install core brews, casks, and Apps
+brew_core # after this, start configuring Dropbox, 1Password (extensions), Alfred, iTerm, Firefox
+brew_essential
+
 # optional
+install_essential_packages
 generate_ssh_key
+
+# optional optional
+brew_optional
 ```

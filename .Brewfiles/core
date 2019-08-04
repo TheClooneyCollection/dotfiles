@@ -26,9 +26,10 @@ brew 'ruby'
 
 # casks
 
-cask 'iterm2'
-cask 'firefox'
+cask 'alfred'
 cask 'dropbox'
+cask 'firefox'
+cask 'iterm2'
 
 # mas
 

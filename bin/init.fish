@@ -9,6 +9,18 @@ function generate_ssh_key
     echo "Done!"
 end
 
+function brew_core
+    brew bundle --file=~/.Brewfiles/core
+end
+
+function brew_essential
+    brew bundle --file=~/.Brewfiles/essential
+end
+
+function brew_optional
+    brew bundle --file=~/.Brewfiles/optional
+end
+
 function mac_init
     echo "Initializing your Mac :)"
 
@@ -16,10 +28,6 @@ function mac_init
     init_folders
 
     set_fish_as_default_shell
-
-    install_fish_plugins
-    install_python_packages
-    install_ruby_gems
 
     disable_bouncing_dock_icons
     only_show_running_apps_in_dock
@@ -48,6 +56,12 @@ function set_fish_as_default_shell
     echo ""
     echo "Done!"
     echo ""
+end
+
+function install_essential_packages
+    install_fish_plugins
+    install_python_packages
+    install_ruby_gems
 end
 
 function install_fish_plugins
