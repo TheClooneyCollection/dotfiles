@@ -188,54 +188,6 @@ See https://github.com/jwiegley/emacs-async for explanation
   (async-bytecomp-package-mode 1))
 #+END_SRC
 
-* UI
-** zenburn
-
-#+BEGIN_SRC emacs-lisp
-  ;(use-package zenburn-theme)
-#+END_SRC
-
-** spacemacs-theme
-#+BEGIN_SRC emacs-lisp
-  (use-package spacemacs-common           ; hack to get spacemacs-themes loading...
-    :ensure spacemacs-theme
-    :config (load-theme 'spacemacs-light t))
-#+END_SRC
-** powerline
-#+BEGIN_SRC emacs-lisp
-  (use-package powerline
-    :config (powerline-center-evil-theme))
-#+END_SRC
-** spaceline
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package spaceline
-  ;;   :init (setq powerline-default-separator 'utf-8)
-  ;;   :config
-  ;;   (require 'spaceline-config)
-  ;;   (spaceline-spacemacs-theme))
-#+END_SRC
-** whitespace
-
-#+BEGIN_SRC emacs-lisp
-  (use-package whitespace ; Built-in
-    :diminish (whitespace-mode global-whitespace-mode)
-    :init (setq whitespace-style '(face tabs trailing empty tab-mark))
-    :config (global-whitespace-mode))
-#+END_SRC
-
-** golden-ratio
-#+BEGIN_SRC emacs-lisp
-  (use-package golden-ratio
-    :diminish golden-ratio-mode
-    :config
-    (add-to-list 'window-size-change-functions 'golden-ratio)
-    (golden-ratio-mode))
-#+END_SRC
-** hl-todo
-#+BEGIN_SRC emacs-lisp
-  (use-package hl-todo
-    :config (global-hl-todo-mode))
-#+END_SRC
 * Keys
 ** guide-key
 
@@ -274,14 +226,20 @@ and when it does work in visual selection mode (v), it selects the line before s
            :map evil-visual-state-map
            ("f" . avy-goto-char-in-line)
            :map evil-operator-state-map
-           ("f" . avy-goto-char-in-line))
-    :init
-    (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
+           ("f" . avy-goto-char-in-line)
+           :map evil-visual-state-map
+           ("t" . avy-goto-char-in-line)
+           :map evil-operator-state-map
+           ("t" . avy-goto-char-in-line))
+    :init (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
 ** Keybindings
 #+BEGIN_SRC emacs-lisp
   (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+
+  (general-define-key "jf" 'find-function)
+  (general-define-key "jv" 'find-variable)
 
   (general-define-key "rb" 'eval-buffer)
   (general-define-key "rr" 'eval-region)
@@ -297,9 +255,9 @@ and when it does work in visual selection mode (v), it selects the line before s
 
   (general-define-key "qq" 'save-buffers-kill-terminal)
 
-  (general-define-key "hk" 'describe-key)
-  (general-define-key "hf" 'describe-function)
-  (general-define-key "hv" 'describe-variable)
+  (general-define-key "hdk" 'describe-key)
+  (general-define-key "hdf" 'describe-function)
+  (general-define-key "hdv" 'describe-variable)
 
   (general-define-key "fee" 'dot-emacs/edit-configuration-after-work-OR-add-todo)
   (general-define-key "feE" 'dot-emacs/edit-configuration)
@@ -312,6 +270,56 @@ and when it does work in visual selection mode (v), it selects the line before s
                       :states '(insert emacs)
                       ";" '(lambda () (interactive) (insert ":"))
                       ":" '(lambda () (interactive) (insert ";")))
+#+END_SRC
+* UI
+** zenburn
+#+BEGIN_SRC emacs-lisp
+  (use-package zenburn-theme)
+#+END_SRC
+** spacemacs-theme
+#+BEGIN_SRC emacs-lisp
+  (use-package spacemacs-common           ; hack to get spacemacs-themes loading...
+    :ensure spacemacs-theme
+    :config (load-theme 'spacemacs-light t)) ;TODO
+#+END_SRC
+** powerline
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline
+    :config (powerline-center-evil-theme))
+#+END_SRC
+** spaceline
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package spaceline
+  ;;   :init (setq powerline-default-separator 'utf-8)
+  ;;   :config
+  ;;   (require 'spaceline-config)
+  ;;   (spaceline-spacemacs-theme))
+#+END_SRC
+** whitespace
+
+#+BEGIN_SRC emacs-lisp
+  (use-package whitespace ; Built-in
+    :diminish (whitespace-mode global-whitespace-mode)
+    :init (setq whitespace-style '(face tabs trailing empty tab-mark))
+    :config (global-whitespace-mode))
+#+END_SRC
+
+** golden-ratio
+#+BEGIN_SRC emacs-lisp
+  (use-package golden-ratio
+    :diminish golden-ratio-mode
+    :config
+    (add-to-list 'window-size-change-functions 'golden-ratio)
+    (golden-ratio-mode))
+#+END_SRC
+** hl-todo
+#+BEGIN_SRC emacs-lisp
+  (use-package hl-todo
+    :config
+    (general-define-key "stn" 'hl-todo-next)
+    (general-define-key "stp" 'hl-todo-previous)
+    (general-define-key "sto" 'hl-todo-occur)
+    (global-hl-todo-mode))
 #+END_SRC
 * time
 #+BEGIN_SRC emacs-lisp
@@ -630,21 +638,21 @@ Automatic clock-in & clock-out when start or finish an item
     :after evil
     :config (evil-magit-init))
 
+#+END_SRC
+** evil-easymotion
+Evil-easymotion's line movements work perfectly with evil.
+
+#+BEGIN_SRC emacs-lisp
   (use-package evil-easymotion
     :after evil
     :config
+    (general-define-key "jj" (evilem-create 'evil-next-line))
+    (general-define-key "jk" (evilem-create 'evil-previous-line))
+
+    (general-define-key :prefix nil
+                        :states '(motion operator visual)
+                        "t" (evilem-create 'evil-repeat-find-char-to)))
 #+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-                                          ; Evil-easymotion's line movements work perfectly with evil.
-  (general-define-key "j" (evilem-create 'evil-next-line))
-  (general-define-key "k" (evilem-create 'evil-previous-line))
-
-  (general-define-key :prefix nil
-                      :states '(motion operator)
-                      "t" (evilem-create 'evil-repeat-find-char-to)))
-#+END_SRC
-
 ** evil-surround
 
 #+BEGIN_SRC emacs-lisp
