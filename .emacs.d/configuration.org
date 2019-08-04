@@ -1029,35 +1029,67 @@ When opening magit, the wait for magithub to refresh data, kills me...
 
 
 ** projectile
-
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
+    :commands (projectile-global-mode
+               projectile-ack
+               projectile-ag
+               projectile-compile-project
+               projectile-dired
+               projectile-find-dir
+               projectile-find-file
+               projectile-find-tag
+               projectile-test-project
+               projectile-grep
+               projectile-invalidate-cache
+               projectile-kill-buffers
+               projectile-multi-occur
+               projectile-project-p
+               projectile-project-root
+               projectile-recentf
+               projectile-regenerate-tags
+               projectile-replace
+               projectile-replace-regexp
+               projectile-run-async-shell-command-in-root
+               projectile-run-shell-command-in-root
+               projectile-switch-project
+               projectile-switch-to-buffer
+               projectile-vc)
     :init
-#+END_SRC
+    (progn
+      (setq projectile-enable-caching t)
+      (setq projectile-switch-project-action 'zen)
+      (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 
-#+BEGIN_SRC emacs-lisp
-  (setq projectile-enable-caching t)
+      (general-define-key
+       "pb" 'projectile-switch-to-buffer
+       "pd" 'projectile-find-dir
+       "pf" 'projectile-find-file
+       "pF" 'projectile-find-file-dwim
+       "ph" 'helm-projectile
+       "pr" 'projectile-recentf
+       "pp" 'projectile-switch-project
+       "pv" 'projectile-vc)
+      (general-define-key
+       "p!" 'projectile-run-shell-command-in-root
+       "p&" 'projectile-run-async-shell-command-in-root
+       "p%" 'projectile-replace-regexp
+       "pa" 'projectile-toggle-between-implementation-and-test
+       "pc" 'projectile-compile-project
+       "pD" 'projectile-dired
+       "pg" 'projectile-find-tag
+       "pG" 'projectile-regenerate-tags
+       "pI" 'projectile-invalidate-cache
+       "pk" 'projectile-kill-buffers
+       "pR" 'projectile-replace
+       "pT" 'projectile-test-project))
+    :config
+    (defalias 'run-command 'projectile-run-async-shell-command-in-root)
+    (projectile-discover-projects-in-directory "~/proj")
+    (projectile-discover-projects-in-directory "~/fork")
+    (projectile-discover-projects-in-directory "~/work")
+    (projectile-global-mode))
 #+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq projectile-switch-project-action 'zen)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :config
-  (defalias 'run-command 'projectile-run-async-shell-command-in-root)
-  (projectile-discover-projects-in-directory "~/work")
-  (projectile-discover-projects-in-directory "~/proj")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (projectile-global-mode))
-#+END_SRC
-
 ** projectile-ripgrep
 
 #+BEGIN_SRC emacs-lisp
