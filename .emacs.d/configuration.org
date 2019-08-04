@@ -9,6 +9,11 @@
   (setq-default indent-tabs-mode nil) ; Don't indent with tabs.
 #+END_SRC
 
+Don't create those filename~ files, please.
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
   (setq custom-file "~/.emacs.d/custom.el")
 #+END_SRC
