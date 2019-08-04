@@ -256,53 +256,9 @@ See https://github.com/jwiegley/emacs-async for explanation
     :init
     (setq general-default-keymaps '(evil-normal-state-map
                                     evil-visual-state-map
-                                    evil-operator-state-map
-                                          ;magit-mode-map ; TODO
-                                    )
-          general-default-prefix "<SPC>")
-
-    ,#+BEGIN_SRC emacs-lisp
-    :config
-
-    (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
-
-    (general-define-key "rb" 'eval-buffer)
-    (general-define-key "rr" 'eval-region)
-    (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
-
-    (general-define-key "fs" 'save-buffer)
-
-    (general-define-key "0" 'delete-other-windows)
-    (general-define-key "9" 'zen)
-
-    (general-define-key "qq" 'save-buffers-kill-terminal)
-
-    (general-define-key "hk" 'describe-key)
-    (general-define-key "hf" 'describe-function)
-    (general-define-key "hv" 'describe-variable)
-
-    (general-define-key "y" 'dot-emacs/copy-to-clipboard)
-    (general-define-key "p" 'dot-emacs/paste-from-clipboard)
-
-    (general-define-key "fee" 'dot-emacs/edit-configuration-maybe)
-    (general-define-key "e!" 'dot-emacs/edit-configuration)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (general-define-key :prefix nil
-                      :keymaps '(swift-mode-map
-                                 python-mode-map
-                                 emacs-lisp-mode-map
-                                 org-mode-map
-                                 enh-ruby-mode-map)
-                      :states '(insert emacs)
-                      ";" '(lambda () (interactive) (insert ":"))
-                      ":" '(lambda () (interactive) (insert ";")))
-#+END_SRC
-
-The end of =general=
-#+BEGIN_SRC emacs-lisp
-  )
+                                    ;magit-mode-map ; TODO
+                                    evil-operator-state-map)
+          general-default-prefix "<SPC>"))
 #+END_SRC
 ** avy
 
@@ -324,6 +280,40 @@ and when it does work in visual selection mode (v), it selects the line before s
     (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
+** Keybindings
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "bm" #'dot-emacs/switch-to-messages-buffer)
+
+  (general-define-key "rb" 'eval-buffer)
+  (general-define-key "rr" 'eval-region)
+  (general-define-key "rl" 'dot-emacs/load-configuration-dot-org)
+
+  (general-define-key "fs" 'save-buffer)
+
+  (general-define-key "0" 'delete-other-windows)
+  (general-define-key "9" 'zen)
+
+  (general-define-key "qq" 'save-buffers-kill-terminal)
+
+  (general-define-key "hk" 'describe-key)
+  (general-define-key "hf" 'describe-function)
+  (general-define-key "hv" 'describe-variable)
+
+  (general-define-key "y" 'dot-emacs/copy-to-clipboard)
+  (general-define-key "p" 'dot-emacs/paste-from-clipboard)
+
+  (general-define-key "fee" 'dot-emacs/edit-configuration-maybe)
+  (general-define-key "e!" 'dot-emacs/edit-configuration)
+  (general-define-key :prefix nil
+                      :keymaps '(swift-mode-map
+                                 python-mode-map
+                                 emacs-lisp-mode-map
+                                 org-mode-map
+                                 enh-ruby-mode-map)
+                      :states '(insert emacs)
+                      ";" '(lambda () (interactive) (insert ":"))
+                      ":" '(lambda () (interactive) (insert ";")))
+#+END_SRC
 * time
 #+BEGIN_SRC emacs-lisp
   (use-package time ; Built-in
