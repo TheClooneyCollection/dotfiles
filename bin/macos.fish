@@ -142,14 +142,14 @@ function install_python_packages
     echo "Installing Python packages"
     echo ""
 
-    set packages cdiff ipython virtualenv pip-tools tox jedi pygments
+    set packages cdiff ipython virtualenv pip-tools tox pygments
 
-    pip2 install $packages
+    # pip2 install $packages
     pip3 install $packages
 
-    echo "Installing pygments with system default python (need sudo)"
-    echo ""
-    sudo /usr/bin/easy_install pygments
+    # echo "Installing pygments with system default python (need sudo)"
+    # echo ""
+    # sudo /usr/bin/easy_install pygments
 
     echo ""
     echo "Done!"
