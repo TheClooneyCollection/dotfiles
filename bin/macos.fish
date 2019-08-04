@@ -29,7 +29,6 @@ function how_many_cpus_xcode_use
 end
 
 function mac_init
-    echo "Run this after started vim once and added fishshell to /etc/shells"
     echo "Initializing your Mac :)"
 
     init_local_fish_config
