@@ -226,11 +226,7 @@ and when it does work in visual selection mode (v), it selects the line before s
            :map evil-visual-state-map
            ("f" . avy-goto-char-in-line)
            :map evil-operator-state-map
-           ("f" . avy-goto-char-in-line)
-           :map evil-visual-state-map
-           ("t" . avy-goto-char-in-line)
-           :map evil-operator-state-map
-           ("t" . avy-goto-char-in-line))
+           ("f" . avy-goto-char-in-line))
     :init (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s)))
 #+END_SRC
 
@@ -271,6 +267,113 @@ and when it does work in visual selection mode (v), it selects the line before s
                       ";" '(lambda () (interactive) (insert ":"))
                       ":" '(lambda () (interactive) (insert ";")))
 #+END_SRC
+* Evil
+
+** evil
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :diminish undo-tree-mode
+    :init
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  evil-regexp-search t ; Enable regexp search
+  )
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (general-define-key "wh" #'evil-window-split
+                      "wv" #'evil-window-vsplit)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (define-key evil-normal-state-map ";" #'evil-ex)
+  (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (define-key evil-normal-state-map "gc" #'comment-line)
+  (define-key evil-visual-state-map "gc" #'comment-region)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (evil-mode))
+#+END_SRC
+
+** evil-escape
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-escape
+    :diminish evil-escape-mode
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :init (setq-default evil-escape-key-sequence "kj")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  :config
+  (evil-escape-mode))
+#+END_SRC
+
+** evil-magit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-magit
+    :after evil
+    :config (evil-magit-init))
+
+#+END_SRC
+** evil-easymotion
+Evil-easymotion's line movements work perfectly with evil.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-easymotion
+    :after evil
+    :config
+    (general-define-key "jj" (evilem-create 'evil-next-line))
+    (general-define-key "jk" (evilem-create 'evil-previous-line)))
+#+END_SRC
+** evil-surround
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-surround
+    :after evil
+    :config (global-evil-surround-mode))
+#+END_SRC
+** evil-visualstar
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-visualstar
+    :after evil
+    :config (global-evil-visualstar-mode))
+#+END_SRC
+** evil-org
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-org
+    :after (org evil)
+    :diminish (evil-org-mode)
+    :mode ("\\.org\\'" . org-mode)
+    :config
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
+#+END_SRC
+
 * UI
 ** zenburn
 #+BEGIN_SRC emacs-lisp
@@ -279,8 +382,7 @@ and when it does work in visual selection mode (v), it selects the line before s
 ** spacemacs-theme
 #+BEGIN_SRC emacs-lisp
   (use-package spacemacs-common           ; hack to get spacemacs-themes loading...
-    :ensure spacemacs-theme
-    :config (load-theme 'spacemacs-light t)) ;TODO
+    :ensure spacemacs-theme)
 #+END_SRC
 ** powerline
 #+BEGIN_SRC emacs-lisp
@@ -565,117 +667,6 @@ Automatic clock-in & clock-out when start or finish an item
 
   (add-hook 'org-after-todo-state-change-hook
             'dot-emacs/org-clock-out-if-waiting))
-#+END_SRC
-
-* Evil
-
-** evil
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :diminish undo-tree-mode
-    :init
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (setq evil-want-C-u-scroll t ; Enable <c-u> to scroll up
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  evil-want-C-i-jump nil ; Disable C-i & TAB for jumps forward (conflicting with evil-org's TAB)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  evil-regexp-search t ; Enable regexp search
-  )
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :config
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (general-define-key "wh" #'evil-window-split
-                      "wv" #'evil-window-vsplit)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (define-key evil-normal-state-map ";" #'evil-ex)
-  (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (define-key evil-normal-state-map "gc" #'comment-line)
-  (define-key evil-visual-state-map "gc" #'comment-region)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (evil-mode))
-#+END_SRC
-
-** evil-escape
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-escape
-    :diminish evil-escape-mode
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :init (setq-default evil-escape-key-sequence "kj")
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  :config
-  (evil-escape-mode))
-#+END_SRC
-
-** evil-magit
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-magit
-    :after evil
-    :config (evil-magit-init))
-
-#+END_SRC
-** evil-easymotion
-Evil-easymotion's line movements work perfectly with evil.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-easymotion
-    :after evil
-    :config
-    (general-define-key "jj" (evilem-create 'evil-next-line))
-    (general-define-key "jk" (evilem-create 'evil-previous-line))
-
-    (general-define-key :prefix nil
-                        :states '(motion operator visual)
-                        "t" (evilem-create 'evil-repeat-find-char-to)))
-#+END_SRC
-** evil-surround
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-surround
-    :after evil
-    :config (global-evil-surround-mode))
-#+END_SRC
-** evil-visualstar
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-visualstar
-    :after evil
-    :config (global-evil-visualstar-mode))
-#+END_SRC
-** evil-org
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-org
-    :after (org evil)
-    :diminish (evil-org-mode)
-    :mode ("\\.org\\'" . org-mode)
-    :config
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme '(navigation insert textobjects additional)))))
 #+END_SRC
 
 * Packages for Languages
