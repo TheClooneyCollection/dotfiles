@@ -726,8 +726,8 @@ Automatic clock-in & clock-out when start or finish an item
 #+END_SRC
 *** tox
 #+BEGIN_SRC emacs-lisp
-    (use-package tox
-      :init (setq tox-runner 'py.test))
+  (use-package tox
+    :init (setq tox-runner 'py.test))
 #+END_SRC
 ** Ruby
 
