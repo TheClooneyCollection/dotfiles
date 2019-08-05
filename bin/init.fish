@@ -47,8 +47,8 @@ end
 
 function set_fish_as_default_shell
     echo "Setting fish as default shell"
-    echo "Remember to add fish shell to /etc/shells"
-    echo (which fish)
+    echo "Adding fish shell to /etc/shells"
+    echo (which fish) | sudo tee -a /etc/shells
     echo ""
 
     chsh -s (which fish)
