@@ -13,8 +13,8 @@ brew 'coreutils' # gln for relative symlink
 brew 'tree'
 
 brew 'carthage'
-brew 'swiftlint'
-brew 'swiftplate', args: ['HEAD']
+# brew 'swiftlint'
+# brew 'swiftplate', args: ['HEAD']
 
 # casks
 
