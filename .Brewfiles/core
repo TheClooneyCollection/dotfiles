@@ -26,11 +26,8 @@ brew 'ruby'
 
 # casks
 
+cask '1password'
 cask 'alfred'
 cask 'dropbox'
 cask 'firefox'
 cask 'iterm2'
-
-# mas
-
-mas '1Password', id: 443987910
