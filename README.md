@@ -25,9 +25,9 @@ git pull origin master
 
 Log into your Apple ID in App Store.
 
-#### Install tools and apps with Homebrew Bundle
+#### Install fishshell
 
-`brew bundle --global -v`
+`brew install fish`
 
 #### Init your Mac
 
