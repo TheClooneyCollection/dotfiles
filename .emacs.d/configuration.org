@@ -17,7 +17,6 @@ Don't create those filename~ files, please.
 #+BEGIN_SRC emacs-lisp
   (setq custom-file "~/.emacs.d/custom.el")
 #+END_SRC
-
 * UI
 
 #+BEGIN_SRC emacs-lisp
@@ -155,6 +154,28 @@ Don't create those filename~ files, please.
                    (call-interactively #'projectile-invalidate-cache))
                  (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
+#+END_SRC
+** Switch project with helm and persp
+#+BEGIN_SRC emacs-lisp
+  (defun spacemacs/helm-persp-switch-project (arg)
+    (interactive "P")
+    (helm
+     :sources
+     (helm-build-in-buffer-source "*Helm Switch Project Layout*"
+       :data (lambda ()
+               (if (projectile-project-p)
+                   (cons (abbreviate-file-name (projectile-project-root))
+                         (projectile-relevant-known-projects))
+                 projectile-known-projects))
+       :fuzzy-match helm-projectile-fuzzy-match
+       :mode-line helm-read-file-name-mode-line-string
+       :action '(("Switch to Project Perspective" .
+                  (lambda (project)
+                    (let ((persp-reset-windows-on-nil-window-conf t))
+                      (persp-switch project)
+                      (let ((projectile-completion-system 'helm))
+                        (projectile-switch-project-by-name project)))))))
+     :buffer "*Helm Projectile Layouts*"))
 #+END_SRC
 * Set up =use-package=
 ** Always install all the packages
@@ -1108,6 +1129,19 @@ When opening magit, the wait for magithub to refresh data, kills me...
     :commands (projectile-ripgrep))
 #+END_SRC
 
+** persp
+#+BEGIN_SRC emacs-lisp
+  (use-package persp-mode
+    :init
+    (progn
+      (setq persp-reset-windows-on-nil-window-conf nil
+            persp-set-last-persp-for-new-frames nil
+            persp-set-ido-hooks t))
+    :config
+    (progn
+      (general-define-key "pl" 'spacemacs/helm-persp-switch-project)
+      (persp-mode)))
+#+END_SRC
 ** ggtags
 
 #+BEGIN_SRC emacs-lisp
@@ -1396,8 +1430,6 @@ CREATED: [2017-08-31 Thu]
 ** TODO org-babel-execute:swift v2 - handle errors with an error buffer
 CREATED: [2017-09-01 Fri]
 ** TODO Swift mode and 4 space indent
-CREATED: [2019-08-06 Tue]
-** TODO Give me a layout manager, please SPC pl
 CREATED: [2019-08-06 Tue]
 ** TODO Got to set up those templates as well
 CREATED: [2019-08-06 Tue]
