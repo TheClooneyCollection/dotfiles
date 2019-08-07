@@ -25,8 +25,8 @@
     cot = !git tag | fzf | xargs git checkout
     count = !git rev-list --count $(git name)
     cp = cherry-pick
-    d = !cdiff
-    dc = !cdiff --cached
+    d = !ydiff
+    dc = !ydiff --cached
     dd = !git d develop
     ; delete remote branch
     dr = !git push origin :$(git name)
@@ -36,7 +36,7 @@
     h = !git head
     hard-reset = reset --hard
     head = !GIT_NO_PAGER=1 git l -1
-    hp = !git log -1 -p --pretty="tformat:" | cdiff
+    hp = !git log -1 -p --pretty="tformat:" | ydiff
     hr = reset --hard
     ; issues = !open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
     l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
@@ -100,7 +100,7 @@
 [color]
     ui=auto
 [core]
-    editor = nvim
+    editor = vim
 [push]
     default = simple
 [credential]
