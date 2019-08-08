@@ -32,6 +32,8 @@ function mac_init
     disable_bouncing_dock_icons
     only_show_running_apps_in_dock
 
+    install-and-set-up-nix
+
     echo "Your mac is set up and ready!"
 end
 
@@ -56,6 +58,54 @@ function set_fish_as_default_shell
     echo ""
     echo "Done!"
     echo ""
+end
+
+function disable_bouncing_dock_icons
+    echo "Disabling bouncing dock icons"
+
+    defaults write com.apple.dock no-bouncing -bool TRUE
+    killall Dock
+
+    echo ""
+    echo "Disabled bouncing dock icons. 😝"
+    echo ""
+end
+
+function only_show_running_apps_in_dock
+    defaults write com.apple.dock static-only -bool TRUE; killall Dock
+end
+
+function install-and-set-up-nix
+    echo "Installing nix and setting it up"
+
+    install-nix
+    install-fisher
+    install-foreign-env
+
+    echo "Remember to either put this line into your fish shell config"
+    echo "  fenv source ~/.nix-profile/etc/profile.d/nix.sh"
+    echo "or run this in your fish shell"
+    echo "  echo \"fenv source ~/.nix-profile/etc/profile.d/nix.sh\" >> ~/.config/fish/config.fish"
+
+    fenv source ~/.nix-profile/etc/profile.d/nix.sh
+
+    echo "You should be able to run `nix repl` now."
+
+    echo ""
+    echo "Nix is installed 😝"
+    echo ""
+end
+
+function install-nix
+    curl https://nixos.org/nix/install | sh
+end
+
+function install-fisher
+    curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+end
+
+function install-foreign-env
+    fisher add oh-my-fish/plugin-foreign-env
 end
 
 function install_essential_packages
@@ -102,19 +152,4 @@ function install_ruby_gems
     echo ""
     echo "Done!"
     echo ""
-end
-
-function disable_bouncing_dock_icons
-    echo "Disabling bouncing dock icons"
-
-    defaults write com.apple.dock no-bouncing -bool TRUE
-    killall Dock
-
-    echo ""
-    echo "Disabled bouncing dock icons. 😝"
-    echo ""
-end
-
-function only_show_running_apps_in_dock
-    defaults write com.apple.dock static-only -bool TRUE; killall Dock
 end
