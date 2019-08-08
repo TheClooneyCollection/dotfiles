@@ -6,13 +6,15 @@ tap 'caskroom/fonts'
 # brews
 
 brew 'gpg'
+brew 'fzf'
 
 brew 'ctags'
 brew 'httpie'
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
 
-brew 'carthage'
+# TODO: Use Nix to install build related tools
+# brew 'carthage'
 # brew 'swiftlint'
 # brew 'swiftplate', args: ['HEAD']
 
