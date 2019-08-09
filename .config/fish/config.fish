@@ -111,6 +111,16 @@ function git --description "After running git commands that would affect HEAD, p
 end
 
 function fish_right_prompt
+    if test -n "$IN_NIX_SHELL"
+        if test $IN_NIX_SHELL != ""
+            if test $name != ""
+                set_color white
+                echo -n "[$name] "
+                set_color normal
+            end
+        end
+    end
+
     set_color green
     echo -n (date "+%H:%M")
     set_color normal
@@ -209,4 +219,4 @@ function git_repo_exists
     command git rev-parse --is-inside-work-tree > /dev/null ^ /dev/null
 end
 
-any-nix-shell fish --info-right | source
+any-nix-shell fish | source

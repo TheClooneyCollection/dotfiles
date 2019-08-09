@@ -88,6 +88,7 @@ function install-and-set-up-nix
     echo "  echo \"fenv source ~/.nix-profile/etc/profile.d/nix.sh\" >> ~/.config/fish/config.fish"
 
     fenv source ~/.nix-profile/etc/profile.d/nix.sh
+    install-any-nix-shell
 
     echo "You should be able to run `nix repl` now."
 
@@ -106,6 +107,10 @@ end
 
 function install-foreign-env
     fisher add oh-my-fish/plugin-foreign-env
+end
+
+function install-any-nix-shell
+    nix-env -i any-nix-shell
 end
 
 function install_essential_packages
