@@ -208,3 +208,5 @@ end
 function git_repo_exists
     command git rev-parse --is-inside-work-tree > /dev/null ^ /dev/null
 end
+
+any-nix-shell fish --info-right | source
