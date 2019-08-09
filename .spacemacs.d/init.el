@@ -52,6 +52,7 @@ This function should only modify configuration layer settings."
      (ruby :variables ruby-enable-enh-ruby-mode t)
      shell-scripts
      yaml
+     nixos
 
      auto-completion
      (git :packages (not magit-gitflow))
@@ -88,6 +89,8 @@ This function should only modify configuration layer settings."
      company-flx
      helm-ls-git
      tox
+
+     edit-indirect ; editing source code blocks in Markdown
 
      org-cliplink
 
