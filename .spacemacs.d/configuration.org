@@ -713,6 +713,13 @@
      (add-hook 'prog-mode-hook #'emr-initialize)
    #+END_SRC
 
+** ruby
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (use-package enh-ruby-mode
+        :mode ("\\.rb\\'" "Brewfile" "Fastfile" "Appfile"))
+   #+END_SRC
+
 ** slack
 
    #+BEGIN_SRC emacs-lisp
