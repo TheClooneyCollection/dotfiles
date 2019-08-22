@@ -10,6 +10,7 @@
     amd = commit --amend
     ap = add -p
     b = branch
+    binaries = !~/bin/git-binaries
     bm = branch --move
     c = commit -v
     ca = commit -av
