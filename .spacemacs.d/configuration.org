@@ -717,7 +717,7 @@
 
    #+BEGIN_SRC emacs-lisp :results output
      (use-package enh-ruby-mode
-        :mode ("\\.rb\\'" "Brewfile" "Fastfile" "Appfile"))
+        :mode ("\\.rb\\'" "Brewfile" "Fastfile" "Appfile" "Scanfile"))
    #+END_SRC
 
 ** slack
