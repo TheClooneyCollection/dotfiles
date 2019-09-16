@@ -455,6 +455,15 @@
      (add-hook 'csv-mode-hook #'csv-align-fields)
    #+END_SRC
 
+** flycheck
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (setq flycheck-python-pycompile-executable "python3")
+     (use-package flycheck-mode
+       :config
+       (setq flycheck-python-pycompile-executable "python3"))
+   #+END_SRC
+
 ** helm
 
 *** Notes
