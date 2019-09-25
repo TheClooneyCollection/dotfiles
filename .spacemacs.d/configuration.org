@@ -92,6 +92,11 @@
                                         (interactive)
                                         (find-file (or (org-file-path-or-nil "work/notes.org")
                                                        org-default-notes-file))))
+
+     (spacemacs/set-leader-keys "ow" #'(lambda ()
+                                         (interactive)
+                                         (find-file (or (org-file-path-or-nil "work/work.org")
+                                                        (org-file-path-or-nil "work.org")))))
    #+END_SRC
 
 * Toggles
