@@ -533,6 +533,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (require 'org-eww)
+      (require 'org-tempo)
       (require 'ob-shell)
     #+END_SRC
 
@@ -564,14 +565,14 @@
 *** Add structure templates
 
     #+BEGIN_SRC emacs-lisp :results output
-      (dolist (item '(("e" "#+BEGIN_SRC emacs-lisp :results output\n?\n#+END_SRC")
-                      ("ex" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE")
-                      ("s" "#+BEGIN_SRC swift\n?\n#+END_SRC")
-                      ("f" "#+BEGIN_SRC sh :results output\n?\n#+END_SRC")
-                      ("sh" "#+BEGIN_SRC sh :results output\n?\n#+END_SRC")
-                      ("ss" "#+BEGIN_SRC ?\n\n#+END_SRC")
-                      ("r" "#+BEGIN_SRC ruby :results output\n?\n#+END_SRC")
-                      ("p" "#+BEGIN_SRC python :results output\n?\n#+END_SRC")))
+      (dolist (item '(("e" . "emacs-lisp :results output")
+                      ("ex" . "example")
+                      ("s" . "swift")
+                      ("f" . "sh :results output")
+                      ("sh" . "sh :results output")
+                      ("ss" . "src")
+                      ("r" . "ruby :results output")
+                      ("p" . "python :results output")))
         (add-to-list 'org-structure-template-alist item))
     #+END_SRC
 
