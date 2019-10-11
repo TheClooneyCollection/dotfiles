@@ -566,7 +566,7 @@
 
     #+BEGIN_SRC emacs-lisp :results output
       (dolist (item '(("e" . "src emacs-lisp :results output")
-                      ("ex" . "src example")
+                      ("ex" . "example")
                       ("s" . "src swift")
                       ("f" . "src sh :results output")
                       ("sh" . "src sh :results output")
