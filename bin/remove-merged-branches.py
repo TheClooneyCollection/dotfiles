@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # Remove all merged branches, except ignored as specified in IGNORE_BRANCHES
 
 # Usage:
