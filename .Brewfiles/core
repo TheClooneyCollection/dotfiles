@@ -3,7 +3,7 @@
 # taps
 
 tap 'homebrew/bundle'
-tap 'caskroom/cask'
+tap 'homebrew/cask'
 tap "d12frosted/emacs-plus"
 # brews
 
