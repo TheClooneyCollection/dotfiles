@@ -177,11 +177,20 @@ function fish_prompt
         set suffix '$'
     end
 
-    switch (uname)
-        case Darwin
-            echo -n 'macOS '
+    # switch (uname)
+    #     case Darwin
+    #         echo -n 'macOS '
+    #     case '*'
+    #         echo -n (uname)
+    #         echo -n ' '
+    # end
+
+    # username
+    switch $USER
+        case nicholas.tian
         case '*'
-            echo -n (uname)
+            set_color cyan
+            echo -n $USER
             echo -n ' '
     end
 
@@ -200,14 +209,14 @@ function fish_prompt
         set_color $fish_color_error
     end
 
-    # git commit
-    git_repo_exists
-    if test $status -eq 0
-        set_color yellow
-        set commit (command git rev-parse --short HEAD)
-        echo -n "$commit"
-        set_color normal
-    end
+    # # git commit
+    # git_repo_exists
+    # if test $status -eq 0
+    #     set_color yellow
+    #     set commit (command git rev-parse --short HEAD)
+    #     echo -n "$commit"
+    #     set_color normal
+    # end
 
     echo
     echo -n "$suffix "
