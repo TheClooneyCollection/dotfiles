@@ -4,25 +4,12 @@
 
 tap 'homebrew/bundle'
 tap 'homebrew/cask'
-tap "d12frosted/emacs-plus"
+
 # brews
 
 brew 'mas' # cli for Mac App Store
 
-brew 'fish'
-brew 'git'
-brew 'git-lfs'
-
 brew 'ydiff' # needed by git for diffing
-
-brew 'vim'
-brew 'emacs-plus'
-
-brew 'ripgrep' # rg needed by emacs for searching
-brew 'ispell' # for emacs spell check
-
-brew 'python'
-brew 'ruby'
 
 # casks
 

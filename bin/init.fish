@@ -10,7 +10,12 @@ function generate_ssh_key
 end
 
 function brew_core
+    brew_base
     brew bundle --file=~/.Brewfiles/core
+end
+
+function brew_base
+    brew bundle --file=~/.Brewfiles/base
 end
 
 function brew_essential
