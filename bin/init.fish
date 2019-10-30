@@ -32,7 +32,14 @@ function mac_init
     disable_bouncing_dock_icons
     only_show_running_apps_in_dock
 
-    install-and-set-up-nix
+    for option in $argv
+        switch "$option"
+            case --no-nix --skip-nix
+                echo "Skipping nix"
+            case \*
+                install-and-set-up-nix
+        end
+    end
 
     echo "Your mac is set up and ready!"
 end
