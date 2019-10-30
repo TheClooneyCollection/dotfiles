@@ -56,14 +56,14 @@ Plug 'jiangmiao/auto-pairs' " () '', pairs, you get it
 
 " Languages
 
-Plug 'apple/swift', { 'rtp': 'utils/vim' }
+" Plug 'apple/swift', { 'rtp': 'utils/vim' }
 
 Plug 'dag/vim-fish' " fishshell
 
 " Autocomplete
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 
