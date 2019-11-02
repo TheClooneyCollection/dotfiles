@@ -141,7 +141,7 @@ function install_python_packages
     echo "Installing Python packages"
     echo ""
 
-    set packages cdiff ipython virtualenv pip-tools tox pygments
+    set packages ipython virtualenv pip-tools invoke
 
     # pip2 install $packages
     pip3 install $packages
@@ -159,7 +159,7 @@ function install_ruby_gems
     echo "Installing Ruby gems"
     echo ""
 
-    gem install bundler cocoapods rcodetools jekyll
+    gem install bundler cocoapods
 
     echo ""
     echo "Done!"
