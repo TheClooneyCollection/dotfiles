@@ -5,6 +5,13 @@
     ;(spacemacs/recompile-elpa t) ; FORCE recompele all files with SPC u
 #+END_SRC
 
+
+#+begin_src emacs-lisp
+  (setenv "SHELL" "/usr/local/bin/fish")
+  (setq shell-file-name "/usr/local/bin/fish"
+        explicit-shell-file-name shell-file-name)
+#+end_src
+
 * Fixes
 
 #+BEGIN_SRC emacs-lisp
