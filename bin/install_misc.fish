@@ -1,3 +1,11 @@
+function clone_spacemacs
+    git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/
+end
+
+function install_vagrant
+    brew cask install vagrant virtualbox virtualbox-extension-pack
+end
+
 function install_node_packages
     npm install -g js-beautify tern eslint
     # npm install -g jshint
@@ -18,10 +26,6 @@ function install_chisel
         echo "command script import /usr/local/opt/chisel/libexec/fblldb.py" >> ~/.lldbinit
         echo "Added chisel to ~/.lldbinit"
     end
-end
-
-function clone_spacemacs
-    git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/
 end
 
 function install_pelican
