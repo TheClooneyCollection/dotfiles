@@ -2,7 +2,9 @@ source ~/.config/fish/local.fish
 
 set -x PATH ~/bin/ $PATH
 
-fenv source ~/.nix-profile/etc/profile.d/nix.sh
+if test -e ~/.nix-profile/etc/profile.d/nix.sh
+    fenv source ~/.nix-profile/etc/profile.d/nix.sh
+end
 
 alias b 'bundle'
 alias bb 'brew bundle --global'
