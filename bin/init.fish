@@ -3,7 +3,7 @@ function generate_ssh_key
     echo "What's your email address?"
 
     read -l email
-    ssh-keygen -t rsa -b 4096 -C $email
+    ssh-keygen -t ed25519 -o -a 100 -C "$email"
 
     echo ""
     echo "Done!"
