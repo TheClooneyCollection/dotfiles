@@ -26,6 +26,18 @@ function brew_optional
     brew bundle --file=~/.Brewfiles/optional
 end
 
+function install_ruby
+    echo "Installing Ruby"
+    echo
+
+    rbenv install 2.6.5
+    rbenv global 2.6.5
+
+    echo
+    echo "Ruby is installed"
+    echo
+end
+
 function mac_init
     echo "Initializing your Mac :)"
 
@@ -39,10 +51,12 @@ function mac_init
 
     for option in $argv
         switch "$option"
-            case --no-nix --skip-nix
-                echo "Skipping nix"
-            case \*
+            case --install-nix --skip-nix
                 install-and-set-up-nix
+            case \*
+                echo "Skipping nix"
+
+                install_ruby
         end
     end
 

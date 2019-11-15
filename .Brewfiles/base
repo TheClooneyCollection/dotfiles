@@ -16,4 +16,4 @@ brew 'ripgrep' # rg needed by emacs for searching
 brew 'ispell' # for emacs spell check
 
 brew 'python'
-brew 'ruby'
+brew 'rbenv'
