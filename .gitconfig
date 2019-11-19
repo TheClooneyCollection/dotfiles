@@ -10,7 +10,6 @@
     amd = commit --amend
     ap = add -p
     b = branch
-    binaries = !~/bin/git-binaries
     bm = branch --move
     c = commit -v
     ca = commit -av
@@ -43,6 +42,7 @@
     l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
     la = !git l --all
     ls = ls-files
+    ls-binaries = !~/bin/git-binaries
     lsd = ls-tree -d HEAD
     lso = ls-files --others
     lp = log -p
