@@ -14,13 +14,24 @@
 
 * Fixes
 
-#+BEGIN_SRC emacs-lisp
-  (if (boundp 'column-number-indicator-zero-based)
-      (message "YOUR SPACEMACS NEED NOT SAVING")
-    (progn
-      (setq column-number-indicator-zero-based nil)
-      (message "SPACEMACS SAVED FROM DESTRUCTION")))
-#+END_SRC
+  #+begin_src emacs-lisp :results output
+    (defun spacemacs/objective-c-file-p ()
+      (and buffer-file-name
+           (string= (file-name-extension buffer-file-name) "m")
+           (re-search-forward "@interface"
+                              magic-mode-regexp-match-limit t)))
+
+    (add-to-list 'magic-mode-alist
+                 (cons #'spacemacs/objective-c-file-p #'objc-mode))
+  #+end_src
+
+  #+BEGIN_SRC emacs-lisp
+    (if (boundp 'column-number-indicator-zero-based)
+        (message "YOUR SPACEMACS NEED NOT SAVING")
+      (progn
+        (setq column-number-indicator-zero-based nil)
+        (message "SPACEMACS SAVED FROM DESTRUCTION")))
+  #+END_SRC
 
 * Key bindings
 ** =TAB= to toggle fold
