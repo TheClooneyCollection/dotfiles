@@ -1,3 +1,6 @@
+# Base: The very basis of the command line system
+# Goal: Start the setup process asap
+
 # taps
 
 tap "d12frosted/emacs-plus"

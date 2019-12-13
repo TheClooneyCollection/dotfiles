@@ -1,3 +1,6 @@
+# Core: The pieces of software allow us to set up macOS
+# Goal: This layer should seed the wider initialization process
+
 # AKA tier zero
 
 # taps
@@ -18,3 +21,4 @@ cask 'alfred'
 cask 'dropbox'
 cask 'firefox'
 cask 'iterm2'
+cask 'little-snitch'
