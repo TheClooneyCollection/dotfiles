@@ -117,6 +117,12 @@
                                                         (org-file-path-or-nil "work.org")))))
    #+END_SRC
 
+* Evil
+
+  #+begin_src emacs-lisp :results output
+    (setq evil-kill-on-visual-paste nil)
+  #+end_src
+
 * Toggles
 
 ** auto-fill-mode
@@ -176,7 +182,6 @@
    #+END_SRC
 
 * Behaviors
-
 ** Save buffers when losing focus
 
    #+BEGIN_SRC emacs-lisp
