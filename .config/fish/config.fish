@@ -26,7 +26,7 @@ alias oo 'open .'
 alias g 'git'
 
 alias e 'emacs -nw'
-alias v 'nvim'
+alias v 'vim'
 
 alias ig 'v (git rev-parse --show-toplevel)/.gitignore'
 
