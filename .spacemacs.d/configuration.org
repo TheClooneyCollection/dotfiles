@@ -96,8 +96,11 @@
    #+END_SRC
 
 ** =SPC oo= to edit =org-default-notes-file=
-
    #+BEGIN_SRC emacs-lisp
+     (spacemacs/set-leader-keys "on" #'(lambda ()
+                                        (interactive)
+                                        (find-file (org-file-path (format-time-string "%Y-%m-%d.org")))))
+
      (spacemacs/set-leader-keys "oo" #'(lambda ()
                                         (interactive)
                                         (find-file (or (org-file-path-or-nil "work/notes.org")
