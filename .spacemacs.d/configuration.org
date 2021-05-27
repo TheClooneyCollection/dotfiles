@@ -5,7 +5,6 @@
     ;(spacemacs/recompile-elpa t) ; FORCE recompele all files with SPC u
 #+END_SRC
 
-
 #+begin_src emacs-lisp
   (setenv "SHELL" "/usr/local/bin/fish")
   (setq shell-file-name "/usr/local/bin/fish"
@@ -114,9 +113,23 @@
 
 * Evil
 
+** Don't copy whatever I delete into the copy/paste kill-ring, please
   #+begin_src emacs-lisp :results output
     (setq evil-kill-on-visual-paste nil)
   #+end_src
+
+** Don't quit on me even if I say so!
+
+   This works in most cases unless I am editing in Org source... Oh well...
+
+  #+begin_src emacs-lisp :results output
+    (evil-ex-define-cmd "wq" #'(lambda ()
+                                 (interactive)
+                                 (save-buffer)
+                                 (evil-window-delete)))
+    (evil-ex-define-cmd "q[uit]" 'evil-window-delete )
+    (evil-ex-define-cmd "wqa" 'evil-write-all )
+#+end_src
 
 * Toggles
 
@@ -550,7 +563,6 @@
 *** Load packages
 
     #+BEGIN_SRC emacs-lisp
-      (require 'org-eww)
       (require 'org-tempo)
       (require 'ob-shell)
     #+END_SRC
@@ -750,7 +762,7 @@
 
    #+BEGIN_SRC emacs-lisp :results output
      (use-package enh-ruby-mode
-        :mode ("\\.rb\\'" "Brewfile" "Fastfile" "Appfile" "Scanfile"))
+        :mode ("\\.rb\\'" "Brewfile" "Fastfile" "Appfile" "Scanfile" "Matchfile"))
    #+END_SRC
 
 ** slack
