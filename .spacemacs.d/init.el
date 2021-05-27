@@ -41,20 +41,21 @@ This function should only modify configuration layer settings."
      org
      (python :variables python-backend 'anaconda)
      swift
+     kotlin
 
      ;; Minor languages
+     protobuf
      typescript
-     csharp
      html
      csv
-     (javascript :variables javascript-backend 'tern)
+     ;; (javascript :variables javascript-backend 'tern)
      json
      (markdown :packages markdown-mode)
      (ruby :variables ruby-enable-enh-ruby-mode t)
      shell-scripts
      yaml
-     nixos
 
+     ;; Utilities
      auto-completion
      (git :packages (not magit-gitflow))
      (github :packages magithub)
@@ -90,6 +91,8 @@ This function should only modify configuration layer settings."
      company-flx
      helm-ls-git
      tox
+
+     markdown-toc
 
      edit-indirect ; editing source code blocks in Markdown
 
