@@ -113,7 +113,17 @@
 
 * Evil
 
+** Do replace with case-sensitivity
+
+  #+begin_src emacs-lisp :results output
+    (setq evil-ex-substitute-case t
+          evil-ex-search-case nil)
+  #+end_src
+
+  #+RESULTS:
+
 ** Don't copy whatever I delete into the copy/paste kill-ring, please
+
   #+begin_src emacs-lisp :results output
     (setq evil-kill-on-visual-paste nil)
   #+end_src

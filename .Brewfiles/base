@@ -12,6 +12,7 @@ brew 'git'
 brew 'git-lfs'
 
 brew 'emacs-plus'
+brew 'libvterm'
 
 brew 'vim'
 

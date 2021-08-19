@@ -48,10 +48,13 @@ This function should only modify configuration layer settings."
      typescript
      html
      csv
-     ;; (javascript :variables javascript-backend 'tern)
+     (javascript :variables
+                 js2-basic-offset 2
+                 js-indent-level 2)
      json
      (markdown :packages markdown-mode)
      (ruby :variables ruby-enable-enh-ruby-mode t)
+     shell
      shell-scripts
      yaml
 
@@ -249,7 +252,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 17
+                               :size 24
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
