@@ -2,4 +2,4 @@
 # name: Update CHANGELOG file
 # key: c
 # --
-Update the CHANGELOG.md file
+docs: Add a changelog entry for $0
