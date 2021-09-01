@@ -54,7 +54,7 @@ This function should only modify configuration layer settings."
      json
      (markdown :packages markdown-mode)
      (ruby :variables ruby-enable-enh-ruby-mode t)
-     shell
+     (shell :variables shell-default-shell 'vterm)
      shell-scripts
      yaml
 
