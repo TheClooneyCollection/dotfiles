@@ -35,6 +35,8 @@ alias vu 'va up'
 alias vup 'va up --provision'
 alias vsh 'va ssh'
 
+alias gitignore-from-pasteboard 'pbpaste | cat > .gitignore'
+
 # brew
 function update_casks --description "Update outdated casks"
     brew cask outdated
