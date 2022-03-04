@@ -4,9 +4,9 @@
 
 #### Install Git
 
-##### (`if macOS`) Install Git with Homebrew
+##### (`if macOS`) Install Git with [Homebrew](https://brew.sh)
 
-`/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` (Updated in 2022 March)
 
 (`git` is installed when you installed Homebrew)
 
