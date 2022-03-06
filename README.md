@@ -2,13 +2,13 @@
 
 ## Usage
 
-#### Install Git
+#### Initiailize!
+
+(These **could** be automated as simple as `make bootstrap`.)
 
 ##### (`if macOS`) Install Git with [Homebrew](https://brew.sh)
 
 `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` (Updated in 2022 March)
-
-(`git` is installed when you installed Homebrew)
 
 #### Set up your `~`
 
@@ -21,7 +21,11 @@ git pull origin main
 # You should have all the files :)
 ```
 
-#### Log into Your Apple ID in App Store
+#### You'd need to download Xcode manually tho...
+
+From here: https://developer.apple.com/download/all/?q=xcode
+
+#### Log into your Apple ID in App Store
 
 Log into your Apple ID in App Store.
 
