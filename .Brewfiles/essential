@@ -13,21 +13,17 @@ brew 'httpie'
 brew 'coreutils' # gln for relative symlink
 brew 'tree'
 
-# TODO: Use Nix to install build related tools
-# brew 'carthage'
-# brew 'swiftlint'
-# brew 'swiftplate', args: ['HEAD']
+brew 'carthage'
+brew 'swiftlint'
+brew 'swiftformat'
 
 # casks
 
 cask 'bartender'
 cask 'istat-menus'
-cask 'google-chrome' # bloody hangout
-cask 'google-drive-file-stream'
 
 cask 'caffeine'
 cask 'moom'
-cask 'gfxCardStatus' # for work laptop
 
 # fonts
 
@@ -39,9 +35,9 @@ cask 'font-source-code-pro-for-powerline'
 
 mas 'DaisyDisk', id: 411643860
 mas 'GIPHY CAPTURE', id: 668208984
-mas 'Agenda.', id: 1287445660
+# mas 'Agenda.', id: 1287445660
 mas 'Disk Care', id: 913724705
-mas 'MindNode 5', id: 1289197285
+# mas 'MindNode 5', id: 1289197285
 
 mas 'Pages', id: 409201541
 mas 'Keynote', id: 409183694
