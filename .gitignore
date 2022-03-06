@@ -1,6 +1,7 @@
 /*
 
 !/.Brewfiles/
+/.Brewfiles/*.lock.json
 !/.Brewfile
 !/.Brewfile.games
 !/.ctags
