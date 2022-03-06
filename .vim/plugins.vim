@@ -6,9 +6,15 @@ let s:vim_plugins_path = '~/.vim-plugins'
 let s:plugin_manager_path = s:vim_plugins_path.'/plugin-manager'
 
 if !isdirectory(expand(s:plugin_manager_path))
+  " echo "Downloading plugin manager!"
   silent exec '!mkdir -p '.s:plugin_manager_path
   silent exec '!git clone --depth=1 '.s:plugin_manager_git.' '.s:plugin_manager_path
+  " exec '!mkdir -p '.s:plugin_manager_path
+  " exec '!git clone --depth=1 '.s:plugin_manager_git.' '.s:plugin_manager_path
   let s:initialized_plugin_manager=1
+  " echo "Finished downloading!"
+else
+  " echo "Plugin manager already exists!"
 endif
 
 exec 'source '.s:plugin_manager_path.'/plug.vim'

@@ -2,12 +2,12 @@
 autocmd!
 
 let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python3_host_prog = '/opt/homebrew/bin/python3'
 
 set nocompatible
 filetype off
 
-set shell=/usr/local/bin/fish
+set shell=/opt/homebrew/bin/fish
 
 set hidden
 set history=10000
