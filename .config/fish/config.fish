@@ -37,6 +37,8 @@ alias vsh 'va ssh'
 
 alias gitignore-from-pasteboard 'pbpaste | cat > .gitignore'
 
+alias weather 'curl "wttr.in?m"'
+
 # brew
 function update_casks --description "Update outdated casks"
     brew cask outdated
