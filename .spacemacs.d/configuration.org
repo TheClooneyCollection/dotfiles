@@ -136,9 +136,17 @@
     (evil-ex-define-cmd "wq" #'(lambda ()
                                  (interactive)
                                  (save-buffer)
-                                 (evil-window-delete)))
-    (evil-ex-define-cmd "q[uit]" 'evil-window-delete )
+                                 (kill-this-buffer)))
+    (evil-ex-define-cmd "q[uit]" 'evil-quit )
     (evil-ex-define-cmd "wqa" 'evil-write-all )
+
+    (defun with-editor-evil-setup ()
+      (evil-ex-define-cmd "wq" 'with-editor-finish))
+
+    (add-hook 'with-editor-mode-hook 'with-editor-evil-setup)
+    (add-hook 'org-source-mode-hook #'(lambda ()
+                                        (interactive)
+                                        (org-edit-src-exit)))
 #+end_src
 
 * Toggles
