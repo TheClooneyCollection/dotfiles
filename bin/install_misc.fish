@@ -43,21 +43,9 @@ function compile_vim_plugins
 end
 
 function compile_YCM
-    pushd ~/.vim/.vim/bundle/YouCompleteMe/
+    pushd ~/.vim-plugins/plugins/YouCompleteMe/
     echo "Compiling YCM"
     ./install.py
-    echo ""
-    echo "Done!"
-    echo ""
-    popd
-end
-
-function compile_command_t
-    pushd ~/.vim/.vim/bundle/command-t/ruby/command-t/
-    echo "Configuring CommandT"
-    ruby extconf.rb
-    echo "Compiling CommandT"
-    make
     echo ""
     echo "Done!"
     echo ""

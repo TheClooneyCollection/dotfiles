@@ -71,6 +71,8 @@ Plug 'dag/vim-fish' " fishshell
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'zchee/deoplete-jedi'
 
+Plug 'ycm-core/YouCompleteMe'
+
 call plug#end()
 
 if exists("s:initialized_plugin_manager") && s:initialized_plugin_manager
