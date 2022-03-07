@@ -103,25 +103,25 @@
 [core]
     editor = vim
 [push]
-	default = current
+    default = current
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 [filter "media"]
-	clean = git media clean %f
-	smudge = git media smudge %f
-	required = true
+    clean = git media clean %f
+    smudge = git media smudge %f
+    required = true
 [magithub]
-	online = false
+    online = false
 [magithub "status"]
-	includeStatusHeader = false
-	includePullRequestsSection = false
-	includeIssuesSection = false
+    includeStatusHeader = false
+    includePullRequestsSection = false
+    includeIssuesSection = false
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [branch]
-	autoSetupMerge = always
+    autoSetupMerge = always
