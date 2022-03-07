@@ -6,8 +6,8 @@
 #+END_SRC
 
 #+begin_src emacs-lisp
-  (setenv "SHELL" "/usr/local/bin/fish")
-  (setq shell-file-name "/usr/local/bin/fish"
+  (setenv "SHELL" "/opt/homebrew/bin/fish")
+  (setq shell-file-name "/opt/homebrew/bin/fish"
         explicit-shell-file-name shell-file-name)
 #+end_src
 
@@ -633,7 +633,7 @@
 *** Babel
 
     #+BEGIN_SRC emacs-lisp
-      (setq org-babel-python-command "/usr/local/bin/python3")
+      (setq org-babel-python-command "/opt/homebrew/bin/python3")
     #+END_SRC
 
 
