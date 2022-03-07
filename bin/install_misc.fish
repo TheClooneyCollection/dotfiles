@@ -3,7 +3,7 @@ function clone_spacemacs
 end
 
 function install_vagrant
-    brew cask install vagrant virtualbox virtualbox-extension-pack
+    brew install --cask vagrant virtualbox virtualbox-extension-pack
 end
 
 function install_node_packages
