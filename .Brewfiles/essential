@@ -27,6 +27,7 @@ cask 'moom'
 
 # fonts
 
+brew 'svn' # Needed to install the fonts
 cask 'font-inconsolata-g-for-powerline'
 cask 'font-source-code-pro'
 cask 'font-source-code-pro-for-powerline'
