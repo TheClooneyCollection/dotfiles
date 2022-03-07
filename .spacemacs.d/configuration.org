@@ -549,7 +549,7 @@
 ** helm-ls-git
 
    #+BEGIN_SRC emacs-lisp
-     (spacemacs/set-leader-keys "ff" #'helm-ls-git-ls)
+     (spacemacs/set-leader-keys "ff" #'helm-ls-git)
    #+END_SRC
 
 ** irc
