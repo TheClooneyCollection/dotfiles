@@ -3,6 +3,7 @@ let mapleader = "\<space>"
 " https://github.com/junegunn/fzf/wiki/Examples-(vim)
 "
 set rtp+=/usr/local/opt/fzf " Add fzf's vim plugin
+set rtp+=/opt/homebrew/opt/fzf " Add fzf's vim plugin on M1 MacBooks
 nnoremap <silent> <leader>f :call fzf#run({
             \ 'source': 'git ls-files',
             \ 'sink': 'e',
