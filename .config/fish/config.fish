@@ -1,6 +1,6 @@
 source ~/.config/fish/local.fish
 
-set -x PATH ~/bin/ $PATH
+set -x PATH /opt/homebrew/bin/ ~/bin/ $PATH
 
 if test -e ~/.nix-profile/etc/profile.d/nix.sh
     fenv source ~/.nix-profile/etc/profile.d/nix.sh
