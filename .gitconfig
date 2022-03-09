@@ -34,6 +34,7 @@
 	ds = diff --stat
 	dss = diff --shortstat
 	delete-all = rm -r '*'
+	destroy = !git delete-all && rm -rf ~/.git
 
 	f = fetch
 	h = !git head
