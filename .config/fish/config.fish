@@ -36,6 +36,8 @@ alias v 'vim'
 
 alias ig 'v (git rev-parse --show-toplevel)/.gitignore'
 
+alias mkdir 'mkdir -p'
+
 alias va 'vagrant'
 alias vu 'va up'
 alias vup 'va up --provision'
