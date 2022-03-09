@@ -56,6 +56,7 @@ This function should only modify configuration layer settings."
      (shell :variables shell-default-shell 'vterm)
      shell-scripts
      yaml
+     vimscript
 
      ;; Utilities
      auto-completion
