@@ -41,6 +41,7 @@ This function should only modify configuration layer settings."
      (python :variables python-backend 'anaconda)
      swift
      kotlin
+     ansible
 
      ;; Minor languages
      protobuf
