@@ -2,16 +2,20 @@ source ~/.config/fish/local.fish
 
 set -x PATH /opt/homebrew/bin/ ~/bin/ $PATH
 
+if type -q invoke
+    invoke --print-completion-script=fish | source
+end
+
 if test -e ~/.nix-profile/etc/profile.d/nix.sh
     fenv source ~/.nix-profile/etc/profile.d/nix.sh
 end
 
-invoke --print-completion-script=fish | source
-
 # Load rbenv automatically by appending
 # the following to ~/.config/fish/config.fish:
 
-status --is-interactive; and source (rbenv init -|psub)
+if type -q rbenv
+    status --is-interactive; and source (rbenv init -|psub)
+end
 
 
 alias b 'bundle'
