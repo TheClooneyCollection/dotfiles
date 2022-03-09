@@ -33,6 +33,7 @@
 	dr = !git push origin :$(git name)
 	ds = diff --stat
 	dss = diff --shortstat
+	delete-all = rm -r '*'
 
 	f = fetch
 	h = !git head
