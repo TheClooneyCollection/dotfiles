@@ -19,7 +19,6 @@ endif
 
 exec 'source '.s:plugin_manager_path.'/plug.vim'
 
-
 if exists('s:initialized_plugin_manager') && s:initialized_plugin_manager
   unlet s:initialized_plugin_manager
   autocmd VimEnter * PlugInstall
