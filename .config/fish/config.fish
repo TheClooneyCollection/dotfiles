@@ -1,4 +1,6 @@
-source ~/.config/fish/local.fish
+if test -e ~/.config/fish/local.fish
+    source ~/.config/fish/local.fish
+end
 
 set -x PATH /opt/homebrew/bin/ ~/bin/ $PATH
 
