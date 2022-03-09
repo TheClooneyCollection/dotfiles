@@ -2,7 +2,7 @@ if test -e ~/.config/fish/local.fish
     source ~/.config/fish/local.fish
 end
 
-set -x PATH /opt/homebrew/bin/ ~/bin/ $PATH
+fish_add_path /opt/homebrew/bin ~/bin
 
 if type -q invoke
     invoke --print-completion-script=fish | source
