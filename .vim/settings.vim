@@ -1,13 +1,17 @@
 " prevent duplicate autocmd when souring .vimrc again
 autocmd!
 
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/opt/homebrew/bin/python3'
+let g:brew_prefix = system('brew --prefix')
+
+let g:python_host_prog = brew_prefix . '/bin/python'
+let g:python3_host_prog = brew_prefix . '/bin/python3'
 
 set nocompatible
 filetype off
 
-set shell=/opt/homebrew/bin/fish
+let g:fish = brew_prefix . '/bin/fish'
+
+set shell=fish
 
 set hidden
 set history=10000
