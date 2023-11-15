@@ -13,6 +13,7 @@ python = "^3.12"
 [tool.poetry.group.dev.dependencies]
 click = "^8.1.7"
 invoke = "^2.2.0"
+ipython = "^8.17.2"
 
 [build-system]
 requires = ["poetry-core"]

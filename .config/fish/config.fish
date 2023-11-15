@@ -4,12 +4,18 @@ end
 
 fish_add_path /opt/homebrew/bin ~/bin
 
-if type -q invoke
-    invoke --print-completion-script=fish | source
+# Set up poetry shell on start up
+
+if type -q poetry
+    # poetry shell --quiet
+    # clear
+    source (poetry env info --path)/bin/activate.fish
 end
 
-if test -e ~/.nix-profile/etc/profile.d/nix.sh
-    fenv source ~/.nix-profile/etc/profile.d/nix.sh
+# Set up invoke auto complete on start up
+
+if type -q invoke
+    invoke --print-completion-script=fish | source
 end
 
 # Load rbenv automatically by appending
@@ -46,13 +52,6 @@ alias vsh 'va ssh'
 alias gitignore-from-pasteboard 'pbpaste | cat > .gitignore'
 
 alias weather 'curl "wttr.in?m"'
-
-# brew
-function update_casks --description "Update outdated casks"
-    brew cask outdated
-
-    brew cask outdated | cut -d " " -f 1 | xargs brew cask install --force
-end
 
 # fish
 
