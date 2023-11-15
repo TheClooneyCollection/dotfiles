@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "the-root"
+version = "1.0.0"
+description = "The Root Virtual Environment"
+authors = ["NicholasTD07 <NicholasTD07@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[tool.poetry.group.dev.dependencies]
+click = "^8.1.7"
+invoke = "^2.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

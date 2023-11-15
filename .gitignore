@@ -1,5 +1,8 @@
 /*
 
+!/tasks.py
+!/pyproject.toml
+
 !/.Brewfiles/
 /.Brewfiles/*.lock.json
 !/.Brewfile
