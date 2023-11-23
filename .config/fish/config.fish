@@ -10,6 +10,9 @@ if type -q poetry
     # poetry shell --quiet
     # clear
     source (poetry env info --path)/bin/activate.fish
+    if test $status -ne 0
+        echo "Please run poetry install --no-root first."
+    end
 end
 
 # Set up invoke auto complete on start up
