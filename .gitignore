@@ -1,5 +1,8 @@
 /*
 
+!/.archive
+!/.archive/*
+
 !/tasks.py
 !/pyproject.toml
 
