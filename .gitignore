@@ -6,31 +6,25 @@
 !/tasks.py
 !/pyproject.toml
 
-!/.Brewfiles/
-/.Brewfiles/*.lock.json
-!/.Brewfile
-!/.Brewfile.games
-!/.ctags
-!/.globalrc
-
 !bin/
 !bin/*
 
-!/sandbox-profiles/
-
-!/requirements.in
-!/requirements.txt
+# Emacs
 
 !/.spacemacs.d
+
+## Track nothing else
+
 .spacemacs.d/*
+
+## But these:
+
 !/.spacemacs.d/snippets/
 !/.spacemacs.d/init.el
 !/.spacemacs.d/configuration.org
 !/.spacemacs.d/configuration.emacs.org
 
-!/.spacemacs
-.spacemacs/**/*
-!/.spacemacs/.spacemacs
+# Vim
 
 !/.vimrc
 !/.vim
@@ -45,6 +39,8 @@
 !/.vim/easy-motion.vim
 !/.vim/tagbar.vim
 !/.vim/neomake.vim
+
+# Config
 
 !.config/
 .config/*
@@ -61,8 +57,4 @@
 
 !.gitignore
 !.gitconfig
-!.githelpers
-!.git_template/
-!.git_template/hooks/
-!.git_template/hooks/*
 
