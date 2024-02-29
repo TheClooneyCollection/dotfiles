@@ -14,6 +14,7 @@ python = "^3.12"
 click = "^8.1.7"
 invoke = "^2.2.0"
 ipython = "^8.17.2"
+pyflakes = "^3.2.0"
 
 [build-system]
 requires = ["poetry-core"]
