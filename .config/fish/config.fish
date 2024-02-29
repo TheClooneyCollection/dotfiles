@@ -2,7 +2,7 @@ if test -e ~/.config/fish/local.fish
     source ~/.config/fish/local.fish
 end
 
-fish_add_path /opt/homebrew/bin ~/bin
+fish_add_path /opt/homebrew/bin ~/bin (brew --prefix python)/libexec/bin
 
 # Set up poetry shell on start up
 
