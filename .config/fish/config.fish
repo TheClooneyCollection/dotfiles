@@ -13,17 +13,33 @@ if type -q poetry
     if test $status -ne 0
         echo "Please run poetry install --no-root first."
     end
+else
+    echo "poetry not installed..."
+end
+
+# Set up thefuck
+
+if type -q thefuck
+    thefuck --alias | source
+else
+    echo "thefuck not installed..."
 end
 
 # Set up zoxide
 
-zoxide init fish | source
-zoxide init --cmd cd fish | source
+if type -q zoxide
+  zoxide init fish | source
+  zoxide init --cmd cd fish | source
+else
+    echo "zoxide not installed..."
+end
 
 # Set up invoke auto complete on start up
 
 if type -q invoke
     invoke --print-completion-script=fish | source
+else
+    echo "invoke not installed..."
 end
 
 # Load rbenv automatically by appending
@@ -31,6 +47,8 @@ end
 
 if type -q rbenv
     status --is-interactive; and source (rbenv init -|psub)
+else
+    echo "rbenv not installed..."
 end
 
 # aliases
