@@ -1,6 +1,7 @@
 import click
 import invoke
 
+
 @invoke.task
 def trash_empty_files(c):
     from pathlib import Path
@@ -62,11 +63,13 @@ def trash_empty_files(c):
 
 # Files namespace
 
+
 files = invoke.Collection('files')
 
 files.add_task(trash_empty_files, 'trash_empty')
 
 # Root namespace
+
 
 namespace = invoke.Collection()
 
