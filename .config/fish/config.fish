@@ -15,6 +15,11 @@ if type -q poetry
     end
 end
 
+# Set up zoxide
+
+zoxide init fish | source
+zoxide init --cmd cd fish | source
+
 # Set up invoke auto complete on start up
 
 if type -q invoke
@@ -28,6 +33,7 @@ if type -q rbenv
     status --is-interactive; and source (rbenv init -|psub)
 end
 
+# aliases
 
 alias b 'bundle'
 alias bb 'brew bundle --global'
@@ -60,10 +66,6 @@ alias weather 'curl "wttr.in?m"'
 
 function c --description "Edit fish shell's config file in nvim"
     v (config_path)
-end
-
-function t
-    z "$argv"
 end
 
 function r --description "Reload fish shell's config file"
@@ -133,6 +135,8 @@ function git --description "After running git commands that would affect HEAD, p
 
     return $command_status
 end
+
+# fish prompt
 
 function fish_right_prompt
     if test -n "$IN_NIX_SHELL"
