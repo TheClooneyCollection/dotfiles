@@ -2,6 +2,35 @@
 	name = NicholasClooney
 	email = 137233165+NicholasClooney@users.noreply.github.com
 
+[init]
+	defaultBranch = main
+
+[color]
+	ui=auto
+
+[core]
+	editor = vim
+
+[push]
+	default = current
+
+[credential]
+	helper = osxkeychain
+
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[submodule]
+	recurse = true
+
 [alias]
 	a = add
 	aa = add --all
@@ -102,30 +131,11 @@
 	prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pulls/g")
 	repo = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\//g")
 
-[color]
-	ui=auto
-[core]
-	editor = vim
-[push]
-	default = current
-[credential]
-	helper = osxkeychain
-[filter "media"]
-	clean = git media clean %f
-	smudge = git media smudge %f
-	required = true
 [magithub]
 	online = false
+
 [magithub "status"]
 	includeStatusHeader = false
 	includePullRequestsSection = false
 	includeIssuesSection = false
-[init]
-	defaultBranch = main
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-[submodule]
-	recurse = true
+
