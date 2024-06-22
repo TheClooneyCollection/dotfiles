@@ -590,6 +590,13 @@
      (spacemacs/set-leader-keys "gg" #'magit-status)
    #+END_SRC
 
+** magit-delta
+
+   #+BEGIN_SRC emacs-lisp
+     (setq magit-delta-delta-args
+           (append magit-delta-delta-args '("--features" "magit-delta")))
+   #+END_SRC
+
 ** org
 
    #+BEGIN_SRC emacs-lisp
