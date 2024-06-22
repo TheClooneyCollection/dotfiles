@@ -517,6 +517,16 @@
      (add-hook 'csv-mode-hook #'csv-align-fields)
    #+END_SRC
 
+** exec-path-from-shell
+
+   #+BEGIN_SRC emacs-lisp :results output
+     (when (memq window-system '(mac ns x))
+       (exec-path-from-shell-initialize))
+
+     (when (daemonp)
+       (exec-path-from-shell-initialize))
+   #+END_SRC
+
 ** flycheck
 
    #+BEGIN_SRC emacs-lisp :results output

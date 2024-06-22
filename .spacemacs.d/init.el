@@ -99,6 +99,8 @@ This function should only modify configuration layer settings."
      markdown-toc
 
      edit-indirect ; editing source code blocks in Markdown
+
+     exec-path-from-shell ; Emacs, just use the PATH from shell please
      )
 
    ;; A list of packages that cannot be updated.
