@@ -114,14 +114,18 @@
 
 	ppr = pull --rebase
 	pt = push --tags
+
 	r = !GIT_NO_PAGER=1 git l -10
 	rr = !GIT_NO_PAGER=1 git l -50
 	ra = remote add origin
-	rbabt = rebase --abort
+	rba = rebase --abort
 	rbc = rebase --continue
 	rh = !~/bin/checkout-history
 	ri = rebase -i
 	rs = reset
+
+    rebase-onto-develop = !git checkout develop && git pull && git checkout - && git rebase develop
+
 	size = !git count-objects -vH
 	s = status --short --branch
 	sc = !git s | grep -E '^(U.|.U)' | sed -e 's/.U //g' -e 's/U. //g' -e 's/.*/\"&\"/g' # show merge conflicts
