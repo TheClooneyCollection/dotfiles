@@ -125,6 +125,7 @@
 	rs = reset
 
     rebase-onto-develop = !git checkout develop && git pull && git checkout - && git rebase develop
+    force-push-after-rebasing-onto-develop = !git rebase-onto-develop && git push --force-with-lease
 
 	size = !git count-objects -vH
 	s = status --short --branch
