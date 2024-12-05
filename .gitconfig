@@ -45,6 +45,32 @@
 	recurse = true
 
 [alias]
+
+
+    count = !git rev-list --count $(git name)
+
+	delete-all = rm -r '*'
+	destroy = !git delete-all && rm -rf ~/.git
+
+    force-push = push --force-with-lease
+    dark-force-push = push --force
+
+    checkout-latest-develop = !git checkout develop && git pull
+    rebase-onto-latest-develop = !git checkout-latest-develop && git checkout - && git rebase develop
+    force-push-after-rebasing-onto-develop = !git rebase-onto-develop && git force-push
+
+    search = log --grep
+
+	undo = !git add --all && git stash && git reset --hard
+	untracked = !git lfo
+
+	whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
+	today = !git whathaveidone --since 7am
+	week = !git whathaveidone --since 'This Monday'
+	lastweek = !git whathaveidone --since 'Last Monday' --until 'Last Friday'
+
+# shortcuts
+
 	a = add
 	aa = add --all
 	ac = !git aa && git c
@@ -58,13 +84,13 @@
 	cd = checkout develop
 	ci = check-ignore -v
 	cl = clone
-	cm = checkout master
+	cm = checkout main
 	co = checkout
+    cob = checkout -b
 	; Must have fzf installed
 	cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
 	; commits = !open (git ls-remote --get-url origin | sed 's/\.git/\/commits/g')
 	cot = !git tag | fzf | xargs git checkout
-	count = !git rev-list --count $(git name)
 	cp = cherry-pick
 
 	d = diff
@@ -74,8 +100,6 @@
 	dr = !git push origin :$(git name)
 	ds = diff --stat
 	dss = diff --shortstat
-	delete-all = rm -r '*'
-	destroy = !git delete-all && rm -rf ~/.git
 
 	f = fetch
 	h = !git head
@@ -92,7 +116,9 @@
 	lso = ls-files --others
 	lp = log -p
 	m = merge
+    # merged to main
 	m2m = !branch=$(git name) && git cm && git mff $branch
+    # merged to develop
 	m2d = !branch=$(git name) && git cd && git mff $branch
 	md = merge develop
 	mod = merge origin/develop
@@ -124,25 +150,14 @@
 	ri = rebase -i
 	rs = reset
 
-    rebase-onto-develop = !git checkout develop && git pull && git checkout - && git rebase develop
-    force-push-after-rebasing-onto-develop = !git rebase-onto-develop && git push --force-with-lease
-
 	size = !git count-objects -vH
 	s = status --short --branch
 	sc = !git s | grep -E '^(U.|.U)' | sed -e 's/.U //g' -e 's/U. //g' -e 's/.*/\"&\"/g' # show merge conflicts
 	scc = !git s | grep -E '^(U.|.U)'
-    search = log --grep
 	st = stash save
 	stc = stash clear
 	stl = stash list
 	stp = stash pop
-	undo = !git add --all && git stash && git reset --hard
-	untracked = !git lfo
-
-	whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
-	today = !git whathaveidone --since 7am
-	week = !git whathaveidone --since 'This Monday'
-	lastweek = !git whathaveidone --since 'Last Monday' --until 'Last Friday'
 
 	# GitHub
 	pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
