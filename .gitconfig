@@ -57,7 +57,7 @@
 
     checkout-latest-develop = !git checkout develop && git pull
     rebase-onto-latest-develop = !git checkout-latest-develop && git checkout - && git rebase develop
-    force-push-after-rebasing-onto-develop = !git rebase-onto-develop && git force-push
+    force-push-after-rebasing-onto-latest-develop = !git rebase-onto-latest-develop && git force-push
 
     search = log --grep
 
@@ -155,6 +155,7 @@
 	sc = !git s | grep -E '^(U.|.U)' | sed -e 's/.U //g' -e 's/U. //g' -e 's/.*/\"&\"/g' # show merge conflicts
 	scc = !git s | grep -E '^(U.|.U)'
 	st = stash save
+    sta = stash apply
 	stc = stash clear
 	stl = stash list
 	stp = stash pop
