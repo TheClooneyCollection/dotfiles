@@ -55,6 +55,8 @@
     force-push = push --force-with-lease
     dark-force-push = push --force
 
+    new = switch -c
+
     checkout-latest-develop = !git checkout develop && git pull
     rebase-onto-latest-develop = !git checkout-latest-develop && git checkout - && git rebase develop
     force-push-after-rebasing-onto-latest-develop = !git rebase-onto-latest-develop && git force-push
