@@ -58,7 +58,7 @@
     new = switch -c
 
     checkout-latest-develop = !git checkout develop && git pull
-    rebase-onto-latest-develop = !git checkout-latest-develop && git checkout - && git rebase develop
+    rebase-onto-latest-develop = !git stash && git checkout-latest-develop && git checkout - && git rebase develop && git stash pop
     force-push-after-rebasing-onto-latest-develop = !git rebase-onto-latest-develop && git force-push
 
     search = log --grep
