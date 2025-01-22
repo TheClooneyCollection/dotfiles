@@ -82,6 +82,7 @@
 	bm = branch --move
 	c = commit -v
 	ca = commit --amend
+	cane = commit --amend --no-edit
 	cc = checkout -
 	cd = checkout develop
 	ci = check-ignore -v
