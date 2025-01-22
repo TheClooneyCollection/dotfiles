@@ -176,3 +176,5 @@
 	includePullRequestsSection = false
 	includeIssuesSection = false
 
+[http]
+	postBuffer = 524288000
