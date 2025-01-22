@@ -49,7 +49,7 @@
 
     count = !git rev-list --count $(git name)
 
-	delete-all = rm -r '*'
+	delete-all = !git rm -r '*'
 	destroy = !git delete-all && rm -rf ~/.git
 
     force-push = push --force-with-lease
