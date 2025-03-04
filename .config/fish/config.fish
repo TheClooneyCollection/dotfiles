@@ -42,6 +42,16 @@ else
     echo "invoke not installed..."
 end
 
+# Fix claude code in fish shell
+
+function claude
+    if type -q --no-functions claude
+        SHELL=/bin/bash command claude
+    else
+        echo "claude not installed"
+    end
+end
+
 # Load rbenv automatically by appending
 # the following to ~/.config/fish/config.fish:
 
