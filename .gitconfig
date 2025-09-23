@@ -79,6 +79,7 @@
 	ac = !git aa && git c
 	amd = commit --amend
 	ap = add -p
+    au = add -u
 	b = branch
 	bm = branch --move
 	c = commit -v
