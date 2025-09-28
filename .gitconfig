@@ -89,7 +89,7 @@
 	cd = checkout develop
 	ci = check-ignore -v
 	cl = clone
-	cm = checkout main
+	cm = commit -m
 	co = checkout
     cob = checkout -b
 	; Must have fzf installed
