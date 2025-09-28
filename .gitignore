@@ -19,6 +19,17 @@
 
 ## But these:
 
+# tmux
+
+!/.tmux.conf
+
+# git
+
+!/.gitconfig
+!.gitignore
+
+# Spacemacs
+
 !/.spacemacs.d/snippets/
 !/.spacemacs.d/init.el
 !/.spacemacs.d/configuration.org
@@ -54,7 +65,4 @@
 !.config/fish/fishfile
 !.config/fish/config.fish
 !.config/fish/functions/fisher.fish
-
-!.gitignore
-!.gitconfig
 
