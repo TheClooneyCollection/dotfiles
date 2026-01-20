@@ -59,6 +59,7 @@
 !.config/nvim
 .config/nvim/*
 !.config/nvim/init.vim
+!.config/nvim/init.lua
 
 !.config/fish
 .config/fish/*
