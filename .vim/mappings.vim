@@ -9,9 +9,9 @@ inoremap ; :
 inoremap : ;
 
 inoremap <c-c> <esc>
-inoremap kj <esc>
-cnoremap kj <c-c> " fix exit after typing :help in command
-tnoremap kj <esc>
+" inoremap kj <esc>
+" cnoremap kj <c-c> " fix exit after typing :help in command
+" tnoremap kj <esc>
 
 noremap <c-j> <c-w>j
 noremap <c-k> <c-w>k
@@ -86,7 +86,7 @@ vnoremap <leader>y "*y
 nnoremap <leader>y "*y
 
 " FIXME: When sharing Vim with someone else
-inoremap <esc> <nop>
+" inoremap <esc> <nop> " using Karabiner-Elements now...
 noremap <up> <nop>
 noremap <down> <nop>
 noremap <right> <nop>
