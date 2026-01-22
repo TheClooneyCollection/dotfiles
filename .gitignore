@@ -67,3 +67,5 @@
 !.config/fish/config.fish
 !.config/fish/functions/fisher.fish
 
+!.config/karabiner
+.config/karabiner/automatic_backups
