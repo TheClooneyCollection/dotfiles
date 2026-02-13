@@ -5,6 +5,7 @@
                 "rules": [
                     {
                         "description": "Change caps_lock to left_control if pressed with other keys, change caps_lock to escape if pressed alone.",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
@@ -43,6 +44,12 @@
             },
             "name": "Default profile",
             "selected": true,
+            "simple_modifications": [
+                {
+                    "from": { "key_code": "caps_lock" },
+                    "to": [{ "key_code": "left_control" }]
+                }
+            ],
             "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
         }
     ]
