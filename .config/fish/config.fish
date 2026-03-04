@@ -241,7 +241,8 @@ function fish_prompt
     #         echo -n ' '
     # end
 
-    # username@host
+    # username@host (short hostname via prompt_hostname)
+    # See: ~/docs/fish_prompt_hostname.md
     set_color cyan
     echo -n $USER
     set_color brblack
