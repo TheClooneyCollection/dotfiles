@@ -105,6 +105,14 @@ function config_path
     status -f
 end
 
+function lock --description "Lock fish config (user immutable flag)"
+    chflags uchg ~/.config/fish/config.fish
+end
+
+function unlock --description "Unlock fish config (remove user immutable flag)"
+    chflags nouchg ~/.config/fish/config.fish
+end
+
 # shell
 
 function mkcd
