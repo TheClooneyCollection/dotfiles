@@ -241,14 +241,13 @@ function fish_prompt
     #         echo -n ' '
     # end
 
-    # username
-    switch $USER
-        case nicholas.tian
-        case '*'
-            set_color cyan
-            echo -n $USER
-            echo -n ' '
-    end
+    # username@host
+    set_color cyan
+    echo -n $USER
+    set_color brblack
+    echo -n '@'
+    echo -n (prompt_hostname)
+    echo -n ' '
 
     # PWD
     set_color $color_cwd
