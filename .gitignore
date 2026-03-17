@@ -12,6 +12,13 @@
 !bin/
 !bin/*
 
+# Claude
+
+!/.claude
+/.claude/*
+!/.claude/settings.json
+!/.claude/statusline-command.sh
+
 # Emacs
 
 !/.spacemacs.d
