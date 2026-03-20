@@ -15,12 +15,7 @@ session_tokens=$(echo "$input" | jq -r '
   (.context_window.total_output_tokens // 0)')
 
 # Shorten the path like fish's prompt_pwd (show last 2 components)
-short_cwd=$(echo "$cwd" | awk -F'/' '{
-  n = NF
-  if (n <= 2) print $0
-  else if (n == 3) printf "%s/%s", $2, $3
-  else printf ".../%s/%s", $(n-1), $n
-}')
+short_cwd=$(basename "$cwd")
 
 # user@host — cyan/dim
 user=$(whoami)
