@@ -1,4 +1,12 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(ls -la:*)",
+      "Bash(find:*)",
+      "Bash(git:*)",
+      "Read"
+    ]
+  },
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true
   },

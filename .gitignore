@@ -18,6 +18,7 @@
 /.claude/*
 !/.claude/settings.json
 !/.claude/statusline-command.sh
+!/.claude/CLAUDE.md
 
 # Emacs
 
