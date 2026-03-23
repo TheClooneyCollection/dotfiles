@@ -7,11 +7,12 @@
       "Read"
     ]
   },
-  "enabledPlugins": {
-    "swift-lsp@claude-plugins-official": true
-  },
   "statusLine": {
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh"
-  }
+  },
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true
+  },
+  "voiceEnabled": true
 }
