@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+# git-activity.sh — list most recent commits across all git repos in this directory
+#
+# Usage: ./git-activity.sh [count] [-m pattern] [-r pattern] [-x pattern]
+#
+#   count          max commits to show (default: 100)
+#   -m <pattern>   only show commits whose message matches pattern (repeatable, OR logic)
+#   -r <pattern>   named repos bypass the -m filter and show all their commits (repeatable, OR logic)
+#   -x <pattern>   exclude commits whose message matches pattern, applied globally (repeatable)
+#
+# Filter logic (applied in this order):
+#   1. -x  drop any commit whose message matches, across all repos
+#   2. -r  if the commit's repo matches, include it regardless of -m
+#   3. -m  for all remaining repos, only include commits whose message matches
+#
+# In other words: -r gives a repo a "free pass" past the -m filter.
+# Use this when you want full history from specific repos and filtered history everywhere else.
+#
+# Examples:
+#   ./git-activity.sh 50
+#   ./git-activity.sh -m feat -m fix
+#   ./git-activity.sh -r blog -m feat -x chore
+#     => all commits from blog, feat-only from everywhere else, chore excluded globally
+#   ./git-activity.sh 200 -r blog -r tongwu.io -m feat -x chore -x docs
+
+COUNT=100
+MATCH_PATTERNS=()
+REPO_PATTERNS=()
+IGNORE_PATTERNS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -m|--match)  MATCH_PATTERNS+=("$2");  shift 2 ;;
+    -r|--repo)   REPO_PATTERNS+=("$2");   shift 2 ;;
+    -x|--ignore) IGNORE_PATTERNS+=("$2"); shift 2 ;;
+    *)           COUNT="$1";              shift   ;;
+  esac
+done
+
+# Build pipe-delimited patterns for awk regex matching
+join_patterns() {
+  local IFS='|'
+  echo "$*"
+}
+
+MATCH_PAT=$(join_patterns "${MATCH_PATTERNS[@]}")
+REPO_PAT=$(join_patterns "${REPO_PATTERNS[@]}")
+IGNORE_PAT=$(join_patterns "${IGNORE_PATTERNS[@]}")
+
+# ANSI colors
+CYAN='\033[0;36m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+GRAY='\033[0;90m'
+RESET='\033[0m'
+
+TMPFILE=$(mktemp)
+
+# Find all git repos up to 3 levels deep, collect commits
+while IFS= read -r gitdir; do
+  repo="${gitdir%/.git}"
+  project=$(basename "$repo")
+  git -C "$repo" log --format="%at|%ad|%s" --date=format:"%Y-%m-%d|%H:%M" 2>/dev/null \
+    | awk -v proj="$project" -F'|' '{print $1 "|" proj "|" $2 "|" $3 "|" $4}' \
+    >> "$TMPFILE"
+done < <(find . -maxdepth 3 -name ".git" -type d 2>/dev/null | sort)
+
+if [[ ! -s "$TMPFILE" ]]; then
+  echo "No commits found."
+  rm -f "$TMPFILE"
+  exit 1
+fi
+
+# Sort by epoch descending, apply filters, take top N, dedup, re-sort ascending, print
+sort -t'|' -k1 -rn "$TMPFILE" | \
+awk -F'|' -v msg_pat="$MATCH_PAT" -v repo_pat="$REPO_PAT" -v excl_pat="$IGNORE_PAT" '
+  excl_pat != "" && $5 ~  excl_pat { next }
+  repo_pat != "" && $2 ~  repo_pat { print; next }
+  msg_pat  != "" && $5 !~ msg_pat  { next }
+  { print }
+' | \
+head -n "$COUNT" | \
+awk -F'|' '
+{
+  key = $1 "|" $5
+  if (key in seen) {
+    extras[key] = (extras[key] == "" ? "" : extras[key] ", ") $2
+  } else {
+    seen[key] = 1
+    order[++count] = key
+    data[key] = $0
+    extras[key] = ""
+  }
+}
+END {
+  for (i = 1; i <= count; i++) {
+    k = order[i]
+    line = data[k]
+    if (extras[k] != "") line = line "|" extras[k]
+    print line
+  }
+}
+' | \
+sort -t'|' -k1 -n | \
+while IFS='|' read -r epoch project date time message extra; do
+  suffix=""
+  [[ -n "$extra" ]] && suffix="${GRAY} (also: $extra)${RESET}"
+  printf "${CYAN}[%-25s]${RESET}  ${YELLOW}%s %s${RESET}  ${GREEN}%s${RESET}%b\n" \
+    "$project" "$date" "$time" "$message" "$suffix"
+done
+
+rm -f "$TMPFILE"
