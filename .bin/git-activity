@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# git-activity.sh — list most recent commits across all git repos in this directory
+# git-activity — list most recent commits across all git repos in this directory
 #
-# Usage: ./git-activity.sh [count] [-m pattern] [-r pattern] [-x pattern]
+# Usage: git-activity [count] [-m pattern] [-r pattern] [-x pattern]
 #
 #   count          max commits to show (default: 100)
 #   -m <pattern>   only show commits whose message matches pattern (repeatable, OR logic)
@@ -18,25 +18,76 @@
 # Use this when you want full history from specific repos and filtered history everywhere else.
 #
 # Examples:
-#   ./git-activity.sh 50
-#   ./git-activity.sh -m feat -m fix
-#   ./git-activity.sh -r blog -m feat -x chore
+#   git-activity 50
+#   git-activity -m feat -m fix
+#   git-activity -r blog -m feat -x chore
 #     => all commits from blog, feat-only from everywhere else, chore excluded globally
-#   ./git-activity.sh 200 -r blog -r tongwu.io -m feat -x chore -x docs
+#   git-activity 200 -r blog -r tongwu.io -m feat -x chore -x docs
 
 COUNT=100
 MATCH_PATTERNS=()
 REPO_PATTERNS=()
 IGNORE_PATTERNS=()
 
+usage() {
+  cat <<'EOF'
+Usage: git-activity [count] [-m pattern] [-r pattern] [-x pattern]
+
+List recent commits across git repos under the current directory.
+
+Arguments:
+  count           max commits to show (default: 100)
+
+Options:
+  -m, --match     only show commits whose message matches pattern; repeatable, OR logic
+  -r, --repo      repos matching pattern bypass --match and show all commits; repeatable, OR logic
+  -x, --ignore    exclude commits whose message matches pattern globally; repeatable
+  -h, --help      show this help message
+
+Filter logic:
+  1. --ignore drops any commit whose message matches, across all repos
+  2. --repo includes matching repos regardless of --match
+  3. --match limits remaining repos to matching commit messages
+
+Examples:
+  git-activity 50
+  git-activity --match feat --match fix
+  git-activity --repo blog --match feat --ignore chore
+EOF
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -m|--match)  MATCH_PATTERNS+=("$2");  shift 2 ;;
-    -r|--repo)   REPO_PATTERNS+=("$2");   shift 2 ;;
-    -x|--ignore) IGNORE_PATTERNS+=("$2"); shift 2 ;;
+    -h|--help)   usage; exit 0 ;;
+    -m|--match)
+      [[ $# -lt 2 ]] && { echo "git-activity: $1 requires a pattern" >&2; usage >&2; exit 2; }
+      MATCH_PATTERNS+=("$2")
+      shift 2
+      ;;
+    -r|--repo)
+      [[ $# -lt 2 ]] && { echo "git-activity: $1 requires a pattern" >&2; usage >&2; exit 2; }
+      REPO_PATTERNS+=("$2")
+      shift 2
+      ;;
+    -x|--ignore)
+      [[ $# -lt 2 ]] && { echo "git-activity: $1 requires a pattern" >&2; usage >&2; exit 2; }
+      IGNORE_PATTERNS+=("$2")
+      shift 2
+      ;;
+    -*)
+      echo "git-activity: unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
     *)           COUNT="$1";              shift   ;;
   esac
 done
+
+if [[ ! "$COUNT" =~ ^[0-9]+$ ]] || [[ "$COUNT" -eq 0 ]]; then
+  echo "git-activity: count must be a positive integer" >&2
+  usage >&2
+  exit 2
+fi
 
 # Build pipe-delimited patterns for awk regex matching
 join_patterns() {
@@ -53,9 +104,11 @@ CYAN='\033[0;36m'
 YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 GRAY='\033[0;90m'
+BOLD='\033[1m'
 RESET='\033[0m'
 
 TMPFILE=$(mktemp)
+FILTERED_TMPFILE=$(mktemp)
 
 # Find all git repos up to 3 levels deep, collect commits
 while IFS= read -r gitdir; do
@@ -68,11 +121,11 @@ done < <(find . -maxdepth 3 -name ".git" -type d 2>/dev/null | sort)
 
 if [[ ! -s "$TMPFILE" ]]; then
   echo "No commits found."
-  rm -f "$TMPFILE"
+  rm -f "$TMPFILE" "$FILTERED_TMPFILE"
   exit 1
 fi
 
-# Sort by epoch descending, apply filters, take top N, dedup, re-sort ascending, print
+# Sort by epoch descending, apply filters, and take top N.
 sort -t'|' -k1 -rn "$TMPFILE" | \
 awk -F'|' -v msg_pat="$MATCH_PAT" -v repo_pat="$REPO_PAT" -v excl_pat="$IGNORE_PAT" '
   excl_pat != "" && $5 ~  excl_pat { next }
@@ -80,7 +133,15 @@ awk -F'|' -v msg_pat="$MATCH_PAT" -v repo_pat="$REPO_PAT" -v excl_pat="$IGNORE_P
   msg_pat  != "" && $5 !~ msg_pat  { next }
   { print }
 ' | \
-head -n "$COUNT" | \
+head -n "$COUNT" > "$FILTERED_TMPFILE"
+
+if [[ ! -s "$FILTERED_TMPFILE" ]]; then
+  echo "No commits matched the selected filters."
+  rm -f "$TMPFILE" "$FILTERED_TMPFILE"
+  exit 1
+fi
+
+# Dedup matching commits, re-sort ascending, and print.
 awk -F'|' '
 {
   key = $1 "|" $5
@@ -101,7 +162,7 @@ END {
     print line
   }
 }
-' | \
+' "$FILTERED_TMPFILE" | \
 sort -t'|' -k1 -n | \
 while IFS='|' read -r epoch project date time message extra; do
   suffix=""
@@ -110,4 +171,37 @@ while IFS='|' read -r epoch project date time message extra; do
     "$project" "$date" "$time" "$message" "$suffix"
 done
 
-rm -f "$TMPFILE"
+printf "\n${BOLD}Summary${RESET}\n"
+
+awk -F'|' '
+{
+  commits++
+  if (min_epoch == "" || $1 < min_epoch) {
+    min_epoch = $1
+    min_date = $3
+    min_time = $4
+  }
+  if (max_epoch == "" || $1 > max_epoch) {
+    max_epoch = $1
+    max_date = $3
+    max_time = $4
+  }
+}
+END {
+  printf "Time frame: %s %s to %s %s\n", min_date, min_time, max_date, max_time
+  printf "Commits shown: %d\n\n", commits
+}
+' "$FILTERED_TMPFILE"
+
+awk -F'|' '
+{
+  repo_counts[$2]++
+}
+END {
+  for (repo in repo_counts) {
+    print repo_counts[repo] "|" repo
+  }
+}
+' "$FILTERED_TMPFILE" | sort -t'|' -k1,1rn -k2,2 | awk -F'|' '{ printf "%-25s %s\n", $2, $1 }'
+
+rm -f "$TMPFILE" "$FILTERED_TMPFILE"
