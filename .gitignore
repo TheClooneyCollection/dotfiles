@@ -22,6 +22,20 @@
 
 # Emacs
 
+!/.emacs.d
+!/.emacs.d/**
+
+# Ignore generated package installs, caches, and local editor state.
+/.emacs.d/elpa/
+/.emacs.d/eln-cache/
+/.emacs.d/auto-save-list/
+/.emacs.d/recentf
+/.emacs.d/savehist
+/.emacs.d/places
+/.emacs.d/bookmarks
+/.emacs.d/transient/
+/.emacs.d/.cache/
+
 !/.spacemacs.d
 
 ## Track nothing else
@@ -45,6 +59,11 @@
 !/.spacemacs.d/init.el
 !/.spacemacs.d/configuration.org
 !/.spacemacs.d/configuration.emacs.org
+
+# Local migration backups
+
+/.emacs.d.spacemacs-*
+/.spacemacs.d.backup-*
 
 # Vim
 
