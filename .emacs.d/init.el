@@ -47,6 +47,7 @@
 (require 'languages)
 (require 'evil-setup)
 (require 'git-setup)
+(require 'funcs)
 (require 'keys)
 
 ;;; init.el ends here

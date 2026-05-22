@@ -12,7 +12,20 @@
         helm-scroll-amount 8
         helm-echo-input-in-header-line t)
   :config
-  (helm-mode 1))
+  (helm-mode 1)
+  ;; Consult drives its own minibuffer via vertico. Helm's completing-read
+  ;; takeover skips the minibuffer-setup-hook consult needs, which crashes
+  ;; async commands like consult-ripgrep with "overlayp, nil". If that resurfaces
+  ;; on a consult command we bind, opt it out via the alist below.
+  ;; (dolist (cmd '(consult-ripgrep
+  ;;                consult-line
+  ;;                consult-line-multi
+  ;;                consult-buffer
+  ;;                consult-yank-pop
+  ;;                consult-grep
+  ;;                consult-find))
+  ;;   (add-to-list 'helm-completing-read-handlers-alist (cons cmd nil)))
+  )
 
 ;; Helm-flx improves fuzzy matching inside Helm sources.
 (use-package helm-flx
@@ -31,6 +44,18 @@
   ;; The current upstream package defaults to a multi-source Git dashboard.
   ;; Restrict it to tracked files so SPC f f keeps the older Spacemacs feel.
   (setq helm-ls-git-default-sources '(helm-source-ls-git)))
+
+;; helm-ag drives the Spacemacs-style project ripgrep UX (full-window helm
+;; with a `pattern:' prompt and silent no-result handling). The package is no
+;; longer on MELPA; install from the emacsattic mirror via :vc.
+(use-package helm-ag
+  :after helm
+  :vc (:url "https://github.com/emacsattic/helm-ag" :rev :newest)
+  :commands (helm-do-ag)
+  :init
+  ;; Same rg flags Spacemacs uses in `spacemacs/helm-files-do-rg'.
+  (setq helm-ag-base-command
+        "rg --smart-case --no-heading --color=never --line-number"))
 
 ;; Vertico shows completion candidates in a compact vertical list.
 (use-package vertico
