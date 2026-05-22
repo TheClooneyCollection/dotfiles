@@ -3,6 +3,12 @@
 ;; Keep package activation under the control of init.el.
 (setq package-enable-at-startup nil)
 
+;; Suppress the default GNU Emacs startup echo before the first frame appears.
+(setq inhibit-startup-screen t
+      inhibit-startup-message t
+      inhibit-startup-echo-area-message user-login-name
+      initial-scratch-message nil)
+
 ;; Relax GC during startup to reduce early pauses.
 ;; `most-positive-fixnum` effectively gets GC out of the way during init.
 (setq gc-cons-threshold most-positive-fixnum)
