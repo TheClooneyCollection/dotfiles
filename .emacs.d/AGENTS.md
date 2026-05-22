@@ -2,6 +2,17 @@
 
 Notes for AI agents working in this Emacs config.
 
+## Git Root
+
+This directory is not the Git top-level. The repository root is the parent
+directory, `~/`, and `.emacs.d/` is a tracked subdirectory inside it.
+
+- Running Git from inside `.emacs.d/` is fine.
+- Do not assume `git rev-parse --show-toplevel` will return `.emacs.d/`.
+- If you reference paths with `git add`, `git commit`, or `git diff`, use paths
+  relative to the current working directory you chose, not assumptions about the
+  repo root.
+
 ## Adding a package
 
 Two places must stay in sync:
