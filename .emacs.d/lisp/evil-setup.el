@@ -15,6 +15,10 @@
         evil-ex-substitute-case t
         evil-ex-search-case nil)
   :config
+  ;; Swap ":" and ";" when inserting text to match the old Spacemacs habit.
+  (global-set-key ":" (lambda () (interactive) (insert ";")))
+  (global-set-key ";" (lambda () (interactive) (insert ":")))
+
   ;; Save and close the current buffer for :wq in normal editing sessions.
   (defun save-and-kill-current-buffer ()
     (interactive)
@@ -30,6 +34,11 @@
 
   (evil-mode 1)
   (define-key evil-normal-state-map (kbd "TAB") #'evil-toggle-fold)
+  ;; In modal states, ";" should open Ex and ":" should repeat the last find.
+  (define-key evil-normal-state-map ";" #'evil-ex)
+  (define-key evil-normal-state-map ":" #'evil-repeat-find-char)
+  (define-key evil-motion-state-map ":" #'evil-repeat-find-char)
+  (define-key evil-visual-state-map ":" #'evil-repeat-find-char)
   (evil-ex-define-cmd "q[uit]" #'evil-quit)
   (evil-ex-define-cmd "wq" #'save-and-kill-current-buffer)
   (evil-ex-define-cmd "wqa" #'save-some-buffers))
