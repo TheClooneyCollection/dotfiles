@@ -56,6 +56,13 @@
       (unload-feature feature t)))
   (load-file (expand-file-name "init.el" user-emacs-directory)))
 
+(defun helm-M-x-fuzzy-matching ()
+  "Run `helm-M-x' with Spacemacs-style flex matching enabled."
+  (interactive)
+  (let ((completion-styles completion-styles))
+    (add-to-list 'completion-styles 'flex t)
+    (call-interactively #'helm-M-x)))
+
 ;;; macOS pasteboard ---------------------------------------------------------
 
 (defun copy-to-pasteboard ()

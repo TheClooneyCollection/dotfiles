@@ -24,7 +24,7 @@
 
   ;; Keep the initial leader map small and close to your Spacemacs muscle memory.
   (leader-key
-    "SPC" '(execute-extended-command :which-key "M-x")
+    "SPC" '(helm-M-x-fuzzy-matching :which-key "M-x")
     "*" '(search-project-at-point :which-key "search project w/ symbol")
     "0" '(delete-other-windows :which-key "delete other windows")
     "1" '(delete-window :which-key "delete window")
@@ -42,6 +42,7 @@
     "gg" '(open-magit-status-cleanly :which-key "magit")
     "p" '(paste-from-pasteboard :which-key "paste from pasteboard")
     "q" '(:ignore t :which-key "quit")
+    "qQ" '(kill-emacs :which-key "kill emacs")
     "qq" '(save-buffers-kill-terminal :which-key "quit emacs")
     "qr" '(restart-emacs :which-key "restart emacs")
     "w" '(:ignore t :which-key "windows")
