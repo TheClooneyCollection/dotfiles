@@ -22,10 +22,13 @@
 
 (package-initialize)
 
-;; Bootstrap use-package so package declarations stay concise.
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; Keep package bootstrap mechanics out of the main entry point.
+(require 'bootstrap)
+
+(when (ensure-bootstrap-packages-installed)
+  ;; Activate freshly installed packages so the rest of init can use them
+  ;; immediately on first boot instead of requiring a manual restart.
+  (package-activate-all))
 
 (require 'use-package)
 

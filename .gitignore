@@ -31,6 +31,7 @@
 /.emacs.d/auto-save-list/
 /.emacs.d/recentf
 /.emacs.d/savehist
+/.emacs.d/history
 /.emacs.d/places
 /.emacs.d/bookmarks
 /.emacs.d/transient/
