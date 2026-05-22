@@ -16,6 +16,12 @@
       ;; sane place to return, but bury it so it stays out of the way.
       (bury-buffer scratch-buffer))))
 
+(defun open-magit-status-on-startup ()
+  "Open Magit once startup has finished drawing the initial frame."
+  (unless (or noninteractive
+              (minibufferp (current-buffer)))
+    (open-magit-status-cleanly)))
+
 ;; Magit is the main Git interface we want to preserve from Spacemacs.
 (use-package magit
   :init
@@ -23,6 +29,8 @@
   (setq magit-display-buffer-function
         #'magit-display-buffer-same-window-except-diff-v1)
   :commands (magit-status))
+
+(add-hook 'emacs-startup-hook #'open-magit-status-on-startup)
 
 (provide 'git-setup)
 
