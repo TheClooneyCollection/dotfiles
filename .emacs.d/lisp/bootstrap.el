@@ -6,6 +6,12 @@
 (defconst bootstrap-packages
   '(use-package
     markdown-mode
+    diff-hl
+    hl-todo
+    rainbow-delimiters
+    swift-mode
+    web-mode
+    json-mode
     helm
     helm-flx
     helm-ls-git
