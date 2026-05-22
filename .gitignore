@@ -32,6 +32,7 @@
 /.emacs.d/recentf
 /.emacs.d/savehist
 /.emacs.d/history
+/.emacs.d/tramp
 /.emacs.d/places
 /.emacs.d/bookmarks
 /.emacs.d/transient/
