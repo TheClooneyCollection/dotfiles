@@ -98,6 +98,7 @@
     "p" '(paste-from-pasteboard :which-key "paste from pasteboard")
     "q" '(:ignore t :which-key "quit")
     "qq" '(save-buffers-kill-terminal :which-key "quit emacs")
+    "qr" '(restart-emacs :which-key "restart emacs")
     "w" '(:ignore t :which-key "windows")
     "wd" '(delete-window :which-key "delete window")
     "wo" '(delete-other-windows :which-key "delete other windows")
