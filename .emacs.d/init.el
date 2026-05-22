@@ -44,6 +44,7 @@
 (require 'modeline)
 (require 'completion)
 (require 'docs)
+(require 'languages)
 (require 'evil-setup)
 (require 'git-setup)
 (require 'keys)
