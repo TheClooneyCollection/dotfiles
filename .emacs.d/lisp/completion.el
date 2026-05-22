@@ -1,5 +1,33 @@
 ;;; completion.el --- Minibuffer completion stack -*- lexical-binding: t; -*-
 
+;; Helm powers the older Spacemacs-style pickers you liked for files/search.
+(use-package helm
+  :init
+  (setq helm-M-x-fuzzy-match t
+        helm-buffers-fuzzy-matching t
+        helm-recentf-fuzzy-match t
+        helm-split-window-inside-p t
+        helm-move-to-line-cycle-in-source t
+        helm-ff-search-library-in-sexp t
+        helm-scroll-amount 8
+        helm-echo-input-in-header-line t)
+  :config
+  (helm-mode 1))
+
+;; Helm-flx improves fuzzy matching inside Helm sources.
+(use-package helm-flx
+  :after helm
+  :init
+  (setq helm-flx-for-helm-find-files t
+        helm-flx-for-helm-locate t)
+  :config
+  (helm-flx-mode 1))
+
+;; Helm-ls-git provides the repo-file picker behind the old SPC f f workflow.
+(use-package helm-ls-git
+  :after helm
+  :commands (helm-ls-git-ls))
+
 ;; Vertico shows completion candidates in a compact vertical list.
 (use-package vertico
   :init

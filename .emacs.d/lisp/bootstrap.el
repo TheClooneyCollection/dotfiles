@@ -5,6 +5,9 @@
 
 (defconst bootstrap-packages
   '(use-package
+    helm
+    helm-flx
+    helm-ls-git
     vertico
     orderless
     marginalia
