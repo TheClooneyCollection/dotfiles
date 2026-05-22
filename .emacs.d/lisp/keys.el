@@ -12,6 +12,27 @@
 (use-package general
   :after evil
   :config
+  (defun switch-to-project-scratch-buffer ()
+    "Switch to a simple project scratch buffer."
+    (interactive)
+    (let* ((project-root (when-let ((project (project-current nil)))
+                           (expand-file-name (project-root project))))
+           (project-name (if project-root
+                             (file-name-nondirectory (directory-file-name project-root))
+                           "scratch"))
+           (buffer-name (format "*scratch: %s*" project-name)))
+      (switch-to-buffer (get-buffer-create buffer-name))
+      (unless (derived-mode-p 'org-mode)
+        (org-mode))
+      (when (= (point-min) (point-max))
+        (insert (format "#+TITLE: %s\n\n" project-name)))))
+
+  (defun zen ()
+    "Switch to a project scratch buffer and focus it."
+    (interactive)
+    (switch-to-project-scratch-buffer)
+    (delete-other-windows))
+
   (defun open-init-file ()
     "Open the main init file."
     (interactive)
@@ -32,13 +53,15 @@
     "SPC" '(execute-extended-command :which-key "M-x")
     "0" '(delete-other-windows :which-key "delete other windows")
     "1" '(delete-window :which-key "delete window")
+    "9" '(zen :which-key "zen")
     "b" '(:ignore t :which-key "buffers")
     "bb" '(consult-buffer :which-key "switch buffer")
     "f" '(:ignore t :which-key "files")
     "fe" '(:ignore t :which-key "emacs")
     "fed" '(open-init-file :which-key "open init.el")
     "fer" '(reload-emacs-config :which-key "reload config")
-    "ff" '(find-file :which-key "find file")
+    "fF" '(helm-find-files :which-key "find file anywhere")
+    "ff" '(helm-ls-git-ls :which-key "find git file")
     "fs" '(save-buffer :which-key "save file")
     "g" '(:ignore t :which-key "git")
     "gg" '(open-magit-status-cleanly :which-key "magit")
