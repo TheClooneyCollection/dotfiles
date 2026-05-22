@@ -35,6 +35,10 @@
 (use-package json-mode
   :mode "\\.json\\'")
 
+;; Yaml mode handles .yml/.yaml files with proper indentation and highlighting.
+(use-package yaml-mode
+  :mode (("\\.ya?ml\\'" . yaml-mode)))
+
 ;; Use the built-in JavaScript mode for .js files and keep indentation simple.
 (setq js-indent-level 2)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))

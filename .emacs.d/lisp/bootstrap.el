@@ -12,6 +12,7 @@
     swift-mode
     web-mode
     json-mode
+    yaml-mode
     helm
     helm-flx
     helm-ls-git
