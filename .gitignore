@@ -35,6 +35,7 @@
 /.emacs.d/history
 /.emacs.d/tramp
 /.emacs.d/places
+/.emacs.d/projects
 /.emacs.d/bookmarks
 /.emacs.d/transient/
 /.emacs.d/.cache/
