@@ -29,6 +29,7 @@
 /.emacs.d/elpa/
 /.emacs.d/eln-cache/
 /.emacs.d/auto-save-list/
+/.emacs.d/custom.el
 /.emacs.d/recentf
 /.emacs.d/savehist
 /.emacs.d/history
