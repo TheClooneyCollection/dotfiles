@@ -5,6 +5,7 @@
 
 (defconst bootstrap-packages
   '(use-package
+    markdown-mode
     helm
     helm-flx
     helm-ls-git

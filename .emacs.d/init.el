@@ -43,6 +43,7 @@
 (require 'theme)
 (require 'modeline)
 (require 'completion)
+(require 'docs)
 (require 'evil-setup)
 (require 'git-setup)
 (require 'keys)
