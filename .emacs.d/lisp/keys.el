@@ -41,7 +41,37 @@
   (defun reload-emacs-config ()
     "Reload the Emacs config from init.el."
     (interactive)
+    ;; `init.el` mostly uses `require`, so unload local modules first to force
+    ;; their code and keybindings to be evaluated again on reload.
+    (dolist (feature '(keys
+                       git-setup
+                       evil-setup
+                       languages
+                       docs
+                       completion
+                       modeline
+                       theme
+                       ui
+                       core
+                       bootstrap))
+      (when (featurep feature)
+        (unload-feature feature t)))
     (load-file (expand-file-name "init.el" user-emacs-directory)))
+
+  ;; Talk to the macOS pasteboard directly so Emacs and other apps share text.
+  (defun copy-to-pasteboard ()
+    "Copy the active region, or the current line, to the macOS pasteboard."
+    (interactive)
+    (let ((start (if (use-region-p) (region-beginning) (line-beginning-position)))
+          (end (if (use-region-p) (region-end) (line-beginning-position 2))))
+      (call-process-region start end "pbcopy")
+      (deactivate-mark)
+      (message "Copied to pasteboard")))
+
+  (defun paste-from-pasteboard ()
+    "Paste text from the macOS pasteboard at point."
+    (interactive)
+    (insert-for-yank (shell-command-to-string "pbpaste")))
 
   (general-create-definer leader-key
     :states '(normal visual motion emacs)
@@ -65,12 +95,14 @@
     "fs" '(save-buffer :which-key "save file")
     "g" '(:ignore t :which-key "git")
     "gg" '(open-magit-status-cleanly :which-key "magit")
+    "p" '(paste-from-pasteboard :which-key "paste from pasteboard")
     "q" '(:ignore t :which-key "quit")
     "qq" '(save-buffers-kill-terminal :which-key "quit emacs")
     "w" '(:ignore t :which-key "windows")
     "wd" '(delete-window :which-key "delete window")
     "wo" '(delete-other-windows :which-key "delete other windows")
-    "ww" '(other-window :which-key "other window")))
+    "ww" '(other-window :which-key "other window")
+    "y" '(copy-to-pasteboard :which-key "copy to pasteboard")))
 
 (provide 'keys)
 
