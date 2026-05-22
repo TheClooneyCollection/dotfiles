@@ -61,7 +61,7 @@
     "fed" '(open-init-file :which-key "open init.el")
     "fer" '(reload-emacs-config :which-key "reload config")
     "fF" '(helm-find-files :which-key "find file anywhere")
-    "ff" '(helm-ls-git-ls :which-key "find git file")
+    "ff" '(helm-ls-git :which-key "find git file")
     "fs" '(save-buffer :which-key "save file")
     "g" '(:ignore t :which-key "git")
     "gg" '(open-magit-status-cleanly :which-key "magit")

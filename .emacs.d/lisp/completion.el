@@ -26,7 +26,11 @@
 ;; Helm-ls-git provides the repo-file picker behind the old SPC f f workflow.
 (use-package helm-ls-git
   :after helm
-  :commands (helm-ls-git-ls))
+  :commands (helm-ls-git)
+  :config
+  ;; The current upstream package defaults to a multi-source Git dashboard.
+  ;; Restrict it to tracked files so SPC f f keeps the older Spacemacs feel.
+  (setq helm-ls-git-default-sources '(helm-source-ls-git)))
 
 ;; Vertico shows completion candidates in a compact vertical list.
 (use-package vertico
