@@ -40,6 +40,8 @@
 ;; Load the config in broad responsibility order.
 (require 'core)
 (require 'ui)
+(require 'theme)
+(require 'modeline)
 (require 'completion)
 (require 'evil-setup)
 (require 'git-setup)
