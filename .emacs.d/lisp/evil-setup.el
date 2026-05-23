@@ -1,7 +1,30 @@
 ;;; evil-setup.el --- Evil configuration -*- lexical-binding: t; -*-
 
+(require 'cl-lib)
+
 ;; Undo-fu provides a simple undo backend that works well with Evil.
 (use-package undo-fu)
+
+;; Keep insert-state escape behavior local to Evil without adding another package.
+(defcustom evil-setup-kj-escape-delay 0.25
+  "Seconds to wait for `j` after `k` in Evil insert state."
+  :type 'number
+  :group 'editing)
+
+(defun evil-setup--finish-k-insert (next-event)
+  "Insert `k` and replay NEXT-EVENT when it is non-nil."
+  (insert "k")
+  (when next-event
+    (setq unread-command-events
+          (cons next-event unread-command-events))))
+
+(defun evil-setup-insert-k-or-escape ()
+  "Exit Evil insert state when `k` is followed quickly by `j`."
+  (interactive)
+  (let ((next-event (read-event nil nil evil-setup-kj-escape-delay)))
+    (if (eq next-event ?j)
+        (evil-normal-state)
+      (evil-setup--finish-k-insert next-event))))
 
 ;; Evil supplies Vim-style modal editing.
 (use-package evil
@@ -33,6 +56,7 @@
       (with-editor-finish)))
 
   (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "k") #'evil-setup-insert-k-or-escape)
   (define-key evil-normal-state-map (kbd "TAB") #'evil-toggle-fold)
   ;; In modal states, ";" should open Ex and ":" should repeat the last find.
   (define-key evil-normal-state-map ";" #'evil-ex)
