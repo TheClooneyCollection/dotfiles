@@ -75,9 +75,12 @@
   (marginalia-mode 1))
 
 ;; Consult provides useful minibuffer-driven commands for search and navigation.
+;; Keep buffer switching on Helm: with `helm-mode' enabled globally, the
+;; Consult buffer picker does not recreate the old Spacemacs UX and is where
+;; the "opens but won't accept search input" regression showed up.
 (use-package consult
   :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
+         ("C-x b" . spacemacs-switch-to-buffer)
          ("M-y" . consult-yank-pop)))
 
 (provide 'completion)

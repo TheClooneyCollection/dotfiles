@@ -30,7 +30,7 @@
     "1" '(delete-window :which-key "delete window")
     "9" '(zen :which-key "zen")
     "b" '(:ignore t :which-key "buffers")
-    "bb" '(consult-buffer :which-key "switch buffer")
+    "bb" '(spacemacs-switch-to-buffer :which-key "switch buffer")
     "f" '(:ignore t :which-key "files")
     "fe" '(:ignore t :which-key "emacs")
     "fed" '(open-init-file :which-key "open init.el")

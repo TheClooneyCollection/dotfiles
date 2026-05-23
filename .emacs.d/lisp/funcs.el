@@ -63,6 +63,12 @@
     (add-to-list 'completion-styles 'flex t)
     (call-interactively #'helm-M-x)))
 
+(defun spacemacs-switch-to-buffer ()
+  "Switch buffers with `helm-mini', matching the older Spacemacs Helm UX."
+  (interactive)
+  (require 'helm-buffers)
+  (call-interactively #'helm-mini))
+
 ;;; macOS pasteboard ---------------------------------------------------------
 
 (defun copy-to-pasteboard ()
