@@ -1,0 +1,9 @@
+# Basic Ghostty setup for macOS.
+# Keep Option behaving as Alt/Meta in shells, and make word motion explicit.
+
+macos-option-as-alt = true
+
+# Word-wise shell movement. These avoid the flaky modified-arrow path and send
+# the classic Meta bindings directly.
+keybind = alt+left=esc:b
+keybind = alt+right=esc:f

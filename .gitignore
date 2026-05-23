@@ -105,3 +105,7 @@
 
 !.config/karabiner
 .config/karabiner/automatic_backups
+
+!.config/ghostty
+.config/ghostty/*
+!.config/ghostty/config
