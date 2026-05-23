@@ -24,6 +24,7 @@
     evil
     evil-collection
     magit
+    avy
     which-key
     general))
 

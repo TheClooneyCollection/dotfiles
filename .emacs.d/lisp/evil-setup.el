@@ -43,6 +43,17 @@
   (evil-ex-define-cmd "wq" #'save-and-kill-current-buffer)
   (evil-ex-define-cmd "wqa" #'save-some-buffers))
 
+;; Restore the old `f' jump motion from the archived Spacemacs setup.
+(use-package avy
+  :after evil
+  :config
+  (setq avy-keys '(?a ?e ?i ?o ?u ?h ?t ?d ?s ?y))
+  (let ((goto-char #'evil-avy-goto-char-timer))
+    (define-key evil-normal-state-map "f" goto-char)
+    (define-key evil-motion-state-map "f" goto-char))
+  (define-key evil-visual-state-map "f" #'evil-avy-goto-char-in-line)
+  (define-key evil-operator-state-map "f" #'evil-avy-goto-char-in-line))
+
 ;; Evil-collection teaches many built-in and package modes to respect Evil keys.
 (use-package evil-collection
   :after evil
