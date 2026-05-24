@@ -107,11 +107,12 @@
 	dss = diff --shortstat
 
 	f = fetch
-	h = !git head
-	hard-reset = reset --hard
-	head = !GIT_NO_PAGER=1 git l -1
-	hp = !git log -1 -p --pretty="tformat:" | delta
-	hr = reset --hard
+		h = !git head
+		hard-reset = reset --hard
+		head = !GIT_NO_PAGER=1 git l -1
+		hs = !git head --stat
+		hp = !git log -1 -p --pretty="tformat:" | delta
+		hr = reset --hard
 	; issues = !open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
 	l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
 	la = !git l --all
