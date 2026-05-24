@@ -1,10 +1,5 @@
 # Managed by ghostty-theme-picker
 
-review:
-  last_reviewed: "Farmhouse Light"
-  reviewed_count: 135
-  total_count: 463
-
 starred:
   - "Dawnfox"
   - "Coffee Theme"
@@ -19,6 +14,11 @@ starred:
   - "Catppuccin Frappe"
   - "Catppuccin Macchiato"
   - "Chester"
+  - "Bluloco Light"
+  - "Catppuccin Latte"
+  - "3024 Day"
+  - "Aizen Light"
+  - "Aizen Dark"
 
 dark:
   - name: "Afterglow"
@@ -78,6 +78,18 @@ dark:
   - name: "Chester"
     background: "#2c3643"
     bg_color: dark blue
+  - name: "GitLab Dark Grey"
+    background: "#222222"
+    bg_color: black
+  - name: "0x96f"
+    background: "#262427"
+    bg_color: dark blue
+  - name: "Aizen Dark"
+    background: "#1a1a1a"
+    bg_color: black
+  - name: "Apple Classic"
+    background: "#2c2b2b"
+    bg_color: dark gray
 
 light:
   - name: "Belafonte Day"
@@ -89,9 +101,6 @@ light:
   - name: "Breadog"
     background: "#f1ebe6"
     bg_color: cream
-  - name: "Builtin Tango Light"
-    background: "#ffffff"
-    bg_color: white
   - name: "Catppuccin Latte"
     background: "#eff1f5"
     bg_color: light gray
@@ -107,3 +116,41 @@ light:
   - name: "Everforest Light Med"
     background: "#efebd4"
     bg_color: cream
+  - name: "3024 Day"
+    background: "#f7f7f7"
+    bg_color: white
+  - name: "Aizen Light"
+    background: "#f0f2f6"
+    bg_color: light gray
+
+seen:
+  - "0x96f"
+  - "12-bit Rainbow"
+  - "3024 Day"
+  - "3024 Night"
+  - "Aardvark Blue"
+  - "Abernathy"
+  - "Adventure"
+  - "Adventure Time"
+  - "Adwaita"
+  - "Adwaita Dark"
+  - "Aizen Dark"
+  - "Aizen Light"
+  - "Alabaster"
+  - "Alien Blood"
+  - "Apple Classic"
+  - "Apple System Colors"
+  - "Apple System Colors Light"
+  - "Ardoise"
+  - "Argonaut"
+  - "Atom One Light"
+  - "Ayu Light"
+  - "Builtin Light"
+  - "CLRS"
+  - "Flexoki Light"
+  - "GitHub"
+  - "Hot Dog Stand (Mustard)"
+
+browse_cursor:
+  dark: "Argonaut"
+  light: "Apple System Colors Light"

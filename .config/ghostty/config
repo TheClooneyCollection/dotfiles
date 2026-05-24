@@ -10,5 +10,5 @@ keybind = alt+right=esc:f
 
 shell-integration-features = ssh-terminfo, ssh-env
 
-theme = Coffee Theme
+theme = Catppuccin Frappe
 font-size = 18
