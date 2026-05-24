@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+
+"""battery-usage — show active screen-on battery sessions.
+
+Usage: battery-usage [date|keyword]
+
+  date       YYYY-MM-DD
+  today      today (default)
+  yesterday  yesterday
+  week       this week (Monday to today)
+
+Parses pmset power log to find user-initiated wake events on battery,
+pairs them with the next sleep event, and reports actual active usage
+time and charge consumed per session.
+"""
+
+import re
+import subprocess
+import sys
+from datetime import datetime, timedelta
+
+
+def get_pmset_log():
+    result = subprocess.run(
+        ["pmset", "-g", "log"],
+        capture_output=True, text=True,
+    )
+    return result.stdout
+
+
+def get_current_charge():
+    result = subprocess.run(
+        ["pmset", "-g", "batt"],
+        capture_output=True, text=True,
+    )
+    m = re.search(r"(\d+)%", result.stdout)
+    return int(m.group(1)) if m else None
+
+
+def parse_events(log: str, date: str):
+    """Extract WAKE and SLEEP events on battery for the given date."""
+    events = []
+    for line in log.splitlines():
+        if date not in line:
+            continue
+
+        # Full wake on battery (user-initiated, screen on)
+        is_wake = (
+            re.search(r"(FullWake|Wake from Deep Idle \[CDNVA\])", line)
+            and re.search(r"Using BATT", line)
+        )
+        # Sleep on battery (idle or clamshell)
+        is_sleep = (
+            re.search(r"(Idle Sleep|Clamshell Sleep)", line)
+            and re.search(r"Using Batt", line)
+        )
+
+        if not is_wake and not is_sleep:
+            continue
+
+        time_match = re.search(r"(\d{2}:\d{2}:\d{2})", line)
+        charge_match = re.search(r"Charge:(\d+)", line)
+        if not time_match or not charge_match:
+            continue
+
+        events.append({
+            "type": "WAKE" if is_wake else "SLEEP",
+            "time": time_match.group(1),
+            "charge": int(charge_match.group(1)),
+        })
+
+    return events
+
+
+def format_duration(seconds: int) -> str:
+    h, remainder = divmod(seconds, 3600)
+    m, s = divmod(remainder, 60)
+    if h > 0:
+        return f"{h}h {m:02d}m"
+    return f"{m}m {s:02d}s"
+
+
+def time_to_seconds(t: str) -> int:
+    parts = t.split(":")
+    return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
+
+
+def duration_between(start: str, end: str) -> int:
+    s = time_to_seconds(start)
+    e = time_to_seconds(end)
+    if e >= s:
+        return e - s
+    return (86400 - s) + e  # crossed midnight
+
+
+# --- Colors ---
+
+CYAN = "\033[0;36m"
+YELLOW = "\033[0;33m"
+GREEN = "\033[0;32m"
+RED = "\033[0;31m"
+BOLD = "\033[1m"
+DIM = "\033[2m"
+RESET = "\033[0m"
+
+
+def resolve_dates(arg: str) -> list[str]:
+    """Resolve a date argument to a list of YYYY-MM-DD strings."""
+    today = datetime.now()
+    if arg in ("today", ""):
+        return [today.strftime("%Y-%m-%d")]
+    if arg == "yesterday":
+        return [(today - timedelta(days=1)).strftime("%Y-%m-%d")]
+    if arg == "week":
+        monday = today - timedelta(days=today.weekday())
+        return [
+            (monday + timedelta(days=i)).strftime("%Y-%m-%d")
+            for i in range((today - monday).days + 1)
+        ]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", arg):
+        return [arg]
+    return []
+
+
+def get_sessions_for_date(log: str, date: str) -> list[dict]:
+    """Parse wake/sleep pairs into sessions for a single date."""
+    events = parse_events(log, date)
+    sessions = []
+    wake = None
+
+    for event in events:
+        if event["type"] == "WAKE":
+            wake = event
+        elif event["type"] == "SLEEP" and wake:
+            dur = duration_between(wake["time"], event["time"])
+            sessions.append({
+                "start": wake["time"],
+                "end": event["time"],
+                "duration": dur,
+                "start_charge": wake["charge"],
+                "end_charge": event["charge"],
+                "active": False,
+            })
+            wake = None
+
+    # Handle still-awake session
+    is_today = date == datetime.now().strftime("%Y-%m-%d")
+    if wake and is_today:
+        now = datetime.now().strftime("%H:%M:%S")
+        current_charge = get_current_charge()
+        dur = duration_between(wake["time"], now)
+        sessions.append({
+            "start": wake["time"],
+            "end": "now",
+            "duration": dur,
+            "start_charge": wake["charge"],
+            "end_charge": current_charge,
+            "active": True,
+        })
+
+    return sessions
+
+
+def print_day(date: str, sessions: list[dict]):
+    """Print the session table and summary for a single date."""
+    if not sessions:
+        print(f"\n{BOLD}Battery sessions for {date}{RESET}")
+        print(f"  {DIM}No battery sessions.{RESET}")
+        return 0, 0
+
+    print(f"\n{BOLD}Battery sessions for {date}{RESET}\n")
+    print(
+        f"{DIM}{'#':<4}  {'Start':<8}  {'End':<8}  "
+        f"{'Duration':<10}  {'Start %':<8}  {'End %':<6}  {'Used':<6}{RESET}"
+    )
+    print(
+        f"{DIM}{'---':<4}  {'--------':<8}  {'--------':<8}  "
+        f"{'----------':<10}  {'--------':<8}  {'------':<6}  {'------':<6}{RESET}"
+    )
+
+    total_seconds = 0
+    total_charge = 0
+
+    for i, s in enumerate(sessions, 1):
+        total_seconds += s["duration"]
+        dur_str = format_duration(s["duration"])
+        start_t = s["start"][:5]
+
+        if s["end"] == "now":
+            end_t = "now"
+        else:
+            end_t = s["end"][:5]
+
+        if s["end_charge"] is not None:
+            charge_used = s["start_charge"] - s["end_charge"]
+            total_charge += charge_used
+            end_str = f"{s['end_charge']}%"
+            used_str = f"{charge_used}%"
+        else:
+            end_str = "?"
+            used_str = "?"
+
+        print(
+            f"{CYAN}{i:<4}{RESET}  {YELLOW}{start_t:<8}{RESET}  "
+            f"{YELLOW}{end_t:<8}{RESET}  {GREEN}{dur_str:<10}{RESET}  "
+            f"{s['start_charge']}{'%':<7}  {end_str:<6}  {RED}{used_str:<6}{RESET}"
+        )
+
+    first_charge = sessions[0]["start_charge"]
+    last_charge = sessions[-1]["end_charge"]
+
+    print(f"\n  {DIM}Active: {format_duration(total_seconds)}  |  "
+          f"Charge: {total_charge}% "
+          f"({first_charge}% → {last_charge if last_charge is not None else '?'}%)"
+          f"{RESET}")
+
+    return total_seconds, total_charge
+
+
+def main():
+    arg = sys.argv[1] if len(sys.argv) > 1 else "today"
+    dates = resolve_dates(arg)
+
+    if not dates:
+        print("Usage: battery-usage [today|yesterday|week|YYYY-MM-DD]", file=sys.stderr)
+        sys.exit(2)
+
+    log = get_pmset_log()
+
+    grand_seconds = 0
+    grand_charge = 0
+    grand_sessions = 0
+
+    for date in dates:
+        sessions = get_sessions_for_date(log, date)
+        day_seconds, day_charge = print_day(date, sessions)
+        grand_seconds += day_seconds
+        grand_charge += day_charge
+        grand_sessions += len(sessions)
+
+    # Print weekly summary when showing multiple days
+    if len(dates) > 1:
+        print(f"\n{BOLD}Weekly summary{RESET}")
+        print(f"Sessions:     {grand_sessions}")
+        print(f"Active time:  {format_duration(grand_seconds)}")
+        print(f"Charge used:  {grand_charge}%")
+        if grand_seconds > 0 and grand_charge > 0:
+            rate = grand_charge * 3600 / grand_seconds
+            print(f"Drain rate:   {rate:.1f}%/hr")
+    elif grand_sessions > 0:
+        if grand_seconds > 0 and grand_charge > 0:
+            rate = grand_charge * 3600 / grand_seconds
+            print(f"  {DIM}Drain rate: {rate:.1f}%/hr{RESET}")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
