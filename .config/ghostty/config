@@ -9,5 +9,5 @@ keybind = alt+left=esc:b
 keybind = alt+right=esc:f
 
 
-theme = Catppuccin Frappe
+theme = Coffee Theme
 font-size = 18
