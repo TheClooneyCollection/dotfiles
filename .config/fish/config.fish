@@ -2,20 +2,7 @@ if test -e ~/.config/fish/local.fish
     source ~/.config/fish/local.fish
 end
 
-fish_add_path /opt/homebrew/bin ~/.bin (brew --prefix python)/libexec/bin
-
-# Set up poetry shell on start up
-
-if type -q poetry
-    # poetry shell --quiet
-    # clear
-    source (poetry env info --path)/bin/activate.fish
-    if test $status -ne 0
-        echo "Please run poetry install --no-root first."
-    end
-else
-    echo "poetry not installed..."
-end
+fish_add_path /opt/homebrew/bin ~/.bin ~/.local/bin (brew --prefix python)/libexec/bin
 
 # Set up thefuck
 
@@ -32,14 +19,6 @@ if type -q zoxide
   zoxide init --cmd cd fish | source
 else
     echo "zoxide not installed..."
-end
-
-# Set up invoke auto complete on start up
-
-if type -q invoke
-    invoke --print-completion-script=fish | source
-else
-    echo "invoke not installed..."
 end
 
 # Load rbenv automatically by appending
