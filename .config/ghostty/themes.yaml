@@ -1,0 +1,93 @@
+# Managed by pick-theme.py
+
+review:
+  last_reviewed: "Zenwritten Light"
+  reviewed_count: 463
+  total_count: 463
+
+starred:
+
+dark:
+  - name: "Afterglow"
+    background: "#212121"
+    bg_color: black
+  - name: "Andromeda"
+    background: "#262a33"
+    bg_color: dark blue
+  - name: "Apple Classic"
+    background: "#2c2b2b"
+    bg_color: dark gray
+  - name: "Arcoiris"
+    background: "#201f1e"
+    bg_color: black
+  - name: "Ardoise"
+    background: "#1e1e1e"
+    bg_color: black
+  - name: "Arthur"
+    background: "#1c1c1c"
+    bg_color: black
+  - name: "Atom One Dark"
+    background: "#21252b"
+    bg_color: dark blue
+  - name: "Aurora"
+    background: "#23262e"
+    bg_color: dark blue
+  - name: "Ayu Mirage"
+    background: "#1f2430"
+    bg_color: dark blue
+  - name: "Blazer"
+    background: "#0d1926"
+    bg_color: dark blue
+  - name: "Blue Dolphin"
+    background: "#006984"
+    bg_color: blue
+  - name: "Bluloco Dark"
+    background: "#282c34"
+    bg_color: dark blue
+  - name: "branch"
+    background: "#32221a"
+    bg_color: dark brown
+  - name: "Breeze"
+    background: "#31363b"
+    bg_color: dark blue
+  - name: "Broadcast"
+    background: "#2b2b2b"
+    bg_color: dark gray
+  - name: "Catppuccin Frappe"
+    background: "#303446"
+    bg_color: blue
+  - name: "Catppuccin Macchiato"
+    background: "#24273a"
+    bg_color: blue
+  - name: "Catppuccin Mocha"
+    background: "#1e1e2e"
+    bg_color: dark blue
+  - name: "Chalk"
+    background: "#2b2d2e"
+    bg_color: dark blue
+  - name: "Chalkboard"
+    background: "#29262f"
+    bg_color: dark blue
+  - name: "Chester"
+    background: "#2c3643"
+    bg_color: dark blue
+
+light:
+  - name: "Belafonte Day"
+    background: "#d5ccba"
+    bg_color: cream
+  - name: "Bluloco Light"
+    background: "#f9f9f9"
+    bg_color: white
+  - name: "Breadog"
+    background: "#f1ebe6"
+    bg_color: cream
+  - name: "Builtin Tango Light"
+    background: "#ffffff"
+    bg_color: white
+  - name: "Catppuccin Latte"
+    background: "#eff1f5"
+    bg_color: light gray
+  - name: "Coffee Theme"
+    background: "#f5deb3"
+    bg_color: cream

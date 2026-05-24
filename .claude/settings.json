@@ -7,6 +7,7 @@
       "Read"
     ]
   },
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh"
@@ -14,8 +15,6 @@
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true
   },
-  "effortLevel": "medium",
-  "theme": "dark-ansi",
   "voiceEnabled": true,
-  "model": "opus"
+  "theme": "dark-ansi"
 }
