@@ -1,11 +1,24 @@
 # Managed by pick-theme.py
 
 review:
-  last_reviewed: "Zenwritten Light"
-  reviewed_count: 463
+  last_reviewed: "Farmhouse Light"
+  reviewed_count: 135
   total_count: 463
 
 starred:
+  - "Dawnfox"
+  - "Coffee Theme"
+  - "Everforest Light Med"
+  - "Afterglow"
+  - "Andromeda"
+  - "Ayu Mirage"
+  - "Blue Dolphin"
+  - "Bluloco Dark"
+  - "Breeze"
+  - "Broadcast"
+  - "Catppuccin Frappe"
+  - "Catppuccin Macchiato"
+  - "Chester"
 
 dark:
   - name: "Afterglow"
@@ -14,14 +27,8 @@ dark:
   - name: "Andromeda"
     background: "#262a33"
     bg_color: dark blue
-  - name: "Apple Classic"
-    background: "#2c2b2b"
-    bg_color: dark gray
   - name: "Arcoiris"
     background: "#201f1e"
-    bg_color: black
-  - name: "Ardoise"
-    background: "#1e1e1e"
     bg_color: black
   - name: "Arthur"
     background: "#1c1c1c"
@@ -90,4 +97,13 @@ light:
     bg_color: light gray
   - name: "Coffee Theme"
     background: "#f5deb3"
+    bg_color: cream
+  - name: "Dawnfox"
+    background: "#faf4ed"
+    bg_color: cream
+  - name: "Dayfox"
+    background: "#f6f2ee"
+    bg_color: cream
+  - name: "Everforest Light Med"
+    background: "#efebd4"
     bg_color: cream

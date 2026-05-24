@@ -6,6 +6,7 @@ Reads background colors from Ghostty's bundled theme files,
 classifies light/dark, and labels the dominant bg color.
 """
 
+import sys
 from pathlib import Path
 
 THEMES_DIR = Path("/Applications/Ghostty.app/Contents/Resources/ghostty/themes")
@@ -13,6 +14,11 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 OUTPUT = SCRIPT_DIR / "themes.yaml"
 CLASSIFIED_OUTPUT = SCRIPT_DIR / "classified-themes.yaml"
 ALL_THEMES_FILE = SCRIPT_DIR / "all-themes.txt"
+
+# Ensure theme_picker is importable if run directly
+sys.path.insert(0, str(SCRIPT_DIR))
+
+from theme_picker.data import parse_bg, classify, generate_classified
 
 # --- Review progress ---
 LAST_REVIEWED = "Coffee Theme"
@@ -48,58 +54,6 @@ PICKED_THEMES = [
     "Coffee Theme",
 ]
 
-
-def parse_bg(theme_name: str) -> str | None:
-    path = THEMES_DIR / theme_name
-    if not path.exists():
-        print(f"WARNING: theme not found: {theme_name}")
-        return None
-    for line in path.read_text().splitlines():
-        if line.startswith("background"):
-            return line.split("=", 1)[1].strip()
-    return None
-
-
-def luminance(hex_color: str) -> float:
-    h = hex_color.lstrip("#")
-    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
-    return 0.299 * r + 0.587 * g + 0.114 * b
-
-
-def classify(hex_color: str) -> tuple[str, str]:
-    h = hex_color.lstrip("#")
-    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
-    lum = luminance(hex_color)
-
-    mode = "light" if lum > 128 else "dark"
-
-    if lum > 200:
-        if r > 240 and g > 240 and b > 240:
-            label = "white"
-        elif r > g > b:
-            label = "cream"
-        else:
-            label = "light gray"
-    elif lum > 140:
-        label = "tan" if r > g > b else "light gray"
-    elif lum < 40:
-        if b > r and b > g:
-            label = "dark blue"
-        elif r > g > b and (r - b) > 15:
-            label = "dark brown"
-        else:
-            label = "black"
-    else:
-        if b > r + 15 and b > g + 15:
-            label = "blue"
-        elif r < 60 and g > 80 and b > 100:
-            label = "teal"
-        elif b > r and b > g:
-            label = "dark blue"
-        else:
-            label = "dark gray"
-
-    return mode, label
 
 
 def reviewed_count() -> tuple[int, int]:
@@ -164,33 +118,6 @@ def main():
     # Generate classified-themes.yaml for all themes
     generate_classified()
 
-
-def generate_classified():
-    """Classify all themes from all-themes.txt and write classified-themes.yaml."""
-    if not ALL_THEMES_FILE.exists():
-        print("No all-themes.txt found, skipping classification.")
-        return
-
-    all_names = ALL_THEMES_FILE.read_text().splitlines()
-    classified = {}
-    skipped = 0
-    for name in all_names:
-        bg = parse_bg(name)
-        if bg is None:
-            skipped += 1
-            continue
-        mode, _ = classify(bg)
-        classified[name] = mode
-
-    out_lines = ["# Auto-generated. Maps theme name -> mode."]
-    for name in sorted(classified.keys(), key=str.lower):
-        out_lines.append(f"{name}: {classified[name]}")
-    out_lines.append("")
-
-    CLASSIFIED_OUTPUT.write_text("\n".join(out_lines))
-    print(f"Written {len(classified)} classifications to {CLASSIFIED_OUTPUT}")
-    if skipped:
-        print(f"  ({skipped} themes skipped, no background found)")
 
 
 if __name__ == "__main__":
