@@ -1,16 +1,16 @@
 [user]
-	name = NicholasClooney
-	email = 137233165+NicholasClooney@users.noreply.github.com
+    name = NicholasClooney
+    email = 137233165+NicholasClooney@users.noreply.github.com
 
 [init]
-	defaultBranch = main
+    defaultBranch = main
 
 [color]
-	ui=auto
+    ui = auto
 
 [core]
-	pager = delta
-	editor = vim
+    pager = delta
+    editor = vim
 
 [interactive]
     diffFilter = delta --color-only
@@ -25,33 +25,31 @@
     colorMoved = default
 
 [push]
-	default = current
-	followTags = true
+    default = current
+    followTags = true
 
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 
 [filter "media"]
-	clean = git media clean %f
-	smudge = git media smudge %f
-	required = true
+    clean = git media clean %f
+    smudge = git media smudge %f
+    required = true
 
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 
 [submodule]
-	recurse = true
+    recurse = true
 
 [alias]
-
-
     count = !git rev-list --count $(git name)
 
-	delete-all = !git rm -r '*'
-	destroy = !git delete-all && rm -rf ~/.git
+    delete-all = !git rm -r '*'
+    destroy = !git delete-all && rm -rf ~/.git
 
     force-push = push --force-with-lease
     dark-force-push = push --force
@@ -64,120 +62,119 @@
 
     search = log --grep
 
-	undo = !git add --all && git stash && git reset --hard
-	untracked = !git lfo
+    undo = !git add --all && git stash && git reset --hard
+    untracked = !git lfo
 
-	whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
-	today = !git whathaveidone --since 7am
-	week = !git whathaveidone --since 'This Monday'
-	lastweek = !git whathaveidone --since 'Last Monday' --until 'Last Friday'
+    whathaveidone = !git log --pretty='%C(yellow) %h (%cr)%C(magenta)%d%Creset %s' --all --author=$(git me)
+    today = !git whathaveidone --since 7am
+    week = !git whathaveidone --since 'This Monday'
+    lastweek = !git whathaveidone --since 'Last Monday' --until 'Last Friday'
 
-# shortcuts
-
-	a = add
-	aa = add --all
-	ac = !git aa && git c
-	amd = commit --amend
-	ap = add -p
+    # shortcuts
+    a = add
+    aa = add --all
+    ac = !git aa && git c
+    amd = commit --amend
+    ap = add -p
     au = add -u
-	b = branch
-	bm = branch --move
-	c = commit -v
-	ca = commit --amend
-	cane = commit --amend --no-edit
-	cc = checkout -
-	cd = checkout develop
-	ci = check-ignore -v
-	cl = clone
-	cm = commit -m
-	co = checkout
+    b = branch
+    bm = branch --move
+    c = commit -v
+    ca = commit --amend
+    cane = commit --amend --no-edit
+    cc = checkout -
+    cd = checkout develop
+    ci = check-ignore -v
+    cl = clone
+    cm = commit -m
+    co = checkout
     cob = checkout -b
-	; Must have fzf installed
-	cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
-	; commits = !open (git ls-remote --get-url origin | sed 's/\.git/\/commits/g')
-	cot = !git tag | fzf | xargs git checkout
-	cp = cherry-pick
+    ; Must have fzf installed
+    cof = !git branch --all | grep -v HEAD | fzf | xargs git checkout
+    ; commits = !open (git ls-remote --get-url origin | sed 's/\.git/\/commits/g')
+    cot = !git tag | fzf | xargs git checkout
+    cp = cherry-pick
 
-	d = diff
-	dc = diff --cached
-	dd = !git d develop
-	; delete remote branch
-	dr = !git push origin :$(git name)
-	ds = diff --stat
-	dss = diff --shortstat
+    d = diff
+    dc = diff --cached
+    dd = !git d develop
+    ; delete remote branch
+    dr = !git push origin :$(git name)
+    ds = diff --stat
+    dss = diff --shortstat
 
-	f = fetch
-		h = !git head
-		hard-reset = reset --hard
-		head = !GIT_NO_PAGER=1 git l -1
-		hs = !git head --stat
-		hp = !git log -1 -p --pretty="tformat:" | delta
-		hr = reset --hard
-	; issues = !open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
-	l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
-	la = !git l --all
-	ls = ls-files
-	ls-binaries = !~/bin/git-binaries
-	lsd = ls-tree -d HEAD
-	lso = ls-files --others
-	lp = log -p
-	m = merge
+    f = fetch
+    h = !git head
+    hard-reset = reset --hard
+    head = !GIT_NO_PAGER=1 git l -1
+    hs = !git head --stat
+    hp = !git log -1 -p --pretty="tformat:" | delta
+    hr = reset --hard
+    ; issues = !open (git ls-remote --get-url origin | sed "s/\.git/\/issues/g")
+    l = log --graph --pretty='[%G?] %C(yellow)%h (%cr)%Cblue %an%C(magenta)%d%Creset %s'
+    la = !git l --all
+    ls = ls-files
+    ls-binaries = !~/bin/git-binaries
+    lsd = ls-tree -d HEAD
+    lso = ls-files --others
+    lp = log -p
+    m = merge
     # merged to main
-	m2m = !branch=$(git name) && git cm && git mff $branch
+    m2m = !branch=$(git name) && git cm && git mff $branch
     # merged to develop
-	m2d = !branch=$(git name) && git cd && git mff $branch
-	md = merge develop
-	mod = merge origin/develop
-	me = config --get user.name
-	mab = merge --abort
-	mff = merge --ff-only
-	n = checkout -b
-	name = rev-parse --abbrev-ref HEAD
-	no = !git count
-	nuke = !git reset --hard && git clean -df
-	p = push
-	po = !git push -u origin $(git symbolic-ref --short HEAD)
-	pc = !git pp && git bc
-	pp = pull
+    m2d = !branch=$(git name) && git cd && git mff $branch
+    md = merge develop
+    mod = merge origin/develop
+    me = config --get user.name
+    mab = merge --abort
+    mff = merge --ff-only
+    n = checkout -b
+    name = rev-parse --abbrev-ref HEAD
+    no = !git count
+    nuke = !git reset --hard && git clean -df
+    p = push
+    po = !git push -u origin $(git symbolic-ref --short HEAD)
+    pc = !git pp && git bc
+    pp = pull
 
-	# Pen Pineapple Apple Pen
-	# No seriously: pull --rebase and push
-	ppap = !echo "Pen Pineapple Apple Pen" && git ppr && git p
+    # Pen Pineapple Apple Pen
+    # No seriously: pull --rebase and push
+    ppap = !echo "Pen Pineapple Apple Pen" && git ppr && git p
 
-	ppr = pull --rebase
-	pt = push --tags
+    ppr = pull --rebase
+    pt = push --tags
 
-	r = !GIT_NO_PAGER=1 git l -10
-	rr = !GIT_NO_PAGER=1 git l -50
-	ra = remote add origin
-	# rba = rebase --abort
-	rbc = rebase --continue
-	rh = !~/bin/checkout-history
-	ri = rebase -i
-	rs = reset
+    r = !GIT_NO_PAGER=1 git l -10
+    rr = !GIT_NO_PAGER=1 git l -50
+    ra = remote add origin
+    # rba = rebase --abort
+    rbc = rebase --continue
+    rh = !~/bin/checkout-history
+    ri = rebase -i
+    rs = reset
 
-	size = !git count-objects -vH
-	s = status --short --branch
-	sc = !git s | grep -E '^(U.|.U)' | sed -e 's/.U //g' -e 's/U. //g' -e 's/.*/\"&\"/g' # show merge conflicts
-	scc = !git s | grep -E '^(U.|.U)'
-	st = stash save
+    size = !git count-objects -vH
+    s = status --short --branch
+    sc = !git s | grep -E '^(U.|.U)' | sed -e 's/.U //g' -e 's/U. //g' -e 's/.*/\"&\"/g' # show merge conflicts
+    scc = !git s | grep -E '^(U.|.U)'
+    st = stash save
     sta = stash apply
-	stc = stash clear
-	stl = stash list
-	stp = stash pop
+    stc = stash clear
+    stl = stash list
+    stp = stash pop
 
-	# GitHub
-	pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
-	prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pulls/g")
-	repo = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\//g")
+    # GitHub
+    pr = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/compare\\\\/$(git name)/g")
+    prs = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\/pulls/g")
+    repo = !open $(git ls-remote --get-url origin | sed "s/\\\\.git/\\\\//g")
 
 [magithub]
-	online = false
+    online = false
 
 [magithub "status"]
-	includeStatusHeader = false
-	includePullRequestsSection = false
-	includeIssuesSection = false
+    includeStatusHeader = false
+    includePullRequestsSection = false
+    includeIssuesSection = false
 
 [http]
-	postBuffer = 524288000
+    postBuffer = 524288000
