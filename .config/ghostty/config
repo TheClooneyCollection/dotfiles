@@ -8,6 +8,7 @@ macos-option-as-alt = true
 keybind = alt+left=esc:b
 keybind = alt+right=esc:f
 
+shell-integration-features = ssh-terminfo, ssh-env
 
 theme = Coffee Theme
 font-size = 18
