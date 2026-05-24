@@ -1,5 +1,8 @@
 /*
 
+__pycache__/
+*.pyc
+
 !/docs
 !/docs/*
 
@@ -107,5 +110,4 @@
 .config/karabiner/automatic_backups
 
 !.config/ghostty
-.config/ghostty/*
-!.config/ghostty/config
+.config/ghostty/classified-themes.yaml
