@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+if ! command -v emacs >/dev/null 2>&1; then
+  echo "warning: \`emacs\` was not found on PATH" >&2
+  echo "error: cannot launch archived Spacemacs without terminal \`emacs\`" >&2
+  exit 1
+fi
+
+exec emacs -nw \
+  --init-directory="$HOME/.emacs.d.spacemacs-2026-05-22" \
+  "$@"

@@ -152,7 +152,7 @@ The older Spacemacs setup still exists for reference:
 
 There is also a launcher script:
 
-- `~/.bin/emacs-spacemacs`
+- `~/.bin/spacemacs`
 
 That launcher uses Emacs `--init-directory` support so Spacemacs can still be
 run without replacing the current lightweight config.
