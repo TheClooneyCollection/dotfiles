@@ -1,14 +1,36 @@
 # dotfiles
 
+Personal macOS development environment and workstation config.
+
+This repo tracks the parts of `~` that are worth keeping under version control: shell setup, editor config, terminal preferences, keybindings, small utility scripts, and a few workflow notes. It is intentionally selective rather than a full home directory snapshot.
+
+## What this repo contains
+
+- `~/.config/fish/` for shell startup, aliases, and CLI defaults.
+- `~/.emacs.d/` for the main Emacs setup, including custom Lisp modules.
+- `~/.config/nvim/` and `~/.vim*` for Neovim/Vim configuration.
+- `~/.config/ghostty/` for terminal configuration and theme material.
+- `~/.config/karabiner/` for keyboard remapping.
+- `~/.tmux.conf` and `~/.gitconfig` for terminal and Git ergonomics.
+- `~/.bin/` for lightweight personal scripts.
+- `~/docs/` and a few root notes for workflow-specific documentation.
+- `~/.archive/` for older config snapshots and migration history that are still useful for reference.
+
+## Shape of the repo
+
+This is a living workstation repo, not just a bootstrap script collection. The goal is to keep everyday tooling, editor behavior, and machine setup decisions visible and reproducible without tracking the entire home directory.
+
+Most files in `~` are intentionally ignored. The tracked set is allowlisted through `.gitignore`, so anything new should be added deliberately.
+
 ## Usage
 
-#### Initiailize!
+#### Initialize
 
-(These **could** be automated as simple as `make bootstrap`.)
+(These could be automated into something like `make bootstrap`.)
 
 ##### (`if macOS`) Install Git with [Homebrew](https://brew.sh)
 
-`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"` (Updated in 2022 March)
+`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
 #### Set up your `~`
 
@@ -17,39 +39,8 @@ cd ~
 git init
 git remote add origin https://github.com/NicholasTD07/dotfiles.git
 git pull origin main
-
-# You should have all the files :)
 ```
 
-#### You'd need to download Xcode manually tho...
+Machine bootstrap has moved to [`TheClooneyCollection/ansible-macOS-playbook`](https://github.com/TheClooneyCollection/ansible-macOS-playbook).
 
-From here: https://developer.apple.com/download/all/?q=xcode
-
-#### Log into your Apple ID in App Store
-
-Log into your Apple ID in App Store.
-
-#### Install fishshell
-
-`brew install fish`
-
-#### Init your Mac
-
-```sh
-fish
-source bin/init.fish
-
-# sets fish as default shell | disables dock bouncing icons | etc.
-mac_init
-
-# install core brews, casks, and Apps
-brew_core # after this, start configuring Dropbox, 1Password (extensions), Alfred, iTerm, Firefox
-brew_essential
-
-# optional
-install_essential_packages
-generate_ssh_key
-
-# optional optional
-brew_optional
-```
+Use this repo for the tracked home-directory configuration itself, and use the playbook to provision a new Mac and apply the wider machine setup.
