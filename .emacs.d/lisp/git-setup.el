@@ -28,6 +28,12 @@
   ;; Make Magit status feel like a primary view instead of a side panel.
   (setq magit-display-buffer-function
         #'magit-display-buffer-same-window-except-diff-v1)
+  :config
+  ;; Evil reserves `Z` as a prefix for commands like `ZZ` and `ZQ`, which
+  ;; prevents Magit's single-key worktree popup from firing in status buffers.
+  ;; Restore Magit's native binding locally so `Z` opens `magit-worktree`.
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal magit-mode-map (kbd "Z") #'magit-worktree))
   :commands (magit-status))
 
 (add-hook 'emacs-startup-hook #'open-magit-status-on-startup)
