@@ -36,6 +36,15 @@
     (evil-define-key 'normal magit-mode-map (kbd "Z") #'magit-worktree))
   :commands (magit-status))
 
+;; Magit's transient panels default to `C-g` for quitting, but the old
+;; Magit-Popup/Spacemacs muscle memory used `q`.  Re-enable that globally for
+;; transients and add single-key Escape to back out of any Magit panel.
+(with-eval-after-load 'transient
+  (transient-bind-q-to-quit)
+  (keymap-set transient-base-map "<escape>" #'transient-quit-one)
+  (keymap-set transient-edit-map "<escape>" #'transient-quit-one)
+  (keymap-set transient-sticky-map "<escape>" #'transient-quit-seq))
+
 (add-hook 'emacs-startup-hook #'open-magit-status-on-startup)
 
 (provide 'git-setup)
