@@ -38,33 +38,46 @@ def get_current_charge():
 
 
 def parse_events(log: str, date: str):
-    """Extract WAKE and SLEEP events on battery for the given date."""
+    """Extract screen-on battery start/end events for the given date."""
     events = []
     for line in log.splitlines():
         if date not in line:
             continue
 
-        # Full wake on battery (user-initiated, screen on)
-        is_wake = (
-            re.search(r"(FullWake|Wake from Deep Idle \[CDNVA\])", line)
-            and re.search(r"Using BATT", line)
-        )
-        # Sleep on battery (idle or clamshell)
-        is_sleep = (
-            re.search(r"(Idle Sleep|Clamshell Sleep)", line)
-            and re.search(r"Using Batt", line)
-        )
-
-        if not is_wake and not is_sleep:
-            continue
-
         time_match = re.search(r"(\d{2}:\d{2}:\d{2})", line)
-        charge_match = re.search(r"Charge:(\d+)", line)
+        charge_match = re.search(r"Charge:\s*(\d+)", line)
         if not time_match or not charge_match:
             continue
 
+        # Classic user wake on battery.
+        is_wake = bool(
+            re.search(r"(FullWake|Wake from Deep Idle \[CDNVA\])", line)
+            and re.search(r"Using BATT", line)
+        )
+        # Generic sleep entries on battery.
+        is_sleep = bool(
+            re.search(r"Entering Sleep state", line)
+            and re.search(r"Using Batt", line)
+        )
+        # Modern macOS often logs unplugged/active transitions as assertion summaries
+        # instead of explicit wake events.
+        is_assertion_start = bool(
+            re.search(r"Summary-\s+\[System: .*DeclUser.*kDisp.*\] Using Batt", line)
+        )
+        is_assertion_end = bool(
+            re.search(r"Summary-\s+\[System: .*?\] Using AC", line)
+        )
+
+        if not any((is_wake, is_sleep, is_assertion_start, is_assertion_end)):
+            continue
+
+        if is_wake or is_assertion_start:
+            event_type = "WAKE"
+        else:
+            event_type = "SLEEP"
+
         events.append({
-            "type": "WAKE" if is_wake else "SLEEP",
+            "type": event_type,
             "time": time_match.group(1),
             "charge": int(charge_match.group(1)),
         })
