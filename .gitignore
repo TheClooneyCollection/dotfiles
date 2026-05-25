@@ -111,3 +111,7 @@ __pycache__/
 
 !.config/ghostty
 .config/ghostty/classified-themes.yaml
+
+!.config/yazi
+.config/yazi/*
+!.config/yazi/keymap.toml

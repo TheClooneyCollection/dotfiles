@@ -1,0 +1,4 @@
+[[mgr.prepend_keymap]]
+on = "z"
+run = "plugin zoxide"
+desc = "Cd to a directory via zoxide"
