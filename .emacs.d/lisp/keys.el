@@ -36,7 +36,7 @@
     "fe" '(:ignore t :which-key "emacs")
     "fed" '(open-init-file :which-key "open init.el")
     "fer" '(reload-emacs-config :which-key "reload config")
-    "fF" '(helm-find-files :which-key "find file anywhere")
+    "fF" '(nc/helm-find-all-files :which-key "find file anywhere (fzf)")
     "ff" '(helm-ls-git :which-key "find git file")
     "fs" '(save-buffer :which-key "save file")
     "g" '(:ignore t :which-key "git")

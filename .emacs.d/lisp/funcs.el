@@ -85,6 +85,28 @@
   (interactive)
   (insert-for-yank (shell-command-to-string "pbpaste")))
 
+;;; File finding -------------------------------------------------------------
+
+(defun nc/helm-find-all-files ()
+  "Fuzzy-find any file using fzf + helm.
+Searches from the project root when in a project, otherwise from HOME."
+  (interactive)
+  (let* ((root (or (when-let ((proj (project-current nil)))
+                     (expand-file-name (project-root proj)))
+                   (expand-file-name "~")))
+         (default-directory root))
+    (helm :sources (helm-build-async-source (format "fzf %s" root)
+                     :candidates-process
+                     (lambda ()
+                       (start-process "helm-fzf" helm-buffer
+                                      "fzf" "--no-sort" "-f" helm-pattern))
+                     :filter-one-by-one #'identity
+                     :requires-pattern 1
+                     :action #'helm-find-file-or-marked
+                     :candidate-number-limit 9999)
+          :buffer "*helm-fzf*"
+          :prompt "Find file: ")))
+
 ;;; Project search ----------------------------------------------------------
 
 ;; Direct port of `spacemacs/helm-files-do-rg' from
