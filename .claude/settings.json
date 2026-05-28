@@ -7,11 +7,6 @@
       "Read"
     ]
   },
-  "model": "opus",
-  "statusLine": {
-    "type": "command",
-    "command": "sh ~/.claude/statusline-command.sh"
-  },
   "hooks": {
     "Notification": [
       {
@@ -34,9 +29,13 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "sh ~/.claude/statusline-command.sh"
+  },
   "enabledPlugins": {
     "swift-lsp@claude-plugins-official": true
   },
-  "voiceEnabled": true,
-  "theme": "dark-ansi"
+  "theme": "dark-ansi",
+  "voiceEnabled": true
 }

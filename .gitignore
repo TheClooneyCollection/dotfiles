@@ -44,6 +44,7 @@ __pycache__/
 /.emacs.d/bookmarks
 /.emacs.d/transient/
 /.emacs.d/.cache/
+/.emacs.d/.claude/
 
 !/.spacemacs.d
 
