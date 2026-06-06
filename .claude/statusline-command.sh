@@ -35,12 +35,16 @@ ctx_part=""
 if [ -n "$ctx_pct" ] && [ -n "$ctx_size" ]; then
   pct_int=$(printf "%.0f" "$ctx_pct")
   ctx_used_derived=$(( ctx_size * pct_int / 100 ))
-  if [ "$ctx_used_derived" -ge 1000 ]; then
+  if [ "$ctx_used_derived" -ge 1000000 ]; then
+    ctx_used_str="$(( ctx_used_derived / 1000000 ))M"
+  elif [ "$ctx_used_derived" -ge 1000 ]; then
     ctx_used_str="$(( ctx_used_derived / 1000 ))k"
   else
     ctx_used_str="$ctx_used_derived"
   fi
-  if [ "$ctx_size" -ge 1000 ]; then
+  if [ "$ctx_size" -ge 1000000 ]; then
+    ctx_size_str="$(( ctx_size / 1000000 ))M"
+  elif [ "$ctx_size" -ge 1000 ]; then
     ctx_size_str="$(( ctx_size / 1000 ))k"
   else
     ctx_size_str="$ctx_size"
@@ -117,4 +121,4 @@ model_short=$(echo "$model" | sed 's/Claude //')
 time_str=$(date +%H:%M)
 
 printf "%s \033[0;36m%s\033[0m\033[0;90m@%s\033[0m \033[0;34m%s\033[0m%s\033[0;90m [%s]%s\033[0m \033[0;90m%s\033[0m" \
-  "$daily_part" "$user" "$host" "$short_cwd" "$git_part" "$model_short" "$ctx_part" "$time_str"
+  "$ctx_part" "$user" "$host" "$short_cwd" "$git_part" "$model_short" "$daily_part" "$time_str"
