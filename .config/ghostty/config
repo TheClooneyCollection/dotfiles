@@ -7,6 +7,7 @@ macos-option-as-alt = true
 # the classic Meta bindings directly.
 keybind = alt+left=esc:b
 keybind = alt+right=esc:f
+keybind = ctrl+tab=esc:[27;5;9~
 
 shell-integration-features = ssh-terminfo, ssh-env
 
