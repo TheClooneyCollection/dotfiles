@@ -7,7 +7,6 @@ starred:
   - "Afterglow"
   - "Andromeda"
   - "Ayu Mirage"
-  - "Blue Dolphin"
   - "Bluloco Dark"
   - "Breeze"
   - "Broadcast"
@@ -18,7 +17,6 @@ starred:
   - "Catppuccin Latte"
   - "3024 Day"
   - "Aizen Light"
-  - "Aizen Dark"
 
 dark:
   - name: "Afterglow"
@@ -84,12 +82,33 @@ dark:
   - name: "0x96f"
     background: "#262427"
     bg_color: dark blue
-  - name: "Aizen Dark"
-    background: "#1a1a1a"
-    bg_color: black
-  - name: "Apple Classic"
-    background: "#2c2b2b"
-    bg_color: dark gray
+  - name: "Atelier Sulphurpool"
+    background: "#202746"
+    bg_color: blue
+  - name: "Atom"
+    background: "#161719"
+    bg_color: dark blue
+  - name: "Calamity"
+    background: "#2f2833"
+    bg_color: dark blue
+  - name: "Challenger Deep"
+    background: "#1e1c31"
+    bg_color: dark blue
+  - name: "Ciapre"
+    background: "#191c27"
+    bg_color: dark blue
+  - name: "Cobalt Neon"
+    background: "#142838"
+    bg_color: dark blue
+  - name: "Cobalt Next"
+    background: "#162c35"
+    bg_color: dark blue
+  - name: "Cobalt Next Dark"
+    background: "#0b1c24"
+    bg_color: dark blue
+  - name: "Cobalt Next Minimal"
+    background: "#0b1c24"
+    bg_color: dark blue
 
 light:
   - name: "Belafonte Day"
@@ -143,14 +162,60 @@ seen:
   - "Apple System Colors Light"
   - "Ardoise"
   - "Argonaut"
+  - "Atelier Sulphurpool"
+  - "Atom"
   - "Atom One Light"
+  - "Aura"
+  - "Ayu"
   - "Ayu Light"
+  - "Banana Blueberry"
+  - "Batman"
+  - "Belafonte Night"
+  - "Birds Of Paradise"
+  - "Black Metal"
+  - "Black Metal (Bathory)"
+  - "Black Metal (Burzum)"
+  - "Black Metal (Dark Funeral)"
+  - "Black Metal (Gorgoroth)"
+  - "Black Metal (Immortal)"
+  - "Black Metal (Khold)"
+  - "Black Metal (Marduk)"
+  - "Black Metal (Mayhem)"
+  - "Black Metal (Nile)"
+  - "Black Metal (Venom)"
+  - "Blue Berry Pie"
+  - "Blue Matrix"
+  - "Borland"
+  - "Box"
+  - "Bright Lights"
+  - "Brogrammer"
+  - "Builtin Dark"
   - "Builtin Light"
+  - "Builtin Pastel Dark"
+  - "Builtin Tango Dark"
+  - "C64"
+  - "CGA"
   - "CLRS"
+  - "Calamity"
+  - "Carbonfox"
+  - "Challenger Deep"
+  - "Ciapre"
+  - "Citruszest"
+  - "Cobalt Neon"
+  - "Cobalt Next"
+  - "Cobalt Next Dark"
+  - "Cobalt Next Minimal"
+  - "Cobalt2"
+  - "Crayon Pony Fish"
+  - "Cursor Dark"
   - "Flexoki Light"
   - "GitHub"
   - "Hot Dog Stand (Mustard)"
+  - "Tinacious Design Dark"
+  - "TokyoNight"
 
 browse_cursor:
-  dark: "Argonaut"
+  dark: "Cursor Dark"
   light: "Apple System Colors Light"
+
+last_seen_browse: "Cursor Dark"
