@@ -84,6 +84,7 @@ endif
 nnoremap <silent> U :UndotreeToggle \| UndotreeFocus <cr>
 
 " solarized
+set background=dark
 colorscheme solarized
 
 "deoplete
