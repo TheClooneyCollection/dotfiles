@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Show this pane's name and the panes it is connected to.
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+case "${1:-}" in
+  -h|--help) echo "usage: tmux-peers [--refresh]"; exit 0 ;;
+  # Rebuild pane border labels; run by the tmux hooks when a pane closes.
+  --refresh) require_tmux; refresh_labels; exit 0 ;;
+esac
+
+require_tmux
+self="$(self_pane)"
+name="$(pane_name "$self")"
+
+if [ -z "$name" ]; then
+  echo "This pane ($self) has no name and no connections."
+  echo "Ask the user to run tmux-connect (or prefix + C) to connect it."
+  exit 0
+fi
+
+echo "you: $name ($self)"
+peers="$(get_peers "$self")"
+if [ -z "$peers" ]; then
+  echo "peers: none"
+  exit 0
+fi
+
+{
+  printf 'NAME\tPANE\tCOMMAND\tWHERE\n'
+  for peer in $peers; do
+    printf '%s\t%s\t%s\t%s\n' "$(pane_name "$peer")" "$peer" "$(pane_command "$peer")" "$(pane_location "$peer")"
+  done
+} | column -t -s "$(printf '\t')"

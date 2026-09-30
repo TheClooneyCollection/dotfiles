@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Remove links between this pane and its peers.
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+usage() {
+  cat <<'EOF'
+usage: tmux-disconnect [name] [--from PANE]
+
+Unlinks this pane from name, or from every peer if no name is given.
+EOF
+}
+
+target="" FROM_PANE=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --from) FROM_PANE="${2:-}"; shift 2 ;;
+    -*) usage >&2; exit 1 ;;
+    *) target="$1"; shift ;;
+  esac
+done
+
+require_tmux
+self="$(self_pane)"
+
+if [ -n "$target" ]; then
+  peers="$(resolve_peer "$self" "$target")"
+else
+  peers="$(get_peers "$self")"
+  [ -n "$peers" ] || { echo "no connections"; exit 0; }
+fi
+
+for peer in $peers; do
+  remove_peer "$self" "$peer"
+  remove_peer "$peer" "$self"
+  printf 'disconnected %s -/- %s\n' "$(label "$self")" "$(label "$peer")"
+done
+refresh_labels
