@@ -3,8 +3,12 @@
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
+# Agents pass --from ME and may only close their own sub agents.
+FROM_PANE=""
+[ "${1:-}" = "--from" ] && { FROM_PANE="${2:-}"; shift 2; }
+
 case "${1:-}" in
-  ''|-h|--help) echo "usage: tmux-dismiss <name> | --done  (closes panes and their transcripts)"; [ -n "${1:-}" ]; exit $? ;;
+  ''|-h|--help) echo "usage: tmux-dismiss [--from ME] <name> | --done  (closes panes and their transcripts)"; [ -n "${1:-}" ]; exit $? ;;
   # Close every done or exited sub agent, after asking.
   --done)
     require_tmux
@@ -20,7 +24,7 @@ case "${1:-}" in
     printf 'Close %s pane(s)? [y/N] ' "$(printf '%s\n' "$rows" | wc -l | tr -d ' ')"
     read -r answer </dev/tty || answer=""
     case "$answer" in y|Y|yes) ;; *) echo "Nothing closed."; sleep 0.5; exit 0 ;; esac
-    printf '%s\n' "$rows" | while read -r pane _; do tmux kill-pane -t "$pane"; done
+    printf '%s\n' "$rows" | while read -r pane _; do note_closed "$pane"; tmux kill-pane -t "$pane"; done
     refresh_labels
     exit 0
     ;;
@@ -29,6 +33,13 @@ esac
 require_tmux
 pane="$(find_pane "$1")"
 [ -n "$pane" ] || die "no agent named '$1'"
+closer=""
+if [ -n "$FROM_PANE" ]; then
+  closer="$(self_pane)"
+  [ "$(tmux display-message -p -t "$pane" '#{@parent}')" = "$closer" ] \
+    || die "'$1' is not your sub agent; you can only close agents you spawned"
+fi
+note_closed "$pane" "$closer"
 tmux kill-pane -t "$pane"
 refresh_labels
 echo "dismissed $1 ($pane)"

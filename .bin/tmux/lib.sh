@@ -190,6 +190,14 @@ is_peer() {
 }
 
 add_peer() {
+  # A live pane with this name is back, so it's no longer "closed".
+  local name cur
+  name="$(pane_name "$2")"
+  cur="$(closed_names "$1")"
+  case " $cur " in
+    *" $name "*) cur="$(printf '%s\n' "$cur" | awk -v n="$name" '{ for (i = 1; i <= NF; i++) if ($i != n) o = o (o ? " " : "") $i } END { print o }')"
+      if [ -n "$cur" ]; then tmux set-option -p -t "$1" @closed "$cur"; else tmux set-option -pu -t "$1" @closed; fi ;;
+  esac
   is_peer "$1" "$2" && return 0
   set_peers "$1" "$(get_peers "$1" | tr '\n' ' ')$2"
 }
@@ -209,9 +217,34 @@ resolve_pane() {
   printf '%s\n' "$id"
 }
 
+# Names of agents the user closed that pane $1 was connected to (@closed).
+closed_names() {
+  tmux show-options -pqv -t "$1" @closed 2>/dev/null
+}
+
+# Before killing pane $1: tell each of its peers, passively, that the user
+# closed it, so a later tmux-ask gets a clear answer instead of "no pane".
+# $2, if given, is the pane doing the closing; it already knows.
+note_closed() {
+  local name peer cur
+  name="$(pane_name "$1")"
+  [ -n "$name" ] || return 0
+  for peer in $(get_peers "$1"); do
+    [ "$peer" != "${2:-}" ] || continue
+    cur="$(closed_names "$peer")"
+    case " $cur " in *" $name "*) continue ;; esac
+    tmux set-option -p -t "$peer" @closed "${cur:+$cur }$name"
+  done
+}
+
 # Resolve a name to a connected peer of pane $1.
 resolve_peer() {
   local id
+  if [ -z "$(find_pane "$2")" ]; then
+    case " $(closed_names "$1") " in
+      *" $2 "*) die "'$2' was closed by the user. If you still need it, spawn a new sub agent with tmux-spawn and pass along any report paths it gave you." ;;
+    esac
+  fi
   id="$(resolve_pane "$2")"
   is_peer "$1" "$id" || die "'$2' is not connected to $(label "$1"). If that isn't you, pass --from <your name> (see tmux-peers)"
   printf '%s\n' "$id"
