@@ -2,6 +2,8 @@
 
 Connect AI agents (Claude, Codex, anything) running in tmux panes so they can message each other. You watch every pane and approve permissions yourself.
 
+Design notes, protocol details and known pitfalls: [DESIGN.md](DESIGN.md).
+
 ## Quick start
 
 1. Open a pane and start `claude`.
