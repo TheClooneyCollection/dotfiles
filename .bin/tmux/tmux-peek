@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Print the last lines of a connected pane's screen without disturbing it.
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+case "${1:-}" in
+  ''|-h|--help) echo "usage: tmux-peek <name> [lines]  (default 40)"; [ -n "${1:-}" ]; exit $? ;;
+esac
+
+require_tmux
+self="$(self_pane)"
+peer="$(resolve_peer "$self" "$1")"
+lines="${2:-40}"
+case "$lines" in *[!0-9]*|'') die "lines must be a number" ;; esac
+
+# Join wrapped lines, drop trailing blank lines, keep the last N.
+tmux capture-pane -p -J -t "$peer" -S -500 \
+  | awk '{ buf[NR] = $0 } NF { last = NR } END { for (i = 1; i <= last; i++) print buf[i] }' \
+  | tail -n "$lines"

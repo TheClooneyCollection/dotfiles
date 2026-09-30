@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# Send a message into a connected pane, as if typed and submitted there.
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+usage() {
+  cat <<'EOF'
+usage: tmux-ask <name> [--reply] [message...]
+
+Sends message (arguments, or stdin if none) to the connected pane name
+and submits it. Requests tell the receiver how to reply. Replies are
+marked as needing no response, which stops endless back-and-forth.
+
+  tmux-ask codex "review the diff in src/auth"
+  tmux-ask --reply claude <<'MSG'
+  multi-line reply
+  MSG
+
+env: TMUX_ASK_ENTER_DELAY  seconds between paste and Enter (default 0.5)
+EOF
+}
+
+target="" reply=0 msg=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --reply) reply=1; shift ;;
+    --) shift; msg="$*"; break ;;
+    -*) usage >&2; exit 1 ;;
+    *)
+      if [ -z "$target" ]; then target="$1"; shift
+      else msg="$*"; break
+      fi
+      ;;
+  esac
+done
+
+[ -n "$target" ] || { usage >&2; exit 1; }
+if [ -z "$msg" ]; then
+  [ -t 0 ] && die "no message (pass it as arguments or on stdin)"
+  msg="$(cat)"
+fi
+[ -n "$msg" ] || die "empty message"
+
+require_tmux
+self="$(self_pane)"
+me="$(pane_name "$self")"
+[ -n "$me" ] || die "this pane has no name; run tmux-connect first"
+peer="$(resolve_peer "$self" "$target")"
+
+if [ "$reply" -eq 1 ]; then
+  body="[reply from $me via tmux-ask]
+$msg
+
+(This is a reply. Do not answer it unless you have a new request.)"
+else
+  body="[request from $me via tmux-ask]
+$msg
+
+(When done, send your answer back with: tmux-ask --reply $me <<'MSG'
+<your reply>
+MSG)"
+fi
+
+# Bracketed paste keeps multi-line text as one message; Enter submits it.
+buf="tmux-ask-$$"
+printf '%s' "$body" | tmux load-buffer -b "$buf" -
+tmux paste-buffer -p -d -b "$buf" -t "$peer"
+sleep "${TMUX_ASK_ENTER_DELAY:-0.5}"
+tmux send-keys -t "$peer" Enter
+
+printf 'sent %s to %s\n' "$([ "$reply" -eq 1 ] && echo reply || echo request)" "$(label "$peer")"
