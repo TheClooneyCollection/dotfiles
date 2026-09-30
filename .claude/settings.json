@@ -1,9 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls -la:*)",
+      "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(git:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(wc:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(maestri:*)",
       "Bash(tmux-ask:*)",
       "Bash(tmux-peers:*)",
       "Bash(tmux-peek:*)",
