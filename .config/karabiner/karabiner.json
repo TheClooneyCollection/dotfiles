@@ -19,23 +19,86 @@
                         ]
                     },
                     {
-                        "description": "kj -> Escape (simultaneous; preserves normal k repeat)",
+                        "description": "jk -> Escape (sequential; preserves normal k repeat)",
                         "manipulators": [
                             {
-                                "from": {
-                                    "modifiers": { "optional": ["any"] },
-                                    "simultaneous": [
-                                        { "key_code": "k" },
-                                        { "key_code": "j" }
-                                    ],
-                                    "simultaneous_options": {
-                                        "detect_key_down_uninterruptedly": true,
-                                        "key_down_order": "insensitive",
-                                        "key_up_order": "insensitive"
+                                "conditions": [
+                                    {
+                                        "name": "jk_pending",
+                                        "type": "variable_if",
+                                        "value": true
                                     }
+                                ],
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": { "optional": ["any"] }
                                 },
-                                "parameters": { "basic.simultaneous_threshold_milliseconds": 80 },
-                                "to": [{ "key_code": "escape" }],
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "jk_pending",
+                                            "value": false
+                                        }
+                                    },
+                                    {
+                                        "key_code": "escape",
+                                        "repeat": false
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "parameters": { "basic.to_delayed_action_delay_milliseconds": 80 },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "jk_pending",
+                                            "value": true
+                                        }
+                                    }
+                                ],
+                                "to_delayed_action": {
+                                    "to_if_canceled": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "name": "jk_pending",
+                                                    "type": "variable_if",
+                                                    "value": true
+                                                }
+                                            ],
+                                            "key_code": "j"
+                                        },
+                                        {
+                                            "set_variable": {
+                                                "name": "jk_pending",
+                                                "value": false
+                                            }
+                                        }
+                                    ],
+                                    "to_if_invoked": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "name": "jk_pending",
+                                                    "type": "variable_if",
+                                                    "value": true
+                                                }
+                                            ],
+                                            "key_code": "j"
+                                        },
+                                        {
+                                            "set_variable": {
+                                                "name": "jk_pending",
+                                                "value": false
+                                            }
+                                        }
+                                    ]
+                                },
                                 "type": "basic"
                             }
                         ]
