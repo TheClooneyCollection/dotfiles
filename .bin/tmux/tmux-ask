@@ -49,17 +49,9 @@ me="$(pane_name "$self")"
 peer="$(resolve_peer "$self" "$target")"
 
 if [ "$reply" -eq 1 ]; then
-  body="[reply from $me via tmux-ask]
-$msg
-
-(This is a reply. Do not answer it unless you have a new request.)"
+  body="$(reply_body "$me" "$msg")"
 else
-  body="[request from $me via tmux-ask]
-$msg
-
-(When done, send your answer back with: tmux-ask --reply $me <<'MSG'
-<your reply>
-MSG)"
+  body="$(request_body "$me" "$msg")"
 fi
 
 # Bracketed paste keeps multi-line text as one message; Enter submits it.

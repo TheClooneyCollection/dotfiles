@@ -64,9 +64,14 @@ sanitize_name() {
 # Shells are left out of the prefix, since the agent hasn't started yet.
 # Extra args count as taken names (suggestions not yet applied).
 suggest_name() {
-  local cmd dir base max
-  cmd="$(pane_command "$1")"
-  dir="$(tmux display-message -p -t "$1" '#{pane_current_path}')"
+  local pane="$1"; shift
+  name_for "$(pane_command "$pane")" "$(tmux display-message -p -t "$pane" '#{pane_current_path}')" "$@"
+}
+
+# Name for command $1 running in directory $2; extra args count as taken.
+name_for() {
+  local cmd="$1" dir="$2" base max
+  shift 2
   if [ "$dir" = "$HOME" ]; then
     dir="~"
   else
@@ -76,11 +81,20 @@ suggest_name() {
     bash|zsh|fish|sh|dash|ksh|tcsh|nu|'') base="$dir" ;;
     *) base="$(sanitize_name "$cmd")-$dir" ;;
   esac
-  local pane="$1"; shift
   max="$( { tmux list-panes -a -F '#{@agent}'; [ $# -eq 0 ] || printf '%s\n' "$@"; } | awk -v b="$base-" '
     index($0, b) == 1 { n = substr($0, length(b) + 1); if (n ~ /^[0-9]+$/ && n + 0 > m) m = n + 0 }
     END { print m + 0 }')"
   printf '%s-%d\n' "$base" "$((max + 1))"
+}
+
+# Message bodies for tmux-ask. Requests carry their own reply instructions,
+# so a receiver that never loaded the skill can still answer.
+request_body() {
+  printf '[request from %s via tmux-ask]\n%s\n\n(When done, send your answer back with: tmux-ask --reply %s <<'"'"'MSG'"'"'\n<your reply>\nMSG)' "$1" "$2" "$1"
+}
+
+reply_body() {
+  printf '[reply from %s via tmux-ask]\n%s\n\n(This is a reply. Do not answer it unless you have a new request.)' "$1" "$2"
 }
 
 # Give pane $1 the name $2, refusing names another pane already holds.
