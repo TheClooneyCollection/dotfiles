@@ -86,6 +86,8 @@ marked as needing no response, which stops endless back-and-forth.
 
 --from ME: your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
 
+Messages over TMUX_ASK_MAX_LINES (default 60) are saved to
+$TMPDIR/tmux-agents/<you>/ and sent as the first 15 lines plus the path.
 If the user is typing or scrolling in the receiver's pane, the message
 is queued and sent once they stop typing or leave copy mode.
 
@@ -123,6 +125,20 @@ self="$(self_pane)"
 me="$(pane_name "$self")"
 [ -n "$me" ] || die "this pane has no name; run tmux-connect first"
 peer="$(resolve_peer "$self" "$target")"
+
+# Safety net for long messages: keep the full text in a file and send the
+# head plus the path. Agents are asked to do this themselves with a summary.
+max="${TMUX_ASK_MAX_LINES:-60}"
+lines="$(printf '%s\n' "$msg" | wc -l | tr -d ' ')"
+if [ "$lines" -gt "$max" ]; then
+  dir="${TMPDIR:-/tmp}"; dir="${dir%/}/tmux-agents/$me"
+  mkdir -p "$dir"
+  file="$dir/$(date +%Y%m%d-%H%M%S)-to-$(pane_name "$peer").md"
+  printf '%s\n' "$msg" > "$file"
+  msg="$(printf '%s\n' "$msg" | head -n 15)
+...
+(Message was $lines lines; the full text is in $file. Read it from there.)"
+fi
 
 if [ "$reply" -eq 1 ]; then
   body="$(reply_body "$me" "$msg" "$(pane_name "$peer")")"
