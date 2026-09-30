@@ -24,6 +24,23 @@ __pycache__/
 !/.claude/settings.json
 !/.claude/statusline-command.sh
 !/.claude/CLAUDE.md
+!/.claude/skills
+/.claude/skills/*
+!/.claude/skills/tmux-agents
+
+# Codex
+
+!/.codex
+/.codex/*
+!/.codex/skills
+/.codex/skills/*
+!/.codex/skills/tmux-agents
+
+!/.codex-2nd
+/.codex-2nd/*
+!/.codex-2nd/skills
+/.codex-2nd/skills/*
+!/.codex-2nd/skills/tmux-agents
 
 # Emacs
 
