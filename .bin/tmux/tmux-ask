@@ -88,6 +88,7 @@ marked as needing no response, which stops endless back-and-forth.
 
 Messages over TMUX_ASK_MAX_LINES (default 60) are saved to
 $TMPDIR/tmux-agents/<you>/ and sent as the first 15 lines plus the path.
+A sub agent that replies to its parent is marked done.
 If the user is typing or scrolling in the receiver's pane, the message
 is queued and sent once they stop typing or leave copy mode.
 
@@ -156,6 +157,14 @@ if user_busy "$peer"; then
   queued=1
 else
   deliver "$peer" "$body"
+fi
+
+# Track sub agent state: replying to your parent means done; a new request
+# means the receiver is working again.
+if [ "$reply" -eq 1 ]; then
+  [ "$(tmux display-message -p -t "$self" '#{@parent}')" != "$peer" ] || tmux set-option -p -t "$self" @state done
+else
+  tmux set-option -p -t "$peer" @state working
 fi
 
 kind="$([ "$reply" -eq 1 ] && echo reply || echo request)"
