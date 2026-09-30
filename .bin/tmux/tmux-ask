@@ -1,7 +1,75 @@
 #!/usr/bin/env bash
 # Send a message into a connected pane, as if typed and submitted there.
 set -euo pipefail
-. "$(dirname "$0")/lib.sh"
+here="$(cd "$(dirname "$0")" && pwd)"
+. "$here/lib.sh"
+
+# Paste $2 into pane $1 and submit it. Bracketed paste keeps multi-line
+# text as one message. user_busy keeps us out of copy mode, where Enter
+# would go to tmux instead of the program.
+deliver() {
+  local buf="tmux-ask-$$-${1#%}"
+  printf '%s' "$2" | tmux load-buffer -b "$buf" -
+  tmux paste-buffer -p -d -b "$buf" -t "$1"
+  sleep "${TMUX_ASK_ENTER_DELAY:-0.5}"
+  tmux send-keys -t "$1" Enter
+}
+
+# Queued messages live in one place per user, so the pane-mode-changed
+# hook (running in the tmux server's environment) finds them too. Names
+# start with a timestamp, so sorting gives the send order.
+QUEUE_DIR="/tmp/tmux-agents-$(id -u)/queue"
+
+# Claim $1 for delivery by renaming it; only one of the background
+# deliverer and the hook can win, so nothing is sent twice.
+claim() {
+  mv "$1" "$1.sending" 2>/dev/null
+}
+
+# pane-mode-changed hook: when pane $2 leaves copy mode (mouse or keys),
+# the user has stopped scrolling, so send its queued messages right away
+# without waiting out the typing window.
+if [ "${1:-}" = "--kick" ]; then
+  peer="$2"
+  [ "$(tmux display-message -p -t "$peer" '#{pane_in_mode}' 2>/dev/null)" = 0 ] || exit 0
+  for f in $(find "$QUEUE_DIR" -name "*-${peer#%}.msg" 2>/dev/null | sort); do
+    claim "$f" || continue
+    deliver "$peer" "$(cat "$f.sending")"
+    rm -f "$f.sending"
+  done
+  exit 0
+fi
+
+# Background delivery of a queued message (started via run-shell): wait
+# until the user stops typing or scrolling in the pane and older messages
+# for it went out, then deliver. After TMUX_ASK_QUEUE_SECS (default 1800),
+# or if the pane is gone, keep the message as .undelivered and tell every
+# client. Exits quietly if the hook already sent it.
+if [ "${1:-}" = "--deliver" ]; then
+  peer="$2" file="$3" waited=0
+  name="$(pane_name "$peer" 2>/dev/null || true)"
+  give_up() {
+    local kept="${file%.msg}.undelivered"
+    mv -f "$file" "$kept" 2>/dev/null || exit 0
+    for c in $(tmux list-clients -F '#{client_name}'); do
+      tmux display-message -c "$c" -d 10000 "tmux-ask: $1; message kept in $kept"
+    done
+    exit 1
+  }
+  while :; do
+    [ -f "$file" ] || exit 0
+    pane_alive "$peer" || give_up "${name:-$peer} is gone, message not delivered"
+    older="$(find "$(dirname "$file")" -name "*-${peer#%}.msg" 2>/dev/null | sort | awk -v f="$file" '$0 < f' | head -n 1)"
+    if [ -z "$older" ] && ! user_busy "$peer"; then
+      claim "$file" || exit 0
+      deliver "$peer" "$(cat "$file.sending")"
+      rm -f "$file.sending"
+      exit 0
+    fi
+    [ "$waited" -lt "${TMUX_ASK_QUEUE_SECS:-1800}" ] || give_up "gave up delivering to ${name:-$peer} after ${waited}s of typing there"
+    sleep 2; waited=$((waited + 2))
+  done
+fi
 
 usage() {
   cat <<'EOF'
@@ -18,7 +86,12 @@ marked as needing no response, which stops endless back-and-forth.
 
 --from ME: your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
 
-env: TMUX_ASK_ENTER_DELAY  seconds between paste and Enter (default 0.5)
+If the user is typing or scrolling in the receiver's pane, the message
+is queued and sent once they stop typing or leave copy mode.
+
+env: TMUX_ASK_IDLE_SECS    seconds without keys before a pane counts as free (default 8)
+     TMUX_ASK_QUEUE_SECS   how long a queued message waits at most (default 1800)
+     TMUX_ASK_ENTER_DELAY  seconds between paste and Enter (default 0.5)
 EOF
 }
 
@@ -57,11 +130,21 @@ else
   body="$(request_body "$me" "$msg" "$(pane_name "$peer")")"
 fi
 
-# Bracketed paste keeps multi-line text as one message; Enter submits it.
-buf="tmux-ask-$$"
-printf '%s' "$body" | tmux load-buffer -b "$buf" -
-tmux paste-buffer -p -d -b "$buf" -t "$peer"
-sleep "${TMUX_ASK_ENTER_DELAY:-0.5}"
-tmux send-keys -t "$peer" Enter
+# Don't paste into a pane the user is typing in; queue it instead.
+queued=0
+if user_busy "$peer"; then
+  mkdir -p "$QUEUE_DIR"
+  file="$QUEUE_DIR/$(date +%s)-$(printf '%06d' $$)-${peer#%}.msg"
+  printf '%s' "$body" > "$file"
+  tmux run-shell -b "'$here/tmux-ask' --deliver '$peer' '$file'"
+  queued=1
+else
+  deliver "$peer" "$body"
+fi
 
-printf 'sent %s to %s\n' "$([ "$reply" -eq 1 ] && echo reply || echo request)" "$(label "$peer")"
+kind="$([ "$reply" -eq 1 ] && echo reply || echo request)"
+if [ "$queued" -eq 1 ]; then
+  printf 'queued %s to %s: the user is typing or scrolling there; it will be delivered once they stop\n' "$kind" "$(label "$peer")"
+else
+  printf 'sent %s to %s\n' "$kind" "$(label "$peer")"
+fi

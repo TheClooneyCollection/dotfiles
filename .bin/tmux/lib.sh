@@ -93,6 +93,15 @@ name_for() {
   printf '%s-%d\n' "$base" "$((max + 1))"
 }
 
+# Succeeds if the user seems busy in pane $1: it is in copy mode (they're
+# scrolling it, and Enter would go to copy mode), or a client is showing it
+# and had a keypress in the last TMUX_ASK_IDLE_SECS (default 8).
+user_busy() {
+  [ "$(tmux display-message -p -t "$1" '#{pane_in_mode}')" != 1 ] || return 0
+  tmux list-clients -F '#{pane_id} #{client_activity}' | awk -v p="$1" -v now="$(date +%s)" \
+    -v w="${TMUX_ASK_IDLE_SECS:-8}" '$1 == p && now - $2 < w { f = 1 } END { exit !f }'
+}
+
 # Message bodies for tmux-ask. Requests carry their own reply instructions,
 # so a receiver that never loaded the skill can still answer.
 # Args: sender, message, receiver. The receiver's name goes into the
