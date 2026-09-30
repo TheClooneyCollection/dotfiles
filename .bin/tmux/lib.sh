@@ -12,7 +12,10 @@ die() {
 
 require_tmux() {
   command -v tmux >/dev/null 2>&1 || die "tmux not found"
-  tmux list-sessions >/dev/null 2>&1 || die "no tmux server running"
+  if ! tmux list-sessions >/dev/null 2>&1; then
+    [ -n "${TMUX:-}" ] && die "can't reach the tmux server. In Codex this means the command ran in the sandbox: run tmux-* commands on their own (not chained with other commands) so the allow rule applies, or ask for escalated permissions."
+    die "no tmux server running"
+  fi
 }
 
 # display-message -t exits 0 with empty output for a closed pane id, so check the list.
