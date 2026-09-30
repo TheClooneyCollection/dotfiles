@@ -1,1 +1,5 @@
-../../.codex/rules/tmux-agents.rules
+# tmux-agents: let Codex message connected agent panes (see ~/.bin/tmux/README.md).
+# Allowed commands run outside the sandbox, which blocks the tmux socket.
+prefix_rule(pattern=["tmux-ask"], decision="allow")
+prefix_rule(pattern=["tmux-peers"], decision="allow")
+prefix_rule(pattern=["tmux-peek"], decision="allow")
