@@ -8,6 +8,7 @@ How the `tmux-*` scripts work, why they work that way, and the traps found while
 - The user watches every pane and makes every permission decision in the agent's own UI.
 - Any number of panes, connected ad hoc. There is no fixed layout or session launcher.
 - No daemon and no state files.
+- Sub agents are real agents in their own panes, hidden by default but one keystroke away, so their full history stays readable.
 
 ## Architecture
 
@@ -20,6 +21,9 @@ Everything is stored as tmux user options on the panes themselves (`set-option -
 | `@agent` | The pane's name, unique across the tmux server. |
 | `@peers` | Space-separated pane ids (`%12`) this pane links to. |
 | `@peer_names` | Cached `name, name` string for the border label. |
+| `@parent` | On spawned sub agents: the pane id that spawned them. |
+| `@closed` | Names of peers the user closed (set by `note_closed` before `kill-pane`). |
+| `@state` | On sub agents: `done` after replying to the parent, `working` after receiving a request. |
 
 Windows that hold named panes also get `@agents_border=1`, plus window-level `pane-border-status top` and `pane-border-format`. The marker lets `refresh_labels` undo only the border settings it set itself.
 
@@ -44,6 +48,9 @@ Why pane options:
 | `tmux-peers` | Lists connections. `--refresh` rebuilds labels (used by hooks). |
 | `tmux-ask` | Sends a message. |
 | `tmux-peek` | Reads a peer's screen (`capture-pane -J`). |
+| `tmux-spawn` | Starts a connected sub agent in a hidden window. `--run` is its in-window half. |
+| `tmux-agents` | fzf switcher (`prefix + a`). `--list`, `--view` and `--alert` are its helper modes. |
+| `tmux-dismiss` | Kills an agent's pane. |
 
 `lib.sh` is not executable, so it never shows up as a command even though the directory is on `PATH`.
 
@@ -52,27 +59,82 @@ Why pane options:
 `tmux-ask` pastes text into the target pane and presses Enter, exactly as if the user had typed it. The agent receives it as an ordinary prompt.
 
 ```
-[request from claude via tmux-ask]
+[request from claude to codex via tmux-ask]
 <message>
 
-(When done, send your answer back with: tmux-ask --reply claude <<'MSG'
+(You are codex. When done, send your answer back with: tmux-ask --from codex --reply claude <<'MSG'
 <your reply>
 MSG)
+[end of request from claude to codex]
 ```
 
 ```
-[reply from codex via tmux-ask]
+[reply from codex to claude via tmux-ask]
 <message>
 
 (This is a reply. Do not answer it unless you have a new request.)
+[end of reply from codex to claude]
 ```
 
 Design decisions:
 - **Push, not call-and-wait.** The sender ends its turn right after sending. The answer arrives later as a new prompt in its own pane. An earlier design blocked on `tmux wait-for` plus a Stop/notify hook and scraped the reply with `capture-pane`. It was dropped because a peer waiting on a permission prompt would stall the caller, and scraped TUI output is noisy.
 - **Loop prevention by convention.** Replies say not to answer. The `tmux-agents` skill repeats the rule. There is no hop counter.
+- **Explicit identity.** Every request names its receiver and puts `--from <receiver>` in the reply command. `self_pane` takes `--from` (a name or pane id) before `$TMUX_PANE`, because `$TMUX_PANE` is wrong in Codex (see pitfalls).
 - **Every request carries its own reply instructions.** An agent that never loaded the skill can still answer.
-- **Delivery.** The script loads the message into a tmux buffer and uses `paste-buffer -p` (bracketed paste), so multi-line text stays one message. It then waits `TMUX_ASK_ENTER_DELAY` (default 0.5s) before sending Enter, because TUIs can treat an Enter that arrives in the same burst as the paste as a newline.
+- **Delivery.** The script loads the message into a tmux buffer and uses `paste-buffer -p` (bracketed paste), so multi-line text stays one message. It then waits `TMUX_ASK_ENTER_DELAY` (default 0.5s) before sending Enter, because TUIs can treat an Enter that arrives in the same burst as the paste as a newline. It then submits with `send-keys Enter`, which is why a pane in copy mode counts as busy (see pitfalls).
+- **Not typing over the user.** `user_busy` is true when the receiver's pane is in copy mode, or a client is showing it and had a keypress in the last `TMUX_ASK_IDLE_SECS` (8s). Then `tmux-ask` writes the body to `/tmp/tmux-agents-<uid>/queue/<epoch>-<pid>-<pane>.msg` (one fixed place, so hooks running in the tmux server's environment find it) and starts `tmux-ask --deliver` with `run-shell -b`, which lives in the tmux server rather than the sender. The deliverer polls every 2s, waits for older queued files for the same pane (names sort by time), delivers once the user is idle, and gives up after `TMUX_ASK_QUEUE_SECS` (30 min) or when the pane is gone. Giving up renames the file to `.undelivered`, so it no longer holds up later messages, and shows every client where it is for 10s. Leaving copy mode doesn't wait for the poll: a `pane-mode-changed[42]` hook runs `tmux-ask --kick <pane>`, which sends that pane's queued messages at once, in order, skipping the typing window (tmux counts mouse scrolling as client activity, so waiting it out cost 8 to 10s after every scroll). The hook and the deliverer can race for the same file, so each claims it by renaming it to `.sending` first; the loser finds it gone and exits. The sender already got `queued` back and has moved on; the skill tells agents that `queued` means sent, so they don't resend. Detecting drafts in the input line from the screen was prototyped and dropped: it depended on each TUI's look (Codex draws its placeholder dim) and the end markers make it unnecessary.
+- **End markers.** Bodies end with `[end of request|reply from X to Y]`. If a user's draft gets submitted with a message, the skill tells the agent that text outside the markers is the user's, with the user's authority.
 - **Trust.** Peer messages look like user input. The skill tells agents that the user's instructions win and to confirm anything destructive with the user.
+
+## Sub agents
+
+Agents are told (skill, Claude memory, `~/.codex/AGENTS.md`) to use `tmux-spawn` wherever they would use a built-in sub agent. Built-in subagents can't be switched off, so this is an instruction, not enforcement.
+
+### Spawning
+
+1. **Refuse if too deep.** `TMUX_AGENTS_DEPTH` (unset means 0) must be below `TMUX_AGENTS_MAX_DEPTH` (default 2). The child gets depth + 1 through `new-window -e`, so a top-level agent can spawn children, and they can spawn grandchildren, which can't spawn further.
+2. **Pick the agent kind.** An explicit `claude|codex|codex-2nd` wins. Otherwise: `CLAUDECODE` set means claude; `CODEX_HOME=~/.codex-2nd` means codex-2nd; then the caller pane's `pane_current_command`.
+3. **Name the caller** with `suggest_name` if it has no name, so the child can reply.
+4. **Name the child.** `--name` is sanitized and made unique with `unique_name` (`-2`, `-3`...). Without it, `name_for <agent> <cwd>` gives `claude-<dir>-<N>`.
+5. **Pick the session.** It is `agents-<project>`, from `agents_session_for`: the git root's basename, `home` for `$HOME`, else the directory's basename. It is created with `new-session -d` on first use. One window per sub agent.
+6. **Hand over the task through a file.** The request body goes to a `mktemp` file. The window runs `tmux-spawn --run <agent> <file>`, which reads and deletes it and `exec`s the agent with the text as its first prompt (`claude "<prompt>"` and `codex "<prompt>"` both start interactive with an initial prompt). No shell ever quotes the task, and nothing has to wait for the TUI to be ready before pasting.
+7. **Wire it up.** `remain-on-exit on` keeps the transcript after the agent exits. The script sets `@agent` and `@parent`, links both ways, and refreshes labels.
+
+For `codex` and `codex-2nd`, `--run` also passes `-c shell_environment_policy.set.{TMUX_PANE,TMUX,TMUX_AGENTS_DEPTH}` with the new pane's values, so commands the sub agent runs through Codex's shared daemon see its own identity and depth. `codex sandbox` confirmed the override is applied.
+
+`--run` puts `~/.bin/tmux` first on `PATH`, because the tmux server's environment may predate the fish PATH change. For `codex-2nd` it sets `CODEX_HOME=~/.codex-2nd` rather than calling the fish function, which isn't available to bash.
+
+### Browsing: `tmux-agents`
+
+- **List.** One row per sub agent (panes with `@parent`), deduped. `ctrl-a` toggles to every named pane. fzf exports `FZF_PROMPT` to reloads, so `--list` reads the prompt (`agents> ` or `all> `) to know which view to rebuild; the toggle uses `transform` under `--with-shell 'bash -c'`, because the user's `$SHELL` is fish. The ID column is hidden with `--with-nth=2..` but still feeds `{1}` in the preview. The keys live in a two-line `--footer`, since both a header line and a one-line footer got truncated in the narrow list. Status is `#{?pane_dead,exited,#{?window_bell_flag,needs-you,running}}`. Parent names are looked up from `@parent`.
+- **Preview.** fzf previews `capture-pane -ep -J -S -300` with `--preview-window follow`, so it shows the latest output in colour.
+- **Enter on a hidden agent.** The switcher itself runs in a popup, so it schedules a second popup with `run-shell -b "sleep 0.2; display-popup ..."` and exits. That popup runs `tmux-agents --view <pane>`, which attaches a nested client to the pane's session and selects its window. It unsets `TMUX` (required for nesting) but keeps the socket from `$TMUX` and passes `-S`. `prefix + d` detaches it, which closes the popup.
+- **Enter on a visible pane, or `ctrl-o`.** `switch-client -c <client> -t <pane>`.
+- **`ctrl-x`.** Runs `tmux-dismiss`, then fzf reloads the list.
+
+### Done state and cleanup
+
+- **Marking.** `tmux-ask` sets `@state done` on the sender when it replies to its own `@parent`, and `@state working` on the receiver of any request.
+- **Precedence.** The list shows `exited` > `done` > `needs-you` > `running`. Codex rings the bell at the end of every turn, so `needs-you` alone doesn't mean the task finished.
+- **Cleanup.** `tmux-dismiss --done` lists done and exited sub agents, asks y/N on the terminal, and kills them. The switcher runs it with fzf `execute` on `ctrl-d`, then reloads.
+
+### Closing, and telling the parent
+
+- **Parents close their own.** `tmux-dismiss --from ME <name>` checks the target's `@parent` is ME and refuses otherwise. Permissions allow only this `--from` form: `Bash(tmux-dismiss --from:*)` and `prefix_rule(["tmux-dismiss", "--from"])`. Plain `tmux-dismiss` and `--done` stay with the user.
+- **Passive notice.** Before killing a pane, `note_closed` appends its name to every peer's `@closed`, skipping the pane doing the closing. Nobody is interrupted. `resolve_peer` turns a lookup of a closed name into "was closed by the user" with advice to respawn, and `tmux-peers` lists them. `add_peer` drops a name from `@closed` once a live pane with that name is connected again. Pushing a notice into the parent was rejected, because every pasted message starts a new turn.
+
+### Long messages
+
+- **Convention.** The skill asks for a 3 to 5 line summary plus a file path whenever an answer runs past about 20 lines. Claude writes to its session scratchpad; other agents write to `$TMPDIR/tmux-agents/<name>/`.
+- **Safety net.** Messages over `TMUX_ASK_MAX_LINES` (default 60) are written to `$TMPDIR/tmux-agents/<sender>/<time>-to-<receiver>.md`. Only the first 15 lines and the path are pasted, which keeps huge pastes out of TUIs.
+
+### Status bar
+
+`status-right` runs `#(~/.bin/tmux/tmux-agents --status)` with `status-interval 5`. It counts live panes that have `@parent` (deduped, `pane_dead` excluded) and the ones whose window has a bell flag, and prints `active subagents: N · M needs you · K done`. Done and exited agents aren't counted as active.
+
+### Alerts
+
+The `alert-bell[42]` hook runs `tmux-agents --alert #{session_name} #{window_name}`. For sessions named `agents-*`, it shows `agent <name> needs you (prefix + a)` for 5s on every client that isn't itself viewing an agents session. Bells in unattached sessions still set `window_bell_flag` and fire the hook, which was verified.
 
 ## Naming
 
@@ -110,25 +172,27 @@ Design decisions:
 
 Codex's seatbelt sandbox denies the tmux socket (`error connecting to /private/tmp/tmux-501/... (Operation not permitted)`). This was confirmed with `codex sandbox`; `--allow-unix-socket` fixes it.
 
-The shipped fix is `~/.codex/rules/tmux-agents.rules`, which allows `tmux-ask`, `tmux-peers` and `tmux-peek` with `prefix_rule(..., decision="allow")`. `codex execpolicy check` confirms the decision, including absolute paths via `--resolve-host-executables`.
+The shipped fix is `~/.codex/rules/tmux-agents.rules`, which allows `tmux-ask`, `tmux-peers`, `tmux-peek` and `tmux-spawn` with `prefix_rule(..., decision="allow")`. `codex execpolicy check` confirms the decision, including absolute paths via `--resolve-host-executables`.
 
 **Unverified:** whether an allow rule alone also runs the command outside the sandbox in a live session. The Codex skill keeps a fallback: request escalated permissions.
 
 ### Permissions
 
-- Claude: `tmux-ask`, `tmux-peers` and `tmux-peek` (bare and `~/.bin/tmux/` forms) are allowlisted in `~/.claude/settings.json`.
-- `tmux-connect` and `tmux-disconnect` are deliberately not allowlisted anywhere. Connecting panes is the user's call.
+- Claude: `tmux-ask`, `tmux-peers`, `tmux-peek` and `tmux-spawn` (bare and `~/.bin/tmux/` forms) are allowlisted in `~/.claude/settings.json`. The Codex rules file allows the same four.
+- `tmux-connect`, `tmux-disconnect`, plain `tmux-dismiss` and `--done` are deliberately not allowlisted. Connecting panes and closing other agents' transcripts are the user's call. Only `tmux-dismiss --from` is allowed, and it checks ownership.
 
 ### Where things are installed
 
 | Piece | Location |
 | --- | --- |
 | Scripts | `~/.bin/tmux/`, on `PATH` via `.config/fish/config.fish` |
-| Binding and hooks | `~/.tmux.conf` (`pane-exited[42]` and `after-kill-pane[42]` run `tmux-peers --refresh`) |
+| Bindings and hooks | `~/.tmux.conf`: `prefix + A` connect, `prefix + a` agents; `pane-exited[42]` and `after-kill-pane[42]` run `tmux-peers --refresh`; `alert-bell[42]` runs `tmux-agents --alert`; `pane-mode-changed[42]` runs `tmux-ask --kick` |
+| Agent instructions | Claude memory `prefer-tmux-agents`, `~/.codex/AGENTS.md` |
+| Codex launch wrappers | `.config/fish/functions/{codex,codex-2nd,__codex_tmux_pins}.fish` |
 | Skills | `~/.claude/skills/tmux-agents/`, `~/.codex/skills/tmux-agents/` |
 | Codex rules | `~/.codex/rules/tmux-agents.rules` |
 
-`~/.codex-2nd/` symlinks the Codex skill, rules and `AGENTS.md` with relative links.
+`~/.codex-2nd/` symlinks the Codex skill and `AGENTS.md` with relative links. The rules file is a **hard link** instead (see pitfalls).
 
 ## Pitfalls found while building
 
@@ -136,6 +200,16 @@ The shipped fix is `~/.codex/rules/tmux-agents.rules`, which allows `tmux-ask`, 
 - **`display-message -t %99 '#{pane_id}'` exits 0 with empty output for a closed pane.** `pane_alive` checks `list-panes -a` instead.
 - **`set -o pipefail` plus `grep -q`.** `grep` exits early, the writer gets SIGPIPE, and the pipeline "fails". Capture output into a variable before grepping (`is_peer`, `pane_alive`).
 - **Grouped sessions** duplicate panes in `list-panes -a`. Dedupe by id.
+- **New windows run through fish, and `config.fish` reorders `PATH`.** A test put fake agents first on the server's `PATH`, but fish moved `~/.local/bin` ahead of them, so the real `claude` started with the test task. It was killed within about a second. `TMUX_SPAWN_BIN` is now the test hook: `--run` prepends it after fish has run.
+- **Nested `tmux attach` after `unset TMUX` goes to the default socket.** On a `-L` test server it attached to the user's real server. `--view` passes `-S` with the socket taken from `$TMUX`.
+- **`read` with `IFS=<tab>` collapses empty fields**, because tab is IFS whitespace. An empty `@parent` shifted every later column. Formats emit `-` for empty values.
+- **`basename ... | tr -c` also translates the trailing newline** into the replacement character. Sanitize `"$(basename ...)"` through `printf '%s'` instead.
+- **`send-keys` goes to copy mode.** If the user is scrolling the receiver's pane, `paste-buffer` still reaches the program (it bypasses modes) but `send-keys Enter` is handled by copy mode, so the message sat in the input box unsent. Pasting a raw `\r` instead worked for `cat` but not for Claude Code, whose input didn't submit on it. So `user_busy` counts `#{pane_in_mode}` as busy: someone scrolling a pane is reading it, and the message is queued until they leave copy mode.
+- **Chained commands run in Codex's sandbox.** Prefix allow rules only match a command's start, so `echo ...; tmux-peers` ran sandboxed, and tmux reported the blocked socket as "no tmux server running". `require_tmux` now says what happened when `$TMUX` is set, and the skill says to run `tmux-*` commands on their own.
+- **`grep -v` that filters out every line exits 1.** Under `pipefail` and `set -e`, removing the only name from `@closed` silently killed `tmux-spawn` halfway through linking. Use `awk` for filters that can come out empty.
+- **Codex runs shell commands in a shared app-server daemon**, one per `CODEX_HOME`, which keeps the environment of the pane it was started from. A codex-2nd sub agent in `%40` ran `tmux-ask` with `TMUX_PANE=%36` (its parent's pane), so it acted as its parent and got "not connected". `ps eww` showed the TUI with `%40` and the daemon with `%36`. The main Codex daemon has no `TMUX_PANE` at all. The fixes are `--from` identity in every message, plus `shell_environment_policy.set` pins (`TMUX_PANE`, `TMUX`, `TMUX_AGENTS_PINNED=1`) for every Codex started in tmux: `tmux-spawn --run` adds them for sub agents, and the fish functions `codex` and `codex-2nd` add them (via `__codex_tmux_pins`) for Codex the user starts. A top-level codex-2nd started without them ran `tmux-peers`, saw its parent's identity, asked the user to confirm that name, got a "yes", and messaged another project's agent as someone else. So the skill no longer lets an unpinned Codex pick a name from `tmux-peers` or have the user confirm one, and `tmux-peers` prints a warning when neither `--from`, `TMUX_AGENTS_PINNED` nor `CLAUDECODE` is set. Verified live: a codex-2nd restarted through the wrapper saw `TMUX_AGENTS_PINNED=1` and `you: codex-~-1 (%48)` while sharing the daemon started from `%36`. `TMUX_AGENTS_DEPTH` had the same problem, which silently broke the depth limit for Codex.
+- **Codex silently ignores symlinked `.rules` files** ([openai/codex#32658](https://github.com/openai/codex/issues/32658), open): `collect_policy_files()` keeps only `is_file()` entries. The codex-2nd symlink was skipped, so codex-2nd prompted for `tmux-peers`; its log shows the `CommandExecutionRequestApproval`. `~/.codex-2nd/rules/tmux-agents.rules` is now a hard link. An editor that saves by writing a new file and renaming it (including `sed -i`) breaks the link; recreate it with `ln -f ~/.codex/rules/tmux-agents.rules ~/.codex-2nd/rules/`.
+- **Prefix allow rules may still prompt for sandbox escapes** ([openai/codex#15298](https://github.com/openai/codex/issues/15298), reported on Windows). If Codex still asks, approving with "don't ask again" writes a rule to that account's `default.rules`, which works.
 - **Font ligatures** can render `-~-` as an arrow (`claude-~-1` shows as `claude⤳1`). This is cosmetic only.
 
 ## Testing
@@ -144,6 +218,7 @@ Tests never touch the user's server:
 - Run scripts against a separate server (`tmux -L <name> -f /dev/null`) by exporting `TMUX=<socket>,1,0` and `TMUX_PANE=%N`.
 - To test key bindings and popups, run an inner server with `-f ~/.tmux.conf` attached inside a pane of an outer server. Drive it with `tmux -L outer send-keys` and read the screen with `capture-pane`.
 - `cat` panes stand in for agents. The TTY echo makes them show pasted text twice, which is expected.
+- For `tmux-spawn`, always set `TMUX_SPAWN_BIN` to a directory of fake `claude`/`codex` scripts that print their arguments and `exec cat`. Check the new pane shows the fake's marker before doing anything else, and kill the server if it doesn't.
 - Pace simulated keystrokes (about 0.1s apart). A single `send-keys` burst of Down plus Backspaces didn't register the Backspaces in the popup form, while paced keys did.
 
 ## Known limitations
@@ -151,4 +226,7 @@ Tests never touch the user's server:
 - The naming form edits only at the end of a field (no ←/→ cursor).
 - A message pasted while the user is typing in that pane gets mixed with the typing. Claude queues input while busy; Codex's behaviour is untested.
 - There is no hop limit beyond the reply convention.
+- Using `tmux-spawn` instead of built-in sub agents is an instruction, not enforcement.
+- A Codex started without the fish wrappers (e.g. `command codex`, another shell, or the desktop app) still can't know its own name until it receives a message. The skill tells it to ask the user for its pane's name.
+- Viewing a hidden agent attaches a second client to its session, which resizes that session's windows to the popup.
 - `@peer_names` is a cache. Renaming a pane by hand (`set -p @agent`) needs `tmux-peers --refresh`.
