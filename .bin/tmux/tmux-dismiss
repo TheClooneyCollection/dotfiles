@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Close an agent pane (and its window if it was the only pane).
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+case "${1:-}" in
+  ''|-h|--help) echo "usage: tmux-dismiss <name>  (closes the pane and its transcript)"; [ -n "${1:-}" ]; exit $? ;;
+esac
+
+require_tmux
+pane="$(find_pane "$1")"
+[ -n "$pane" ] || die "no agent named '$1'"
+tmux kill-pane -t "$pane"
+refresh_labels
+echo "dismissed $1 ($pane)"
