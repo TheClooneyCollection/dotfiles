@@ -5,7 +5,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-usage: tmux-ask <name> [--reply] [message...]
+usage: tmux-ask [--from ME] <name> [--reply] [message...]
 
 Sends message (arguments, or stdin if none) to the connected pane name
 and submits it. Requests tell the receiver how to reply. Replies are
@@ -16,15 +16,18 @@ marked as needing no response, which stops endless back-and-forth.
   multi-line reply
   MSG
 
+--from ME: your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
+
 env: TMUX_ASK_ENTER_DELAY  seconds between paste and Enter (default 0.5)
 EOF
 }
 
-target="" reply=0 msg=""
+target="" reply=0 msg="" FROM_PANE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --reply) reply=1; shift ;;
+    --from) FROM_PANE="${2:-}"; shift 2 ;;
     --) shift; msg="$*"; break ;;
     -*) usage >&2; exit 1 ;;
     *)
@@ -49,9 +52,9 @@ me="$(pane_name "$self")"
 peer="$(resolve_peer "$self" "$target")"
 
 if [ "$reply" -eq 1 ]; then
-  body="$(reply_body "$me" "$msg")"
+  body="$(reply_body "$me" "$msg" "$(pane_name "$peer")")"
 else
-  body="$(request_body "$me" "$msg")"
+  body="$(request_body "$me" "$msg" "$(pane_name "$peer")")"
 fi
 
 # Bracketed paste keeps multi-line text as one message; Enter submits it.

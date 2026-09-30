@@ -39,10 +39,16 @@ find_pane() {
   tmux list-panes -a -F '#{pane_id} #{@agent}' | awk -v n="$1" '$2 == n { print $1; exit }'
 }
 
-# The pane this script acts for: --from override, else the caller's pane.
+# The pane this script acts for: --from (a name or pane id), else $TMUX_PANE.
+# Codex runs commands in a shared app-server daemon whose TMUX_PANE is the
+# pane it started in, so agents pass --from with their own name.
 self_pane() {
   local pane="${FROM_PANE:-${TMUX_PANE:-}}"
-  [ -n "$pane" ] || die "not inside a tmux pane"
+  [ -n "$pane" ] || die "not inside a tmux pane (pass --from <your name>)"
+  case "$pane" in
+    %*) ;;
+    *) pane="$(find_pane "$pane")"; [ -n "$pane" ] || die "no agent named '$FROM_PANE'" ;;
+  esac
   pane_alive "$pane" || die "pane $pane no longer exists"
   printf '%s\n' "$pane"
 }
@@ -89,12 +95,16 @@ name_for() {
 
 # Message bodies for tmux-ask. Requests carry their own reply instructions,
 # so a receiver that never loaded the skill can still answer.
+# Args: sender, message, receiver. The receiver's name goes into the
+# reply command as --from, so it works even where TMUX_PANE is wrong.
+# Both end with an [end of ...] line: text outside the markers in the same
+# prompt was typed by the user (a draft can get submitted along with it).
 request_body() {
-  printf '[request from %s via tmux-ask]\n%s\n\n(When done, send your answer back with: tmux-ask --reply %s <<'"'"'MSG'"'"'\n<your reply>\nMSG)' "$1" "$2" "$1"
+  printf '[request from %s to %s via tmux-ask]\n%s\n\n(You are %s. When done, send your answer back with: tmux-ask --from %s --reply %s <<'"'"'MSG'"'"'\n<your reply>\nMSG)\n[end of request from %s to %s]' "$1" "$3" "$2" "$3" "$3" "$1" "$1" "$3"
 }
 
 reply_body() {
-  printf '[reply from %s via tmux-ask]\n%s\n\n(This is a reply. Do not answer it unless you have a new request.)' "$1" "$2"
+  printf '[reply from %s to %s via tmux-ask]\n%s\n\n(This is a reply. Do not answer it unless you have a new request.)\n[end of reply from %s to %s]' "$1" "$3" "$2" "$1" "$3"
 }
 
 # Give pane $1 the name $2, refusing names another pane already holds.
@@ -163,7 +173,7 @@ resolve_pane() {
 resolve_peer() {
   local id
   id="$(resolve_pane "$2")"
-  is_peer "$1" "$id" || die "'$2' is not connected to this pane (see tmux-peers)"
+  is_peer "$1" "$id" || die "'$2' is not connected to $(label "$1"). If that isn't you, pass --from <your name> (see tmux-peers)"
   printf '%s\n' "$id"
 }
 

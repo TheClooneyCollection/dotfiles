@@ -3,8 +3,10 @@
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
+FROM_PANE=""
+[ "${1:-}" = "--from" ] && { FROM_PANE="${2:-}"; shift 2; }
 case "${1:-}" in
-  ''|-h|--help) echo "usage: tmux-peek <name> [lines]  (default 40)"; [ -n "${1:-}" ]; exit $? ;;
+  ''|-h|--help) echo "usage: tmux-peek [--from ME] <name> [lines]  (default 40)"; [ -n "${1:-}" ]; exit $? ;;
 esac
 
 require_tmux

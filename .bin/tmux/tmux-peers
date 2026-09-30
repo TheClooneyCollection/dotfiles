@@ -3,8 +3,10 @@
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
+FROM_PANE=""
+[ "${1:-}" = "--from" ] && { FROM_PANE="${2:-}"; shift 2; }
 case "${1:-}" in
-  -h|--help) echo "usage: tmux-peers [--refresh]"; exit 0 ;;
+  -h|--help) echo "usage: tmux-peers [--from ME] [--refresh]"; exit 0 ;;
   # Rebuild pane border labels; run by the tmux hooks when a pane closes.
   --refresh) require_tmux; refresh_labels; exit 0 ;;
 esac
