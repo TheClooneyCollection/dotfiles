@@ -20,6 +20,7 @@
       "Read"
     ]
   },
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -58,7 +59,8 @@
       }
     }
   },
-  "effortLevel": "medium",
+  "effortLevel": "low",
   "theme": "dark-ansi",
+  "agentPushNotifEnabled": true,
   "voiceEnabled": true
 }
