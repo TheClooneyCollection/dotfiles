@@ -100,6 +100,8 @@ Agents are told (skill, Claude memory, `~/.codex/AGENTS.md`) to use `tmux-spawn`
 6. **Hand over the task through a file.** The request body goes to a `mktemp` file. The window runs `tmux-spawn --run <agent> <file>`, which reads and deletes it and `exec`s the agent with the text as its first prompt (`claude "<prompt>"` and `codex "<prompt>"` both start interactive with an initial prompt). No shell ever quotes the task, and nothing has to wait for the TUI to be ready before pasting.
 7. **Wire it up.** `remain-on-exit on` keeps the transcript after the agent exits. The script sets `@agent` and `@parent`, links both ways, and refreshes labels.
 
+Sub agents always start in auto mode: `--permission-mode auto` for Claude and `-c approvals_reviewer="auto_review"` for Codex. Before this, a spawned codex-2nd fell back to its config default (`user`) and asked about every command, while its parent had been switched to auto review by hand.
+
 For `codex` and `codex-2nd`, `--run` also passes `-c shell_environment_policy.set.{TMUX_PANE,TMUX,TMUX_AGENTS_DEPTH}` with the new pane's values, so commands the sub agent runs through Codex's shared daemon see its own identity and depth. `codex sandbox` confirmed the override is applied.
 
 `--run` puts `~/.bin/tmux` first on `PATH`, because the tmux server's environment may predate the fish PATH change. For `codex-2nd` it sets `CODEX_HOME=~/.codex-2nd` rather than calling the fish function, which isn't available to bash.

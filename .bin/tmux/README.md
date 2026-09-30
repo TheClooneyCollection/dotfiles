@@ -42,7 +42,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 - **Alerts.** When a hidden agent rings the bell (e.g. waiting for approval), your status line says `agent <name> needs you`.
 - **History is kept** until someone closes it. Panes stay after the agent exits. The parent closes its sub agents once it has what it needs (`tmux-dismiss --from`, own sub agents only); you can close any of them.
 - **Parents learn about your closes.** When you close a sub agent, its parent isn't interrupted. Its `tmux-peers` lists it under `closed by user`, and a later `tmux-ask` says it was closed instead of failing with "no pane".
-- **Same kind by default.** Claude spawns Claude, Codex spawns Codex, codex-2nd spawns codex-2nd.
+- **Same kind by default, in auto mode.** Claude spawns Claude, Codex spawns Codex, codex-2nd spawns codex-2nd. Sub agents start with Claude's `--permission-mode auto` or Codex's `approvals_reviewer="auto_review"`.
 - **Depth limit.** At most two levels of sub agents (`TMUX_AGENTS_MAX_DEPTH`).
 
 ## Commands

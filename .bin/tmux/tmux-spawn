@@ -14,7 +14,8 @@ Starts a sub agent in its own window of the project's hidden session
 (agents-<project>), names it, connects it to this pane, and hands it
 the task (arguments, or stdin if none) as a tmux-ask request. It
 replies with tmux-ask --reply when done. The agent defaults to the
-same kind as the caller.
+same kind as the caller, in auto mode (Claude --permission-mode auto,
+Codex approvals_reviewer=auto_review).
 
   --from ME     your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
   --name NAME   short task name, e.g. auth-review; -2, -3... is added
@@ -42,10 +43,12 @@ if [ "${1:-}" = "--run" ]; then
     -c "shell_environment_policy.set.TMUX_AGENTS_DEPTH=\"${TMUX_AGENTS_DEPTH:-0}\""
     -c 'shell_environment_policy.set.TMUX_AGENTS_PINNED="1"'
   )
+  # Sub agents start in auto mode: Claude's auto permission mode, Codex's
+  # auto review, so the user isn't asked about every command they run.
   case "$agent" in
-    claude) cmd=(claude) ;;
-    codex) cmd=(codex "${codex_env[@]}") ;;
-    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex "${codex_env[@]}") ;;
+    claude) cmd=(claude --permission-mode auto) ;;
+    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
+    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
     *) die "unknown agent '$agent'" ;;
   esac
   if [ -n "$prompt" ]; then exec "${cmd[@]}" "$prompt"; else exec "${cmd[@]}"; fi
