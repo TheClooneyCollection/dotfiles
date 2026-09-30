@@ -35,12 +35,14 @@ __pycache__/
 !/.codex/skills
 /.codex/skills/*
 !/.codex/skills/tmux-agents
+!/.codex/AGENTS.md
 
 !/.codex-2nd
 /.codex-2nd/*
 !/.codex-2nd/skills
 /.codex-2nd/skills/*
 !/.codex-2nd/skills/tmux-agents
+!/.codex-2nd/AGENTS.md
 
 # Emacs
 
