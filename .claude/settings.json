@@ -4,6 +4,12 @@
       "Bash(ls -la:*)",
       "Bash(find:*)",
       "Bash(git:*)",
+      "Bash(tmux-ask:*)",
+      "Bash(tmux-peers:*)",
+      "Bash(tmux-peek:*)",
+      "Bash(~/.bin/tmux/tmux-ask:*)",
+      "Bash(~/.bin/tmux/tmux-peers:*)",
+      "Bash(~/.bin/tmux/tmux-peek:*)",
       "Read"
     ]
   },
