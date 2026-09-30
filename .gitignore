@@ -36,6 +36,9 @@ __pycache__/
 /.codex/skills/*
 !/.codex/skills/tmux-agents
 !/.codex/AGENTS.md
+!/.codex/rules
+/.codex/rules/*
+!/.codex/rules/tmux-agents.rules
 
 !/.codex-2nd
 /.codex-2nd/*
@@ -43,6 +46,9 @@ __pycache__/
 /.codex-2nd/skills/*
 !/.codex-2nd/skills/tmux-agents
 !/.codex-2nd/AGENTS.md
+!/.codex-2nd/rules
+/.codex-2nd/rules/*
+!/.codex-2nd/rules/tmux-agents.rules
 
 # Emacs
 
