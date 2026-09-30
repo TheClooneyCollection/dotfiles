@@ -48,7 +48,7 @@ Reply with findings, each with file:line.
 MSG
 ```
 
-- It opens a hidden window in the project's session (`agents-<project>`), starts the same kind of agent as you, connects it to your pane, and sends the task as a request. Pass `claude`, `codex` or `codex-2nd` first only when the user asks for a different agent.
+- It opens a hidden window in the project's session (`agents-<project>`), starts the same kind of agent as you, connects it to your pane, and sends the task as a request. Pass `claude`, `codex` or `codex-2nd` first only when the user asks for a different agent. Sub agents start in auto mode (Claude `--permission-mode auto`, Codex auto review), so they rarely need the user's approval.
 - `--name`: a short, descriptive task name in kebab-case (`auth-review`, `fix-login-test`, `research-tmux-hooks`). It shows up in the user's agent list, so make it say what the agent is doing. `-2`, `-3`... is added if the name is taken.
 - The task must be self-contained: the sub agent starts with no context. Include the goal, relevant paths, constraints, and exactly what to reply with.
 - After spawning, tell the user the name and **end your turn**. The answer arrives as `[reply from <name> via tmux-ask]`. Spawn several at once for parallel work, then end your turn.
