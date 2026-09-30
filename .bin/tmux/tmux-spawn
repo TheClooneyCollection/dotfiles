@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# Start a sub agent in a hidden pane, connected to this one.
+set -euo pipefail
+here="$(cd "$(dirname "$0")" && pwd)"
+. "$here/lib.sh"
+
+MAX_DEPTH="${TMUX_AGENTS_MAX_DEPTH:-2}"
+
+usage() {
+  cat <<'EOF'
+usage: tmux-spawn [claude|codex|codex-2nd] [--from ME] [--name NAME] [task...]
+
+Starts a sub agent in its own window of the project's hidden session
+(agents-<project>), names it, connects it to this pane, and hands it
+the task (arguments, or stdin if none) as a tmux-ask request. It
+replies with tmux-ask --reply when done. The agent defaults to the
+same kind as the caller.
+
+  --from ME     your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
+  --name NAME   short task name, e.g. auth-review; -2, -3... is added
+                if taken (default: <agent>-<dir>-<N>)
+
+Browse agents with tmux-agents (prefix + a).
+
+env: TMUX_AGENTS_MAX_DEPTH  spawn levels allowed (default 2)
+     TMUX_SPAWN_BIN         dir put first on the agent's PATH (for tests)
+EOF
+}
+
+# Inside the new window: start the agent with the task as its first prompt.
+if [ "${1:-}" = "--run" ]; then
+  agent="$2" file="$3"
+  prompt="$(cat "$file")"; rm -f "$file"
+  export PATH="$here:$PATH"
+  # Test hook: put stand-in agent binaries first.
+  [ -z "${TMUX_SPAWN_BIN:-}" ] || export PATH="$TMUX_SPAWN_BIN:$PATH"
+  # Codex runs commands in a shared app-server daemon that keeps the env of
+  # whichever pane started it; pin this pane's identity for its commands.
+  codex_env=(
+    -c "shell_environment_policy.set.TMUX_PANE=\"${TMUX_PANE:-}\""
+    -c "shell_environment_policy.set.TMUX=\"${TMUX:-}\""
+    -c "shell_environment_policy.set.TMUX_AGENTS_DEPTH=\"${TMUX_AGENTS_DEPTH:-0}\""
+    -c 'shell_environment_policy.set.TMUX_AGENTS_PINNED="1"'
+  )
+  case "$agent" in
+    claude) cmd=(claude) ;;
+    codex) cmd=(codex "${codex_env[@]}") ;;
+    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex "${codex_env[@]}") ;;
+    *) die "unknown agent '$agent'" ;;
+  esac
+  if [ -n "$prompt" ]; then exec "${cmd[@]}" "$prompt"; else exec "${cmd[@]}"; fi
+fi
+
+agent="" name="" task="" FROM_PANE=""
+case "${1:-}" in
+  claude|codex|codex-2nd) agent="$1"; shift ;;
+esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --name) name="${2:-}"; shift 2 ;;
+    --from) FROM_PANE="${2:-}"; shift 2 ;;
+    --) shift; task="$*"; break ;;
+    -*) usage >&2; exit 1 ;;
+    *) task="$*"; break ;;
+  esac
+done
+if [ -z "$task" ] && [ ! -t 0 ]; then task="$(cat)"; fi
+
+require_tmux
+self="$(self_pane)"
+
+depth="${TMUX_AGENTS_DEPTH:-0}"
+[ "$depth" -lt "$MAX_DEPTH" ] || die "spawn depth limit ($MAX_DEPTH) reached; do this task yourself"
+
+# Default to the caller's own kind of agent.
+if [ -z "$agent" ]; then
+  if [ -n "${CLAUDECODE:-}" ]; then
+    agent=claude
+  elif [ "${CODEX_HOME:-}" = "$HOME/.codex-2nd" ]; then
+    agent=codex-2nd
+  else
+    case "$(pane_command "$self")" in
+      *claude*) agent=claude ;;
+      *codex*) agent=codex ;;
+      *) die "can't tell which agent you are; pass claude, codex or codex-2nd" ;;
+    esac
+  fi
+fi
+
+# The caller needs a name so the sub agent can reply to it.
+me="$(pane_name "$self")"
+if [ -z "$me" ]; then
+  me="$(suggest_name "$self")"
+  set_name "$self" "$me"
+fi
+
+cwd="$(tmux display-message -p -t "$self" '#{pane_current_path}')"
+if [ -n "$name" ]; then
+  name="$(unique_name "$(sanitize_name "$name")")"
+else
+  name="$(name_for "$agent" "$cwd")"
+fi
+session="$(agents_session_for "$cwd")"
+
+# Hand the prompt over in a file, so no shell ever has to quote it.
+file="$(mktemp "${TMPDIR:-/tmp}/tmux-spawn.XXXXXX")"
+[ -z "$task" ] || request_body "$me" "$task" "$name" > "$file"
+run="'$here/tmux-spawn' --run '$agent' '$file'"
+env_args=(-e "TMUX_AGENTS_DEPTH=$((depth + 1))")
+[ -z "${TMUX_SPAWN_BIN:-}" ] || env_args+=(-e "TMUX_SPAWN_BIN=$TMUX_SPAWN_BIN")
+
+if tmux has-session -t "=$session" 2>/dev/null; then
+  pane="$(tmux new-window -d -t "=$session:" -n "$name" -c "$cwd" \
+    "${env_args[@]}" -P -F '#{pane_id}' "$run")"
+else
+  pane="$(tmux new-session -d -s "$session" -n "$name" -c "$cwd" \
+    "${env_args[@]}" -P -F '#{pane_id}' "$run")"
+fi
+
+# Keep the transcript on screen after the agent exits.
+tmux set-option -w -t "$pane" remain-on-exit on
+tmux set-option -w -t "$pane" automatic-rename off
+set_name "$pane" "$name"
+tmux set-option -p -t "$pane" @parent "$self"
+add_peer "$self" "$pane"
+add_peer "$pane" "$self"
+refresh_labels
+
+printf 'spawned %s (%s) as %s, hidden in session "%s"; it will reply via tmux-ask. View: tmux-agents or prefix + a.\n' \
+  "$agent" "$pane" "$name" "$session"

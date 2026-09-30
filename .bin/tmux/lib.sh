@@ -96,6 +96,34 @@ name_for() {
   printf '%s-%d\n' "$base" "$((max + 1))"
 }
 
+# $1, or $1-2, $1-3... whichever no pane holds yet.
+unique_name() {
+  local base="$1" name="$1" n=1
+  while [ -n "$(find_pane "$name")" ]; do
+    n=$((n + 1))
+    name="$base-$n"
+  done
+  printf '%s\n' "$name"
+}
+
+# Hidden sub agents live in one session per project: agents-<project>.
+# The project is the git root's basename, else the directory's; tmux
+# session names can't hold '.' or ':'.
+AGENTS_PREFIX="${TMUX_AGENTS_PREFIX:-agents}"
+agents_session_for() {
+  local dir="$1" root
+  root="$(git -C "$dir" rev-parse --show-toplevel 2>/dev/null)" || root="$dir"
+  if [ "$root" = "$HOME" ]; then
+    printf '%s-home\n' "$AGENTS_PREFIX"
+  else
+    printf '%s-%s\n' "$AGENTS_PREFIX" "$(printf '%s' "$(basename "$root")" | tr -c 'A-Za-z0-9_-' '-')"
+  fi
+}
+
+is_agents_session() {
+  case "$1" in "$AGENTS_PREFIX"-*) return 0 ;; *) return 1 ;; esac
+}
+
 # Succeeds if the user seems busy in pane $1: it is in copy mode (they're
 # scrolling it, and Enter would go to copy mode), or a client is showing it
 # and had a keypress in the last TMUX_ASK_IDLE_SECS (default 8).
