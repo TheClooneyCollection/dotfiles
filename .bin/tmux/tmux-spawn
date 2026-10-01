@@ -46,13 +46,16 @@ if [ "${1:-}" = "--run" ]; then
   # Sub agents start in auto mode: Claude's auto permission mode, Codex's
   # auto review, so the user isn't asked about every command they run.
   # Permission hooks feed the chip: an agent waiting for approval can't
-  # report anything itself. The pane id is baked into the command, since
-  # Codex runs hooks in a daemon with another pane's environment.
+  # report anything itself. Claude runs hooks in its own process, so its
+  # commands can carry the pane id.
   report="'$here/tmux-agent-report' --pane '${TMUX_PANE:-}' --perm"
   claude_hooks="$(printf '{"hooks":{"Notification":[{"matcher":"permission_prompt","hooks":[{"type":"command","command":"%s on"}]}],"PostToolUse":[{"hooks":[{"type":"command","command":"%s off"}]}],"UserPromptSubmit":[{"hooks":[{"type":"command","command":"%s off"}]}],"Stop":[{"hooks":[{"type":"command","command":"%s off"}]}]}}' "$report" "$report" "$report" "$report")"
+  # Codex hooks must be the same for every agent: Codex asks the user to
+  # trust a hook again whenever its command changes, and runs it with the
+  # daemon's environment. tmux-agent-report finds the pane by session_id.
   codex_hooks=()
   for ev in PermissionRequest:on PostToolUse:off UserPromptSubmit:off Stop:off; do
-    codex_hooks+=(-c "hooks.${ev%%:*}=[{hooks=[{type=\"command\",command=\"$report ${ev#*:}\"}]}]")
+    codex_hooks+=(-c "hooks.${ev%%:*}=[{hooks=[{type=\"command\",command=\"'$here/tmux-agent-report' --codex-hook ${ev#*:}\"}]}]")
   done
   case "$agent" in
     claude) cmd=(claude --permission-mode auto --settings "$claude_hooks") ;;
