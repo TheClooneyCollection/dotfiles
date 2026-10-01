@@ -51,7 +51,8 @@ chip_layout() {
     tmux set-option -g 'status-format[1]' "$main"
     if [ "${fps:-10}" -gt 1 ] 2>/dev/null; then
       # Pushed by the chip daemon at $fps frames a second.
-      tmux set-option -g 'status-format[0]' '#[align=right]#{@chip}'
+      # The #() part prints nothing; it restarts the daemon if it died.
+      tmux set-option -g 'status-format[0]' "#[align=right]#{@chip}#($here/tmux-agents --chip-ensure)"
       tmux run-shell -b "'$here/tmux-agents' --chip-daemon"
     else
       # Re-run by tmux every status-interval (1s at most).
@@ -71,10 +72,20 @@ chip_layout() {
 # second, animate its spinner at @tmux_agents_chip_fps (default 10), and
 # push it into @chip with a redraw. Exits once the chip line is gone.
 chip_daemon() {
-  local pid fps delay frames tick=0 last=-1 now template line c
+  local pid fps delay frames tick=0 last=-1 now template line c log
   pid="$(tmux show-options -gqv @tmux_agents_chip_pid)"
   if [ -n "$pid" ] && [ "$pid" != $$ ] && kill -0 "$pid" 2>/dev/null; then return 0; fi
   tmux set-option -g @tmux_agents_chip_pid $$
+  # Two clients' --chip-ensure can start daemons in the same second; the
+  # last one to register wins and the others leave.
+  sleep 0.3
+  [ "$(tmux show-options -gqv @tmux_agents_chip_pid)" = $$ ] || return 0
+  # A long-running loop: one failing tmux call (say a client detaching
+  # between list-clients and refresh-client) must not end it.
+  set +e +o pipefail
+  log="/tmp/tmux-agents-$(id -u)/chip-daemon.log"
+  mkdir -p "$(dirname "$log")"
+  exec 2>>"$log"
   fps="$(tmux show-options -gqv @tmux_agents_chip_fps)"
   case "$fps" in ''|*[!0-9]*) fps=10 ;; esac
   [ "$fps" -le 30 ] || fps=30
@@ -83,12 +94,12 @@ chip_daemon() {
   while :; do
     now="$(date +%s)"
     if [ "$now" != "$last" ]; then
-      case "$(tmux show-options -gv 'status-format[0]' 2>/dev/null)" in *"@chip"*) ;; *) break ;; esac
+      case "$(tmux show-options -gv 'status-format[0]' 2>/dev/null)" in *"@chip"*) ;; *) echo "$(date '+%F %T') chip line gone, exiting" >&2; break ;; esac
       template="$(CHIP_SPIN=@@SPIN@@ chip)"
       last="$now"
     fi
     line="${template//@@SPIN@@/${frames[$((tick % 10))]}}"
-    tmux set-option -g @chip "$line" 2>/dev/null || break
+    tmux set-option -g @chip "$line" 2>/dev/null || { echo "$(date '+%F %T') tmux server gone, exiting" >&2; break; }
     for c in $(tmux list-clients -F '#{client_name}' 2>/dev/null); do tmux refresh-client -S -t "$c" 2>/dev/null; done
     tick=$((tick + 1))
     sleep "$delay"
@@ -193,6 +204,14 @@ case "${1:-}" in
   --chip) require_tmux; chip; exit 0 ;;
   --chip-layout) require_tmux; chip_layout "${2:-on}"; exit 0 ;;
   --chip-daemon) require_tmux; chip_daemon; exit 0 ;;
+  # Run every status-interval from the chip line: restart a dead daemon.
+  --chip-ensure)
+    pid="$(tmux show-options -gqv @tmux_agents_chip_pid)"
+    if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+      tmux run-shell -b "'$here/tmux-agents' --chip-daemon"
+    fi
+    exit 0
+    ;;
   --list) require_tmux; [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; exit 0 ;;
   # Popup body: a nested client on the hidden session, showing this pane.
   --view)
