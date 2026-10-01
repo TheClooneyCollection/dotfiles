@@ -52,11 +52,11 @@ chip_layout() {
     if [ "${fps:-10}" -gt 1 ] 2>/dev/null; then
       # Pushed by the chip daemon at $fps frames a second.
       # The #() part prints nothing; it restarts the daemon if it died.
-      tmux set-option -g 'status-format[0]' "#[align=right]#{@chip}#($here/tmux-agents --chip-ensure)"
+      tmux set-option -g 'status-format[0]' "#{@chip}#($here/tmux-agents --chip-ensure)"
       tmux run-shell -b "'$here/tmux-agents' --chip-daemon"
     else
       # Re-run by tmux every status-interval (1s at most).
-      tmux set-option -g 'status-format[0]' "#[align=right]#($here/tmux-agents --chip)"
+      tmux set-option -g 'status-format[0]' "#($here/tmux-agents --chip)"
     fi
     tmux set-option -g status 2
   else
@@ -122,8 +122,8 @@ short_task() {
   printf '%s…%s' "${1:0:7}" "${1:$((${#1} - 10))}"
 }
 
-# The chip: per-project counts, then one focus agent that rotates every
-# 4s. Agents waiting for permission take over the focus and turn red; past
+# The chip, centred: one focus agent that rotates every 4s, then
+# per-project counts. Agents waiting for permission take over the focus and turn red; past
 # TMUX_AGENTS_BLINK_SECS (default 60) unanswered, they blink.
 chip() {
   local now frames spin rows id name dead st session since activity state act
@@ -167,10 +167,10 @@ EOF
       case "${states[i]}" in work) w=$((w+1)) ;; done) d=$((d+1)) ;; perm) pm=$((pm+1)) ;; exited) ex=$((ex+1)) ;; esac
     done
     seg="#[fg=colour250]$pj#[default]"
-    [ "$pm" -eq 0 ] || seg="$seg #[fg=white,bg=red,bold] ⚠$pm #[default]"
-    [ "$w" -eq 0 ] || seg="$seg #[fg=colour117]$spin$w#[default]"
-    [ "$d" -eq 0 ] || seg="$seg #[fg=colour114]✓$d#[default]"
-    [ "$ex" -eq 0 ] || seg="$seg #[fg=colour240]✗$ex#[default]"
+    [ "$pm" -eq 0 ] || seg="$seg #[fg=white,bg=red,bold] ⚠ $pm #[default]"
+    [ "$w" -eq 0 ] || seg="$seg #[fg=colour117]$spin $w#[default]"
+    [ "$d" -eq 0 ] || seg="$seg #[fg=colour114]✓ $d#[default]"
+    [ "$ex" -eq 0 ] || seg="$seg #[fg=colour240]✗ $ex#[default]"
     out="${out:+$out #[fg=colour240]·#[default] }$seg"
   done
 
@@ -195,7 +195,8 @@ EOF
   else
     focus="#[fg=colour252]$focus#[default]"
   fi
-  printf ' %s #[fg=colour240]│#[default] %s ' "$out" "$focus"
+  # Focus, then per-project status, centred on the line.
+  printf '#[align=centre]%s  #[fg=colour240]│#[default]  %s' "$focus" "$out"
 }
 
 case "${1:-}" in
