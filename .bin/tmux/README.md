@@ -36,7 +36,12 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 - **Easy to check.** `prefix + a` opens `tmux-agents`: your sub agents with status (`running`, `needs-you`, `done`, `exited`), parent, project and a live preview. The keys are shown in a footer.
   - `enter`: open a hidden agent in a popup, where you can approve prompts. `prefix + d` closes it. Visible panes are jumped to instead.
   - `ctrl-o`: jump there full screen; `prefix + L` jumps back. `ctrl-x`: dismiss. `ctrl-d`: close every `done`/`exited` sub agent after a y/N confirmation. `ctrl-a`: toggle between sub agents and every named pane. `ctrl-r`: refresh.
-- **Status bar.** The right side shows `active subagents: N`, plus `· N needs you` and `· N done`.
+- **Status chip.** While sub agents exist, a line above the status bar shows them, right-aligned:
+  ```
+  stone-age ⠹2 ✓1 · dotfiles ⠹1 │ ⠹ giiru-map-audit: verifying giiru imports
+  ```
+  Per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `✗` exited), then one agent in focus, rotating every 4s. An agent waiting for permission takes over the focus in red, and blinks after 60s unanswered. The line disappears when the last sub agent is closed.
+- **Progress reports.** Sub agents report what they're doing with `tmux-agent-report "<a few words>"`; permission waits are reported by hooks. Nothing is read off the screen.
 - **Done.** A sub agent is `done` once it replies to its parent, and `running` again when it gets a new request.
 - **Long answers.** Agents reply with a short summary and a path to the full report in a temp dir. `tmux-ask` also saves any message over 60 lines to `$TMPDIR/tmux-agents/<sender>/` and sends the first 15 lines plus the path.
 - **Alerts.** When a hidden agent rings the bell (e.g. waiting for approval), your status line says `agent <name> needs you`.
@@ -55,6 +60,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 | `tmux-ask [--from ME] <name> [--reply] [msg]` | Paste a message into a connected pane and submit it. Reads stdin if no `msg`. |
 | `tmux-peek <name> [lines]` | Print the last lines (default 40) of a connected pane. |
 | `tmux-spawn [claude\|codex\|codex-2nd] [--name NAME] [task]` | Start a connected sub agent in the project's hidden session and send it the task (or stdin). Taken names get `-2`, `-3`... |
+| `tmux-agent-report [--from ME] "text"` | Report what a sub agent is doing, for the chip. |
 | `tmux-agents` | Browse sub agents, or every named pane with `ctrl-a` (`prefix + a`). |
 | `tmux-dismiss [--from ME] <name>` | Close an agent's pane and its transcript. With `--from`, only your own sub agents. `--done` closes every done/exited one after a y/N. |
 

@@ -15,11 +15,13 @@
       "Bash(tmux-peers:*)",
       "Bash(tmux-peek:*)",
       "Bash(tmux-spawn:*)",
+      "Bash(tmux-agent-report:*)",
       "Bash(tmux-dismiss --from:*)",
       "Bash(~/.bin/tmux/tmux-ask:*)",
       "Bash(~/.bin/tmux/tmux-peers:*)",
       "Bash(~/.bin/tmux/tmux-peek:*)",
       "Bash(~/.bin/tmux/tmux-spawn:*)",
+      "Bash(~/.bin/tmux/tmux-agent-report:*)",
       "Bash(~/.bin/tmux/tmux-dismiss --from:*)",
       "Read"
     ]

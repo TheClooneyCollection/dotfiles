@@ -31,6 +31,7 @@ Pass `--from <your name>` to every `tmux-ask`, `tmux-peers`, `tmux-peek` and `tm
   ```
 - `tmux-ask --from ME --reply <name> <<'MSG' ... MSG`: answer a request.
 - `tmux-peek --from ME <name> [lines]`: read the last lines of a peer's screen without interrupting it.
+- `tmux-agent-report --from ME "<what you're doing>"`: report progress as a sub agent (see below).
 - `tmux-spawn [claude|codex|codex-2nd] --from ME --name <task-name> <<'MSG' ... MSG`: start a sub agent (see below).
 
 If the commands are not on PATH, use `~/.bin/tmux/<command>`. Run each `tmux-*` command on its own, not chained with `&&`, `;` or pipes into it from other commands: permission rules match the start of the command, so a chained call may run sandboxed and fail with "can't reach the tmux server".
@@ -53,6 +54,7 @@ MSG
 - The task must be self-contained: the sub agent starts with no context. Include the goal, relevant paths, constraints, and exactly what to reply with.
 - After spawning, tell the user the name and **end your turn**. The answer arrives as `[reply from <name> via tmux-ask]`. Spawn several at once for parallel work, then end your turn.
 - Follow-ups go to the same agent with `tmux-ask <name>`. Don't spawn a new one for the same thread of work.
+- **As a sub agent, report progress.** When you start and at each major step (not every command), run `tmux-agent-report --from ME "<what you're doing>"` with a few words, like `reading map loader` or `running import tests`. The user watches these in a status-bar chip. Waiting for permission and finishing are tracked for you.
 - A sub agent is shown as `done` once it replies to its parent, and `running` again when it gets a new request. So always finish a task with your reply.
 - **Close sub agents you're done with.** Once you have everything you need from one (its reply read, any report files read, no follow-ups planned), close it with `tmux-dismiss --from ME <name>`. Keep it open while you might still ask follow-ups. Close several at once when a batch of parallel work is finished.
 - If `tmux-ask` says a sub agent **was closed by the user**, don't retry. If you still need that work, spawn a new sub agent and pass along the report paths the old one gave you.

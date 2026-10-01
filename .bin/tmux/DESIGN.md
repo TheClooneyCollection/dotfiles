@@ -130,9 +130,14 @@ For `codex` and `codex-2nd`, `--run` also passes `-c shell_environment_policy.se
 - **Convention.** The skill asks for a 3 to 5 line summary plus a file path whenever an answer runs past about 20 lines. Claude writes to its session scratchpad; other agents write to `$TMPDIR/tmux-agents/<name>/`.
 - **Safety net.** Messages over `TMUX_ASK_MAX_LINES` (default 60) are written to `$TMPDIR/tmux-agents/<sender>/<time>-to-<receiver>.md`. Only the first 15 lines and the path are pasted, which keeps huge pastes out of TUIs.
 
-### Status bar
+### Status chip
 
-`status-right` runs `#(~/.bin/tmux/tmux-agents --status)` with `status-interval 5`. It counts live panes that have `@parent` (deduped, `pane_dead` excluded) and the ones whose window has a bell flag, and prints `active subagents: N · M needs you · K done`. Done and exited agents aren't counted as active.
+- **Placement.** tmux can't float a widget over the panes without stealing focus (popups are modal), so the chip is a second status line. `tmux-agents --chip-layout on` (run by `tmux-spawn`) saves the user's `status-format[0]` in `@tmux_agents_main_format`, moves it to `status-format[1]`, puts `#[align=right]#(tmux-agents --chip)` in `status-format[0]` and sets `status 2`. When `--chip` finds no sub agents it runs `--chip-layout off`, which restores the user's line and `status on`. `status-interval 1` keeps the spinner moving.
+- **Content.** Per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `✗` exited), then a focus agent that rotates every 4s through all sub agents, or only through those waiting for permission if any. Those render white on red, with `blink` once `@perm_since` is older than `TMUX_AGENTS_BLINK_SECS` (60s). Projects drop `agents-`/`projects-` and cap at 10 characters; task names over 18 keep their start and end around `…`.
+- **Data, not screen scraping.** A first version parsed `capture-pane` output (Claude's spinner and `⏺ Tool(...)` lines, Codex's `• Working` and `• Ran` lines). It was dropped as brittle across TUI versions. Now:
+  - `@activity`: the sub agent reports a few words with `tmux-agent-report --from ME "..."`. `tmux-spawn` adds the instruction to every task, and the skill repeats it.
+  - `@perm_since`: hooks report permission waits, since a blocked agent can't. `tmux-spawn --run` passes Claude `--settings` with `Notification` (`permission_prompt`) → `--perm on` and `PostToolUse`/`UserPromptSubmit`/`Stop` → `--perm off`, and passes Codex the same as `-c hooks.<Event>=[...]` with `PermissionRequest`. The pane id is written into each hook command, because Codex runs hooks in a daemon with another pane's environment. Codex validates `-c hooks` overrides (checked with `codex sandbox`).
+  - `@state done`: set by the reply to the parent.
 
 ### Alerts
 
