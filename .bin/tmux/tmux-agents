@@ -243,6 +243,14 @@ case "${1:-}" in
     ( unset TMUX; tmux -S "$sock" attach-session -t "=$sess" \; select-window -t "$win" )
     exec "$here/tmux-agents" --client "${3:-}" --select "$name"
     ;;
+  # Started by fzf on "start": keep the preview live by asking fzf (on its
+  # --listen port) to refresh it. Ends when fzf exits and the port closes.
+  --preview-loop)
+    while curl -fs -XPOST "http://localhost:${FZF_PORT:?}" -d refresh-preview >/dev/null 2>&1; do
+      sleep "${TMUX_AGENTS_PREVIEW_SECS:-0.5}"
+    done
+    exit 0
+    ;;
   # fzf ctrl-a: flip between sub agents and every named pane, remember the
   # choice for next time, and tell fzf what to do.
   --toggle)
@@ -303,6 +311,7 @@ fi
 out="$(printf '%s\n' "$rows" | fzf --ansi --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
   ${start:+--bind "$start"} \
   --with-shell 'bash -c' \
+  --listen --bind "start:execute-silent('$self' --preview-loop >/dev/null 2>&1 &)" \
   --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh')" --footer-border=rounded \
   --expect=ctrl-o \
   --preview 'tmux capture-pane -ep -J -t {1} -S -300' --preview-window='right,55%,follow' \
