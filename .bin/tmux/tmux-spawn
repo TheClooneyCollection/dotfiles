@@ -45,10 +45,19 @@ if [ "${1:-}" = "--run" ]; then
   )
   # Sub agents start in auto mode: Claude's auto permission mode, Codex's
   # auto review, so the user isn't asked about every command they run.
+  # Permission hooks feed the chip: an agent waiting for approval can't
+  # report anything itself. The pane id is baked into the command, since
+  # Codex runs hooks in a daemon with another pane's environment.
+  report="'$here/tmux-agent-report' --pane '${TMUX_PANE:-}' --perm"
+  claude_hooks="$(printf '{"hooks":{"Notification":[{"matcher":"permission_prompt","hooks":[{"type":"command","command":"%s on"}]}],"PostToolUse":[{"hooks":[{"type":"command","command":"%s off"}]}],"UserPromptSubmit":[{"hooks":[{"type":"command","command":"%s off"}]}],"Stop":[{"hooks":[{"type":"command","command":"%s off"}]}]}}' "$report" "$report" "$report" "$report")"
+  codex_hooks=()
+  for ev in PermissionRequest:on PostToolUse:off UserPromptSubmit:off Stop:off; do
+    codex_hooks+=(-c "hooks.${ev%%:*}=[{hooks=[{type=\"command\",command=\"$report ${ev#*:}\"}]}]")
+  done
   case "$agent" in
-    claude) cmd=(claude --permission-mode auto) ;;
-    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
-    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
+    claude) cmd=(claude --permission-mode auto --settings "$claude_hooks") ;;
+    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}" "${codex_hooks[@]}") ;;
+    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}" "${codex_hooks[@]}") ;;
     *) die "unknown agent '$agent'" ;;
   esac
   if [ -n "$prompt" ]; then exec "${cmd[@]}" "$prompt"; else exec "${cmd[@]}"; fi
@@ -108,7 +117,13 @@ session="$(agents_session_for "$cwd")"
 
 # Hand the prompt over in a file, so no shell ever has to quote it.
 file="$(mktemp "${TMPDIR:-/tmp}/tmux-spawn.XXXXXX")"
-[ -z "$task" ] || request_body "$me" "$task" "$name" > "$file"
+# Ask for progress reports; the chip above the status bar shows them.
+if [ -n "$task" ]; then
+  task="$task
+
+(Progress: when you start, and at each major step, run tmux-agent-report --from $name \"<what you're doing, a few words>\". It shows in the user's status bar.)"
+  request_body "$me" "$task" "$name" > "$file"
+fi
 run="'$here/tmux-spawn' --run '$agent' '$file'"
 env_args=(-e "TMUX_AGENTS_DEPTH=$((depth + 1))")
 [ -z "${TMUX_SPAWN_BIN:-}" ] || env_args+=(-e "TMUX_SPAWN_BIN=$TMUX_SPAWN_BIN")

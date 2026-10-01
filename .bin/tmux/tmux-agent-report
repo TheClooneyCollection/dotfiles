@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Report what an agent is doing, for the sub agent chip (tmux-agents --chip).
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+usage() {
+  cat <<'USAGE'
+usage: tmux-agent-report [--from ME] "what you're doing now"
+       tmux-agent-report --pane PANE --perm on|off   (used by hooks)
+
+Agents call it when they start a task and at each major step, with a
+short phrase ("reading map loader", "running import tests"). The chip
+above the status bar shows it next to the agent's name.
+
+Hooks call --perm on when the agent is waiting for a permission answer
+and --perm off when it moves on; the chip turns that agent red.
+USAGE
+}
+
+FROM_PANE="" pane="" perm=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --from) FROM_PANE="${2:-}"; shift 2 ;;
+    --pane) pane="${2:-}"; shift 2 ;;
+    --perm) perm="${2:-}"; shift 2 ;;
+    -*) usage >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
+
+require_tmux
+if [ -n "$pane" ]; then
+  pane_alive "$pane" || exit 0
+else
+  pane="$(self_pane)"
+fi
+
+case "$perm" in
+  on)
+    [ -n "$(tmux show-options -pqv -t "$pane" @perm_since)" ] || tmux set-option -p -t "$pane" @perm_since "$(date +%s)"
+    exit 0 ;;
+  off)
+    tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
+    exit 0 ;;
+esac
+
+text="$*"
+[ -n "$text" ] || { usage >&2; exit 1; }
+tmux set-option -p -t "$pane" @activity "$(printf '%s' "$text" | tr '\n' ' ' | cut -c1-60)"
+tmux set-option -p -t "$pane" @state working
+tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
+echo "reported: $text"
