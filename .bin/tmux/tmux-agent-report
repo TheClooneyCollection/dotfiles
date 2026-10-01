@@ -7,7 +7,6 @@ usage() {
   cat <<'USAGE'
 usage: tmux-agent-report [--from ME] "what you're doing now"
        tmux-agent-report --pane PANE --perm on|off   (Claude hooks)
-       tmux-agent-report --codex-hook on|off         (Codex hooks; JSON on stdin)
 
 Agents call it when they start a task and at each major step, with a
 short phrase ("reading map loader", "running import tests"). The chip
@@ -15,49 +14,24 @@ above the status bar shows it next to the agent's name.
 
 Hooks call --perm on when the agent is waiting for a permission answer
 and --perm off when it moves on; the chip turns that agent red.
-
-Codex hooks run in a shared daemon with another pane's environment, and
-Codex re-asks for trust whenever a hook command changes, so their command
-is the same for every agent and the pane is found from the hook input:
-UserPromptSubmit reads "[request from X to NAME via tmux-ask]" from the
-prompt and stores the session_id on NAME's pane (@codex_session); later
-hooks look the pane up by session_id.
+Codex sub agents get no hooks: they run with auto_review, so their
+permission requests go to a review model, never to the user.
 USAGE
 }
 
-FROM_PANE="" pane="" perm="" codex_hook=""
+FROM_PANE="" pane="" perm=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --from) FROM_PANE="${2:-}"; shift 2 ;;
     --pane) pane="${2:-}"; shift 2 ;;
     --perm) perm="${2:-}"; shift 2 ;;
-    --codex-hook) codex_hook="${2:-}"; shift 2 ;;
+    # Codex sub agents spawned before hooks were dropped still call this.
+    --codex-hook) cat >/dev/null 2>&1; exit 0 ;;
     -*) usage >&2; exit 1 ;;
     *) break ;;
   esac
 done
-
-# Codex hook: map session_id -> pane, then set or clear the flag. Hooks
-# must never fail the agent's turn, so every error ends in exit 0.
-if [ -n "$codex_hook" ]; then
-  tmux list-sessions >/dev/null 2>&1 || exit 0
-  input="$(cat)"
-  fields="$(printf '%s' "$input" | /usr/bin/perl -MJSON::PP -e '
-    local $/; my $j = eval { decode_json(<STDIN>) } || {};
-    my $to = ""; $to = $1 if ($j->{prompt} // "") =~ /\[(?:request|reply) from \S+ to (\S+) via tmux-ask\]/;
-    print join("\t", $j->{session_id} // "", $j->{hook_event_name} // "", $to);
-  ' 2>/dev/null)" || exit 0
-  sid="${fields%%	*}"; rest="${fields#*	}"; event="${rest%%	*}"; to="${rest#*	}"
-  [ -n "$sid" ] || exit 0
-  if [ "$event" = UserPromptSubmit ] && [ -n "$to" ]; then
-    p="$(find_pane "$to")"
-    [ -z "$p" ] || tmux set-option -p -t "$p" @codex_session "$sid"
-  fi
-  pane="$(tmux list-panes -a -F '#{pane_id} #{@codex_session}' | awk -v s="$sid" '$2 == s { print $1; exit }')"
-  [ -n "$pane" ] || exit 0
-  perm="$codex_hook"
-fi
 
 require_tmux
 if [ -n "$pane" ]; then

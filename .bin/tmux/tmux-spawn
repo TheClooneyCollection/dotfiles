@@ -50,17 +50,12 @@ if [ "${1:-}" = "--run" ]; then
   # commands can carry the pane id.
   report="'$here/tmux-agent-report' --pane '${TMUX_PANE:-}' --perm"
   claude_hooks="$(printf '{"hooks":{"Notification":[{"matcher":"permission_prompt","hooks":[{"type":"command","command":"%s on"}]}],"PostToolUse":[{"hooks":[{"type":"command","command":"%s off"}]}],"UserPromptSubmit":[{"hooks":[{"type":"command","command":"%s off"}]}],"Stop":[{"hooks":[{"type":"command","command":"%s off"}]}]}}' "$report" "$report" "$report" "$report")"
-  # Codex hooks must be the same for every agent: Codex asks the user to
-  # trust a hook again whenever its command changes, and runs it with the
-  # daemon's environment. tmux-agent-report finds the pane by session_id.
-  codex_hooks=()
-  for ev in PermissionRequest:on PostToolUse:off UserPromptSubmit:off Stop:off; do
-    codex_hooks+=(-c "hooks.${ev%%:*}=[{hooks=[{type=\"command\",command=\"'$here/tmux-agent-report' --codex-hook ${ev#*:}\"}]}]")
-  done
   case "$agent" in
     claude) cmd=(claude --permission-mode auto --settings "$claude_hooks") ;;
-    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}" "${codex_hooks[@]}") ;;
-    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}" "${codex_hooks[@]}") ;;
+    # No hooks for Codex: with auto_review its escalations go to a review
+    # model, never to the user, so PermissionRequest only ever misfired.
+    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
+    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
     *) die "unknown agent '$agent'" ;;
   esac
   if [ -n "$prompt" ]; then exec "${cmd[@]}" "$prompt"; else exec "${cmd[@]}"; fi
