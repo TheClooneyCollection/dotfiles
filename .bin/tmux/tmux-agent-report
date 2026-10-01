@@ -6,6 +6,7 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 usage: tmux-agent-report [--from ME] "what you're doing now"
+       tmux-agent-report [--from ME] --waiting "what you're waiting for"
        tmux-agent-report --pane PANE --perm on|off   (Claude hooks)
        tmux-agent-report --pane PANE --turn-start|--turn-end   (Claude hooks)
        tmux-agent-report --codex-notify JSON          (Codex notify)
@@ -27,7 +28,7 @@ NAME's pane (@codex_thread) for later turns.
 USAGE
 }
 
-FROM_PANE="" pane="" perm="" turn="" notify_json=""
+FROM_PANE="" pane="" perm="" turn="" notify_json="" waiting=0
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
@@ -36,6 +37,7 @@ while [ $# -gt 0 ]; do
     --perm) perm="${2:-}"; shift 2 ;;
     # Codex sub agents spawned before hooks were dropped still call this.
     --codex-hook) cat >/dev/null 2>&1; exit 0 ;;
+    --waiting) waiting=1; shift ;;
     --turn-start) turn=start; shift ;;
     --turn-end) turn=end; shift ;;
     --codex-notify) notify_json="${2:-}"; turn=end; shift 2 ;;
@@ -47,8 +49,31 @@ done
 # A turn ended. Done agents stay done; agents still waiting on their own
 # sub agents or on replies show "waiting for ..."; anyone else needs the
 # user. Never fails: it runs from hooks and notify.
+# Bash commands Claude is still running for pane $1, i.e. its background
+# tasks: children of the pane's claude process started through Claude's
+# shell snapshot, minus this hook's own ancestors. Prints a count.
+claude_background() {
+  local pp
+  pp="$(tmux display-message -p -t "$1" '#{pane_pid}' 2>/dev/null)" || { echo 0; return; }
+  ps -A -o pid=,ppid=,comm=,command= 2>/dev/null | awk -v root="$pp" -v me="$$" '
+    { pid[NR] = $1; ppid[NR] = $2; comm[NR] = $3; cmd[NR] = $0; parent[$1] = $2 }
+    END {
+      # The claude process: a descendant of the pane (within 4 levels).
+      for (i = 1; i <= NR; i++) {
+        if (comm[i] !~ /(^|\/)claude$/) continue
+        p = pid[i]; for (d = 0; d < 5 && p != root && p > 1; d++) p = parent[p]
+        if (p == root) { cl = pid[i]; break }
+      }
+      if (!cl) { print 0; exit }
+      for (p = me; p > 1; p = parent[p]) anc[p] = 1
+      n = 0
+      for (i = 1; i <= NR; i++) if (ppid[i] == cl && !(pid[i] in anc) && index(cmd[i], "/.claude/shell-snapshots/")) n++
+      print n
+    }'
+}
+
 turn_end() {
-  local p="$1" kids awaited live="" n who
+  local p="$1" kids awaited live="" n who waiting_on
   tmux set-option -pu -t "$p" @perm_since 2>/dev/null || true
   [ "$(tmux show-options -pqv -t "$p" @state)" != done ] || return 0
   kids="$(tmux list-panes -a -F '#{pane_id} #{@parent} #{pane_dead} #{?@state,#{@state},-} #{@agent}' \
@@ -58,9 +83,18 @@ turn_end() {
     if [ -n "$(find_pane "$n")" ]; then live="$live $n"; else remove_word "$p" @awaiting "$n"; fi
   done
   who="$(printf '%s %s\n' "$kids" "$live" | tr ' ' '\n' | awk 'NF && !seen[$0]++' | tr '\n' ' ' | sed 's/ $//')"
+  # Waiting on its own background work: reported with --waiting, or (for
+  # Claude) Bash commands still running when the turn ended.
+  waiting_on="$(tmux show-options -pqv -t "$p" @waiting_on)"
+  if [ -z "$waiting_on" ] && [ "$(claude_background "$p")" -gt 0 ]; then
+    waiting_on="background command"
+  fi
+  # Names are single words; the background work is a phrase, added last.
+  who="$(printf '%s' "$who" | sed 's/ /, /g')"
+  [ -z "$waiting_on" ] || who="${who:+$who, }$waiting_on"
   if [ -n "$who" ]; then
     tmux set-option -p -t "$p" @state working
-    tmux set-option -p -t "$p" @activity "waiting for $(printf '%s' "$who" | sed 's/ /, /g')"
+    tmux set-option -p -t "$p" @activity "waiting for $who"
     tmux set-option -pu -t "$p" @attention_since 2>/dev/null || true
   else
     tmux set-option -p -t "$p" @state needs_you
@@ -108,6 +142,7 @@ case "$turn" in
       tmux set-option -pu -t "$pane" @attention_since 2>/dev/null || true
     fi
     tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
+    tmux set-option -pu -t "$pane" @waiting_on 2>/dev/null || true
     exit 0 ;;
 esac
 
@@ -122,7 +157,15 @@ esac
 
 text="$*"
 [ -n "$text" ] || { usage >&2; exit 1; }
-tmux set-option -p -t "$pane" @activity "$(printf '%s' "$text" | tr '\n' ' ' | cut -c1-60)"
+text="$(printf '%s' "$text" | tr '\n' ' ' | cut -c1-60)"
+if [ "$waiting" -eq 1 ]; then
+  # Ending the turn to wait for background work: not a "needs you".
+  tmux set-option -p -t "$pane" @waiting_on "$text"
+  text="waiting for $text"
+else
+  tmux set-option -pu -t "$pane" @waiting_on 2>/dev/null || true
+fi
+tmux set-option -p -t "$pane" @activity "$text"
 tmux set-option -p -t "$pane" @state working
 tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
 tmux set-option -pu -t "$pane" @attention_since 2>/dev/null || true
