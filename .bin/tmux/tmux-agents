@@ -20,16 +20,18 @@ Bound to prefix + a.
 EOF
 }
 
-# One row per agent: ID NAME STATUS PARENT PROJECT. Sub agents only,
-# unless $1 is "all" (then every named pane). ID is hidden by fzf.
+# One entry per agent, two lines: ID NAME STATUS PARENT PROJECT, then what
+# it is doing now. Entries end in \036 (bash strings can't hold the NUL
+# fzf --read0 wants; callers convert with tr); the first is the header.
+# Sub agents only, unless $1 is "all" (then every named pane). ID is
+# hidden by fzf.
 list_agents() {
-  local all="${1:-}" rows
+  local all="${1:-}" rows sorted tab
+  tab="$(printf '\t')"
   rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@perm_since,1,0}	#{?@state,#{@state},-}	#{?@parent,#{@parent},-}	#{session_name}	#{?@activity,#{@activity},-}' \
     | awk -F '\t' -v all="$all" '$2 != "" && (all == "all" || $6 != "-") && !seen[$1]++')"
   # Same states as the chip; those that need the user sort first.
-  {
-    printf 'ID\tNAME\tSTATUS\tPARENT\tPROJECT\tNOW\n'
-    printf '%s\n' "$rows" | while IFS="$(printf '\t')" read -r id name dead perm st parent session activity; do
+  sorted="$(printf '%s\n' "$rows" | while IFS="$tab" read -r id name dead perm st parent session activity; do
       [ -n "$id" ] || continue
       if [ "$dead" = 1 ]; then rank=4 status="✗ exited"
       elif [ "$perm" = 1 ]; then rank=0 status="⚠ permission"
@@ -41,12 +43,19 @@ list_agents() {
       [ "$parent" = "-" ] || pname="$(pane_name "$parent")"
       is_agents_session "$session" && session="${session#"$AGENTS_PREFIX"-}"
       printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$rank" "$id" "$name" "$status" "${pname:--}" "$session" "$activity"
-    done | sort -t "$(printf '\t')" -k1,1n -s | cut -f2-
-  } | column -t -s "$(printf '\t')" | awk '
-    # Colour after aligning, so escape codes do not upset the columns.
-    { sub(/⚠ permission/, "\033[1;97;41m&\033[0m"); sub(/◆ needs you/, "\033[1;30;48;5;214m&\033[0m");
-      sub(/⠿ working/, "\033[38;5;117m&\033[0m"); sub(/✓ done/, "\033[38;5;114m&\033[0m");
-      sub(/✗ exited/, "\033[38;5;240m&\033[0m"); print }'
+    done | sort -t "$tab" -k1,1n -s | cut -f2-)"
+  # Align the first lines, then add each agent's activity under its own.
+  { printf 'ID\tNAME\tSTATUS\tPARENT\tPROJECT\n'; [ -z "$sorted" ] || printf '%s\n' "$sorted" | cut -f1-5; } \
+    | column -t -s "$tab" \
+    | ACTS="$(printf '%s\n' "$sorted" | cut -f6 | tr '\n' '\036')" awk '
+      BEGIN { split(ENVIRON["ACTS"], act, "\036") }
+      # Colour after aligning, so escape codes do not upset the columns.
+      NR == 1 { printf "%s%c", $0, 30; next }
+      { sub(/⚠ permission/, "\033[1;97;41m&\033[0m"); sub(/◆ needs you/, "\033[1;30;48;5;214m&\033[0m");
+        sub(/⠿ working/, "\033[38;5;117m&\033[0m"); sub(/✓ done/, "\033[38;5;114m&\033[0m");
+        sub(/✗ exited/, "\033[38;5;240m&\033[0m")
+        a = act[NR - 1]; if (a == "" || a == "-") a = "no report yet"
+        printf "%s\n  \033[38;5;245m%s\033[0m%c", $0, a, 30 }'
 }
 
 # Two-line status bar while sub agents exist: the chip line on top, the
@@ -231,7 +240,7 @@ case "${1:-}" in
     fi
     exit 0
     ;;
-  --list) require_tmux; [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; exit 0 ;;
+  --list) require_tmux; { [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; } | tr '\036' '\0'; exit 0 ;;
   # Popup body: a nested client on the hidden session, showing pane $2.
   # Detaching (prefix + d) brings back the list, on the same agent.
   --view)
@@ -319,10 +328,10 @@ case "$(tmux show-options -gv prefix 2>/dev/null)" in
 esac
 start=""
 if [ -n "$select" ]; then
-  n="$(printf '%s\n' "$rows" | awk -v s="$select" 'NR > 1 && $2 == s { print NR - 1; exit }')"
+  n="$(printf '%s' "$rows" | awk -v RS='\036' -v s="$select" 'NR > 1 && $2 == s { print NR - 1; exit }')"
   [ -z "$n" ] || start="load:pos($n)+unbind(load)"
 fi
-out="$(printf '%s\n' "$rows" | fzf --ansi --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
+out="$(printf '%s' "$rows" | tr '\036' '\0' | fzf --read0 --ansi --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
   ${start:+--bind "$start"} \
   ${prefix_keys[@]+"${prefix_keys[@]}"} \
   --with-shell 'bash -c' \
