@@ -14,6 +14,8 @@ Design notes, protocol details and known pitfalls: [DESIGN.md](DESIGN.md).
    ```
 3. Tell either agent to talk to the other: "ask codex to review this diff".
 
+Or skip connecting by hand: tell an agent "connect codex and have it do xyz". It runs `tmux-connect --from <itself> codex`, which finds the other pane in this window running codex, names both panes if needed, and links them; then it sends the task.
+
 Both agents already running? Press `prefix + A` in one pane to connect it from a popup.
 Add more agents the same way. Links are one-to-one: A↔B and B↔C does not link A↔C.
 
@@ -54,7 +56,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 
 | Command | What it does |
 | --- | --- |
-| `tmux-connect [target] [--as NAME] [--all]` | Name this pane and link it to `target` (name, `%id`, or `1.0`). No target opens a picker of panes in this window (`--all`: every window); the pane under the cursor is tinted. Unnamed panes get asked for a name. |
+| `tmux-connect [target] [--as NAME] [--all]`, `tmux-connect --from ME codex\|claude\|NAME` | Name this pane and link it to `target` (name, `%id`, or `1.0`). No target opens a picker of panes in this window (`--all`: every window); the pane under the cursor is tinted. Unnamed panes get asked for a name. With `--from` (agents) it never prompts: `codex`/`claude` picks that agent's pane in this window, and names are generated. |
 | `tmux-disconnect [name]` | Unlink from `name`, or from everyone. |
 | `tmux-peers` | Show this pane's name and its connections. |
 | `tmux-ask [--from ME] [--any] <name> [--reply] [msg]` | Paste a message into a connected pane and submit it. Reads stdin if no `msg`. `--any` sends to any named pane, connected or not. |
