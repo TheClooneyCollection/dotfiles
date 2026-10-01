@@ -111,7 +111,13 @@ if [ -n "$notify_json" ]; then
     for my $m (@{ $j->{"input-messages"} || [] }) {
       if ($m =~ /\[(?:request|reply) from \S+ to (\S+) via tmux-ask\]/) { $to = $1; last }
     }
-    print join("\t", $j->{type} // "", $j->{"thread-id"} // "", $to);
+    # Codex names a new session in a side thread whose whole answer is
+    # {"title": ...}; that is not the agent ending a turn.
+    my $last = $j->{"last-assistant-message"} // "";
+    my $t = $last =~ /^\s*\{/ ? eval { JSON::PP->new->decode($last) } : undef;
+    my $type = $j->{type} // "";
+    $type = "title" if ref $t eq "HASH" && exists $t->{title} && keys %$t == 1;
+    print join("\t", $type, $j->{"thread-id"} // "", $to);
   ' 2>/dev/null)" || exit 0
   type="${fields%%	*}"; rest="${fields#*	}"; thread="${rest%%	*}"; to="${rest#*	}"
   [ "$type" = agent-turn-complete ] && [ -n "$thread" ] || exit 0
