@@ -33,14 +33,14 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 ```
 
 - **Hidden by default.** Each project gets its own session (`agents-dotfiles`, `agents-blog`), one window per sub agent. Nothing is added to your layout.
-- **Easy to check.** `prefix + a` opens `tmux-agents`: your sub agents with status (`running`, `needs-you`, `done`, `exited`), parent, project and a live preview. The keys are shown in a footer.
-  - `enter`: open a hidden agent in a popup, where you can approve prompts. `prefix + d` closes it. Visible panes are jumped to instead.
-  - `ctrl-o`: jump there full screen; `prefix + L` jumps back. `ctrl-x`: dismiss. `ctrl-d`: close every `done`/`exited` sub agent after a y/N confirmation. `ctrl-a`: toggle between sub agents and every named pane. `ctrl-r`: refresh.
-- **Status chip.** While sub agents exist, a line above the status bar shows them, right-aligned:
+- **Easy to check.** `prefix + a` opens `tmux-agents`: your sub agents with status, parent, project, what they're doing now, and a preview that refreshes twice a second. Statuses use the chip's colours (red `⚠ permission`, amber `◆ needs you`, `⠿ working`, green `✓ done`, grey `✗ exited`), and the ones that need you sort to the top. The keys are shown in a footer.
+  - `enter`: open a hidden agent in a popup, where you can approve prompts. `prefix + d` takes you back to the list, on the same agent. Visible panes are jumped to instead.
+  - `ctrl-o`: jump there full screen; `prefix + L` jumps back. `ctrl-x`: dismiss. `ctrl-d`: close every `done`/`exited` sub agent after a y/N confirmation. `ctrl-a`: toggle between sub agents and every named pane (remembered for next time). `ctrl-r`: refresh.
+- **Status chip.** While sub agents exist, a line above the status bar shows them:
   ```
-  stone-age ⠹2 ✓1 · dotfiles ⠹1 │ ⠹ giiru-map-audit: verifying giiru imports
+        ⠹ giiru-map-audit: verifying giiru imports  │  stone-age ⠹ 2 ✓ 1 · dotfiles ⠹ 1
   ```
-  Per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `✗` exited), then one agent in focus, rotating every 4s. An agent waiting for permission takes over the focus in red, and blinks after 60s unanswered. The line disappears when the last sub agent is closed. It animates at `@tmux_agents_chip_fps` frames a second (default 10, set in `~/.tmux.conf`); `1` falls back to tmux's once-a-second refresh.
+  Centred: one agent in focus, rotating every 4s, then per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `◆` needs you, `✗` exited). An agent waiting for permission (red) or for you (amber) takes over the focus, and blinks after 60s unanswered. **Needs you** means a sub agent ended its turn without replying to its parent and without waiting on anyone, which is how a Codex sub agent asks you for something (it never gets approval prompts, see DESIGN.md). The line disappears when the last sub agent is closed. It animates at `@tmux_agents_chip_fps` frames a second (default 10, set in `~/.tmux.conf`); `1` falls back to tmux's once-a-second refresh.
 - **Progress reports.** Sub agents report what they're doing with `tmux-agent-report "<a few words>"`; permission waits are reported by hooks. Nothing is read off the screen.
 - **Done.** A sub agent is `done` once it replies to its parent, and `running` again when it gets a new request.
 - **Long answers.** Agents reply with a short summary and a path to the full report in a temp dir. `tmux-ask` also saves any message over 60 lines to `$TMPDIR/tmux-agents/<sender>/` and sends the first 15 lines plus the path.
