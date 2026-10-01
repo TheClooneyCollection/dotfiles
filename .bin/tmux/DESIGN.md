@@ -1,4 +1,4 @@
-# tmux agents: design notes
+# tmux-agents: design notes
 
 How the `tmux-*` scripts work, why they work that way, and the traps found while building them. For usage, see [README.md](README.md).
 

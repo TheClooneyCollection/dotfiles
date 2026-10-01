@@ -1,4 +1,4 @@
-# tmux agents
+# tmux-agents
 
 Connect AI agents (Claude, Codex, anything) running in tmux panes so they can message each other, and let them start sub agents in hidden panes. You watch every pane and approve permissions yourself.
 

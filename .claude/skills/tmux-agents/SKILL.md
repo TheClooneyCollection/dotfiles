@@ -3,7 +3,7 @@ name: tmux-agents
 description: Talk to other AI agents (Codex, Claude, etc.) running in connected tmux panes, and start sub agents in hidden tmux panes. Use whenever you would start a sub agent (Agent/Task tool, spawned or delegated agents; use tmux-spawn instead), and when the user says to ask, tell, check on, or hand work to another agent or pane, or when a message starts with "[request from ... via tmux-ask]" or "[reply from ... via tmux-ask]".
 ---
 
-# tmux agents
+# tmux-agents
 
 You may be running in a tmux pane that the user has connected to other agent panes.
 Messages travel as pasted prompts: you send with `tmux-ask`, and answers arrive later as a new message in your own pane.
