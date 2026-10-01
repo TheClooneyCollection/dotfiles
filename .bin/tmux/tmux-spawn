@@ -42,6 +42,7 @@ if [ "${1:-}" = "--run" ]; then
     -c "shell_environment_policy.set.TMUX=\"${TMUX:-}\""
     -c "shell_environment_policy.set.TMUX_AGENTS_DEPTH=\"${TMUX_AGENTS_DEPTH:-0}\""
     -c 'shell_environment_policy.set.TMUX_AGENTS_PINNED="1"'
+    -c "shell_environment_policy.set.TMUX_AGENTS_KIND=\"$agent\""
   )
   # Sub agents start in auto mode: Claude's auto permission mode, Codex's
   # auto review, so the user isn't asked about every command they run.
@@ -86,9 +87,13 @@ self="$(self_pane)"
 depth="${TMUX_AGENTS_DEPTH:-0}"
 [ "$depth" -lt "$MAX_DEPTH" ] || die "spawn depth limit ($MAX_DEPTH) reached; do this task yourself"
 
-# Default to the caller's own kind of agent.
+# Default to the caller's own kind of agent. Codex's commands run in a
+# shared daemon without its CODEX_HOME, so Codex started through tmux-spawn
+# or the fish wrappers carries its kind in TMUX_AGENTS_KIND.
 if [ -z "$agent" ]; then
-  if [ -n "${CLAUDECODE:-}" ]; then
+  if [ -n "${TMUX_AGENTS_KIND:-}" ]; then
+    agent="$TMUX_AGENTS_KIND"
+  elif [ -n "${CLAUDECODE:-}" ]; then
     agent=claude
   elif [ "${CODEX_HOME:-}" = "$HOME/.codex-2nd" ]; then
     agent=codex-2nd

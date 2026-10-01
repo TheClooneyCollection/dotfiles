@@ -81,6 +81,10 @@ if [ -n "$notify_json" ]; then
   ' 2>/dev/null)" || exit 0
   type="${fields%%	*}"; rest="${fields#*	}"; thread="${rest%%	*}"; to="${rest#*	}"
   [ "$type" = agent-turn-complete ] && [ -n "$thread" ] || exit 0
+  # One line per turn end, to debug state changes: time thread to= last words.
+  { mkdir -p "/tmp/tmux-agents-$(id -u)" && printf '%s %s to=%s %s\n' "$(date '+%F %T')" "$thread" "${to:--}" \
+      "$(printf '%s' "$notify_json" | /usr/bin/perl -MJSON::PP -e 'local $/; my $j = eval { decode_json(<STDIN>) } || {}; my $m = $j->{"last-assistant-message"} // ""; $m =~ s/\s+/ /g; print substr($m, 0, 80)' 2>/dev/null)" \
+      >> "/tmp/tmux-agents-$(id -u)/notify.log"; } 2>/dev/null || true
   if [ -n "$to" ]; then
     p="$(find_pane "$to")"
     [ -z "$p" ] || tmux set-option -p -t "$p" @codex_thread "$thread"
