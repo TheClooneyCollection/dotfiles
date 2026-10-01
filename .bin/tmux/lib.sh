@@ -46,14 +46,47 @@ find_pane() {
 # Codex runs commands in a shared app-server daemon whose TMUX_PANE is the
 # pane it started in, so agents pass --from with their own name.
 self_pane() {
-  local pane="${FROM_PANE:-${TMUX_PANE:-}}"
+  local pane="${FROM_PANE:-${TMUX_PANE:-}}" mine
   [ -n "$pane" ] || die "not inside a tmux pane (pass --from <your name>)"
   case "$pane" in
     %*) ;;
-    *) pane="$(find_pane "$pane")"; [ -n "$pane" ] || die "no agent named '$FROM_PANE'" ;;
+    *)
+      pane="$(find_pane "$FROM_PANE")"
+      if [ -z "$pane" ]; then
+        # An unknown --from from a freshly opened, unnamed agent: name its
+        # own pane, as long as $TMUX_PANE can be trusted to be that pane.
+        mine="${TMUX_PANE:-}"
+        if trusted_pane && [ -n "$mine" ] && pane_alive "$mine" && [ -z "$(pane_name "$mine")" ]; then
+          auto_name "$mine" >/dev/null
+          pane="$mine"
+        elif trusted_pane && [ -n "$mine" ] && [ -n "$(pane_name "$mine")" ]; then
+          die "no agent named '$FROM_PANE'; you are $(pane_name "$mine") (pass --from $(pane_name "$mine"))"
+        else
+          die "no agent named '$FROM_PANE'"
+        fi
+      fi
+      ;;
   esac
   pane_alive "$pane" || die "pane $pane no longer exists"
   printf '%s\n' "$pane"
+}
+
+# $TMUX_PANE is this agent's own pane: Claude runs commands in its own
+# process, and pinned Codex (tmux-spawn or the fish wrappers) has it set
+# per session. Unpinned Codex may see another pane's.
+trusted_pane() {
+  [ -n "${CLAUDECODE:-}" ] || [ -n "${TMUX_AGENTS_PINNED:-}" ]
+}
+
+# Give unnamed pane $1 a generated name (<command>-<dir>-<N>) and print it.
+# Unless $2 is "quiet", tell the caller on stderr that this is now its name.
+auto_name() {
+  local n
+  n="$(suggest_name "$1")"
+  set_name "$1" "$n"
+  refresh_labels
+  [ "${2:-}" = quiet ] || printf '%s: this pane had no name, so it is now "%s"; pass --from %s from now on\n' "$(basename "$0")" "$n" "$n" >&2
+  printf '%s\n' "$n"
 }
 
 valid_name() {

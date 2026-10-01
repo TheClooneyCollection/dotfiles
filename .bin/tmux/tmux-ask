@@ -127,7 +127,10 @@ fi
 require_tmux
 self="$(self_pane)"
 me="$(pane_name "$self")"
-[ -n "$me" ] || die "this pane has no name; run tmux-connect first"
+if [ -z "$me" ]; then
+  trusted_pane || die "this pane has no name; run tmux-connect first, or pass --from <your name>"
+  me="$(auto_name "$self")"
+fi
 if [ "$any" -eq 1 ]; then
   peer="$(resolve_pane "$target")"
   [ "$peer" != "$self" ] || die "that's you"

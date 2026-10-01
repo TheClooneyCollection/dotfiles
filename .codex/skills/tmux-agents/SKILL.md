@@ -13,6 +13,7 @@ Messages travel as pasted prompts: you send with `tmux-ask`, and answers arrive 
 Pass `--from <your name>` to every `tmux-ask`, `tmux-peers`, `tmux-peek` and `tmux-spawn` call.
 
 - **Where it comes from.** Your name is the `to` part of messages you receive: `[request from X to Y via tmux-ask]` means you are Y. A spawned agent's first message is such a request.
+- **`ME` and `my-name` below are placeholders.** Never copy them, or a name like `claude`, literally. If you don't know your name yet, run `tmux-peers` first: in Claude, or in Codex started by tmux-spawn or the `codex`/`codex-2nd` wrappers, an unnamed pane gets a name on the spot (like `claude-~-1`) and the command tells you what it is.
 - **Why it matters.** Codex runs shell commands in a shared background process whose `$TMUX_PANE` can be another agent's pane, so without `--from` you may act as someone else, and get "not connected" errors.
 - **If you've never received a message,** `tmux-peers` (no `--from`) shows who `$TMUX_PANE` says you are. Only trust it when:
   - you are Claude (Claude runs commands in its own pane), or
@@ -24,7 +25,7 @@ Pass `--from <your name>` to every `tmux-ask`, `tmux-peers`, `tmux-peek` and `tm
 - `tmux-peers --from ME`: your name and the agents you can reach. Names come from here.
 - `tmux-ask --from ME <name> "message"`: send a request. For anything multi-line, use stdin:
   ```sh
-  tmux-ask --from claude codex <<'MSG'
+  tmux-ask --from my-name codex <<'MSG'
   Review the diff in src/auth.ts for race conditions.
   Reply with findings only; don't edit files.
   MSG
@@ -44,7 +45,7 @@ If the commands are not on PATH, use `~/.bin/tmux/<command>`. Run each `tmux-*` 
 Whenever you would start a sub agent (your built-in Agent/Task tool, spawned or delegated agents, parallel workers), use `tmux-spawn` instead. The user wants every sub agent in its own tmux pane so they can read its full history and approve its permissions.
 
 ```sh
-tmux-spawn --from claude --name auth-review <<'MSG'
+tmux-spawn --from my-name --name auth-review <<'MSG'
 Review src/auth.ts for race conditions. Don't edit files.
 Reply with findings, each with file:line.
 MSG
