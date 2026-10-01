@@ -57,7 +57,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 | `tmux-connect [target] [--as NAME] [--all]` | Name this pane and link it to `target` (name, `%id`, or `1.0`). No target opens a picker of panes in this window (`--all`: every window); the pane under the cursor is tinted. Unnamed panes get asked for a name. |
 | `tmux-disconnect [name]` | Unlink from `name`, or from everyone. |
 | `tmux-peers` | Show this pane's name and its connections. |
-| `tmux-ask [--from ME] <name> [--reply] [msg]` | Paste a message into a connected pane and submit it. Reads stdin if no `msg`. |
+| `tmux-ask [--from ME] [--any] <name> [--reply] [msg]` | Paste a message into a connected pane and submit it. Reads stdin if no `msg`. `--any` sends to any named pane, connected or not. |
 | `tmux-peek <name> [lines]` | Print the last lines (default 40) of a connected pane. |
 | `tmux-spawn [claude\|codex\|codex-2nd] [--name NAME] [task]` | Start a connected sub agent in the project's hidden session and send it the task (or stdin). Taken names get `-2`, `-3`... |
 | `tmux-agent-report [--from ME] "text"` | Report what a sub agent is doing, for the chip. |

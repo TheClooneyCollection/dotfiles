@@ -73,7 +73,7 @@ fi
 
 usage() {
   cat <<'EOF'
-usage: tmux-ask [--from ME] <name> [--reply] [message...]
+usage: tmux-ask [--from ME] [--any] <name> [--reply] [message...]
 
 Sends message (arguments, or stdin if none) to the connected pane name
 and submits it. Requests tell the receiver how to reply. Replies are
@@ -85,6 +85,8 @@ marked as needing no response, which stops endless back-and-forth.
   MSG
 
 --from ME: your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
+--any:     send to a named pane you aren't connected to (the reply
+           instructions include --any too)
 
 Messages over TMUX_ASK_MAX_LINES (default 60) are saved to
 $TMPDIR/tmux-agents/<you>/ and sent as the first 15 lines plus the path.
@@ -98,12 +100,13 @@ env: TMUX_ASK_IDLE_SECS    seconds without keys before a pane counts as free (de
 EOF
 }
 
-target="" reply=0 msg="" FROM_PANE=""
+target="" reply=0 any=0 msg="" FROM_PANE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --reply) reply=1; shift ;;
     --from) FROM_PANE="${2:-}"; shift 2 ;;
+    --any) any=1; shift ;;
     --) shift; msg="$*"; break ;;
     -*) usage >&2; exit 1 ;;
     *)
@@ -125,7 +128,13 @@ require_tmux
 self="$(self_pane)"
 me="$(pane_name "$self")"
 [ -n "$me" ] || die "this pane has no name; run tmux-connect first"
-peer="$(resolve_peer "$self" "$target")"
+if [ "$any" -eq 1 ]; then
+  peer="$(resolve_pane "$target")"
+  [ "$peer" != "$self" ] || die "that's you"
+  [ -n "$(pane_name "$peer")" ] || die "pane $peer has no name, so it couldn't reply; name it with tmux-connect first"
+else
+  peer="$(resolve_peer "$self" "$target")"
+fi
 
 # Safety net for long messages: keep the full text in a file and send the
 # head plus the path. Agents are asked to do this themselves with a summary.
@@ -144,7 +153,7 @@ fi
 if [ "$reply" -eq 1 ]; then
   body="$(reply_body "$me" "$msg" "$(pane_name "$peer")")"
 else
-  body="$(request_body "$me" "$msg" "$(pane_name "$peer")")"
+  body="$(request_body "$me" "$msg" "$(pane_name "$peer")" "$([ "$any" -eq 1 ] && echo --any)")"
 fi
 
 # Don't paste into a pane the user is typing in; queue it instead.

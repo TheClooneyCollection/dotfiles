@@ -30,6 +30,7 @@ Pass `--from <your name>` to every `tmux-ask`, `tmux-peers`, `tmux-peek` and `tm
   MSG
   ```
 - `tmux-ask --from ME --reply <name> <<'MSG' ... MSG`: answer a request.
+- `tmux-ask --from ME --any <name> ...`: message a named agent you aren't connected to. Only when the user asks you to; the reply instructions include `--any`, so follow them as given.
 - `tmux-peek --from ME <name> [lines]`: read the last lines of a peer's screen without interrupting it.
 - `tmux-agent-report --from ME "<what you're doing>"`: report progress as a sub agent (see below).
 - `tmux-spawn [claude|codex|codex-2nd] --from ME --name <task-name> <<'MSG' ... MSG`: start a sub agent (see below).

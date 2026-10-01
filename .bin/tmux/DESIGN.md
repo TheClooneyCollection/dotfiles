@@ -79,6 +79,7 @@ MSG)
 Design decisions:
 - **Push, not call-and-wait.** The sender ends its turn right after sending. The answer arrives later as a new prompt in its own pane. An earlier design blocked on `tmux wait-for` plus a Stop/notify hook and scraped the reply with `capture-pane`. It was dropped because a peer waiting on a permission prompt would stall the caller, and scraped TUI output is noisy.
 - **Loop prevention by convention.** Replies say not to answer. The `tmux-agents` skill repeats the rule. There is no hop counter.
+- **Unconnected panes.** `tmux-ask --any` skips the connection check and resolves any named pane; the request's reply instructions carry `--any` so the receiver can answer. The receiver must have a name.
 - **Explicit identity.** Every request names its receiver and puts `--from <receiver>` in the reply command. `self_pane` takes `--from` (a name or pane id) before `$TMUX_PANE`, because `$TMUX_PANE` is wrong in Codex (see pitfalls).
 - **Every request carries its own reply instructions.** An agent that never loaded the skill can still answer.
 - **Delivery.** The script loads the message into a tmux buffer and uses `paste-buffer -p` (bracketed paste), so multi-line text stays one message. It then waits `TMUX_ASK_ENTER_DELAY` (default 0.5s) before sending Enter, because TUIs can treat an Enter that arrives in the same burst as the paste as a newline. It then submits with `send-keys Enter`, which is why a pane in copy mode counts as busy (see pitfalls).

@@ -135,12 +135,13 @@ user_busy() {
 
 # Message bodies for tmux-ask. Requests carry their own reply instructions,
 # so a receiver that never loaded the skill can still answer.
-# Args: sender, message, receiver. The receiver's name goes into the
-# reply command as --from, so it works even where TMUX_PANE is wrong.
+# Args: sender, message, receiver[, extra reply flags]. The receiver's name
+# goes into the reply command as --from, so it works even where TMUX_PANE
+# is wrong; $4 adds flags such as --any when the two aren't connected.
 # Both end with an [end of ...] line: text outside the markers in the same
 # prompt was typed by the user (a draft can get submitted along with it).
 request_body() {
-  printf '[request from %s to %s via tmux-ask]\n%s\n\n(You are %s. When done, send your answer back with: tmux-ask --from %s --reply %s <<'"'"'MSG'"'"'\n<your reply>\nMSG)\n[end of request from %s to %s]' "$1" "$3" "$2" "$3" "$3" "$1" "$1" "$3"
+  printf '[request from %s to %s via tmux-ask]\n%s\n\n(You are %s. When done, send your answer back with: tmux-ask --from %s%s --reply %s <<'"'"'MSG'"'"'\n<your reply>\nMSG)\n[end of request from %s to %s]' "$1" "$3" "$2" "$3" "$3" "${4:+ $4}" "$1" "$1" "$3"
 }
 
 reply_body() {
