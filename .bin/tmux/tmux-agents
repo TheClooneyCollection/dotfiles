@@ -214,14 +214,24 @@ case "${1:-}" in
     exit 0
     ;;
   --list) require_tmux; [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; exit 0 ;;
-  # Popup body: a nested client on the hidden session, showing this pane.
+  # Popup body: a nested client on the hidden session, showing pane $2.
+  # Detaching (prefix + d) brings back the list, on the same agent.
   --view)
     win="$(tmux display-message -p -t "$2" '#{window_id}')"
+    name="$(pane_name "$2")"
     # Nesting needs TMUX unset; keep talking to this server, not the default one.
     sock="${TMUX%%,*}"
     sess="$(tmux display-message -p -t "$2" '#{session_name}')"
-    unset TMUX
-    exec tmux -S "$sock" attach-session -t "=$sess" \; select-window -t "$win"
+    ( unset TMUX; tmux -S "$sock" attach-session -t "=$sess" \; select-window -t "$win" )
+    exec "$here/tmux-agents" --client "${3:-}" --select "$name"
+    ;;
+  # fzf ctrl-a: flip between sub agents and every named pane, remember the
+  # choice for next time, and tell fzf what to do.
+  --toggle)
+    if [ "${2:-}" = "all> " ]; then mode=sub prompt="agents> "; else mode=all prompt="all> "; fi
+    tmux set-option -g @tmux_agents_list_mode "$mode"
+    printf "change-prompt(%s)+reload('%s' --list)\n" "$prompt" "$here/tmux-agents"
+    exit 0
     ;;
   # status-right: "active subagents: N", plus how many rang for attention.
   --status)
@@ -248,14 +258,32 @@ case "${1:-}" in
     ;;
 esac
 
-client=""
-if [ "${1:-}" = "--client" ]; then client="${2:-}"; fi
+client="" select=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --client) client="${2:-}"; shift 2 ;;
+    --select) select="${2:-}"; shift 2 ;;
+    *) shift ;;
+  esac
+done
 require_tmux
 [ -n "$client" ] || client="$(tmux display-message -p '#{client_name}')"
 command -v fzf >/dev/null 2>&1 || die "fzf is required"
 
 self="$here/tmux-agents"
-out="$(list_agents | fzf --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt='agents> ' \
+# Open in the view used last time (ctrl-a), with the cursor on --select.
+if [ "$(tmux show-options -gqv @tmux_agents_list_mode)" = all ]; then
+  prompt="all> " rows="$(list_agents all)"
+else
+  prompt="agents> " rows="$(list_agents)"
+fi
+start=""
+if [ -n "$select" ]; then
+  n="$(printf '%s\n' "$rows" | awk -v s="$select" 'NR > 1 && $2 == s { print NR - 1; exit }')"
+  [ -z "$n" ] || start="load:pos($n)+unbind(load)"
+fi
+out="$(printf '%s\n' "$rows" | fzf --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
+  ${start:+--bind "$start"} \
   --with-shell 'bash -c' \
   --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh')" --footer-border=rounded \
   --expect=ctrl-o \
@@ -263,7 +291,7 @@ out="$(list_agents | fzf --reverse --no-sort --header-lines=1 --with-nth=2.. --p
   --bind "ctrl-x:execute-silent('$here/tmux-dismiss' {2})+reload('$self' --list)" \
   --bind "ctrl-r:reload('$self' --list)" \
   --bind "ctrl-d:execute('$here/tmux-dismiss' --done)+reload('$self' --list)" \
-  --bind "ctrl-a:transform:[ \"\$FZF_PROMPT\" = 'all> ' ] && echo \"change-prompt(agents> )+reload('$self' --list)\" || echo \"change-prompt(all> )+reload('$self' --list)\"")" || exit 0
+  --bind "ctrl-a:transform:'$self' --toggle \"\$FZF_PROMPT\"")" || exit 0
 
 key="$(printf '%s\n' "$out" | sed -n 1p)"
 pane="$(printf '%s\n' "$out" | sed -n 2p | awk '{ print $1 }')"
@@ -273,7 +301,7 @@ session="$(tmux display-message -p -t "$pane" '#{session_name}')"
 
 if [ "$key" != "ctrl-o" ] && is_agents_session "$session"; then
   # This script runs in a popup itself, so open the viewer once it closes.
-  tmux run-shell -b "sleep 0.2; tmux display-popup -c '$client' -E -w 90% -h 90% -T ' $name  (prefix + d to close) ' '$here/tmux-agents --view $pane'"
+  tmux run-shell -b "sleep 0.2; tmux display-popup -c '$client' -E -w 90% -h 90% -T ' $name  (prefix + d: back to the list) ' '$here/tmux-agents --view $pane $client'"
 else
   tmux switch-client -c "$client" -t "$pane"
   tmux display-message -c "$client" -d 4000 "jumped to $name · prefix + L to go back"
