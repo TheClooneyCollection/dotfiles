@@ -144,6 +144,8 @@ tmux set-option -p -t "$pane" @parent "$self"
 add_peer "$self" "$pane"
 add_peer "$pane" "$self"
 refresh_labels
+# Show the sub agent chip line above the status bar.
+"$here/tmux-agents" --chip-layout on
 
 printf 'spawned %s (%s) as %s, hidden in session "%s"; it will reply via tmux-ask. View: tmux-agents or prefix + a.\n' \
   "$agent" "$pane" "$name" "$session"

@@ -38,9 +38,121 @@ list_agents() {
   } | column -t -s "$(printf '\t')"
 }
 
+# Two-line status bar while sub agents exist: the chip line on top, the
+# user's own status line below. "on" saves their line in
+# @tmux_agents_main_format; "off" puts it back.
+chip_layout() {
+  local cur main
+  if [ "$1" = on ]; then
+    cur="$(tmux show-options -gv 'status-format[0]')"
+    case "$cur" in *"tmux-agents --chip"*) ;; *) tmux set-option -g @tmux_agents_main_format "$cur" ;; esac
+    main="$(tmux show-options -gqv @tmux_agents_main_format)"
+    tmux set-option -g 'status-format[1]' "$main"
+    tmux set-option -g 'status-format[0]' "#[align=right]#($here/tmux-agents --chip)"
+    tmux set-option -g status 2
+  else
+    main="$(tmux show-options -gqv @tmux_agents_main_format)"
+    [ -n "$main" ] || return 0
+    tmux set-option -g 'status-format[0]' "$main"
+    tmux set-option -gu 'status-format[1]'
+    tmux set-option -g status on
+  fi
+}
+
+# "stone-age" from agents-projects-stone-age, at most 10 characters.
+short_project() {
+  local p="${1#"$AGENTS_PREFIX"-}"
+  p="${p#projects-}"; p="${p#project-}"
+  [ "${#p}" -le 10 ] || p="${p:0:9}…"
+  printf '%s' "$p"
+}
+
+# Long task names keep their start and end: seimu-jyaruga-map-audit -> seimu-j…map-audit
+short_task() {
+  [ "${#1}" -le 18 ] && { printf '%s' "$1"; return; }
+  printf '%s…%s' "${1:0:7}" "${1:$((${#1} - 10))}"
+}
+
+# The chip: per-project counts, then one focus agent that rotates every
+# 4s. Agents waiting for permission take over the focus and turn red; past
+# TMUX_AGENTS_BLINK_SECS (default 60) unanswered, they blink.
+chip() {
+  local now frames spin rows id name dead st session since activity state act
+  local -a ids names states acts projs sinces
+  now="$(date +%s)"
+  frames=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
+  spin="${frames[$((now % 10))]}"
+  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@state,#{@state},-}	#{session_name}	#{?@perm_since,#{@perm_since},-}	#{?@activity,#{@activity},-}	#{?@parent,1,0}' \
+    | awk -F '\t' '$8 == 1 && $2 != "" && !seen[$1]++')"
+  if [ -z "$rows" ]; then
+    [ "$(tmux show-options -gv status)" != 2 ] || tmux run-shell -b "'$here/tmux-agents' --chip-layout off"
+    return 0
+  fi
+  # State comes from what agents report: tmux-agent-report sets @activity,
+  # its permission hooks set @perm_since, a reply to the parent sets done.
+  while IFS="$(printf '\t')" read -r id name dead st session since activity _; do
+    if [ "$dead" = 1 ]; then
+      state=exited act="exited"
+    elif [ "$since" != - ]; then
+      state=perm act="NEEDS PERMISSION"
+    elif [ "$st" = done ]; then
+      state=done act="done"
+    else
+      state=work act="$activity"
+      [ "$act" != - ] || act="starting"
+    fi
+    ids+=("$id"); names+=("$name"); states+=("$state"); acts+=("$act"); projs+=("$(short_project "$session")"); sinces+=("$since")
+  done <<EOF
+$rows
+EOF
+
+  # Per-project counts, in first-seen order.
+  local out="" seen_projs=" " pj i n w d pm ex seg
+  for pj in "${projs[@]}"; do
+    case "$seen_projs" in *" $pj "*) continue ;; esac
+    seen_projs="$seen_projs$pj "
+    w=0 d=0 pm=0 ex=0
+    for ((i = 0; i < ${#ids[@]}; i++)); do
+      [ "${projs[i]}" = "$pj" ] || continue
+      case "${states[i]}" in work) w=$((w+1)) ;; done) d=$((d+1)) ;; perm) pm=$((pm+1)) ;; exited) ex=$((ex+1)) ;; esac
+    done
+    seg="#[fg=colour250]$pj#[default]"
+    [ "$pm" -eq 0 ] || seg="$seg #[fg=white,bg=red,bold] ⚠$pm #[default]"
+    [ "$w" -eq 0 ] || seg="$seg #[fg=colour117]$spin$w#[default]"
+    [ "$d" -eq 0 ] || seg="$seg #[fg=colour114]✓$d#[default]"
+    [ "$ex" -eq 0 ] || seg="$seg #[fg=colour240]✗$ex#[default]"
+    out="${out:+$out #[fg=colour240]·#[default] }$seg"
+  done
+
+  # Focus: rotate through agents waiting for permission if any, else all.
+  local -a cand=()
+  for ((i = 0; i < ${#ids[@]}; i++)); do [ "${states[i]}" != perm ] || cand+=("$i"); done
+  [ ${#cand[@]} -gt 0 ] || for ((i = 0; i < ${#ids[@]}; i++)); do cand+=("$i"); done
+  i="${cand[$(( (now / 4) % ${#cand[@]} ))]}"
+  local icon style focus
+  case "${states[i]}" in
+    perm) icon="⚠" ;;
+    work) icon="$spin" ;;
+    done) icon="✓" ;;
+    exited) icon="✗" ;;
+    *) icon="◦" ;;
+  esac
+  focus="$icon $(short_task "${names[i]}"): ${acts[i]}"
+  if [ "${states[i]}" = perm ]; then
+    style="fg=white,bg=red,bold"
+    [ $((now - ${sinces[i]})) -lt "${TMUX_AGENTS_BLINK_SECS:-60}" ] || style="$style,blink"
+    focus="#[$style] $focus #[default]"
+  else
+    focus="#[fg=colour252]$focus#[default]"
+  fi
+  printf ' %s #[fg=colour240]│#[default] %s ' "$out" "$focus"
+}
+
 case "${1:-}" in
   -h|--help) usage; exit 0 ;;
   # fzf reloads call this; the prompt says which view is showing.
+  --chip) require_tmux; chip; exit 0 ;;
+  --chip-layout) require_tmux; chip_layout "${2:-on}"; exit 0 ;;
   --list) require_tmux; [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; exit 0 ;;
   # Popup body: a nested client on the hidden session, showing this pane.
   --view)
