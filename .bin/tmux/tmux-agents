@@ -251,6 +251,14 @@ case "${1:-}" in
     done
     exit 0
     ;;
+  # fzf "d": after the tmux prefix key (within 2s), prefix + d closes the
+  # list, like it leaves an agent's view; otherwise d is just typed.
+  --prefix-d)
+    at="$(tmux show-options -gqv @tmux_agents_prefix_at)"
+    tmux set-option -gu @tmux_agents_prefix_at 2>/dev/null || true
+    if [ -n "$at" ] && [ $(( $(date +%s) - at )) -le 2 ]; then echo abort; else echo "put(d)"; fi
+    exit 0
+    ;;
   # fzf ctrl-a: flip between sub agents and every named pane, remember the
   # choice for next time, and tell fzf what to do.
   --toggle)
@@ -303,6 +311,12 @@ if [ "$(tmux show-options -gqv @tmux_agents_list_mode)" = all ]; then
 else
   prompt="agents> " rows="$(list_agents)"
 fi
+# The tmux prefix (C-b -> ctrl-b) arms "d" to close the list: prefix + d.
+prefix_keys=()
+case "$(tmux show-options -gv prefix 2>/dev/null)" in
+  C-[a-z]) pk="$(tmux show-options -gv prefix)"; pk="ctrl-${pk#C-}"
+    prefix_keys=(--bind "$pk:execute-silent(tmux set-option -g @tmux_agents_prefix_at \$(date +%s))" --bind "d:transform:'$self' --prefix-d") ;;
+esac
 start=""
 if [ -n "$select" ]; then
   n="$(printf '%s\n' "$rows" | awk -v s="$select" 'NR > 1 && $2 == s { print NR - 1; exit }')"
@@ -310,9 +324,10 @@ if [ -n "$select" ]; then
 fi
 out="$(printf '%s\n' "$rows" | fzf --ansi --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
   ${start:+--bind "$start"} \
+  ${prefix_keys[@]+"${prefix_keys[@]}"} \
   --with-shell 'bash -c' \
   --listen --bind "start:execute-silent('$self' --preview-loop >/dev/null 2>&1 &)" \
-  --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh')" --footer-border=rounded \
+  --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh · prefix+d close')" --footer-border=rounded \
   --expect=ctrl-o \
   --preview 'tmux capture-pane -ep -J -t {1} -S -300' --preview-window='right,55%,follow' \
   --bind "ctrl-x:execute-silent('$here/tmux-dismiss' {2})+reload('$self' --list)" \
