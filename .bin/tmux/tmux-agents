@@ -24,18 +24,29 @@ EOF
 # unless $1 is "all" (then every named pane). ID is hidden by fzf.
 list_agents() {
   local all="${1:-}" rows
-  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{?pane_dead,exited,#{?#{==:#{@state},done},done,#{?window_bell_flag,needs-you,running}}}	#{?@parent,#{@parent},-}	#{session_name}' \
-    | awk -F '\t' -v all="$all" '$2 != "" && (all == "all" || $4 != "-") && !seen[$1]++')"
+  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@perm_since,1,0}	#{?@state,#{@state},-}	#{?@parent,#{@parent},-}	#{session_name}	#{?@activity,#{@activity},-}' \
+    | awk -F '\t' -v all="$all" '$2 != "" && (all == "all" || $6 != "-") && !seen[$1]++')"
+  # Same states as the chip; those that need the user sort first.
   {
-    printf 'ID\tNAME\tSTATUS\tPARENT\tPROJECT\n'
-    printf '%s\n' "$rows" | while IFS="$(printf '\t')" read -r id name status parent session; do
+    printf 'ID\tNAME\tSTATUS\tPARENT\tPROJECT\tNOW\n'
+    printf '%s\n' "$rows" | while IFS="$(printf '\t')" read -r id name dead perm st parent session activity; do
       [ -n "$id" ] || continue
+      if [ "$dead" = 1 ]; then rank=4 status="✗ exited"
+      elif [ "$perm" = 1 ]; then rank=0 status="⚠ permission"
+      elif [ "$st" = needs_you ]; then rank=1 status="◆ needs you"
+      elif [ "$st" = done ]; then rank=3 status="✓ done"
+      else rank=2 status="⠿ working"
+      fi
       pname="-"
       [ "$parent" = "-" ] || pname="$(pane_name "$parent")"
       is_agents_session "$session" && session="${session#"$AGENTS_PREFIX"-}"
-      printf '%s\t%s\t%s\t%s\t%s\n' "$id" "$name" "$status" "${pname:--}" "$session"
-    done
-  } | column -t -s "$(printf '\t')"
+      printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$rank" "$id" "$name" "$status" "${pname:--}" "$session" "$activity"
+    done | sort -t "$(printf '\t')" -k1,1n -s | cut -f2-
+  } | column -t -s "$(printf '\t')" | awk '
+    # Colour after aligning, so escape codes do not upset the columns.
+    { sub(/⚠ permission/, "\033[1;97;41m&\033[0m"); sub(/◆ needs you/, "\033[1;30;48;5;214m&\033[0m");
+      sub(/⠿ working/, "\033[38;5;117m&\033[0m"); sub(/✓ done/, "\033[38;5;114m&\033[0m");
+      sub(/✗ exited/, "\033[38;5;240m&\033[0m"); print }'
 }
 
 # Two-line status bar while sub agents exist: the chip line on top, the
@@ -289,7 +300,7 @@ if [ -n "$select" ]; then
   n="$(printf '%s\n' "$rows" | awk -v s="$select" 'NR > 1 && $2 == s { print NR - 1; exit }')"
   [ -z "$n" ] || start="load:pos($n)+unbind(load)"
 fi
-out="$(printf '%s\n' "$rows" | fzf --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
+out="$(printf '%s\n' "$rows" | fzf --ansi --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
   ${start:+--bind "$start"} \
   --with-shell 'bash -c' \
   --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh')" --footer-border=rounded \
