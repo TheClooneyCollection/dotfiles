@@ -20,18 +20,20 @@ Bound to prefix + a.
 EOF
 }
 
-# One entry per agent, two lines: ID NAME STATUS PARENT PROJECT, then what
-# it is doing now. Entries end in \036 (bash strings can't hold the NUL
-# fzf --read0 wants; callers convert with tr); the first is the header.
-# Sub agents only, unless $1 is "all" (then every named pane). ID is
-# hidden by fzf.
+# One entry per agent: NAME STATUS PARENT, then what it is doing now,
+# grouped into a section per project (the first entry of each project
+# carries a "▸ project" line on top). Every entry starts with its pane id,
+# hidden by fzf, so {1} is the pane. Entries end in \036 (bash strings
+# can't hold the NUL fzf --read0 wants; callers convert with tr); the first
+# is the header. Sub agents only, unless $1 is "all" (then every named pane).
 list_agents() {
   local all="${1:-}" rows sorted tab
   tab="$(printf '\t')"
-  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@perm_since,1,0}	#{?@state,#{@state},-}	#{?@parent,#{@parent},-}	#{session_name}	#{?@activity,#{@activity},-}' \
+  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@perm_since,1,0}	#{?@state,#{@state},-}	#{?@parent,#{@parent},-}	#{session_name}	#{?@activity,#{@activity},-}	#{pane_current_path}' \
     | awk -F '\t' -v all="$all" '$2 != "" && (all == "all" || $6 != "-") && !seen[$1]++')"
-  # Same states as the chip; those that need the user sort first.
-  sorted="$(printf '%s\n' "$rows" | while IFS="$tab" read -r id name dead perm st parent session activity; do
+  # Same states as the chip; those that need the user sort first. A
+  # project's section sorts by its most urgent agent.
+  sorted="$(printf '%s\n' "$rows" | while IFS="$tab" read -r id name dead perm st parent session activity path; do
       [ -n "$id" ] || continue
       if [ "$dead" = 1 ]; then rank=4 status="✗ exited"
       elif [ "$perm" = 1 ]; then rank=0 status="⚠ permission"
@@ -41,21 +43,31 @@ list_agents() {
       fi
       pname="-"
       [ "$parent" = "-" ] || pname="$(pane_name "$parent")"
-      is_agents_session "$session" && session="${session#"$AGENTS_PREFIX"-}"
-      printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$rank" "$id" "$name" "$status" "${pname:--}" "$session" "$activity"
-    done | sort -t "$tab" -k1,1n -s | cut -f2-)"
-  # Align the first lines, then add each agent's activity under its own.
-  { printf 'ID\tNAME\tSTATUS\tPARENT\tPROJECT\n'; [ -z "$sorted" ] || printf '%s\n' "$sorted" | cut -f1-5; } \
+      # Hidden sub agents: the project in the session name. Other panes:
+      # the project tmux-spawn would use for their directory.
+      if is_agents_session "$session"; then project="${session#"$AGENTS_PREFIX"-}"
+      else project="$(agents_session_for "$path")"; project="${project#"$AGENTS_PREFIX"-}"
+      fi
+      printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$rank" "$project" "$id" "$name" "$status" "${pname:--}" "$activity"
+    done | awk -F '\t' '{ r[NR] = $0; if (!($2 in best) || $1 < best[$2]) best[$2] = $1; p[NR] = $2 }
+      END { for (i = 1; i <= NR; i++) print best[p[i]] "\t" r[i] }' \
+    | sort -t "$tab" -k1,1n -k3,3 -k2,2n -s | cut -f3-)"
+  # Align NAME STATUS PARENT, then add each entry's id, section and activity.
+  { printf 'NAME\tSTATUS\tPARENT\n'; [ -z "$sorted" ] || printf '%s\n' "$sorted" | cut -f3-5; } \
     | column -t -s "$tab" \
-    | ACTS="$(printf '%s\n' "$sorted" | cut -f6 | tr '\n' '\036')" awk '
-      BEGIN { split(ENVIRON["ACTS"], act, "\036") }
+    | META="$(printf '%s\n' "$sorted" | cut -f1,2,6 | tr '\n' '\036')" awk '
+      BEGIN { n = split(ENVIRON["META"], m, "\036")
+        for (i = 1; i <= n; i++) { split(m[i], f, "\t"); P[i] = f[1]; I[i] = f[2]; A[i] = f[3] } }
       # Colour after aligning, so escape codes do not upset the columns.
-      NR == 1 { printf "%s%c", $0, 30; next }
-      { sub(/⚠ permission/, "\033[1;97;41m&\033[0m"); sub(/◆ needs you/, "\033[1;30;48;5;214m&\033[0m");
+      NR == 1 { printf "ID %s%c", $0, 30; next }
+      { i = NR - 1
+        sub(/⚠ permission/, "\033[1;97;41m&\033[0m"); sub(/◆ needs you/, "\033[1;30;48;5;214m&\033[0m");
         sub(/⠿ working/, "\033[38;5;117m&\033[0m"); sub(/✓ done/, "\033[38;5;114m&\033[0m");
         sub(/✗ exited/, "\033[38;5;240m&\033[0m")
-        a = act[NR - 1]; if (a == "" || a == "-") a = "no report yet"
-        printf "%s\n  \033[38;5;245m%s\033[0m%c", $0, a, 30 }'
+        a = A[i]; if (a == "" || a == "-") a = "no report yet"
+        sect = ""
+        if (P[i] != last) { sect = "\033[1;38;5;180m▸ " P[i] "\033[0m\n"; last = P[i] }
+        printf "%s %s%s\n  \033[38;5;245m%s\033[0m%c", I[i], sect, $0, a, 30 }'
 }
 
 # Two-line status bar while sub agents exist: the chip line on top, the
@@ -328,7 +340,7 @@ case "$(tmux show-options -gv prefix 2>/dev/null)" in
 esac
 start=""
 if [ -n "$select" ]; then
-  n="$(printf '%s' "$rows" | awk -v RS='\036' -v s="$select" 'NR > 1 && $2 == s { print NR - 1; exit }')"
+  n="$(printf '%s' "$rows" | awk -v RS='\036' -v s="$select" 'NR > 1 { sub(/^[^ ]+ +/, ""); if (index($0, s " ") == 1 || index($0, "\n" s " ")) { print NR - 1; exit } }')"
   [ -z "$n" ] || start="load:pos($n)+unbind(load)"
 fi
 out="$(printf '%s' "$rows" | tr '\036' '\0' | fzf --read0 --ansi --reverse --no-sort --header-lines=1 --with-nth=2.. --prompt="$prompt" \
@@ -339,7 +351,7 @@ out="$(printf '%s' "$rows" | tr '\036' '\0' | fzf --read0 --ansi --reverse --no-
   --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh · prefix+d close')" --footer-border=rounded \
   --expect=ctrl-o \
   --preview 'tmux capture-pane -ep -J -t {1} -S -300' --preview-window='right,55%,follow' \
-  --bind "ctrl-x:execute-silent('$here/tmux-dismiss' {2})+reload('$self' --list)" \
+  --bind "ctrl-x:execute-silent('$here/tmux-dismiss' \"\$(tmux display-message -p -t {1} '#{@agent}')\")+reload('$self' --list)" \
   --bind "ctrl-r:reload('$self' --list)" \
   --bind "ctrl-d:execute('$here/tmux-dismiss' --done)+reload('$self' --list)" \
   --bind "ctrl-a:transform:'$self' --toggle \"\$FZF_PROMPT\"")" || exit 0
