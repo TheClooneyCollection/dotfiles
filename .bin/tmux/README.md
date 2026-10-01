@@ -40,7 +40,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
   ```
   stone-age ⠹2 ✓1 · dotfiles ⠹1 │ ⠹ giiru-map-audit: verifying giiru imports
   ```
-  Per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `✗` exited), then one agent in focus, rotating every 4s. An agent waiting for permission takes over the focus in red, and blinks after 60s unanswered. The line disappears when the last sub agent is closed.
+  Per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `✗` exited), then one agent in focus, rotating every 4s. An agent waiting for permission takes over the focus in red, and blinks after 60s unanswered. The line disappears when the last sub agent is closed. It animates at `@tmux_agents_chip_fps` frames a second (default 10, set in `~/.tmux.conf`); `1` falls back to tmux's once-a-second refresh.
 - **Progress reports.** Sub agents report what they're doing with `tmux-agent-report "<a few words>"`; permission waits are reported by hooks. Nothing is read off the screen.
 - **Done.** A sub agent is `done` once it replies to its parent, and `running` again when it gets a new request.
 - **Long answers.** Agents reply with a short summary and a path to the full report in a temp dir. `tmux-ask` also saves any message over 60 lines to `$TMPDIR/tmux-agents/<sender>/` and sends the first 15 lines plus the path.

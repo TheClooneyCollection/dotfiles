@@ -42,13 +42,21 @@ list_agents() {
 # user's own status line below. "on" saves their line in
 # @tmux_agents_main_format; "off" puts it back.
 chip_layout() {
-  local cur main
+  local cur main fps
   if [ "$1" = on ]; then
     cur="$(tmux show-options -gv 'status-format[0]')"
-    case "$cur" in *"tmux-agents --chip"*) ;; *) tmux set-option -g @tmux_agents_main_format "$cur" ;; esac
+    case "$cur" in *"tmux-agents --chip"*|*"@chip"*) ;; *) tmux set-option -g @tmux_agents_main_format "$cur" ;; esac
     main="$(tmux show-options -gqv @tmux_agents_main_format)"
+    fps="$(tmux show-options -gqv @tmux_agents_chip_fps)"
     tmux set-option -g 'status-format[1]' "$main"
-    tmux set-option -g 'status-format[0]' "#[align=right]#($here/tmux-agents --chip)"
+    if [ "${fps:-10}" -gt 1 ] 2>/dev/null; then
+      # Pushed by the chip daemon at $fps frames a second.
+      tmux set-option -g 'status-format[0]' '#[align=right]#{@chip}'
+      tmux run-shell -b "'$here/tmux-agents' --chip-daemon"
+    else
+      # Re-run by tmux every status-interval (1s at most).
+      tmux set-option -g 'status-format[0]' "#[align=right]#($here/tmux-agents --chip)"
+    fi
     tmux set-option -g status 2
   else
     main="$(tmux show-options -gqv @tmux_agents_main_format)"
@@ -57,6 +65,36 @@ chip_layout() {
     tmux set-option -gu 'status-format[1]'
     tmux set-option -g status on
   fi
+}
+
+# One per tmux server, started by chip_layout: rebuild the chip once a
+# second, animate its spinner at @tmux_agents_chip_fps (default 10), and
+# push it into @chip with a redraw. Exits once the chip line is gone.
+chip_daemon() {
+  local pid fps delay frames tick=0 last=-1 now template line c
+  pid="$(tmux show-options -gqv @tmux_agents_chip_pid)"
+  if [ -n "$pid" ] && [ "$pid" != $$ ] && kill -0 "$pid" 2>/dev/null; then return 0; fi
+  tmux set-option -g @tmux_agents_chip_pid $$
+  fps="$(tmux show-options -gqv @tmux_agents_chip_fps)"
+  case "$fps" in ''|*[!0-9]*) fps=10 ;; esac
+  [ "$fps" -le 30 ] || fps=30
+  delay="$(awk -v f="$fps" 'BEGIN { printf "%.3f", 1 / f }')"
+  frames=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
+  while :; do
+    now="$(date +%s)"
+    if [ "$now" != "$last" ]; then
+      case "$(tmux show-options -gv 'status-format[0]' 2>/dev/null)" in *"@chip"*) ;; *) break ;; esac
+      template="$(CHIP_SPIN=@@SPIN@@ chip)"
+      last="$now"
+    fi
+    line="${template//@@SPIN@@/${frames[$((tick % 10))]}}"
+    tmux set-option -g @chip "$line" 2>/dev/null || break
+    for c in $(tmux list-clients -F '#{client_name}' 2>/dev/null); do tmux refresh-client -S -t "$c" 2>/dev/null; done
+    tick=$((tick + 1))
+    sleep "$delay"
+  done
+  tmux set-option -gu @tmux_agents_chip_pid 2>/dev/null || true
+  tmux set-option -gu @chip 2>/dev/null || true
 }
 
 # "stone-age" from agents-projects-stone-age, at most 10 characters.
@@ -81,7 +119,8 @@ chip() {
   local -a ids names states acts projs sinces
   now="$(date +%s)"
   frames=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
-  spin="${frames[$((now % 10))]}"
+  # CHIP_SPIN lets the chip daemon put a placeholder here and animate it.
+  spin="${CHIP_SPIN:-${frames[$((now % 10))]}}"
   rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@state,#{@state},-}	#{session_name}	#{?@perm_since,#{@perm_since},-}	#{?@activity,#{@activity},-}	#{?@parent,1,0}' \
     | awk -F '\t' '$8 == 1 && $2 != "" && !seen[$1]++')"
   if [ -z "$rows" ]; then
@@ -153,6 +192,7 @@ case "${1:-}" in
   # fzf reloads call this; the prompt says which view is showing.
   --chip) require_tmux; chip; exit 0 ;;
   --chip-layout) require_tmux; chip_layout "${2:-on}"; exit 0 ;;
+  --chip-daemon) require_tmux; chip_daemon; exit 0 ;;
   --list) require_tmux; [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; exit 0 ;;
   # Popup body: a nested client on the hidden session, showing this pane.
   --view)
