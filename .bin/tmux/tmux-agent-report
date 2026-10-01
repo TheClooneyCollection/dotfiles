@@ -7,6 +7,7 @@ usage() {
   cat <<'USAGE'
 usage: tmux-agent-report [--from ME] "what you're doing now"
        tmux-agent-report [--from ME] --waiting "what you're waiting for"
+                     (background work only, never the user)
        tmux-agent-report --pane PANE --perm on|off   (Claude hooks)
        tmux-agent-report --pane PANE --turn-start|--turn-end   (Claude hooks)
        tmux-agent-report --codex-notify JSON          (Codex notify)
