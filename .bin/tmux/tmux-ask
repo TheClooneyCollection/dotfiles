@@ -129,7 +129,7 @@ self="$(self_pane)"
 me="$(pane_name "$self")"
 if [ -z "$me" ]; then
   trusted_pane || die "this pane has no name; run tmux-connect first, or pass --from <your name>"
-  me="$(auto_name "$self")"
+  me="$(auto_name "$self")" || die "couldn't give pane $self a name"
 fi
 if [ "$any" -eq 1 ]; then
   peer="$(resolve_pane "$target")"

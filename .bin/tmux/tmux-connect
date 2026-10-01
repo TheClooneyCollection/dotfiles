@@ -69,22 +69,39 @@ agent_mode=0
 [ -z "$FROM_PANE" ] || [ "$popup" -eq 1 ] || agent_mode=1
 
 # For agents, "codex" or "claude" means the one other pane in this window
-# running it (or whose name starts with it); several or none is an error
-# that lists what's there.
+# running exactly that program, or named codex/codex-... (claude/claude-...);
+# several or none is an error listing the window's panes. Anything else is
+# a pane id, or an exact name, looked up in this window first.
 resolve_agent_target() {
-  local id matches n
-  id="$(find_pane "$2")"
-  [ -z "$id" ] || { printf '%s\n' "$id"; return; }
+  local id matches n here k
   case "$2" in %*|*.*|*:*) resolve_pane "$2"; return ;; esac
-  matches="$(tmux list-panes -t "$1" -F '#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-}' \
-    | awk -v s="$1" -v k="$2" 'BEGIN { k = tolower(k) } $1 != s && (index(tolower($2), k) || index(tolower($3), k) == 1)')"
+  here="$(tmux list-panes -t "$1" -F '  #{pane_id}  #{pane_current_command}  #{?@agent,#{@agent},(no name)}' | grep -v "^  $1 " || true)"
+  k="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')"
+  case "$k" in
+    codex|claude)
+      # The agent type: a pane in this window running exactly that program,
+      # or named after it (codex, codex-...).
+      matches="$(tmux list-panes -t "$1" -F '#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-}' \
+        | awk -v s="$1" -v k="$k" '$1 != s && (tolower($2) == k || tolower($3) == k || index(tolower($3), k "-") == 1)')"
+      ;;
+    *)
+      # A name: this window first, then anywhere.
+      matches="$(tmux list-panes -t "$1" -F '#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-}' \
+        | awk -v s="$1" -v n="$2" '$1 != s && $3 == n')"
+      if [ -z "$matches" ]; then
+        id="$(find_pane "$2")"
+        [ -n "$id" ] || die "no agent named '$2'. Panes in this window:
+$here"
+        printf '%s\n' "$id"
+        return
+      fi
+      ;;
+  esac
   n="$(printf '%s' "$matches" | awk 'NF' | wc -l | tr -d ' ')"
   if [ "$n" -eq 1 ]; then
     printf '%s\n' "$matches" | awk '{ print $1 }'
     return
   fi
-  local here
-  here="$(tmux list-panes -t "$1" -F '  #{pane_id}  #{pane_current_command}  #{?@agent,#{@agent},(no name)}' | grep -v "^  $1 ")"
   if [ "$n" -eq 0 ]; then
     die "no '$2' in this window. Other panes here:
 $here"
@@ -200,7 +217,7 @@ fi
 if [ ${#todo[@]} -gt 0 ] && [ "$agent_mode" -eq 1 ]; then
   # Take the suggestions as they are.
   for pane in "${todo[@]}"; do
-    n="$(auto_name "$pane" quiet)"
+    n="$(auto_name "$pane" quiet)" || die "couldn't give pane $pane a name"
     if [ "$pane" = "$self" ]; then echo "this pane had no name, so it is now \"$n\"; pass --from $n from now on"
     else echo "named $pane ($(pane_command "$pane")) \"$n\""; fi
   done

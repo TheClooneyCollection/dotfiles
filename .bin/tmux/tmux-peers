@@ -17,7 +17,7 @@ name="$(pane_name "$self")"
 
 if [ -z "$name" ]; then
   if trusted_pane; then
-    name="$(auto_name "$self")"
+    name="$(auto_name "$self")" || die "couldn't give pane $self a name"
   else
     echo "This pane ($self) has no name and no connections."
     echo "Ask the user to run tmux-connect (or prefix + A) to connect it."

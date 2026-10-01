@@ -57,7 +57,7 @@ self_pane() {
         # own pane, as long as $TMUX_PANE can be trusted to be that pane.
         mine="${TMUX_PANE:-}"
         if trusted_pane && [ -n "$mine" ] && pane_alive "$mine" && [ -z "$(pane_name "$mine")" ]; then
-          auto_name "$mine" >/dev/null
+          auto_name "$mine" >/dev/null || die "couldn't give pane $mine a name"
           pane="$mine"
         elif trusted_pane && [ -n "$mine" ] && [ -n "$(pane_name "$mine")" ]; then
           die "no agent named '$FROM_PANE'; you are $(pane_name "$mine") (pass --from $(pane_name "$mine"))"
@@ -81,9 +81,18 @@ trusted_pane() {
 # Give unnamed pane $1 a generated name (<command>-<dir>-<N>) and print it.
 # Unless $2 is "quiet", tell the caller on stderr that this is now its name.
 auto_name() {
-  local n
-  n="$(suggest_name "$1")"
-  set_name "$1" "$n"
+  local n try
+  # Runs inside $(...), where set -e doesn't apply: check every step. Two
+  # agents naming themselves at once can pick the same name, so confirm it
+  # is ours alone after writing, and move on to the next number if not.
+  for try in 1 2 3; do
+    n="$(suggest_name "$1")" || return 1
+    set_name "$1" "$n" || return 1
+    [ "$(tmux list-panes -a -F '#{pane_id} #{@agent}' | awk -v n="$n" '$2 == n && !seen[$1]++' | wc -l | tr -d ' ')" -gt 1 ] || break
+    tmux set-option -pu -t "$1" @agent 2>/dev/null || true
+    [ "$try" -lt 3 ] || return 1
+    sleep "0.$((RANDOM % 5))$((RANDOM % 10))"
+  done
   refresh_labels
   [ "${2:-}" = quiet ] || printf '%s: this pane had no name, so it is now "%s"; pass --from %s from now on\n' "$(basename "$0")" "$n" "$n" >&2
   printf '%s\n' "$n"
