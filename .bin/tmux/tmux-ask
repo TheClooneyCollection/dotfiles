@@ -169,11 +169,16 @@ else
 fi
 
 # Track sub agent state: replying to your parent means done; a new request
-# means the receiver is working again.
+# means the receiver is working again. @awaiting lists who a pane is
+# waiting to hear back from, so ending a turn to wait for them isn't
+# mistaken for needing the user (tmux-agent-report --turn-end).
 if [ "$reply" -eq 1 ]; then
   [ "$(tmux display-message -p -t "$self" '#{@parent}')" != "$peer" ] || tmux set-option -p -t "$self" @state done
+  remove_word "$peer" @awaiting "$me"
 else
   tmux set-option -p -t "$peer" @state working
+  tmux set-option -pu -t "$peer" @attention_since 2>/dev/null || true
+  add_word "$self" @awaiting "$(pane_name "$peer")"
 fi
 
 kind="$([ "$reply" -eq 1 ] && echo reply || echo request)"

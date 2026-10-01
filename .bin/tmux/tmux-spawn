@@ -48,14 +48,17 @@ if [ "${1:-}" = "--run" ]; then
   # Permission hooks feed the chip: an agent waiting for approval can't
   # report anything itself. Claude runs hooks in its own process, so its
   # commands can carry the pane id.
-  report="'$here/tmux-agent-report' --pane '${TMUX_PANE:-}' --perm"
-  claude_hooks="$(printf '{"hooks":{"Notification":[{"matcher":"permission_prompt","hooks":[{"type":"command","command":"%s on"}]}],"PostToolUse":[{"hooks":[{"type":"command","command":"%s off"}]}],"UserPromptSubmit":[{"hooks":[{"type":"command","command":"%s off"}]}],"Stop":[{"hooks":[{"type":"command","command":"%s off"}]}]}}' "$report" "$report" "$report" "$report")"
+  report="'$here/tmux-agent-report' --pane '${TMUX_PANE:-}'"
+  claude_hooks="$(printf '{"hooks":{"Notification":[{"matcher":"permission_prompt","hooks":[{"type":"command","command":"%s --perm on"}]}],"PostToolUse":[{"hooks":[{"type":"command","command":"%s --perm off"}]}],"UserPromptSubmit":[{"hooks":[{"type":"command","command":"%s --turn-start"}]}],"Stop":[{"hooks":[{"type":"command","command":"%s --turn-end"}]}]}}' "$report" "$report" "$report" "$report")"
+  # Codex says when a turn ends through notify (not a hook, so no trust
+  # prompt); tmux-agent-report finds the pane from the turn's messages.
+  codex_notify=(-c "notify=[\"$here/tmux-agent-report\",\"--codex-notify\"]")
   case "$agent" in
     claude) cmd=(claude --permission-mode auto --settings "$claude_hooks") ;;
     # No hooks for Codex: with auto_review its escalations go to a review
     # model, never to the user, so PermissionRequest only ever misfired.
-    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
-    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}") ;;
+    codex) cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}" "${codex_notify[@]}") ;;
+    codex-2nd) export CODEX_HOME="$HOME/.codex-2nd"; cmd=(codex -c 'approvals_reviewer="auto_review"' "${codex_env[@]}" "${codex_notify[@]}") ;;
     *) die "unknown agent '$agent'" ;;
   esac
   if [ -n "$prompt" ]; then exec "${cmd[@]}" "$prompt"; else exec "${cmd[@]}"; fi

@@ -132,21 +132,25 @@ chip() {
   frames=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
   # CHIP_SPIN lets the chip daemon put a placeholder here and animate it.
   spin="${CHIP_SPIN:-${frames[$((now % 10))]}}"
-  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@state,#{@state},-}	#{session_name}	#{?@perm_since,#{@perm_since},-}	#{?@activity,#{@activity},-}	#{?@parent,1,0}' \
+  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@state,#{@state},-}	#{session_name}	#{?@perm_since,#{@perm_since},-}	#{?@activity,#{@activity},-}	#{?@parent,1,0}	#{?@attention_since,#{@attention_since},-}' \
     | awk -F '\t' '$8 == 1 && $2 != "" && !seen[$1]++')"
   if [ -z "$rows" ]; then
     [ "$(tmux show-options -gv status)" != 2 ] || tmux run-shell -b "'$here/tmux-agents' --chip-layout off"
     return 0
   fi
   # State comes from what agents report: tmux-agent-report sets @activity,
-  # its permission hooks set @perm_since, a reply to the parent sets done.
-  while IFS="$(printf '\t')" read -r id name dead st session since activity _; do
+  # Claude's permission hook sets @perm_since, a reply to the parent sets
+  # done, and a turn that ends without either sets needs_you.
+  while IFS="$(printf '\t')" read -r id name dead st session since activity _ attention; do
     if [ "$dead" = 1 ]; then
       state=exited act="exited"
     elif [ "$since" != - ]; then
       state=perm act="NEEDS PERMISSION"
     elif [ "$st" = done ]; then
       state=done act="done"
+    elif [ "$st" = needs_you ]; then
+      state=needs act="NEEDS YOU" since="$attention"
+      [ "$since" != - ] || since="$now"
     else
       state=work act="$activity"
       [ "$act" != - ] || act="starting"
@@ -157,39 +161,42 @@ $rows
 EOF
 
   # Per-project counts, in first-seen order.
-  local out="" seen_projs=" " pj i n w d pm ex seg
+  local out="" seen_projs=" " pj i n w d pm nd ex seg
   for pj in "${projs[@]}"; do
     case "$seen_projs" in *" $pj "*) continue ;; esac
     seen_projs="$seen_projs$pj "
-    w=0 d=0 pm=0 ex=0
+    w=0 d=0 pm=0 nd=0 ex=0
     for ((i = 0; i < ${#ids[@]}; i++)); do
       [ "${projs[i]}" = "$pj" ] || continue
-      case "${states[i]}" in work) w=$((w+1)) ;; done) d=$((d+1)) ;; perm) pm=$((pm+1)) ;; exited) ex=$((ex+1)) ;; esac
+      case "${states[i]}" in work) w=$((w+1)) ;; done) d=$((d+1)) ;; perm) pm=$((pm+1)) ;; needs) nd=$((nd+1)) ;; exited) ex=$((ex+1)) ;; esac
     done
     seg="#[fg=colour250]$pj#[default]"
     [ "$pm" -eq 0 ] || seg="$seg #[fg=white,bg=red,bold] ⚠ $pm #[default]"
+    [ "$nd" -eq 0 ] || seg="$seg #[fg=black,bg=colour214,bold] ◆ $nd #[default]"
     [ "$w" -eq 0 ] || seg="$seg #[fg=colour117]$spin $w#[default]"
     [ "$d" -eq 0 ] || seg="$seg #[fg=colour114]✓ $d#[default]"
     [ "$ex" -eq 0 ] || seg="$seg #[fg=colour240]✗ $ex#[default]"
     out="${out:+$out #[fg=colour240]·#[default] }$seg"
   done
 
-  # Focus: rotate through agents waiting for permission if any, else all.
+  # Focus: rotate through agents that need the user (permission or
+  # otherwise) if any, else all.
   local -a cand=()
-  for ((i = 0; i < ${#ids[@]}; i++)); do [ "${states[i]}" != perm ] || cand+=("$i"); done
+  for ((i = 0; i < ${#ids[@]}; i++)); do case "${states[i]}" in perm|needs) cand+=("$i") ;; esac; done
   [ ${#cand[@]} -gt 0 ] || for ((i = 0; i < ${#ids[@]}; i++)); do cand+=("$i"); done
   i="${cand[$(( (now / 4) % ${#cand[@]} ))]}"
   local icon style focus
   case "${states[i]}" in
     perm) icon="⚠" ;;
+    needs) icon="◆" ;;
     work) icon="$spin" ;;
     done) icon="✓" ;;
     exited) icon="✗" ;;
     *) icon="◦" ;;
   esac
   focus="$icon $(short_task "${names[i]}"): ${acts[i]}"
-  if [ "${states[i]}" = perm ]; then
-    style="fg=white,bg=red,bold"
+  if [ "${states[i]}" = perm ] || [ "${states[i]}" = needs ]; then
+    if [ "${states[i]}" = perm ]; then style="fg=white,bg=red,bold"; else style="fg=black,bg=colour214,bold"; fi
     [ $((now - ${sinces[i]})) -lt "${TMUX_AGENTS_BLINK_SECS:-60}" ] || style="$style,blink"
     focus="#[$style] $focus #[default]"
   else

@@ -218,6 +218,21 @@ resolve_pane() {
   printf '%s\n' "$id"
 }
 
+# Space-separated word lists in pane option $2 of pane $1.
+add_word() {
+  local cur
+  cur="$(tmux show-options -pqv -t "$1" "$2" 2>/dev/null)"
+  case " $cur " in *" $3 "*) return 0 ;; esac
+  tmux set-option -p -t "$1" "$2" "${cur:+$cur }$3"
+}
+
+remove_word() {
+  local cur
+  cur="$(tmux show-options -pqv -t "$1" "$2" 2>/dev/null)"
+  cur="$(printf '%s\n' "$cur" | awk -v n="$3" '{ for (i = 1; i <= NF; i++) if ($i != n) o = o (o ? " " : "") $i } END { print o }')"
+  if [ -n "$cur" ]; then tmux set-option -p -t "$1" "$2" "$cur"; else tmux set-option -pu -t "$1" "$2" 2>/dev/null || true; fi
+}
+
 # Names of agents the user closed that pane $1 was connected to (@closed).
 closed_names() {
   tmux show-options -pqv -t "$1" @closed 2>/dev/null
