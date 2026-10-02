@@ -14,7 +14,9 @@ The details behind the [README](../README.md). Design notes and pitfalls are in 
 
 Or skip connecting by hand: tell an agent "connect codex and have it do xyz". It runs `tmux-connect --from <itself> codex`, which finds the other pane in this window running codex, names both panes if needed, and links them; then it sends the task.
 
-Both agents already running? Press `prefix + A` in one pane to connect it from a popup.
+Both agents already running? Press `prefix + A` in one pane to connect it from a popup. It lists this window's panes with a preview; `ctrl-a` switches to every window, grouped by window, and is remembered.
+
+**Agents in other windows.** Tell an agent "connect the codex in stone-age" or "connect the claude in window 2". It runs `tmux-connect --from <itself> codex@stone-age` (a project, by name or part of it) or `claude@2` (a window; `work:2` for another session). For anything vaguer it lists every pane with `tmux-connect --list` and picks the one you mean, or asks. The agent in the other window gets a short notice saying who connected, since it didn't see it happen.
 Add more agents the same way. Links are one-to-one: A↔B and B↔C does not link A↔C.
 
 Connected panes show `name ⇄ peers` on their top border, e.g. `claude ⇄ codex, gemini`.

@@ -48,7 +48,7 @@ Why pane options:
 
 ### Picker and popup (the user)
 
-- The picker lists panes in the current window by default (`--all` for every window).
+- The picker lists panes in the current window, or every window with `--all` or after `ctrl-a`, which stores `@tmux_connect_scope` so the next picker opens the same way. Entries look like the agent list's: two lines (name, command, project, whether it's already linked; then what it's doing or its directory), in a section per window, this window first and hidden `agents-*` sessions last. `connect_tsv` builds the rows for both the picker and `--list`. A preview shows the focused pane, since the tint can't be seen in another window.
 - It dedupes by pane id, because grouped sessions list a shared window once per session.
 - fzf's `focus` event runs `tmux-connect --highlight <id>`, which sets pane-level `window-style` (`TMUX_CONNECT_HIGHLIGHT`, default `bg=colour24`) on the focused pane and clears it on the other candidates. The `EXIT` trap clears it on pick, cancel and error.
 - `tmux-connect` names every unnamed pane in one form (`name_form`): ↑/↓/Tab switch fields, typing appends, Backspace deletes, Ctrl-U clears, and one Enter accepts all. Without a TTY it reads one line per field, which the tests rely on.
@@ -65,7 +65,10 @@ Why pane options:
 
 - A target of `codex` or `claude` means the agent type. It resolves to the single other pane in the caller's window whose `pane_current_command` equals it, or whose name is it or starts with `codex-`/`claude-`.
 - Any other target is an exact name (this window first, then anywhere) or a pane id.
-- Several matches or none is an error listing the window's panes, so the agent asks the user.
+- `codex@WHERE` / `claude@WHERE` looks elsewhere (`where_panes`): a number is a window in the caller's session, `session:window` a window anywhere, anything else a project (the same project `tmux-spawn` uses, exact name first, then by part of it). A project's main agent wins over its sub agents, so "the codex in stone-age" isn't ambiguous just because it has spawned Codex sub agents.
+- `--list` prints every pane the caller could connect to, by window, for requests the shorthand can't express ("the codex fixing the login bug"); the agent picks one or asks.
+- Several matches or none is an error listing the candidates, so the agent asks the user.
+- **Notice across windows.** Connecting to an agent (`claude` or `codex`) in another window sends it a `tmux-ask --notice`: who connected, from which project and window, and how to message back. It didn't see the connection happen, and the first request might come much later. Notices say no reply or action is needed. Sub agents get none: their parent manages them, and a turn ended without replying would mark them as needing the user.
 - Unnamed panes are named with `auto_name`.
 
 An earlier version matched names globally first and command substrings for any target, so `codex` could pick a pane of that name in another window and `code` matched `codex-notes`. Codex's review of the change caught both.

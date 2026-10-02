@@ -102,7 +102,7 @@ Or let your agent show you: say "tmux-agents quick start".
 | Key | |
 | --- | --- |
 | `prefix + a` | The agent list, with a live preview |
-| `prefix + A` | Connect this pane to another one |
+| `prefix + A` | Connect this pane to another one (`ctrl-a`: any window) |
 | `prefix + d` | In a popup: back to the list. In the list: close it |
 
 In the list: `enter` open · `ctrl-o` jump there · `ctrl-x` dismiss · `ctrl-d` close all finished · `ctrl-a` all panes / sub agents

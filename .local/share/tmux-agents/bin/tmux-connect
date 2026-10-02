@@ -6,25 +6,96 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 usage: tmux-connect [target] [--as NAME] [--all] [--from PANE] [--popup]
-       tmux-connect --from ME codex|claude|NAME|PANE   (agents)
+       tmux-connect --from ME codex|claude[@WHERE]|NAME|PANE   (agents)
+       tmux-connect --from ME --list                          (agents)
 
 Names this pane (asks if it has no name yet) and links it both ways to
 target. Target is a pane name, pane id (%3), or tmux target (1.0).
-With no target, pick from the panes in this window; the pane under the
-cursor is tinted. Run again to add more links.
+With no target, pick from the panes in this window (ctrl-a: every
+window); the pane under the cursor is tinted and previewed. Run again to
+add more links.
 
   --as NAME     name for this pane
-  --all         pick from panes in every window, not just this one
+  --all         start the picker on every window, not just this one
   --from PANE   act for PANE instead of the current pane (used by the key binding)
   --popup       wait for Enter before exiting (used by the key binding)
+  --list        print the panes in every window you could connect to
 
 With --from and no --popup (an agent asked by the user to connect), it
 never prompts: "codex" or "claude" picks the one other pane in this window
-running it, and unnamed panes get generated names.
+running it, and unnamed panes get generated names. codex@WHERE looks
+elsewhere: WHERE is a project (codex@stone-age: its name, or part of it)
+or a window (codex@2 in this session, codex@work:2). Connecting to an agent
+in another window sends it a short notice saying who connected.
 
 env: TMUX_CONNECT_HIGHLIGHT  style for the tinted pane (default bg=colour24)
 EOF
 }
+
+# Panes in this window, or every window ($1 = all), other than pane $2, as
+# tab-separated: window ("session:index  name"), id, name, command,
+# project, link ("⇄ linked" or "-"), what it is doing (or its directory).
+# This window first, then the others in order.
+connect_tsv() {
+  local tab here peers rows
+  tab="$(printf '\t')"
+  here="$(tmux display-message -p -t "$2" '#{session_name}:#{window_index}')"
+  peers=" $(get_peers "$2" | tr '\n' ' ') "
+  if [ "$1" = all ]; then rows="$(tmux list-panes -a -F "$CONNECT_FMT")"
+  else rows="$(tmux list-panes -t "$2" -F "$CONNECT_FMT")"; fi
+  # Grouped sessions list a window once per session, so dedupe by pane id.
+  rows="$(printf '%s\n' "$rows" | awk -F '\t' -v s="$2" '$1 != s && !seen[$1]++')"
+  [ -n "$rows" ] || return 0
+  printf '%s\n' "$rows" | while IFS="$tab" read -r id win wname name cmd act path session; do
+      if is_agents_session "$session"; then project="${session#"$AGENTS_PREFIX"-}"
+      else project="$(agents_session_for "$path")"; project="${project#"$AGENTS_PREFIX"-}"; fi
+      link="-"; case "$peers" in *" $id "*) link="⇄ linked" ;; esac
+      if [ "$act" = "-" ]; then
+        case "$path" in "$HOME"|"$HOME"/*) act="~${path#"$HOME"}" ;; *) act="$path" ;; esac
+      fi
+      # This window first, hidden sub agent sessions last.
+      first=1; [ "$win" = "$here" ] && first=0; is_agents_session "$session" && first=2
+      printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$first" "$win  $wname" "$id" "$name" "$cmd" "$project" "$link" "$act"
+    done | sort -t "$tab" -k1,1n -s | cut -f2-
+}
+
+# Picker rows, as list entries like tmux-agents': "ID [▸ window line]
+# NAME COMMAND PROJECT LINK", then what it is doing. Entries end in \036
+# (callers convert to NUL for fzf --read0); the first is the header.
+connect_rows() {
+  local tab rows
+  tab="$(printf '\t')"
+  rows="$(connect_tsv "$1" "$2")"
+  [ -n "$rows" ] || return 0
+  { printf 'NAME\tCOMMAND\tPROJECT\tLINK\n'; printf '%s\n' "$rows" | cut -f3-6; } \
+    | column -t -s "$tab" \
+    | META="$(printf '%s\n' "$rows" | cut -f1,2,7 | tr '\n' '\036')" awk '
+      BEGIN { n = split(ENVIRON["META"], m, "\036")
+        for (i = 1; i <= n; i++) { split(m[i], f, "\t"); W[i] = f[1]; I[i] = f[2]; A[i] = f[3] } }
+      NR == 1 { printf "ID %s%c", $0, 30; next }
+      { i = NR - 1; sub(/⇄ linked/, "\033[38;5;114m&\033[0m")
+        sect = ""
+        if (W[i] != last) { sect = "\033[1;38;5;180m▸ " W[i] "\033[0m\n"; last = W[i] }
+        printf "%s %s%s\n  \033[38;5;245m%s\033[0m%c", I[i], sect, $0, A[i], 30 }'
+}
+
+CONNECT_FMT="#{pane_id}	#{session_name}:#{window_index}	#{window_name}	#{?@agent,#{@agent},(no name)}	#{pane_current_command}	#{?@activity,#{@activity},-}	#{pane_current_path}	#{session_name}"
+
+# Picker reload: rows for the scope the prompt names.
+if [ "${1:-}" = "--rows" ]; then
+  require_tmux
+  connect_rows "$2" "$3" | tr '\036' '\0'
+  exit 0
+fi
+
+# Picker ctrl-a: flip between this window and every window, remember the
+# choice, and tell fzf what to do.
+if [ "${1:-}" = "--toggle" ]; then
+  if [ "${2:-}" = "all windows> " ]; then scope=window prompt="this window> "; else scope=all prompt="all windows> "; fi
+  tmux set-option -g @tmux_connect_scope "$scope"
+  printf "change-prompt(%s)+reload('%s' --rows %s '%s')\n" "$prompt" "$0" "$scope" "$3"
+  exit 0
+fi
 
 # Picker callback: tint pane $1, clear the other candidates.
 if [ "${1:-}" = "--highlight" ]; then
@@ -35,7 +106,7 @@ if [ "${1:-}" = "--highlight" ]; then
   exit 0
 fi
 
-target="" as="" all=0 popup=0 FROM_PANE=""
+target="" as="" all=0 popup=0 list=0 FROM_PANE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
@@ -43,6 +114,7 @@ while [ $# -gt 0 ]; do
     --all) all=1; shift ;;
     --from) FROM_PANE="${2:-}"; shift 2 ;;
     --popup) popup=1; shift ;;
+    --list) list=1; shift ;;
     -*) usage >&2; exit 1 ;;
     *) target="$1"; shift ;;
   esac
@@ -62,39 +134,96 @@ trap cleanup EXIT
 require_tmux
 self="$(self_pane)"
 
+# --list: for agents, every pane they could connect to, by window.
+if [ "$list" -eq 1 ]; then
+  rows="$(connect_tsv all "$self")"
+  [ -n "$rows" ] || { echo "no other panes"; exit 0; }
+  here="$(tmux display-message -p -t "$self" '#{session_name}:#{window_index}')"
+  printf '%s\n' "$rows" | awk -F '\t' -v here="$here" '
+    { split($1, w, "  ")
+      if ($1 != last) { printf "%s== %s%s\n", (NR > 1 ? "\n" : ""), $1, (w[1] == here ? "  (this window)" : ""); last = $1 }
+      printf "  %-5s %-28s %-8s %-20s %s\n", $2, $3, $4, $5, ($6 == "-" ? "" : "linked")
+      printf "        %s\n", $7 }'
+  me="$(pane_name "$self")"
+  printf '\nConnect with: tmux-connect --from %s <name or pane id>\n' "${me:-<your name>}"
+  exit 0
+fi
+
 # Agent mode: an agent ran "tmux-connect --from ME <target>" because the
 # user asked it to connect. No picker, no naming form: unnamed panes get
 # generated names.
 agent_mode=0
 [ -z "$FROM_PANE" ] || [ "$popup" -eq 1 ] || agent_mode=1
 
+# Panes (id, command, name) other than $1 in WHERE ($2): a window number in
+# $1's session, a session:window target, or a project, by exact name first
+# and then by part of it.
+where_panes() {
+  local fmt='#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-} #{?@parent,1,0}' tab rows exact
+  case "$2" in
+    *[!0-9]*) ;;
+    *) tmux list-panes -t "$(tmux display-message -p -t "$1" '#{session_name}'):$2" -F "$fmt" 2>/dev/null \
+         || die "no window $2 in this session"
+       return ;;
+  esac
+  case "$2" in
+    *:*) tmux list-panes -t "$2" -F "$fmt" 2>/dev/null || die "no window '$2'"; return ;;
+  esac
+  tab="$(printf '\t')"
+  rows="$(tmux list-panes -a -F "#{pane_id}${tab}#{pane_current_command}${tab}#{?@agent,#{@agent},-}${tab}#{session_name}${tab}#{pane_current_path}${tab}#{?@parent,1,0}" \
+    | awk -F '\t' '!seen[$1]++' | while IFS="$tab" read -r id cmd name session path sub; do
+        if is_agents_session "$session"; then p="${session#"$AGENTS_PREFIX"-}"
+        else p="$(agents_session_for "$path")"; p="${p#"$AGENTS_PREFIX"-}"; fi
+        printf '%s\t%s %s %s %s\n' "$(printf '%s' "$p" | tr '[:upper:]' '[:lower:]')" "$id" "$cmd" "$name" "$sub"
+      done)"
+  q="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')"
+  exact="$(printf '%s\n' "$rows" | awk -F '\t' -v q="$q" '$1 == q { print $2 }')"
+  if [ -n "$exact" ]; then printf '%s\n' "$exact"
+  else printf '%s\n' "$rows" | awk -F '\t' -v q="$q" 'index($1, q) { print $2 }'; fi
+}
+
 # For agents, "codex" or "claude" means the one other pane in this window
 # running exactly that program, or named codex/codex-... (claude/claude-...);
-# several or none is an error listing the window's panes. Anything else is
-# a pane id, or an exact name, looked up in this window first.
+# "codex@WHERE" looks in a project or window instead (see where_panes).
+# Several or none is an error listing the candidates. Anything else is a
+# pane id, or an exact name, looked up in this window first.
 resolve_agent_target() {
-  local id matches n here k
-  case "$2" in %*|*.*|*:*) resolve_pane "$2"; return ;; esac
+  local id matches n here k base q where cands
+  case "$2" in %*|*.*|*:*) case "$2" in *@*) ;; *) resolve_pane "$2"; return ;; esac ;; esac
   here="$(tmux list-panes -t "$1" -F '  #{pane_id}  #{pane_current_command}  #{?@agent,#{@agent},(no name)}' | grep -v "^  $1 " || true)"
   k="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')"
-  case "$k" in
+  base="${k%%@*}" q=""
+  case "$2" in *@*) q="${2#*@}" ;; esac
+  case "$base" in
     codex|claude)
-      # The agent type: a pane in this window running exactly that program,
-      # or named after it (codex, codex-...).
-      matches="$(tmux list-panes -t "$1" -F '#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-}' \
-        | awk -v s="$1" -v k="$k" '$1 != s && (tolower($2) == k || tolower($3) == k || index(tolower($3), k "-") == 1)')"
+      # The agent type: a pane running exactly that program, or named after
+      # it (codex, codex-...), in this window or in WHERE.
+      if [ -n "$q" ]; then
+        cands="$(where_panes "$1" "$q")" where="'$q'"
+      else
+        cands="$(tmux list-panes -t "$1" -F '#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-} #{?@parent,1,0}')" where="this window"
+      fi
+      matches="$(printf '%s\n' "$cands" | awk -v s="$1" -v k="$base" 'NF && $1 != s && !seen[$1]++ && (tolower($2) == k || tolower($3) == k || index(tolower($3), k "-") == 1)')"
+      # "The codex in stone-age" means its main agent, not one of its sub
+      # agents (field 4 is 1 for those), unless only sub agents match.
+      if printf '%s\n' "$matches" | awk '$4 == 0 { f = 1 } END { exit !f }'; then
+        matches="$(printf '%s\n' "$matches" | awk '$4 == 0')"
+      fi
       ;;
     *)
+      [ -z "$q" ] || die "'@' only goes after codex or claude (codex@project, claude@2); for a name, pass it on its own"
       # A name: this window first, then anywhere.
       matches="$(tmux list-panes -t "$1" -F '#{pane_id} #{pane_current_command} #{?@agent,#{@agent},-}' \
         | awk -v s="$1" -v n="$2" '$1 != s && $3 == n')"
       if [ -z "$matches" ]; then
         id="$(find_pane "$2")"
         [ -n "$id" ] || die "no agent named '$2'. Panes in this window:
-$here"
+$here
+Agents in other windows: tmux-connect --from <you> --list"
         printf '%s\n' "$id"
         return
       fi
+      where="this window"
       ;;
   esac
   n="$(printf '%s' "$matches" | awk 'NF' | wc -l | tr -d ' ')"
@@ -103,10 +232,12 @@ $here"
     return
   fi
   if [ "$n" -eq 0 ]; then
+    if [ -n "$q" ]; then die "no $base in $where. See every window with: tmux-connect --from <you> --list"; fi
     die "no '$2' in this window. Other panes here:
-$here"
+$here
+For another window: $base@<project or window number>, or see every window with tmux-connect --from <you> --list"
   fi
-  die "several panes in this window match '$2'; ask the user which, then pass its name or pane id:
+  die "several panes in $where match '$2'; ask the user which, then pass its name or pane id:
 $(printf '%s\n' "$matches" | awk '{ printf "  %s  %s  %s\n", $1, $2, $3 }')"
 }
 
@@ -175,26 +306,37 @@ if [ -z "$target" ] && [ "$agent_mode" -eq 1 ]; then
   die "pass what to connect to: codex, claude, a name or a pane id"
 fi
 if [ -z "$target" ]; then
-  if [ "$all" -eq 1 ]; then scope="-a"; else scope="-t $self"; fi
-  # Grouped sessions list a window once per session, so dedupe by pane id.
-  list="$(tmux list-panes $scope -F '#{pane_id}	#{?@agent,#{@agent},-}	#{pane_current_command}	#{b:pane_current_path}	#{session_name}:#{window_index}.#{pane_index}' \
-    | awk -F '\t' -v s="$self" '$1 != s && !seen[$1]++')"
-  [ -n "$list" ] || die "no other panes in this window (try --all)"
-  table="$( { printf 'ID\tNAME\tCOMMAND\tDIR\tWHERE\n'; printf '%s\n' "$list"; } | column -t -s "$(printf '\t')")"
+  # Start on every window with --all, else on the scope used last (ctrl-a).
+  scope=window
+  if [ "$all" -eq 1 ] || [ "$(tmux show-options -gqv @tmux_connect_scope)" = all ]; then scope=all; fi
   if command -v fzf >/dev/null 2>&1; then
-    TMUX_CONNECT_PANES="$(printf '%s\n' "$list" | cut -f1 | tr '\n' ' ')"
+    rows="$(connect_rows "$scope" "$self")"
+    if [ -z "$rows" ] && [ "$scope" = window ]; then scope=all rows="$(connect_rows all "$self")"; fi
+    [ -n "$rows" ] || die "no other panes"
+    if [ "$scope" = all ]; then prompt="all windows> "; else prompt="this window> "; fi
+    TMUX_CONNECT_PANES="$(tmux list-panes -a -F '#{pane_id}' | tr '\n' ' ')"
     export TMUX_CONNECT_PANES
-    choice="$(printf '%s\n' "$table" \
-      | fzf --prompt='connect to> ' --header-lines=1 --reverse --no-sort \
-          --bind "focus:execute-silent('$0' --highlight {1})")" || exit 0
+    choice="$(printf '%s' "$rows" | tr '\036' '\0' \
+      | fzf --read0 --ansi --prompt="$prompt" --header-lines=1 --with-nth=2.. --reverse --no-sort \
+          --with-shell 'bash -c' \
+          --preview 'tmux capture-pane -ep -J -t {1} -S -100' --preview-window='right,45%,follow' \
+          --footer 'enter connect · ^a this window / all windows' --footer-border=rounded \
+          --bind "focus:execute-silent('$0' --highlight {1})" \
+          --bind "ctrl-a:transform:'$0' --toggle \"\$FZF_PROMPT\" '$self'")" || exit 0
+    target="$(printf '%s\n' "$choice" | sed -n 1p | awk '{ print $1 }')"
   else
+    if [ "$scope" = all ]; then scope="-a"; else scope="-t $self"; fi
+    # Grouped sessions list a window once per session, so dedupe by pane id.
+    list="$(tmux list-panes $scope -F '#{pane_id}	#{?@agent,#{@agent},-}	#{pane_current_command}	#{b:pane_current_path}	#{session_name}:#{window_index}.#{pane_index}' \
+      | awk -F '\t' -v s="$self" '$1 != s && !seen[$1]++')"
+    [ -n "$list" ] || die "no other panes in this window (try --all)"
+    table="$( { printf 'ID\tNAME\tCOMMAND\tDIR\tWHERE\n'; printf '%s\n' "$list"; } | column -t -s "$(printf '\t')")"
     printf '%s\n' "$table" | sed -n 1p >&2
     printf '%s\n' "$table" | sed 1d | nl -w2 -s') ' >&2
     printf 'Connect to #: ' >&2
     read -r n
-    choice="$(printf '%s\n' "$list" | sed -n "${n}p")"
+    target="$(printf '%s\n' "$list" | sed -n "${n}p" | awk '{ print $1 }')"
   fi
-  target="$(printf '%s\n' "$choice" | awk '{ print $1 }')"
   [ -n "$target" ] || die "nothing selected"
 fi
 
@@ -236,3 +378,17 @@ refresh_labels
 msg="connected $(label "$self") <-> $(label "$peer")"
 printf '%s\n' "$msg"
 [ "$popup" -eq 0 ] || tmux display-message "$msg"
+
+# An agent in another window didn't see this happen: tell it who connected,
+# and from where. Not sub agents: their parent manages them, and a turn
+# ended without replying would mark them as needing the user.
+win_of() { tmux display-message -p -t "$1" '#{session_name}:#{window_index}'; }
+if [ "$(win_of "$self")" != "$(win_of "$peer")" ] \
+  && [ -z "$(tmux display-message -p -t "$peer" '#{@parent}')" ]; then
+  case "$(pane_command "$peer")" in
+    *claude*|*codex*)
+      "$(dirname "$0")/tmux-ask" --from "$self" --notice "$(pane_name "$peer")" \
+        "$(pane_name "$self") ($(pane_command "$self"), project $(pane_project "$self"), window $(win_of "$self")) is now connected to you, at the user's request. It may send you requests with tmux-ask; you can message it too: tmux-ask --from $(pane_name "$peer") $(pane_name "$self") ..." \
+        >/dev/null || true ;;
+  esac
+fi
