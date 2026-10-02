@@ -132,6 +132,12 @@ if [ -n "$notify_json" ]; then
   fi
   pane="$(tmux list-panes -a -F '#{pane_id} #{@codex_thread}' | awk -v t="$thread" '$2 == t { print $1; exit }')"
   [ -n "$pane" ] || exit 0
+  # The thread id is the session id: record it so the sub agent can be
+  # reopened once closed (tmux-spawn --resume).
+  n="$(pane_name "$pane")"
+  if [ -n "$n" ] && [ -f "$(sessions_dir)/$n" ] && [ "$(record_get "$n" id)" != "$thread" ]; then
+    record_set "$n" id "$thread"
+  fi
 fi
 
 require_tmux

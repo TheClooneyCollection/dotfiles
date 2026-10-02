@@ -306,7 +306,7 @@ resolve_peer() {
   local id
   if [ -z "$(find_pane "$2")" ]; then
     case " $(closed_names "$1") " in
-      *" $2 "*) die "'$2' was closed by the user. If you still need it, spawn a new sub agent with tmux-spawn and pass along any report paths it gave you." ;;
+      *" $2 "*) die "'$2' was closed by the user. Don't reopen it on your own; if the user asks for it back, tmux-spawn --resume $2 brings it back with its conversation. Otherwise, if you still need it, spawn a new sub agent and pass along any report paths it gave you." ;;
     esac
   fi
   id="$(resolve_pane "$2")"
@@ -349,4 +349,41 @@ label() {
   local name
   name="$(pane_name "$1")"
   printf '%s (%s)' "${name:-unnamed}" "$1"
+}
+
+# Session records: what it takes to reopen a closed sub agent. One file per
+# sub agent name, per tmux server (pane ids and names are per server), as
+# key=value lines: kind (claude, codex or a Codex profile), id (the agent's
+# session id; Codex's arrives with its first turn end), dir, parent (name),
+# depth, closed (epoch, once closed). They outlive the pane, so tmux-spawn
+# --resume NAME and the agent list can bring the conversation back.
+sessions_dir() {
+  local sock="${TMUX%%,*}"
+  printf '%s/tmux-agents/%s/sessions\n' "${XDG_STATE_HOME:-$HOME/.local/state}" "$(basename "${sock:-default}")"
+}
+
+# record_get NAME KEY: print the value, empty if unset.
+record_get() {
+  local f
+  f="$(sessions_dir)/$1"
+  [ -f "$f" ] || return 0
+  awk -F= -v k="$2" '$1 == k { sub(/^[^=]*=/, ""); v = $0 } END { printf "%s", v }' "$f"
+}
+
+# record_set NAME KEY VALUE: set one key (empty VALUE removes it).
+record_set() {
+  local d f tmp
+  d="$(sessions_dir)"; f="$d/$1"
+  mkdir -p "$d"
+  tmp="$(mktemp "$d/.rec.XXXXXX")"
+  { [ ! -f "$f" ] || awk -F= -v k="$2" '$1 != k' "$f"; [ -z "$3" ] || printf '%s=%s\n' "$2" "$3"; } > "$tmp"
+  mv -f "$tmp" "$f"
+}
+
+# Mark the sub agent in pane $1 closed, if it has a record.
+record_closed() {
+  local name
+  name="$(pane_name "$1")"
+  [ -n "$name" ] && [ -f "$(sessions_dir)/$name" ] || return 0
+  record_set "$name" closed "$(date +%s)"
 }

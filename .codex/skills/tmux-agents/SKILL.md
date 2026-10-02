@@ -40,6 +40,7 @@ If the commands are not on PATH, use `~/.bin/tmux/<command>`. Run each `tmux-*` 
 - `tmux-connect --from ME <codex|claude|name|pane>`: connect to another agent, only when the user asks ("connect codex", "连接 claude", "talk to the codex next to you"). `codex` or `claude` always means the agent type: the one other pane **in this window** running it or named after it (`codex-...`); any other target is an exact name (this window first) or a pane id; unnamed panes, yours included, get names on the spot. If several panes match, it lists them: ask the user which, then pass that name. Then message it with `tmux-ask` as usual. A typical request like "connect codex and have it do xyz" is: `tmux-connect --from ME codex`, then `tmux-ask --from ME <its name> ...` with the task, then end your turn.
 - `tmux-disconnect` belongs to the user. Don't run it unless asked.
 - `tmux-dismiss --from ME <name>`: close one of your own sub agents (see below). It refuses agents you didn't spawn.
+- `tmux-spawn --resume <name> --from ME`: reopen a closed sub agent with its whole conversation, connected to you (see below).
 
 ## Sub agents
 
@@ -62,7 +63,8 @@ MSG
 - **Need the user** (a question, a choice, missing information)? Ask in your reply and end your turn, without `--waiting`: that is what shows the user **needs you**. Don't use a question tool or form that keeps your turn open (Claude's AskUserQuestion, Codex's request_user_input); the user won't be flagged until the turn ends.
 - A sub agent is shown as `done` once it replies to its parent, and `running` again when it gets a new request. So always finish a task with your reply.
 - **Close sub agents you're done with.** Once you have everything you need from one (its reply read, any report files read, no follow-ups planned), close it with `tmux-dismiss --from ME <name>`. Keep it open while you might still ask follow-ups. Close several at once when a batch of parallel work is finished.
-- If `tmux-ask` says a sub agent **was closed by the user**, don't retry. If you still need that work, spawn a new sub agent and pass along the report paths the old one gave you.
+- If `tmux-ask` says a sub agent **was closed by the user**, don't retry, and don't reopen it on your own. If you still need that work, spawn a new sub agent and pass along the report paths the old one gave you.
+- **Reopening.** When the user asks to bring back a closed sub agent ("reopen auth-review", "把 xxx 再开回来"), run `tmux-spawn --resume <name> --from ME`: it comes back in a hidden window with its whole conversation, connected to you, and idle. Then send it the next request with `tmux-ask`. It works for sub agents closed in the last 7 days; a Codex one needs to have finished at least one turn before it was closed.
 - Depth is limited to two levels. If `tmux-spawn` says the depth limit is reached, do the work yourself.
 - The user browses sub agents with `prefix + a` (`tmux-agents`).
 

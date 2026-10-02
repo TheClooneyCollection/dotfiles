@@ -30,7 +30,7 @@ if [ -z "$FROM_PANE" ] && [ -z "${TMUX_AGENTS_PINNED:-}" ] && [ -z "${CLAUDECODE
   echo "warning: this comes from \$TMUX_PANE, which isn't pinned. Inside Codex it may be another agent's pane; don't assume this is you."
 fi
 closed="$(closed_names "$self")"
-[ -z "$closed" ] || echo "closed by user: $(printf '%s' "$closed" | sed 's/ /, /g')"
+[ -z "$closed" ] || echo "closed by user: $(printf '%s' "$closed" | sed 's/ /, /g') (reopen only if the user asks: tmux-spawn --resume NAME)"
 peers="$(get_peers "$self")"
 if [ -z "$peers" ]; then
   echo "peers: none"

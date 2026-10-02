@@ -3,6 +3,8 @@ if test -e ~/.config/fish/local.fish
 end
 
 fish_add_path /opt/homebrew/bin ~/.bin ~/.bin/tmux ~/.local/bin (brew --prefix python)/libexec/bin
+# tmux-agents: the second Codex account, for tmux-spawn codex-2nd
+set -gx TMUX_AGENTS_CODEX_HOMES "codex-2nd=$HOME/.codex-2nd"
 
 # Set up thefuck
 
