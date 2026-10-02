@@ -1,11 +1,11 @@
 # Changelog
 
-## Unreleased
+## v1.1.0 (2026-10-02)
 
 - **Reopen closed sub agents.** Each sub agent's session is recorded, so a closed one can come back with its whole conversation for 7 days: from a `closed` section at the bottom of the agent list (`enter`), or by asking its parent (`tmux-spawn --resume NAME`).
 - **Agent list:** each agent takes two lines, with what it is doing underneath, grouped into a section per project.
 - **tmux-ask:** a pane left in copy mode with no keys for 5 minutes is taken out of it so queued messages go through (`TMUX_ASK_COPY_IDLE_SECS`). Queued messages are kept per tmux server, and the delivery loop now gets the `TMUX_ASK_*` settings.
-- **Fix:** Codex sub agents no longer show "needs you" while Codex names a new session; agents are told to ask the user in their reply, not with `--waiting`.
+- **Extra Codex accounts.** When `TMUX_AGENTS_CODEX_HOMES` is unset, `tmux-spawn` reads it from tmux's global environment so agents started earlier can spawn on extra accounts.
 
 ## v1.0.0 (2026-10-01)
 
