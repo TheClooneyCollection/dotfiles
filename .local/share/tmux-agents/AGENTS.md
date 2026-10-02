@@ -18,4 +18,4 @@ Notes for AI agents working on tmux-agents.
 
 - Commit style: `feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`.
 - Releases are semver tags `vX.Y.Z` with a GitHub release; add the notes to CHANGELOG.md first.
-- After every release, update the copy vendored in the maintainer's dotfiles with `git subtree pull --squash` (see the dotfiles' AGENTS.md). Changes are made here, never in the vendored copy.
+- The maintainer's dotfiles vendor this repo as a subtree at `.local/share/tmux-agents`. It may be changed in either place, but every change must be synced both ways (`git subtree push` / `git subtree pull --squash`, run from the dotfiles root; see the dotfiles' AGENTS.md).
