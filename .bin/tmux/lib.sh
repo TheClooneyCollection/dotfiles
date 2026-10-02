@@ -171,6 +171,12 @@ is_agents_session() {
 # and had a keypress in the last TMUX_ASK_IDLE_SECS (default 8).
 user_busy() {
   [ "$(tmux display-message -p -t "$1" '#{pane_in_mode}')" != 1 ] || return 0
+  user_typing "$1"
+}
+
+# Succeeds if a client showing pane $1 had a keypress (or scroll) in the
+# last TMUX_ASK_IDLE_SECS (default 8).
+user_typing() {
   tmux list-clients -F '#{pane_id} #{client_activity}' | awk -v p="$1" -v now="$(date +%s)" \
     -v w="${TMUX_ASK_IDLE_SECS:-8}" '$1 == p && now - $2 < w { f = 1 } END { exit !f }'
 }

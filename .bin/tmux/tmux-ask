@@ -15,10 +15,12 @@ deliver() {
   tmux send-keys -t "$1" Enter
 }
 
-# Queued messages live in one place per user, so the pane-mode-changed
-# hook (running in the tmux server's environment) finds them too. Names
-# start with a timestamp, so sorting gives the send order.
-QUEUE_DIR="/tmp/tmux-agents-$(id -u)/queue"
+# Queued messages live in one place per user and tmux server, so the
+# pane-mode-changed hook (running in the tmux server's environment) finds
+# them too. Per server because pane ids repeat across servers: a message
+# queued for %1 on one must never go to %1 on another. Names start with a
+# timestamp, so sorting gives the send order.
+QUEUE_DIR="/tmp/tmux-agents-$(id -u)/queue/$(basename "${TMUX%%,*}")"
 
 # Claim $1 for delivery by renaming it; only one of the background
 # deliverer and the hook can win, so nothing is sent twice.
@@ -42,11 +44,14 @@ fi
 
 # Background delivery of a queued message (started via run-shell): wait
 # until the user stops typing or scrolling in the pane and older messages
-# for it went out, then deliver. After TMUX_ASK_QUEUE_SECS (default 1800),
+# for it went out, then deliver. A pane left in copy mode with no keys for
+# TMUX_ASK_COPY_IDLE_SECS (default 300; 0 = never) was probably forgotten:
+# take it out of copy mode, which delivers through the --kick hook and the
+# next check here. After TMUX_ASK_QUEUE_SECS (default 1800),
 # or if the pane is gone, keep the message as .undelivered and tell every
 # client. Exits quietly if the hook already sent it.
 if [ "${1:-}" = "--deliver" ]; then
-  peer="$2" file="$3" waited=0
+  peer="$2" file="$3" waited=0 copy_idle=0
   name="$(pane_name "$peer" 2>/dev/null || true)"
   give_up() {
     local kept="${file%.msg}.undelivered"
@@ -65,6 +70,19 @@ if [ "${1:-}" = "--deliver" ]; then
       deliver "$peer" "$(cat "$file.sending")"
       rm -f "$file.sending"
       exit 0
+    fi
+    if [ "$(tmux display-message -p -t "$peer" '#{pane_in_mode}' 2>/dev/null)" = 1 ] && ! user_typing "$peer"; then
+      copy_idle=$((copy_idle + 2))
+    else
+      copy_idle=0
+    fi
+    limit="${TMUX_ASK_COPY_IDLE_SECS:-300}"
+    if [ "$limit" -gt 0 ] 2>/dev/null && [ "$copy_idle" -ge "$limit" ]; then
+      tmux send-keys -t "$peer" -X cancel 2>/dev/null || true
+      for c in $(tmux list-clients -F '#{client_name}'); do
+        tmux display-message -c "$c" -d 5000 "tmux-ask: ${name:-$peer} was left in copy mode for ${copy_idle}s; closed it to deliver a message"
+      done
+      copy_idle=0
     fi
     [ "$waited" -lt "${TMUX_ASK_QUEUE_SECS:-1800}" ] || give_up "gave up delivering to ${name:-$peer} after ${waited}s of typing there"
     sleep 2; waited=$((waited + 2))
@@ -92,10 +110,14 @@ Messages over TMUX_ASK_MAX_LINES (default 60) are saved to
 $TMPDIR/tmux-agents/<you>/ and sent as the first 15 lines plus the path.
 A sub agent that replies to its parent is marked done.
 If the user is typing or scrolling in the receiver's pane, the message
-is queued and sent once they stop typing or leave copy mode.
+is queued and sent once they stop typing or leave copy mode. A pane
+left in copy mode with no keys for TMUX_ASK_COPY_IDLE_SECS is taken out
+of it, so the message goes through.
 
 env: TMUX_ASK_IDLE_SECS    seconds without keys before a pane counts as free (default 8)
      TMUX_ASK_QUEUE_SECS   how long a queued message waits at most (default 1800)
+     TMUX_ASK_COPY_IDLE_SECS  leave a forgotten copy mode after this long
+                              with no keys (default 300; 0 = never)
      TMUX_ASK_ENTER_DELAY  seconds between paste and Enter (default 0.5)
 EOF
 }
@@ -165,7 +187,14 @@ if user_busy "$peer"; then
   mkdir -p "$QUEUE_DIR"
   file="$QUEUE_DIR/$(date +%s)-$(printf '%06d' $$)-${peer#%}.msg"
   printf '%s' "$body" > "$file"
-  tmux run-shell -b "'$here/tmux-ask' --deliver '$peer' '$file'"
+  # run-shell gets the tmux server's environment, not ours: pass on the
+  # settings the delivery loop reads (numbers, so plain quoting is safe).
+  envs=""
+  for v in TMUX_ASK_IDLE_SECS TMUX_ASK_QUEUE_SECS TMUX_ASK_COPY_IDLE_SECS TMUX_ASK_ENTER_DELAY; do
+    eval "val=\${$v:-}"
+    [ -z "$val" ] || envs="$envs$v='$val' "
+  done
+  tmux run-shell -b "$envs'$here/tmux-ask' --deliver '$peer' '$file'"
   queued=1
 else
   deliver "$peer" "$body"
