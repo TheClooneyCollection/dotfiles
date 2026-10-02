@@ -27,6 +27,7 @@ __pycache__/
 !/.claude/skills
 /.claude/skills/*
 !/.claude/skills/tmux-agents
+!/.claude/skills/tmux-agents-setup
 
 # Codex
 
@@ -35,6 +36,7 @@ __pycache__/
 !/.codex/skills
 /.codex/skills/*
 !/.codex/skills/tmux-agents
+!/.codex/skills/tmux-agents-setup
 !/.codex/AGENTS.md
 !/.codex/rules
 /.codex/rules/*
@@ -45,6 +47,7 @@ __pycache__/
 !/.codex-2nd/skills
 /.codex-2nd/skills/*
 !/.codex-2nd/skills/tmux-agents
+!/.codex-2nd/skills/tmux-agents-setup
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
 /.codex-2nd/rules/*

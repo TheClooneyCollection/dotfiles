@@ -10,3 +10,10 @@ Notes for AI agents working in this dotfiles repo.
 - Keep the month zero-padded consistently. Existing tags show an older inconsistency (`v2026.5.1` vs `v2026.05.0`); prefer `vYYYY.MM.X`.
 - Do not imply semver meaning in release numbers. They are chronological snapshot labels for this dotfiles repo.
 - Keep docs concise and practical. Add local workflow notes where future agents are likely to make the same mistake.
+
+## tmux-agents sync
+
+- `.local/share/tmux-agents` is a squashed subtree of https://github.com/TheClooneyCollection/tmux-agents.git (`main`). Changes may be made here or upstream; always sync them both ways.
+- Run subtree commands from the dotfiles repo root (`~`).
+- Dotfiles → upstream: `git subtree push --prefix=.local/share/tmux-agents https://github.com/TheClooneyCollection/tmux-agents.git main`.
+- Upstream → dotfiles: `GIT_LFS_SKIP_SMUDGE=1 git subtree pull --prefix=.local/share/tmux-agents https://github.com/TheClooneyCollection/tmux-agents.git main --squash`. Documentation images may stay as LFS pointers.
