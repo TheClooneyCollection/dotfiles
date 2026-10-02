@@ -162,6 +162,17 @@ agents_session_for() {
   fi
 }
 
+# The project pane $1 belongs to, as in agents-<project>: a hidden sub
+# agent's from its session, any other pane's from its directory.
+pane_project() {
+  local session p
+  session="$(tmux display-message -p -t "$1" '#{session_name}')"
+  if is_agents_session "$session"; then p="$session"
+  else p="$(agents_session_for "$(tmux display-message -p -t "$1" '#{pane_current_path}')")"
+  fi
+  printf '%s\n' "${p#"$AGENTS_PREFIX"-}"
+}
+
 is_agents_session() {
   case "$1" in "$AGENTS_PREFIX"-*) return 0 ;; *) return 1 ;; esac
 }
@@ -194,6 +205,11 @@ request_body() {
 
 reply_body() {
   printf '[reply from %s to %s via tmux-ask]\n%s\n\n(This is a reply. Do not answer it unless you have a new request.)\n[end of reply from %s to %s]' "$1" "$3" "$2" "$1" "$3"
+}
+
+# A notice needs no answer and asks for nothing (e.g. "X connected to you").
+notice_body() {
+  printf '[notice from %s to %s via tmux-ask]\n%s\n\n(This is a notice. No reply or action is needed; carry on with what you were doing.)\n[end of notice from %s to %s]' "$1" "$3" "$2" "$1" "$3"
 }
 
 # Give pane $1 the name $2, refusing names another pane already holds.

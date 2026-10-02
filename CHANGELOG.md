@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Connect across windows.** The `prefix + A` picker switches to every window with `ctrl-a` (remembered), shows each pane's project and what it's doing, and previews it. Agents can connect to another window's agent with `codex@<project>` or `claude@<window>`, or find it with `tmux-connect --list`. The agent on the other side gets a notice (`tmux-ask --notice`) saying who connected.
+
 ## v1.1.0 (2026-10-02)
 
 - **Reopen closed sub agents.** Each sub agent's session is recorded, so a closed one can come back with its whole conversation for 7 days: from a `closed` section at the bottom of the agent list (`enter`), or by asking its parent (`tmux-spawn --resume NAME`).

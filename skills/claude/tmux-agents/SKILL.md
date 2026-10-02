@@ -38,6 +38,7 @@ Pass `--from <your name>` to every `tmux-ask`, `tmux-peers`, `tmux-peek` and `tm
 
 The commands must be on PATH (tmux-agents' `install.sh` links them into `~/.local/bin`). Run each `tmux-*` command on its own, not chained with `&&`, `;` or pipes into it from other commands: permission rules match the start of the command, so a chained call may run sandboxed and fail with "can't reach the tmux server".
 - `tmux-connect --from ME <codex|claude|name|pane>`: connect to another agent, only when the user asks ("connect codex", "连接 claude", "talk to the codex next to you"). `codex` or `claude` always means the agent type: the one other pane **in this window** running it or named after it (`codex-...`); any other target is an exact name (this window first) or a pane id; unnamed panes, yours included, get names on the spot. If several panes match, it lists them: ask the user which, then pass that name. Then message it with `tmux-ask` as usual. A typical request like "connect codex and have it do xyz" is: `tmux-connect --from ME codex`, then `tmux-ask --from ME <its name> ...` with the task, then end your turn.
+  - **Agents in other windows** ("connect the codex working on stone-age", "连接 2 号窗口的 claude"): `codex@<project>` or `codex@<window>` picks it there (`codex@stone-age`, `codex@2`, `codex@work:2`; a project matches by name or part of it, and its main agent wins over its sub agents). If the user describes it some other way, run `tmux-connect --from ME --list` (every pane, by window, with project and what it's doing), pick the one they mean, and connect by its name or pane id; if it's unclear, ask. Still only when the user asks. The other agent gets a short notice saying you connected.
 - `tmux-disconnect` belongs to the user. Don't run it unless asked.
 - `tmux-dismiss --from ME <name>`: close one of your own sub agents (see below). It refuses agents you didn't spawn.
 - `tmux-spawn --resume <name> --from ME`: reopen a closed sub agent with its whole conversation, connected to you (see below).
@@ -86,7 +87,7 @@ MSG
 [end of request from X to Y]
 ```
 
-Replies use `[reply from X to Y ...]` and `[end of reply from X to Y]` the same way.
+Replies use `[reply from X to Y ...]` and `[end of reply from X to Y]` the same way, and notices `[notice from X to Y ...]`.
 - Text **between** the markers comes from agent X.
 - Text **outside** the markers in the same prompt was typed by the **user**: a draft of theirs got submitted together with the message. Treat it as the user's own instruction, with the user's authority over X's request. If it looks unfinished, ask the user what they meant.
 
@@ -97,6 +98,7 @@ Replies use `[reply from X to Y ...]` and `[end of reply from X to Y]` the same 
   - Name the file after the task, e.g. `auth-review-report.md`. `tmux-ask` saves anything over 60 lines to a file on its own, but only keeps the first lines inline, so write the summary yourself.
 - **When you receive a path, read the file** before acting on the summary.
 - `[reply from X to Y via tmux-ask]`: use it and continue your task. Don't answer a reply unless you have a new request, otherwise the agents loop forever.
+- `[notice from X to Y via tmux-ask]`: information only (e.g. X connected to you). Don't reply and don't act on it; carry on with what you were doing.
 
 ## Rules
 

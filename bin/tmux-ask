@@ -91,7 +91,7 @@ fi
 
 usage() {
   cat <<'EOF'
-usage: tmux-ask [--from ME] [--any] <name> [--reply] [message...]
+usage: tmux-ask [--from ME] [--any] <name> [--reply | --notice] [message...]
 
 Sends message (arguments, or stdin if none) to the connected pane name
 and submits it. Requests tell the receiver how to reply. Replies are
@@ -103,6 +103,8 @@ marked as needing no response, which stops endless back-and-forth.
   MSG
 
 --from ME: your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
+--notice:  a message that needs no answer (tmux-connect sends one when
+           it connects agents in different windows)
 --any:     send to a named pane you aren't connected to (the reply
            instructions include --any too)
 
@@ -122,11 +124,12 @@ env: TMUX_ASK_IDLE_SECS    seconds without keys before a pane counts as free (de
 EOF
 }
 
-target="" reply=0 any=0 msg="" FROM_PANE=""
+target="" reply=0 notice=0 any=0 msg="" FROM_PANE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --reply) reply=1; shift ;;
+    --notice) notice=1; shift ;;
     --from) FROM_PANE="${2:-}"; shift 2 ;;
     --any) any=1; shift ;;
     --) shift; msg="$*"; break ;;
@@ -175,7 +178,9 @@ if [ "$lines" -gt "$max" ]; then
 (Message was $lines lines; the full text is in $file. Read it from there.)"
 fi
 
-if [ "$reply" -eq 1 ]; then
+if [ "$notice" -eq 1 ]; then
+  body="$(notice_body "$me" "$msg" "$(pane_name "$peer")")"
+elif [ "$reply" -eq 1 ]; then
   body="$(reply_body "$me" "$msg" "$(pane_name "$peer")")"
 else
   body="$(request_body "$me" "$msg" "$(pane_name "$peer")" "$([ "$any" -eq 1 ] && echo --any)")"
@@ -204,7 +209,9 @@ fi
 # means the receiver is working again. @awaiting lists who a pane is
 # waiting to hear back from, so ending a turn to wait for them isn't
 # mistaken for needing the user (tmux-agent-report --turn-end).
-if [ "$reply" -eq 1 ]; then
+if [ "$notice" -eq 1 ]; then
+  :
+elif [ "$reply" -eq 1 ]; then
   [ "$(tmux display-message -p -t "$self" '#{@parent}')" != "$peer" ] || tmux set-option -p -t "$self" @state done
   remove_word "$peer" @awaiting "$me"
 else
@@ -213,7 +220,9 @@ else
   add_word "$self" @awaiting "$(pane_name "$peer")"
 fi
 
-kind="$([ "$reply" -eq 1 ] && echo reply || echo request)"
+kind=request
+[ "$reply" -eq 0 ] || kind=reply
+[ "$notice" -eq 0 ] || kind=notice
 if [ "$queued" -eq 1 ]; then
   printf 'queued %s to %s: the user is typing or scrolling there; it will be delivered once they stop\n' "$kind" "$(label "$peer")"
 else
