@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+# Report what an agent is doing, for the sub agent chip (tmux-agents --chip).
+set -euo pipefail
+. "$(dirname "$0")/lib.sh"
+
+usage() {
+  cat <<'USAGE'
+usage: tmux-agent-report [--from ME] "what you're doing now"
+       tmux-agent-report [--from ME] --waiting "what you're waiting for"
+                     (background work only, never the user)
+       tmux-agent-report --pane PANE --perm on|off   (Claude hooks)
+       tmux-agent-report --pane PANE --turn-start|--turn-end   (Claude hooks)
+       tmux-agent-report --codex-notify JSON          (Codex notify)
+
+Agents call it when they start a task and at each major step, with a
+short phrase ("reading map loader", "running import tests"). The chip
+above the status bar shows it next to the agent's name.
+
+Hooks call --perm on when the agent is waiting for a permission answer
+and --perm off when it moves on; the chip turns that agent red.
+Codex sub agents get no hooks: they run with auto_review, so their
+permission requests go to a review model, never to the user. When one
+does need the user, it ends its turn without replying. --turn-end
+catches that: a sub agent that ends a turn neither done nor waiting on
+its own sub agents or requests is marked needs_you. Codex reports turn
+ends through notify, whose JSON names the agent in its first message
+("[request from X to NAME via tmux-ask]"); the thread id is stored on
+NAME's pane (@codex_thread) for later turns.
+USAGE
+}
+
+FROM_PANE="" pane="" perm="" turn="" notify_json="" waiting=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --from) FROM_PANE="${2:-}"; shift 2 ;;
+    --pane) pane="${2:-}"; shift 2 ;;
+    --perm) perm="${2:-}"; shift 2 ;;
+    # Codex sub agents spawned before hooks were dropped still call this.
+    --codex-hook) cat >/dev/null 2>&1; exit 0 ;;
+    --waiting) waiting=1; shift ;;
+    --turn-start) turn=start; shift ;;
+    --turn-end) turn=end; shift ;;
+    --codex-notify) notify_json="${2:-}"; turn=end; shift 2 ;;
+    -*) usage >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
+
+# A turn ended. Done agents stay done; agents still waiting on their own
+# sub agents or on replies show "waiting for ..."; anyone else needs the
+# user. Never fails: it runs from hooks and notify.
+# Bash commands Claude is still running for pane $1, i.e. its background
+# tasks: children of the pane's claude process started through Claude's
+# shell snapshot, minus this hook's own ancestors. Prints a count.
+claude_background() {
+  local pp
+  pp="$(tmux display-message -p -t "$1" '#{pane_pid}' 2>/dev/null)" || { echo 0; return; }
+  ps -A -o pid=,ppid=,comm=,command= 2>/dev/null | awk -v root="$pp" -v me="$$" '
+    { pid[NR] = $1; ppid[NR] = $2; comm[NR] = $3; cmd[NR] = $0; parent[$1] = $2 }
+    END {
+      # The claude process: a descendant of the pane (within 4 levels).
+      for (i = 1; i <= NR; i++) {
+        if (comm[i] !~ /(^|\/)claude$/) continue
+        p = pid[i]; for (d = 0; d < 5 && p != root && p > 1; d++) p = parent[p]
+        if (p == root) { cl = pid[i]; break }
+      }
+      if (!cl) { print 0; exit }
+      for (p = me; p > 1; p = parent[p]) anc[p] = 1
+      n = 0
+      for (i = 1; i <= NR; i++) if (ppid[i] == cl && !(pid[i] in anc) && index(cmd[i], "/.claude/shell-snapshots/")) n++
+      print n
+    }'
+}
+
+turn_end() {
+  local p="$1" kids awaited live="" n who waiting_on
+  tmux set-option -pu -t "$p" @perm_since 2>/dev/null || true
+  [ "$(tmux show-options -pqv -t "$p" @state)" != done ] || return 0
+  kids="$(tmux list-panes -a -F '#{pane_id} #{@parent} #{pane_dead} #{?@state,#{@state},-} #{@agent}' \
+    | awk -v p="$p" '$2 == p && $3 == 0 && $4 != "done" && !seen[$1]++ { print $5 }' | tr '\n' ' ')"
+  awaited="$(tmux show-options -pqv -t "$p" @awaiting)"
+  for n in $awaited; do
+    if [ -n "$(find_pane "$n")" ]; then live="$live $n"; else remove_word "$p" @awaiting "$n"; fi
+  done
+  who="$(printf '%s %s\n' "$kids" "$live" | tr ' ' '\n' | awk 'NF && !seen[$0]++' | tr '\n' ' ' | sed 's/ $//')"
+  # Waiting on its own background work: reported with --waiting, or (for
+  # Claude) Bash commands still running when the turn ended.
+  waiting_on="$(tmux show-options -pqv -t "$p" @waiting_on)"
+  if [ -z "$waiting_on" ] && [ "$(claude_background "$p")" -gt 0 ]; then
+    waiting_on="background command"
+  fi
+  # Names are single words; the background work is a phrase, added last.
+  who="$(printf '%s' "$who" | sed 's/ /, /g')"
+  [ -z "$waiting_on" ] || who="${who:+$who, }$waiting_on"
+  if [ -n "$who" ]; then
+    tmux set-option -p -t "$p" @state working
+    tmux set-option -p -t "$p" @activity "waiting for $who"
+    tmux set-option -pu -t "$p" @attention_since 2>/dev/null || true
+  else
+    tmux set-option -p -t "$p" @state needs_you
+    [ -n "$(tmux show-options -pqv -t "$p" @attention_since)" ] || tmux set-option -p -t "$p" @attention_since "$(date +%s)"
+  fi
+}
+
+# Codex notify: find the pane from the turn's messages, or by thread id.
+if [ -n "$notify_json" ]; then
+  tmux list-sessions >/dev/null 2>&1 || exit 0
+  fields="$(printf '%s' "$notify_json" | /usr/bin/perl -MJSON::PP -e '
+    local $/; my $j = eval { decode_json(<STDIN>) } || {};
+    my $to = "";
+    for my $m (@{ $j->{"input-messages"} || [] }) {
+      if ($m =~ /\[(?:request|reply) from \S+ to (\S+) via tmux-ask\]/) { $to = $1; last }
+    }
+    # Codex names a new session in a side thread whose whole answer is
+    # {"title": ...}; that is not the agent ending a turn.
+    my $last = $j->{"last-assistant-message"} // "";
+    my $t = $last =~ /^\s*\{/ ? eval { JSON::PP->new->decode($last) } : undef;
+    my $type = $j->{type} // "";
+    $type = "title" if ref $t eq "HASH" && exists $t->{title} && keys %$t == 1;
+    print join("\t", $type, $j->{"thread-id"} // "", $to);
+  ' 2>/dev/null)" || exit 0
+  type="${fields%%	*}"; rest="${fields#*	}"; thread="${rest%%	*}"; to="${rest#*	}"
+  [ "$type" = agent-turn-complete ] && [ -n "$thread" ] || exit 0
+  # One line per turn end, to debug state changes: time thread to= last words.
+  { mkdir -p "/tmp/tmux-agents-$(id -u)" && printf '%s %s to=%s %s\n' "$(date '+%F %T')" "$thread" "${to:--}" \
+      "$(printf '%s' "$notify_json" | /usr/bin/perl -MJSON::PP -e 'local $/; my $j = eval { decode_json(<STDIN>) } || {}; my $m = $j->{"last-assistant-message"} // ""; $m =~ s/\s+/ /g; print substr($m, 0, 80)' 2>/dev/null)" \
+      >> "/tmp/tmux-agents-$(id -u)/notify.log"; } 2>/dev/null || true
+  if [ -n "$to" ]; then
+    p="$(find_pane "$to")"
+    [ -z "$p" ] || tmux set-option -p -t "$p" @codex_thread "$thread"
+  fi
+  pane="$(tmux list-panes -a -F '#{pane_id} #{@codex_thread}' | awk -v t="$thread" '$2 == t { print $1; exit }')"
+  [ -n "$pane" ] || exit 0
+  # The thread id is the session id: record it so the sub agent can be
+  # reopened once closed (tmux-spawn --resume).
+  n="$(pane_name "$pane")"
+  if [ -n "$n" ] && [ -f "$(sessions_dir)/$n" ] && [ "$(record_get "$n" id)" != "$thread" ]; then
+    record_set "$n" id "$thread"
+  fi
+fi
+
+require_tmux
+if [ -n "$pane" ]; then
+  pane_alive "$pane" || exit 0
+else
+  pane="$(self_pane)"
+fi
+
+case "$turn" in
+  end) turn_end "$pane"; exit 0 ;;
+  start)
+    if [ "$(tmux show-options -pqv -t "$pane" @state)" = needs_you ]; then
+      tmux set-option -p -t "$pane" @state working
+      tmux set-option -pu -t "$pane" @attention_since 2>/dev/null || true
+    fi
+    tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
+    tmux set-option -pu -t "$pane" @waiting_on 2>/dev/null || true
+    exit 0 ;;
+esac
+
+case "$perm" in
+  on)
+    [ -n "$(tmux show-options -pqv -t "$pane" @perm_since)" ] || tmux set-option -p -t "$pane" @perm_since "$(date +%s)"
+    exit 0 ;;
+  off)
+    tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
+    exit 0 ;;
+esac
+
+text="$*"
+[ -n "$text" ] || { usage >&2; exit 1; }
+text="$(printf '%s' "$text" | tr '\n' ' ' | cut -c1-60)"
+if [ "$waiting" -eq 1 ]; then
+  # Ending the turn to wait for background work: not a "needs you".
+  tmux set-option -p -t "$pane" @waiting_on "$text"
+  text="waiting for $text"
+else
+  tmux set-option -pu -t "$pane" @waiting_on 2>/dev/null || true
+fi
+tmux set-option -p -t "$pane" @activity "$text"
+tmux set-option -p -t "$pane" @state working
+tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
+tmux set-option -pu -t "$pane" @attention_since 2>/dev/null || true
+echo "reported: $text"

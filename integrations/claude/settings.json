@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tmux-ask:*)",
+      "Bash(tmux-peers:*)",
+      "Bash(tmux-peek:*)",
+      "Bash(tmux-spawn:*)",
+      "Bash(tmux-agent-report:*)",
+      "Bash(tmux-connect --from:*)",
+      "Bash(tmux-dismiss --from:*)"
+    ]
+  }
+}
