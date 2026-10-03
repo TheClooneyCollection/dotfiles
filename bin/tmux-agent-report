@@ -150,6 +150,13 @@ fi
 case "$turn" in
   end) turn_end "$pane"; exit 0 ;;
   start)
+    # A notice (tmux-ask --notice) asks for nothing, so it doesn't start new
+    # work: keep what the agent is waiting on, and a needs-you stays one.
+    # Claude passes the prompt to the hook as JSON on stdin.
+    if [ ! -t 0 ]; then
+      prompt="$(/usr/bin/perl -MJSON::PP -e 'local $/; my $j = eval { JSON::PP->new->decode(<STDIN>) } || {}; print substr($j->{prompt} // "", 0, 40)' 2>/dev/null || true)"
+      case "$prompt" in "[notice from "*) exit 0 ;; esac
+    fi
     if [ "$(tmux show-options -pqv -t "$pane" @state)" = needs_you ]; then
       tmux set-option -p -t "$pane" @state working
       tmux set-option -pu -t "$pane" @attention_since 2>/dev/null || true
