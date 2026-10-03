@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **`tmux-spawn --for <owner>`.** Spawn a sub agent for an agent you're connected to: it belongs to the owner, is connected only to it, starts without a task, and gets its first task from the owner, whom you brief. Depth counts from you, so main can spawn a worker for its coordinator that can still start sub agents. Tests: `tests/spawn-for.sh`.
+- **Product decisions** are recorded one per file in `docs/decisions/`.
 - **Fix:** a name that no longer exists (a closed agent's) is now an error. tmux's loose target matching sent a message for one to the agent in a window with a similar name. Only `%12`, `2`, `2.1`, `work:2` and `work:2.1` are taken as tmux targets.
 - The skills tell agents to use the names `tmux-peers` shows now, not remembered ones.
 - **Tests:** `tests/names.sh`.

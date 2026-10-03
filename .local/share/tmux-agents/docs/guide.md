@@ -54,6 +54,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 - **Reopening.** A closed sub agent can come back with its whole conversation for 7 days (`TMUX_AGENTS_RESUME_DAYS`). In the list they sit in a `closed` section at the bottom, newest first: `enter` reopens one connected to its old parent and opens it, `ctrl-o` reopens and jumps there, `ctrl-x` forgets it. Or ask the parent ("reopen auth-review"), which runs `tmux-spawn --resume auth-review`. A Codex sub agent can be reopened once it has finished a turn; that's when Codex reports its session id.
 - **Same kind by default, in auto mode.** Claude spawns Claude, Codex spawns Codex, and a Codex on another account spawns on that account. Sub agents start with Claude's `--permission-mode auto` or Codex's `approvals_reviewer="auto_review"`.
 - **Depth limit.** At most two levels of sub agents (`TMUX_AGENTS_MAX_DEPTH`).
+- **Spawning for another agent.** `tmux-spawn --for <owner>` gives an agent you're connected to a sub agent of its own: it belongs to `<owner>` (connected to it only, listed under it, reports to it) and starts without a task. You tell `<owner>`, with your brief, and `<owner>` introduces itself and sends the first task. Depth counts from you, so main can spawn a worker for its coordinator that can still start sub agents. See [the decisions](decisions/README.md).
 
 ## Commands
 

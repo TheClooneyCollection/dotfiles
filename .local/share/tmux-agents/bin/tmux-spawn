@@ -9,6 +9,7 @@ MAX_DEPTH="${TMUX_AGENTS_MAX_DEPTH:-2}"
 usage() {
   cat <<'EOF'
 usage: tmux-spawn [claude|codex|PROFILE] [--from ME] [--name NAME] [task...]
+       tmux-spawn [claude|codex|PROFILE] --for OWNER [--from ME] [--name NAME] [brief...]
        tmux-spawn --resume NAME [--from ME | --parent NAME]
 
 Starts a sub agent in its own window of the project's hidden session
@@ -21,6 +22,10 @@ Codex approvals_reviewer=auto_review).
   --from ME     your own name (needed where $TMUX_PANE is wrong, e.g. Codex)
   --name NAME   short task name, e.g. auth-review; -2, -3... is added
                 if taken (default: <agent>-<dir>-<N>)
+  --for OWNER   spawn it for OWNER, an agent you're connected to: it becomes
+                OWNER's sub agent, connected to OWNER only, and starts without
+                a task. OWNER is told, with your brief, and sends the first
+                task itself. Depth still counts from you.
   --resume NAME reopen a closed sub agent with its conversation, in the
                 same project, connected to you (or to --parent)
 
@@ -108,7 +113,7 @@ if [ "${1:-}" = "--run" ]; then
   if [ -n "$prompt" ]; then exec "${cmd[@]}" "$prompt"; else exec "${cmd[@]}"; fi
 fi
 
-agent="" name="" task="" FROM_PANE="" resume="" parent_name=""
+agent="" name="" task="" FROM_PANE="" resume="" parent_name="" for_name=""
 case "${1:-}" in
   claude|codex) agent="$1"; shift ;;
   -*|'') ;;
@@ -121,6 +126,7 @@ while [ $# -gt 0 ]; do
     --from) FROM_PANE="${2:-}"; shift 2 ;;
     --resume) resume="${2:-}"; shift 2 ;;
     --parent) parent_name="${2:-}"; shift 2 ;;
+    --for) for_name="${2:-}"; shift 2 ;;
     --) shift; task="$*"; break ;;
     -*) usage >&2; exit 1 ;;
     *) task="$*"; break ;;
@@ -222,6 +228,16 @@ if [ -z "$me" ]; then
   set_name "$self" "$me"
 fi
 
+# --for: the sub agent belongs to OWNER, which must be connected to us.
+# It starts without a task; the brief goes to OWNER, who sends the first one.
+owner="$self" owner_name="$me" brief=""
+if [ -n "$for_name" ]; then
+  owner="$(resolve_peer "$self" "$for_name")"
+  [ "$owner" != "$self" ] || die "--for names you; spawn without it"
+  owner_name="$(pane_name "$owner")"
+  brief="$task" task=""
+fi
+
 cwd="$(tmux display-message -p -t "$self" '#{pane_current_path}')"
 if [ -n "$name" ]; then
   name="$(unique_name "$(sanitize_name "$name")")"
@@ -250,11 +266,25 @@ rm -f "$(sessions_dir)/$name"
 record_set "$name" kind "$agent"
 record_set "$name" id "$sid"
 record_set "$name" dir "$cwd"
-record_set "$name" parent "$me"
+record_set "$name" parent "$owner_name"
 record_set "$name" depth "$((depth + 1))"
 
 pane="$(open_window "$session" "$cwd" "$name" "'$here/tmux-spawn' --run '$agent' '$file' '$sid'" "$((depth + 1))")"
-adopt "$pane" "$self" "$name"
+adopt "$pane" "$owner" "$name"
+
+if [ -n "$for_name" ]; then
+  tmux set-option -p -t "$pane" @activity "waiting for its first task from $owner_name"
+  msg="I spawned $name ($agent) for you: it is your sub agent now, connected to you (not to me), and it has no task yet. Introduce yourself to it (who you are, your role, how you'll work together), then send it its first task: tmux-ask --from $owner_name $name. It replies to you; close it with tmux-dismiss --from $owner_name $name when you're done with it."
+  [ -z "$brief" ] || msg="$msg
+
+My brief for it:
+$brief"
+  printf '%s\n' "$msg" | "$here/tmux-ask" --from "$self" "$owner_name" >/dev/null \
+    || die "spawned $name ($pane) for $owner_name, but couldn't tell $owner_name; tell it yourself"
+  printf 'spawned %s (%s) as %s for %s, hidden in session "%s". Told %s to introduce itself and send the first task; %s replies to %s, not to you. View: tmux-agents or prefix + a.\n' \
+    "$agent" "$pane" "$name" "$owner_name" "$session" "$owner_name" "$name" "$owner_name"
+  exit 0
+fi
 
 printf 'spawned %s (%s) as %s, hidden in session "%s"; it will reply via tmux-ask. View: tmux-agents or prefix + a.\n' \
   "$agent" "$pane" "$name" "$session"

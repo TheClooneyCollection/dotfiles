@@ -39,3 +39,4 @@ Sub agents are ordinary agents started by `tmux-spawn` in hidden windows of an `
 - [Sub agents](docs/design/sub-agents.md): spawning, the switcher, done state and cleanup, closing, the status chip, alerts.
 - [Environment](docs/design/environment.md): macOS bash 3.2, Codex's sandbox and shared daemon, permissions, install layout.
 - [Pitfalls and testing](docs/design/pitfalls-and-testing.md): traps found while building, how to test without touching the user's server, known limitations.
+- [Product decisions](docs/decisions/README.md): what the user decided about behaviour, and why, one per file.
