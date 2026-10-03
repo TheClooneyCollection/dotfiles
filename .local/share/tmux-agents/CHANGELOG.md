@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.3.2 (2026-10-03)
 
 - **Docs:** the agent chain's middle role is called "secondary" (was "coordinator") in the guide, skills and tests.
 
