@@ -54,6 +54,18 @@ expect() {  # name, wanted kid state
 echo "Normal workflows: never needs you"
 
 reset
+tmux set -p -t %1 @state idle
+turn_end
+expect "idle without a task stays idle at turn end" idle
+"$B/tmux-agent-report" --pane %1 "starting work" >/dev/null
+expect "progress report starts idle agent working" working
+
+reset
+tmux set -p -t %1 @state idle
+ask %0 kid "first task"
+expect "first request starts idle agent working" working
+
+reset
 ask %0 kid "do x"; turn_start "[request from boss to kid via tmux-ask] do x"
 ask %1 --reply boss "done"; turn_end
 expect "replies to its parent, then ends its turn" done
@@ -78,6 +90,30 @@ tmux kill-pane -t "$gk"
 reset
 ask %1 boss "question for you"; turn_end
 expect "waits for the reply to a request it sent" working
+
+reset
+ask %1 --notice boss "progress update"; turn_end
+expect "notice to its parent, then ends its turn" working
+[ "$(st %1 @waiting_on)" = "boss (after a notice)" ] || { echo "FAIL  missing parent notice wait marker"; fail=1; }
+[ "$(st %1 @activity)" = "waiting for boss (after a notice)" ] || { echo "FAIL  missing parent notice wait activity"; fail=1; }
+[ -z "$(st %1 @awaiting)" ] || { echo "FAIL  sending a notice created a reply obligation"; fail=1; }
+
+ask %0 --notice kid "acknowledged"
+turn_start "[notice from boss to kid via tmux-ask] acknowledged"; turn_end
+expect "parent notice wait survives an incoming notice" working
+
+ask %1 --reply boss "done"; turn_end
+expect "reply after parent notice stays done" done
+ask %1 --notice boss "one last FYI"; turn_end
+expect "done agent sends parent notice and stays done" done
+
+reset
+# The parent's display name can change; ownership is its pane ID.
+tmux set -p -t %0 @agent renamed-boss
+ask %1 --any --notice renamed-boss "FYI"; turn_end
+expect "notice recognizes parent by pane ID after rename" working
+[ "$(st %1 @waiting_on)" = "renamed-boss (after a notice)" ] || { echo "FAIL  notice wait did not use current parent name"; fail=1; }
+tmux set -p -t %0 @agent boss
 
 reset
 "$B/tmux-agent-report" --pane %1 --waiting "CI run" >/dev/null; turn_end
@@ -106,6 +142,35 @@ notify main-thread "done, standing by" "anything"
 expect "Codex, done, another turn end" done
 
 echo "Real cases: needs you"
+
+reset
+ask %1 --notice boss "progress update"; turn_end
+ask %0 kid "next task"
+[ -z "$(st %1 @waiting_on)" ] || { echo "FAIL  new request retained parent notice wait"; fail=1; }
+# No turn_start hook: Codex must also stop waiting on a new request.
+turn_end
+expect "new request clears parent notice wait without a turn-start hook" needs_you
+
+reset
+ask %1 --notice boss "progress update"
+"$B/tmux-agent-report" --pane %1 "resumed work" >/dev/null
+[ -z "$(st %1 @waiting_on)" ] || { echo "FAIL  progress report retained parent notice wait"; fail=1; }
+turn_end
+expect "progress report clears parent notice wait" needs_you
+
+reset
+tmux new-window -d cat; other="$(tmux list-panes -a -F '#{pane_id}' | tail -1)"
+tmux set -p -t "$other" @agent colleague
+ask %1 --any --notice colleague "FYI"
+[ -z "$(st %1 @waiting_on)" ] || { echo "FAIL  nonparent notice created a wait marker"; fail=1; }
+turn_end
+expect "notice to a nonparent does not imply waiting" needs_you
+tmux kill-pane -t "$other"
+
+reset
+"$B/tmux-agent-report" --pane %1 --waiting "CI run" >/dev/null
+ask %0 kid "next task"; turn_end
+expect "new request clears background wait without a turn-start hook" needs_you
 
 reset
 turn_end
