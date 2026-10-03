@@ -10,12 +10,12 @@ When the user asks to "start the chain" (or similar), set up three agents that w
 
 - **main agent** (the agent the user started, usually Claude): talks to the user and the other agents. Clarifies intent, turns it into self-contained tasks and relays user decisions. Does not investigate or implement.
 - **secondary** (Claude): coordinates the worker and owns the main checkout. Merges worker commits, runs project steps (importers, backups, server relaunches, tests) and records decisions in docs. Sends anything that needs a user decision to the main agent, not to the user.
-- **worker** (Codex on the second account, `codex-2nd`, plus its sub agents): main implementer. Sub agents split work by file ownership to avoid conflicts.
+- **worker** (Codex on the second account, `codex-2nd`, plus its sub agents): main implementer. By default it splits any task with independent parts across its own sub agents (`tmux-spawn`), one per part by file ownership, after agreeing the interfaces between them; it integrates and runs the full checks itself. It works alone only on short, strictly sequential or same-file tasks, and says why.
 
 Starting the chain (main agent):
 
 1. `tmux-spawn claude --from <me> --split <me> --right --name secondary "<role brief + current goal>"`
-2. `tmux-spawn codex-2nd --from <me> --for <secondary> --split <secondary> --below --name worker "<brief for the secondary: the worker's role and first goal>"`. The worker becomes the secondary's sub agent, connected to the secondary only (not to main), and starts without a task: the secondary gets the brief, introduces itself to the worker and sends the first task.
+2. `tmux-spawn codex-2nd --from <me> --for <secondary> --split <secondary> --below --name worker "<brief for the secondary: the worker's role and first goal>"`. The worker becomes the secondary's sub agent, connected to the secondary only (not to main), and starts without a task: the secondary gets the brief, introduces itself to the worker (including that it is the worker in the agent chain and splits independent parts across sub agents by default) and sends the first task.
 3. Tell the user the two names. Layout, all in the main agent's window: main on the left half, the secondary top right, the worker bottom right (the splits are 50% by default).
 
 Spawn both from the main agent (not worker from secondary) so the worker stays at depth 1 and can still start its own sub agents; `--for` makes it the secondary's all the same. Main doesn't message the worker; it goes through the secondary (`tmux-ask --any` only if the user asks). Spawned agents load this same file, so each brief only needs to name their role ("you are the secondary in the agent chain"), the other agents' names and the current goal.
