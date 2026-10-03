@@ -6,6 +6,8 @@ Each file: the context, the decision, why, and what was rejected. Name new ones 
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-03 | [Sub agents can open in a visible split](2026-10-03-spawn-into-a-split.md) |
+| 2026-10-03 | [A reopened sub agent comes back in a hidden window](2026-10-03-resume-reopens-hidden.md) |
 | 2026-10-03 | [An agent can spawn a sub agent for another agent](2026-10-03-spawn-for-another-agent.md) |
 | 2026-10-03 | [A sub agent spawned for another agent isn't connected to the caller](2026-10-03-not-connected-to-the-caller.md) |
 | 2026-10-03 | [Its depth counts from the agent that spawned it](2026-10-03-depth-counts-from-the-caller.md) |

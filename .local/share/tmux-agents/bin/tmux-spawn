@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start a sub agent in a hidden pane, connected to this one.
+# Start a sub agent in a hidden window or visible split, connected to its owner.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 . "$here/lib.sh"
@@ -10,9 +10,10 @@ usage() {
   cat <<'EOF'
 usage: tmux-spawn [claude|codex|PROFILE] [--from ME] [--name NAME] [task...]
        tmux-spawn [claude|codex|PROFILE] --for OWNER [--from ME] [--name NAME] [brief...]
+       tmux-spawn [claude|codex|PROFILE] --split PANE [--right | --below] [--size N%] [task...]
        tmux-spawn --resume NAME [--from ME | --parent NAME]
 
-Starts a sub agent in its own window of the project's hidden session
+By default, starts a sub agent in its own window of the project's hidden session
 (agents-<project>), names it, connects it to this pane, and hands it
 the task (arguments, or stdin if none) as a tmux-ask request. It
 replies with tmux-ask --reply when done. The agent defaults to the
@@ -26,8 +27,12 @@ Codex approvals_reviewer=auto_review).
                 OWNER's sub agent, connected to OWNER only, and starts without
                 a task. OWNER is told, with your brief, and sends the first
                 task itself. Depth still counts from you.
+  --split PANE  open in a visible split of an agent name or pane id
+  --right       split left/right (default); the new pane is on the right
+  --below       split top/bottom; the new pane is below
+  --size N%     new pane share, 1% to 99% (default 50%)
   --resume NAME reopen a closed sub agent with its conversation, in the
-                same project, connected to you (or to --parent)
+                same project in a hidden window, connected to you (or to --parent)
 
 Each sub agent's session is recorded (see sessions_dir in lib.sh), so a
 closed one can be reopened. Codex records it when its first turn ends.
@@ -66,7 +71,7 @@ codex_profile_for_home() {
   return 1
 }
 
-# Inside the new window: start the agent with the task as its first prompt.
+# Inside the new pane: start the agent with the task as its first prompt.
 if [ "${1:-}" = "--run" ]; then
   agent="$2" file="$3" sid="${4:-}" mode="${5:-new}"
   prompt=""
@@ -114,6 +119,7 @@ if [ "${1:-}" = "--run" ]; then
 fi
 
 agent="" name="" task="" FROM_PANE="" resume="" parent_name="" for_name=""
+split_target="" split_pane="" split_direction="" split_size="50%" split_options=0
 case "${1:-}" in
   claude|codex) agent="$1"; shift ;;
   -*|'') ;;
@@ -127,11 +133,24 @@ while [ $# -gt 0 ]; do
     --resume) resume="${2:-}"; shift 2 ;;
     --parent) parent_name="${2:-}"; shift 2 ;;
     --for) for_name="${2:-}"; shift 2 ;;
+    --split)
+      [ -n "${2:-}" ] || die "--split needs an agent name or pane id"
+      split_target="$2"; shift 2 ;;
+    --right|--below)
+      [ -z "$split_direction" ] || die "choose only one of --right and --below"
+      split_direction="$1"; split_options=1; shift ;;
+    --size)
+      [ -n "${2:-}" ] || die "--size needs a percentage (1% to 99%)"
+      split_size="$2"; split_options=1; shift 2 ;;
     --) shift; task="$*"; break ;;
     -*) usage >&2; exit 1 ;;
     *) task="$*"; break ;;
   esac
 done
+[ "$split_options" -eq 0 ] || [ -n "$split_target" ] || die "--right, --below and --size require --split"
+[ -z "$resume" ] || [ -z "$split_target" ] || die "--resume reopens hidden; --split is only for new sub agents"
+size_re='^([1-9]|[1-9][0-9])%$'
+[[ $split_size =~ $size_re ]] || die "--size must be a percentage from 1% to 99%"
 [ -n "$resume" ] || [ -n "$task" ] || [ -t 0 ] || task="$(cat)"
 
 require_tmux
@@ -139,8 +158,8 @@ require_tmux
 # Show a sub agent's pane, connected to its parent ($2, may be empty), and
 # keep its transcript on screen after the agent exits.
 adopt() {
-  tmux set-option -w -t "$1" remain-on-exit on
-  tmux set-option -w -t "$1" automatic-rename off
+  tmux set-option -p -t "$1" remain-on-exit on
+  [ "${4:-hidden}" = split ] || tmux set-option -w -t "$1" automatic-rename off
   set_name "$1" "$3"
   if [ -n "$2" ]; then
     tmux set-option -p -t "$1" @parent "$2"
@@ -163,6 +182,16 @@ open_window() {
   else
     tmux new-session -d -s "$1" -n "$3" -c "$2" "${env_args[@]}" -P -F '#{pane_id}' "$4"
   fi
+}
+
+# Split a resolved pane, leaving focus and the shared window options alone.
+# Directory, command and environment match open_window.
+open_split() {
+  local direction=-h env_args=(-e "TMUX_AGENTS_DEPTH=$4")
+  [ "$split_direction" != --below ] || direction=-v
+  [ -z "${TMUX_SPAWN_BIN:-}" ] || env_args+=(-e "TMUX_SPAWN_BIN=$TMUX_SPAWN_BIN")
+  [ -z "${TMUX_AGENTS_CODEX_HOMES:-}" ] || env_args+=(-e "TMUX_AGENTS_CODEX_HOMES=$TMUX_AGENTS_CODEX_HOMES")
+  tmux split-window -d "$direction" -l "$split_size" -t "$1" -c "$2" "${env_args[@]}" -P -F '#{pane_id}' "$3"
 }
 
 # Reopen a closed sub agent from its session record.
@@ -198,6 +227,14 @@ if [ -n "$resume" ]; then
 fi
 
 self="$(self_pane)"
+
+if [ -n "$split_target" ]; then
+  # Unlike general message targets, splits accept only exact names or pane ids.
+  pane_id_re='^%[0-9]+$'
+  [[ $split_target =~ $pane_id_re ]] || [ -n "$(find_pane "$split_target")" ] \
+    || die "--split needs an existing agent name or pane id: '$split_target'"
+  split_pane="$(resolve_pane "$split_target")"
+fi
 
 depth="${TMUX_AGENTS_DEPTH:-0}"
 [ "$depth" -lt "$MAX_DEPTH" ] || die "spawn depth limit ($MAX_DEPTH) reached; do this task yourself"
@@ -269,8 +306,15 @@ record_set "$name" dir "$cwd"
 record_set "$name" parent "$owner_name"
 record_set "$name" depth "$((depth + 1))"
 
-pane="$(open_window "$session" "$cwd" "$name" "'$here/tmux-spawn' --run '$agent' '$file' '$sid'" "$((depth + 1))")"
-adopt "$pane" "$owner" "$name"
+if [ -n "$split_pane" ]; then
+  pane="$(open_split "$split_pane" "$cwd" "'$here/tmux-spawn' --run '$agent' '$file' '$sid'" "$((depth + 1))")"
+  adopt "$pane" "$owner" "$name" split
+  location="in a visible split of $split_pane"
+else
+  pane="$(open_window "$session" "$cwd" "$name" "'$here/tmux-spawn' --run '$agent' '$file' '$sid'" "$((depth + 1))")"
+  adopt "$pane" "$owner" "$name"
+  location="hidden in session \"$session\""
+fi
 
 if [ -n "$for_name" ]; then
   tmux set-option -p -t "$pane" @activity "waiting for its first task from $owner_name"
@@ -281,10 +325,10 @@ My brief for it:
 $brief"
   printf '%s\n' "$msg" | "$here/tmux-ask" --from "$self" "$owner_name" >/dev/null \
     || die "spawned $name ($pane) for $owner_name, but couldn't tell $owner_name; tell it yourself"
-  printf 'spawned %s (%s) as %s for %s, hidden in session "%s". Told %s to introduce itself and send the first task; %s replies to %s, not to you. View: tmux-agents or prefix + a.\n' \
-    "$agent" "$pane" "$name" "$owner_name" "$session" "$owner_name" "$name" "$owner_name"
+  printf 'spawned %s (%s) as %s for %s, %s. Told %s to introduce itself and send the first task; %s replies to %s, not to you. View: tmux-agents or prefix + a.\n' \
+    "$agent" "$pane" "$name" "$owner_name" "$location" "$owner_name" "$name" "$owner_name"
   exit 0
 fi
 
-printf 'spawned %s (%s) as %s, hidden in session "%s"; it will reply via tmux-ask. View: tmux-agents or prefix + a.\n' \
-  "$agent" "$pane" "$name" "$session"
+printf 'spawned %s (%s) as %s, %s; it will reply via tmux-ask. View: tmux-agents or prefix + a.\n' \
+  "$agent" "$pane" "$name" "$location"

@@ -54,6 +54,15 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 - **Reopening.** A closed sub agent can come back with its whole conversation for 7 days (`TMUX_AGENTS_RESUME_DAYS`). In the list they sit in a `closed` section at the bottom, newest first: `enter` reopens one connected to its old parent and opens it, `ctrl-o` reopens and jumps there, `ctrl-x` forgets it. Or ask the parent ("reopen auth-review"), which runs `tmux-spawn --resume auth-review`. A Codex sub agent can be reopened once it has finished a turn; that's when Codex reports its session id.
 - **Same kind by default, in auto mode.** Claude spawns Claude, Codex spawns Codex, and a Codex on another account spawns on that account. Sub agents start with Claude's `--permission-mode auto` or Codex's `approvals_reviewer="auto_review"`.
 - **Depth limit.** At most two levels of sub agents (`TMUX_AGENTS_MAX_DEPTH`).
+- **Visible layout.** When you want sub agents in the same window, use `--split <name-or-pane-id>`: `--right` (default) places the new pane to the right, `--below` beneath it, and `--size N%` sets its share (default 50%). Splits stay detached, use the caller's directory, and keep the same ownership, depth, records and status chip. Enter in the agent list jumps to a visible split; `tmux-dismiss` closes only its pane. Without `--split`, sub agents open hidden as before.
+
+  For a chain with main left, secondary top right and worker bottom right (use the actual assigned names):
+  ```sh
+  tmux-spawn claude --from main --split main --right --name secondary "coordinate the work"
+  tmux-spawn codex-2nd --from main --for secondary --split secondary --below --name worker "implement the task"
+  ```
+
+  `--right`, `--below` and `--size` require `--split`. A closed split always reopens in a hidden window with `--resume`; move that pane into your layout if wanted.
 - **Spawning for another agent.** `tmux-spawn --for <owner>` gives an agent you're connected to a sub agent of its own: it belongs to `<owner>` (connected to it only, listed under it, reports to it) and starts without a task. You tell `<owner>`, with your brief, and `<owner>` introduces itself and sends the first task. Depth counts from you, so main can spawn a worker for its secondary that can still start sub agents. See [the decisions](decisions/README.md).
 
 ## Commands
@@ -65,7 +74,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 | `tmux-peers` | Show this pane's name and its connections. |
 | `tmux-ask [--from ME] [--any] <name> [--reply] [msg]` | Paste a message into a connected pane and submit it. Reads stdin if no `msg`. `--any` sends to any named pane, connected or not. |
 | `tmux-peek <name> [lines]` | Print the last lines (default 40) of a connected pane. |
-| `tmux-spawn [claude\|codex\|PROFILE] [--name NAME] [task]` | Start a connected sub agent in the project's hidden session and send it the task (or stdin). Taken names get `-2`, `-3`... |
+| `tmux-spawn [claude\|codex\|PROFILE] [--name NAME] [task]` | Start a connected sub agent hidden, or visibly with `--split NAME`, and send it the task (or stdin). Taken names get `-2`, `-3`... |
 | `tmux-agent-report [--from ME] "text"` | Report what a sub agent is doing, for the chip. |
 | `tmux-agents` | Browse sub agents, or every named pane with `ctrl-a` (`prefix + a`). |
 | `tmux-dismiss [--from ME] <name>` | Close an agent's pane and its transcript. With `--from`, only your own sub agents. `--done` closes every done/exited one after a y/N. |

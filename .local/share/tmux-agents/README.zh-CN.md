@@ -119,7 +119,7 @@ cd tmux-agents
 | --- | --- |
 | `tmux-connect` | 给当前 pane 命名并连接到另一个 pane |
 | `tmux-ask` | 给已连接的 agent 发消息 |
-| `tmux-spawn` | 在隐藏窗口里启动一个子 agent |
+| `tmux-spawn` | 在隐藏窗口或 `--split` 指定的可见分屏中启动子 agent |
 | `tmux-agents` | agent 列表（`prefix + a`） |
 | `tmux-peers`、`tmux-peek` | 查看连接关系；读取另一个 pane 的内容 |
 | `tmux-dismiss`、`tmux-disconnect` | 关闭子 agent；断开 pane 之间的连接 |
