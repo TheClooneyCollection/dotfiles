@@ -22,6 +22,8 @@ Starting the chain (main agent):
 
 Spawn both from the main agent (not worker from secondary) so the worker stays at depth 1 and can still start its own sub agents; `--for` makes it the secondary's all the same. Main doesn't message the worker; it goes through the secondary (`tmux-ask --any` only if the user asks). Spawned agents load this same file, so each brief only needs to name their role ("you are the secondary in the agent chain"), the other agents' names and the current goal.
 
+Ending the chain: `tmux-dismiss --from <me> <secondary>` closes the secondary, the worker and the worker's sub agents (tmux-agents v1.6.0); each can be reopened with `tmux-spawn --resume <name>`.
+
 Messages:
 
 - Everything goes through `tmux-ask`. Long reports go in a file; the message is a short summary plus the path.
