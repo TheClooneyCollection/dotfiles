@@ -316,6 +316,10 @@ else
   location="hidden in session \"$session\""
 fi
 
+if [ -z "$task" ]; then
+  tmux set-option -p -t "$pane" @state idle
+fi
+
 if [ -n "$for_name" ]; then
   tmux set-option -p -t "$pane" @activity "waiting for its first task from $owner_name"
   msg="I spawned $name ($agent) for you: it is your sub agent now, connected to you (not to me), and it has no task yet. Introduce yourself to it (who you are, your role, how you'll work together), then send it its first task: tmux-ask --from $owner_name $name. It replies to you; close it with tmux-dismiss --from $owner_name $name when you're done with it."

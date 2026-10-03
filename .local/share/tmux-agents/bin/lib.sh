@@ -416,3 +416,46 @@ record_closed() {
   [ -n "$name" ] && [ -f "$(sessions_dir)/$name" ] || return 0
   record_set "$name" closed "$(date +%s)"
 }
+
+# Strict ancestry: only live, exact pane IDs participate. Reject cycles,
+# including cycles above the requested ancestor, rather than granting access.
+pane_is_descendant() {
+  local child="$1" ancestor="$2" cursor="$1" seen=" " found=1
+  [ "$child" != "$ancestor" ] || return 1
+  pane_alive "$ancestor" && pane_alive "$child" || return 1
+  while [ -n "$cursor" ]; do
+    case "$cursor" in %*) ;; *) return 1 ;; esac
+    case "$seen" in *" $cursor "*) return 1 ;; esac
+    pane_alive "$cursor" || return 1
+    seen="$seen$cursor "
+    [ "$cursor" != "$ancestor" ] || found=0
+    cursor="$(tmux show-options -pqv -t "$cursor" @parent)" || return 1
+  done
+  return "$found"
+}
+
+# Snapshot the live ownership graph and print the root's subtree deepest
+# first. Missing parents and cycles outside that subtree cannot loop.
+pane_subtree() {
+  pane_alive "$1" || return 1
+  tmux list-panes -a -F '#{pane_id} #{@parent}' | awk -v root="$1" '
+    { parent[$1] = $2 }
+    END {
+      for (pane in parent) {
+        cursor = pane; depth = 0
+        for (key in seen) delete seen[key]
+        while (cursor in parent && !seen[cursor]++) {
+          if (cursor == root) { print depth, pane; break }
+          cursor = parent[cursor]; depth++
+        }
+      }
+    }' | sort -k1,1nr -k2,2 | awk '{ print $2 }'
+}
+
+pane_finished() {
+  pane_alive "$1" || return 1
+  case "$(tmux display-message -p -t "$1" '#{?pane_dead,exited,#{@state}}')" in
+    done|exited) return 0 ;;
+    *) return 1 ;;
+  esac
+}

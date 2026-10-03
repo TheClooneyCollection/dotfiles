@@ -47,6 +47,26 @@ out="$(TMUX_PANE=%0 "$B/tmux-spawn" codex --for secondary --name worker "build t
 sleep 0.8
 w="$(pane_of worker)"
 [ -n "$w" ] && ok "worker spawned ($w)" || { bad "no worker pane"; exit 1; }
+[ "$(tmux show -pqv -t "$w" @state)" = idle ] && ok "worker starts idle" || bad "worker did not start idle"
+listing="$(FZF_PROMPT='agents · all windows> ' "$B/tmux-agents" --list | tr '\0' '\n')"
+case "$listing" in *"worker"*"○ idle"*) ok "list shows worker idle" ;; *) bad "list did not show worker idle" ;; esac
+
+[ "$(printf '%s\n' "$listing" | awk '/^%/ {print $1; exit}')" = "$coord" ] && ok "working sorts before idle" || bad "idle sorted before working"
+tmux set -p -t "$coord" @state done
+listing="$(FZF_PROMPT='agents · all windows> ' "$B/tmux-agents" --list | tr '\0' '\n')"
+[ "$(printf '%s\n' "$listing" | awk '/^%/ {print $1; exit}')" = "$w" ] && ok "idle sorts before done" || bad "done sorted before idle"
+tmux set -p -t "$coord" @state working
+
+# With the worker as the only sub agent, chip focus and counts are deterministic.
+tmux set -pu -t "$coord" @parent
+chip="$("$B/tmux-agents" --chip)"
+case "$chip" in *'#[fg=colour244]○ worker: idle'*) ok "chip focuses idle worker in grey" ;; *) bad "chip idle focus missing" ;; esac
+case "$chip" in *'#[fg=colour244]○ 1'*) ok "chip counts idle worker" ;; *) bad "chip idle count missing" ;; esac
+tmux set -p -t "$coord" @parent %0
+TMUX_PANE=%0 "$B/tmux-spawn" codex --name no-task </dev/null >/dev/null
+no_task="$(pane_of no-task)"
+[ "$(tmux show -pqv -t "$no_task" @state)" = idle ] && ok "ordinary no-task spawn starts idle" || bad "no-task spawn did not start idle"
+TMUX_PANE=%0 "$B/tmux-dismiss" --from main no-task >/dev/null
 
 [ "$(tmux show -pqv -t "$w" @parent)" = "$coord" ] && ok "its parent is the secondary" || bad "parent is $(tmux show -pqv -t "$w" @parent), not $coord"
 case " $(peers_of "$w")" in *" secondary "*) ok "connected to the secondary" ;; *) bad "not connected to the secondary" ;; esac
@@ -63,7 +83,8 @@ case "$cs" in *"build the parser"*) ok "with main's brief" ;; *) bad "the brief 
 
 [ "$(grep '^depth=' "$XDG_STATE_HOME"/tmux-agents/*/sessions/worker | cut -d= -f2)" = 1 ] && ok "its depth counts from main (1)" || bad "recorded depth is not 1"
 
-TMUX_PANE=%0 "$B/tmux-dismiss" --from main worker >/dev/null 2>&1 && bad "main could close the secondary's worker" || ok "main can't close it"
+TMUX_PANE=%0 "$B/tmux-spawn" codex --for secondary --name ancestor-close "cleanup check" </dev/null >/dev/null
+TMUX_PANE=%0 "$B/tmux-dismiss" --from main ancestor-close >/dev/null 2>&1 && ok "main can close its descendant" || bad "main could not close its descendant"
 TMUX_PANE="$coord" "$B/tmux-dismiss" --from secondary worker >/dev/null 2>&1 && ok "the secondary can close it" || bad "the secondary couldn't close it"
 
 tmux new-window -d -c "$tmp" cat; other="$(tmux list-panes -a -F '#{pane_id}' | tail -1)"; tmux set -p -t "$other" @agent stranger

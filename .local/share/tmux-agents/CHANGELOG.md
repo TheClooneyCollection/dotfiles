@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6.0 (2026-10-03)
+
+- **Idle agents.** Agents spawned without a task show grey `○ idle` in the list and chip until a request or progress report starts work.
+- **Closed descendants in this window.** Closed agents follow their recorded ancestry through closed parents to a live ancestor, keeping the whole closed chain discoverable in its window.
+- **Parent progress notices.** A sub agent sending its parent a progress notice stays working at turn end. A new request clears the wait, so unanswered work still shows as needs you.
+- **Close agent subtrees.** Ancestors can dismiss any descendant and its whole subtree, deepest first, keeping each session available to resume. `--keep-children` leaves direct children unowned; `--done` skips subtrees with unfinished work.
+
 ## v1.5.0 (2026-10-03)
 
 - **Window-scoped agent list.** `prefix + a` opens on this window and its descendants. `ctrl-t` switches to all windows; `ctrl-a` still switches between sub agents and every named pane. Returning from a hidden agent keeps the view and scope, and closed agents follow their recorded parent.

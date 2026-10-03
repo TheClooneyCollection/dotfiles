@@ -88,14 +88,46 @@ check 'named all-window view includes other main' has "$tmp/named-all" "$main_b"
 records="$XDG_STATE_HOME/tmux-agents/$(basename "$S")/sessions"; mkdir -p "$records"
 record() { printf 'kind=claude\nid=test-id\ndir=%s\nparent=%s\ndepth=1\nclosed=%s\n' "$tmp" "$2" "$now" >"$records/$1"; }
 record closed-a main-a; record closed-grand hidden-a; record closed-b main-b; record orphan gone
+record closed-parent main-a; record closed-child closed-parent
+record cycle-a cycle-b; record cycle-b cycle-a
+record broken-child missing-record; record empty-parent ''
+record no-session main-a
+sed '/^id=/d' "$records/no-session" >"$tmp/no-session"; mv "$tmp/no-session" "$records/no-session"
 list 'agents · this window> ' "$tmp/closed"
 check 'local closed parent is included' has "$tmp/closed" closed:closed-a
 check 'hidden local parent includes closed child' has "$tmp/closed" closed:closed-grand
 check 'remote closed parent is excluded' lacks "$tmp/closed" closed:closed-b
 check 'missing closed parent is excluded' lacks "$tmp/closed" closed:orphan
+check 'closed child follows closed parent to live grandparent in A' has "$tmp/closed" closed:closed-child
+check 'closed record cycle is excluded without hanging' lacks "$tmp/closed" closed:cycle-a
+check 'missing ancestor record is excluded' lacks "$tmp/closed" closed:broken-child
+check 'empty recorded ancestry is excluded' lacks "$tmp/closed" closed:empty-parent
+check 'local record without session id is excluded' lacks "$tmp/closed" closed:no-session
+tmux switch-client -c "$client" -t "$main_b"
+list 'agents · this window> ' "$tmp/closed-b"
+check 'closed grandchild from A is excluded in B' lacks "$tmp/closed-b" closed:closed-child
+check 'closed record owned by B is included in B' has "$tmp/closed-b" closed:closed-b
+tmux switch-client -c "$client" -t %0
+# A visible ancestor in B owns the record even when its own parent is in A.
+tmux set -p -t "$main_b" @parent %0
+list 'agents · this window> ' "$tmp/closed-visible"
+check 'visible ancestor in B does not inherit parent window A' lacks "$tmp/closed-visible" closed:closed-b
+tmux set -pu -t "$main_b" @parent
+# Hidden live ancestry falls back to its own window when no visible owner exists.
+tmux set -pu -t "$hidden" @parent
+tmux switch-client -c "$client" -t "$hidden"
+list 'agents · this window> ' "$tmp/closed-hidden"
+check 'entirely hidden live ancestor uses its own window' has "$tmp/closed-hidden" closed:closed-grand
+tmux switch-client -c "$client" -t %0
+list 'agents · this window> ' "$tmp/closed-hidden-away"
+check 'hidden fallback window is excluded from A' lacks "$tmp/closed-hidden-away" closed:closed-grand
+tmux set -p -t "$hidden" @parent %0
 list 'agents · all windows> ' "$tmp/closed-all"
 check 'all windows includes remote closed agent' has "$tmp/closed-all" closed:closed-b
 check 'all windows includes orphan record' has "$tmp/closed-all" closed:orphan
+check 'all windows preserves closed record cycles' has "$tmp/closed-all" closed:cycle-a
+check 'all windows includes closed grandchildren' has "$tmp/closed-all" closed:closed-child
+check 'all windows excludes records without session id' lacks "$tmp/closed-all" closed:no-session
 # A cycle and a missing parent do not hang or inherit an unrelated window.
 agent "$other" hidden-b "$perm"; tmux set -p -t "$perm" @parent "$other"
 list 'agents · this window> ' "$tmp/cycle"

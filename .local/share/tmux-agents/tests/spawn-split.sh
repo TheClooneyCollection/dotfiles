@@ -77,7 +77,8 @@ check 'worker starts without a task' test "$(grep -c 'build the parser\|\[reques
 check 'visible worker appears in the agent list' grep -q "$worker .*worker" "$tmp/list"
 check 'visible project comes from the directory' grep -q "$(basename "$tmp")" "$tmp/list"
 CHIP_SPIN=x "$B/tmux-agents" --chip >"$tmp/chip"
-check 'chip includes visible sub agents' grep -q 'x 2' "$tmp/chip"
+check 'chip counts working visible sub agent' grep -q 'x 1' "$tmp/chip"
+check 'chip counts idle visible worker' grep -q '○ 1' "$tmp/chip"
 peers "$worker" worker >"$tmp/peers"
 check 'peers works for the split' grep -q secondary "$tmp/peers"
 TMUX_PANE="$secondary" "$B/tmux-ask" --from secondary worker 'split-message-test' >/dev/null

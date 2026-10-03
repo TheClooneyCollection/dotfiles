@@ -6,6 +6,10 @@ Each file: the context, the decision, why, and what was rejected. Name new ones 
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-03 | [A sub agent with no task yet shows as idle](2026-10-03-idle-state.md) |
+| 2026-10-03 | [An agent can close any of its descendants](2026-10-03-dismiss-descendants.md) |
+| 2026-10-03 | [Closing an agent closes its sub agents too](2026-10-03-dismiss-closes-subtree.md) |
+| 2026-10-03 | [--keep-children leaves the children unowned](2026-10-03-keep-children-unowned.md) |
 | 2026-10-03 | [The agent list shows this window's sub agents](2026-10-03-list-shows-this-window.md) |
 | 2026-10-03 | [Agents that need the user are pinned at the top of the list](2026-10-03-needs-you-pinned.md) |
 | 2026-10-03 | [The status-bar chip stays global](2026-10-03-chip-stays-global.md) |
