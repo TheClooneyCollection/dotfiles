@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.2.1 (2026-10-03)
 
 - **Fix:** a notice to a Claude sub agent waiting on background work (`--waiting`) no longer clears that and flags it as needs you.
 - **Tests:** `tests/needs-you.sh` checks normal workflows don't flag sub agents as needs you, and real cases do.
