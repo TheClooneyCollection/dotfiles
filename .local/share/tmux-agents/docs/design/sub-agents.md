@@ -40,6 +40,7 @@ What `--run` sets up:
 
 - **Marking.** `tmux-ask` sets `@state done` on the sender when it replies to its own `@parent`, and `@state working` on the receiver of any request.
 - **Cleanup.** `tmux-dismiss --done` lists done and exited sub agents, asks y/N on the terminal, and kills them. The switcher runs it with fzf `execute` on `ctrl-d`, then reloads.
+- **Requests reopen work; notices don't.** A request to a `done` sub agent sets it back to `working` and adds it to the sender's `@awaiting`; a notice changes neither. Seen live: a parent broadcast a rule ("no reply needed, don't restart") to finished sub agents as a request. They acknowledged locally without `--reply`, and the next turn end marked them needs you, while the parent kept waiting on them. The skill now says to send information as notices. Guessing from the answer's wording ("standing by") was rejected, since it would also hide real unfinished work.
 
 ## Closing, and telling the parent
 
