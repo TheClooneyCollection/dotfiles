@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.0 (2026-10-03)
+
+- **Visible sub agents.** `tmux-spawn --split <name-or-pane-id> [--right | --below] [--size N%]` opens a detached split, including with `--for`. Hidden windows remain the default. Only the new pane keeps its transcript on exit; reopening a closed split still uses a hidden window.
+- **Tests:** `tests/spawn-split.sh` covers layout, ownership, environment, shared window settings, listing, messages, dismissal and hidden resume.
+
 ## v1.3.2 (2026-10-03)
 
 - **Docs:** the agent chain's middle role is called "secondary" (was "coordinator") in the guide, skills and tests.

@@ -119,7 +119,7 @@ Agents run these for you; each takes `--help`.
 | --- | --- |
 | `tmux-connect` | Name this pane and link it to another |
 | `tmux-ask` | Send a message to a connected agent |
-| `tmux-spawn` | Start a sub agent in a hidden window |
+| `tmux-spawn` | Start a sub agent hidden, or in a visible split with `--split` |
 | `tmux-agents` | The agent list (`prefix + a`) |
 | `tmux-peers`, `tmux-peek` | Show connections; read another pane |
 | `tmux-dismiss`, `tmux-disconnect` | Close a sub agent; unlink panes |
