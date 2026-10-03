@@ -65,6 +65,7 @@ Why pane options:
 
 - A target of `codex` or `claude` means the agent type. It resolves to the single other pane in the caller's window whose `pane_current_command` equals it, or whose name is it or starts with `codex-`/`claude-`.
 - Any other target is an exact name (this window first, then anywhere) or a pane id.
+- **Names never fall through to tmux.** `resolve_pane` passes a string to tmux as a target only when it looks like one (`is_target`: `%12`, `2`, `2.1`, `work:2`, `work:2.1`). tmux matches other strings loosely, by window name too: a message for a closed agent named `blog.clooney.io-1` was delivered to the agent in a window named `blog.clooney.io`, which happened to be connected, so nothing flagged it. Now an unknown name is an error.
 - `codex@WHERE` / `claude@WHERE` looks elsewhere (`where_panes`): a number is a window in the caller's session, `session:window` a window anywhere, anything else a project (the same project `tmux-spawn` uses, exact name first, then by part of it). A project's main agent wins over its sub agents, so "the codex in stone-age" isn't ambiguous just because it has spawned Codex sub agents.
 - `--list` prints every pane the caller could connect to, by window, for requests the shorthand can't express ("the codex fixing the login bug"); the agent picks one or asks.
 - Several matches or none is an error listing the candidates, so the agent asks the user.

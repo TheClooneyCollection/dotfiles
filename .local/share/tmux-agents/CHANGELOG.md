@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- **Fix:** a name that no longer exists (a closed agent's) is now an error. tmux's loose target matching sent a message for one to the agent in a window with a similar name. Only `%12`, `2`, `2.1`, `work:2` and `work:2.1` are taken as tmux targets.
+- The skills tell agents to use the names `tmux-peers` shows now, not remembered ones.
+- **Tests:** `tests/names.sh`.
+
 ## v1.2.1 (2026-10-03)
 
 - **Fix:** a notice to a Claude sub agent waiting on background work (`--waiting`) no longer clears that and flags it as needs you.
