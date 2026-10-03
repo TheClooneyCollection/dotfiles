@@ -31,6 +31,7 @@ Pass `--from <your name>` to every `tmux-ask`, `tmux-peers`, `tmux-peek` and `tm
   MSG
   ```
 - `tmux-ask --from ME --reply <name> <<'MSG' ... MSG`: answer a request.
+- `tmux-ask --from ME --notice <name> <<'MSG' ... MSG`: tell an agent something that needs no answer and no work (a rule change, a heads-up, "carry on"). Use this, not a request, whenever you don't expect a reply.
 - `tmux-ask --from ME --any <name> ...`: message a named agent you aren't connected to. Only when the user asks you to; the reply instructions include `--any`, so follow them as given.
 - `tmux-peek --from ME <name> [lines]`: read the last lines of a peer's screen without interrupting it.
 - `tmux-agent-report --from ME "<what you're doing>"`: report progress as a sub agent (see below).
@@ -63,6 +64,7 @@ MSG
 - **Ending your turn to wait for background work** (a long test run, a build, a background command)? Run `tmux-agent-report --from ME --waiting "full test run"` first. Otherwise a turn that ends without your reply is shown to the user as **needs you**. (Claude's own background Bash commands are noticed automatically; Codex's aren't.) `--waiting` is only for work running in the background, never for waiting on the user.
 - **Need the user** (a question, a choice, missing information)? Ask in your reply and end your turn, without `--waiting`: that is what shows the user **needs you**. Don't use a question tool or form that keeps your turn open (Claude's AskUserQuestion, Codex's request_user_input); the user won't be flagged until the turn ends.
 - A sub agent is shown as `done` once it replies to its parent, and `running` again when it gets a new request. So always finish a task with your reply.
+- **Informing a sub agent isn't asking it.** A request, even one saying "no reply needed", puts a `done` sub agent back to `working` and makes you wait for its reply; when it then answers only locally, it shows the user **needs you**. For information or rules that need no answer, use `--notice`. Send a request only when you want work done and a reply.
 - **Close sub agents you're done with.** Once you have everything you need from one (its reply read, any report files read, no follow-ups planned), close it with `tmux-dismiss --from ME <name>`. Keep it open while you might still ask follow-ups. Close several at once when a batch of parallel work is finished.
 - If `tmux-ask` says a sub agent **was closed by the user**, don't retry, and don't reopen it on your own. If you still need that work, spawn a new sub agent and pass along the report paths the old one gave you.
 - **Reopening.** When the user asks to bring back a closed sub agent ("reopen auth-review", "把 xxx 再开回来"), run `tmux-spawn --resume <name> --from ME`: it comes back in a hidden window with its whole conversation, connected to you, and idle. Then send it the next request with `tmux-ask`. It works for sub agents closed in the last 7 days; a Codex one needs to have finished at least one turn before it was closed.

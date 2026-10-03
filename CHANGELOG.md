@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fix:** agents are told to inform sub agents with `tmux-ask --notice`, not a request. A request saying "no reply needed" put finished sub agents back to working, and they then showed as needs you.
+
 ## v1.2.0 (2026-10-03)
 
 - **Connect across windows.** The `prefix + A` picker switches to every window with `ctrl-a` (remembered), shows each pane's project and what it's doing, and previews it. Agents can connect to another window's agent with `codex@<project>` or `claude@<window>`, or find it with `tmux-connect --list`. The agent on the other side gets a notice (`tmux-ask --notice`) saying who connected.
