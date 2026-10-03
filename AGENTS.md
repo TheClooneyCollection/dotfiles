@@ -8,6 +8,7 @@ Notes for AI agents working on tmux-agents.
 - Before pointing `TMUX=` at a test socket, check the server is up (`tmux -L <testname> has-session`) and the socket path is non-empty and not `*/default`. A failed test server plus an empty `TMUX` falls back to the user's server.
 - Clean up with `tmux -L <testname> kill-server` only. Never run a bare `tmux kill-server`.
 - Fake agents: point `TMUX_SPAWN_BIN` at a directory with stub `claude`/`codex` scripts.
+- `tests/names.sh` checks that names that no longer exist fail instead of resolving to another pane, and that real tmux targets still work. Run it after touching name or target lookup.
 - `tests/needs-you.sh` checks when sub agents are and aren't flagged "needs you". Run it after touching `tmux-agent-report`, `tmux-ask` or the skills' messaging rules; add a case for every new workflow.
 - Target bash 3.2 (macOS): see [environment](docs/design/environment.md#macos-bash-32) and [pitfalls](docs/design/pitfalls-and-testing.md).
 

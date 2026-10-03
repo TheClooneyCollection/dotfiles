@@ -276,10 +276,23 @@ resolve_pane() {
   local id
   id="$(find_pane "$1")"
   if [ -z "$id" ]; then
+    # Only something that looks like a tmux target goes to tmux: %12, 2,
+    # 2.1, work:2, work:2.1. tmux matches anything else loosely, by window
+    # name too, so a closed agent's name like "blog.example.io-1" resolved
+    # to a pane in a window called "blog.example.io": the message went to
+    # whoever was there instead of failing.
+    is_target "$1" || die "no agent named '$1' (it may have been closed or renamed; see tmux-peers)"
     id="$(tmux display-message -p -t "$1" '#{pane_id}' 2>/dev/null)" || id=""
   fi
   [ -n "$id" ] && pane_alive "$id" || die "no pane named or targeted by '$1'"
   printf '%s\n' "$id"
+}
+
+# Succeeds if $1 is a pane id or a numeric tmux target: %12, 2, 2.1,
+# work:2, work:2.1 (session names may hold anything but ':').
+is_target() {
+  local re='^(%[0-9]+|([^:]+:)?[0-9]+(\.[0-9]+)?)$'
+  [[ $1 =~ $re ]]
 }
 
 # Space-separated word lists in pane option $2 of pane $1.
