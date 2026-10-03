@@ -37,7 +37,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 - **Hidden by default.** Each project gets its own session (`agents-api`, `agents-blog`), one window per sub agent. Nothing is added to your layout.
 - **Easy to check.** `prefix + a` opens `tmux-agents`: your sub agents with status, parent, project, what they're doing now, and a preview that refreshes twice a second. Statuses use the chip's colours (red `⚠ permission`, amber `◆ needs you`, `⠿ working`, green `✓ done`, grey `✗ exited`), and the ones that need you sort to the top. The keys are shown in a footer.
   - `enter`: open a hidden agent in a popup, where you can approve prompts. `prefix + d` takes you back to the list, on the same agent. Visible panes are jumped to instead.
-  - `ctrl-o`: jump there full screen; `prefix + L` jumps back. `ctrl-x`: dismiss. `ctrl-d`: close every `done`/`exited` sub agent after a y/N confirmation. `ctrl-a`: toggle between sub agents and every named pane (remembered for next time). `ctrl-r`: refresh. `prefix + d`: close the list (it also leaves an agent's popup, so pressing it twice gets you all the way out).
+  - `ctrl-o`: jump there full screen; `prefix + L` jumps back. `ctrl-x`: dismiss. `ctrl-d`: close every `done`/`exited` sub agent after a y/N confirmation. `ctrl-a`: toggle between sub agents and every named pane (remembered for next time). `ctrl-t`: toggle this window / all windows (starts on this window each time). `ctrl-r`: refresh. `prefix + d`: close the list (it also leaves an agent's popup, so pressing it twice gets you all the way out).
 
 - **Status chip.** While sub agents exist, a line above the status bar shows them:
 
@@ -45,6 +45,8 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
         ⠹ auth-review: reading src/auth.ts  │  api ⠹ 2 ✓ 1 · blog ⠹ 1
   ```
   Centred: one agent in focus, rotating every 4s, then per-project counts (`⠹` working, `✓` done, `⚠` needs permission, `◆` needs you, `✗` exited). An agent waiting for permission (red) or for you (amber) takes over the focus, and blinks after 60s unanswered. **Needs you** means a sub agent ended its turn without replying to its parent and without waiting on anyone or anything (its own sub agents, requests it sent, background work it reported with `tmux-agent-report --waiting`, or, for Claude, Bash commands still running in the background), which is how a Codex sub agent asks you for something (it never gets approval prompts, see [sub agents](design/sub-agents.md#data-not-screen-scraping)). The line disappears when the last sub agent is closed. It animates at `@tmux_agents_chip_fps` frames a second (default 10, set after the `source-file` line to change it); `1` falls back to tmux's once-a-second refresh.
+- **Window scope.** The list uses the window of the client it was opened for. A pane belongs if it or any ancestor in its `@parent` chain is there, including hidden children and grandchildren. Both views follow this scope. Returning from a hidden agent's popup keeps the scope and selected agent; an empty window still offers `ctrl-t` to show all windows. Closed agents follow their recorded parent's current window; all-window scope includes records whose parent is gone.
+- **Pinned attention.** Every sub agent waiting for permission or marked `needs you` appears first, even from another window, longest wait first. Its second line gives the owning window (`session:index`), project and activity. Hidden agents use the first visible ancestor's window; splits use their own, and a missing or entirely hidden ancestry falls back to the agent's own window. It appears only once. The status-bar chip stays global.
 - **Progress reports.** Sub agents report what they're doing with `tmux-agent-report "<a few words>"`; permission waits are reported by hooks. Nothing is read off the screen.
 - **Done.** A sub agent is `done` once it replies to its parent, and `running` again when it gets a new request. So a parent that only wants to tell its sub agents something (a rule change, "carry on") sends a notice (`tmux-ask --notice`), which needs no reply. A request saying "no reply needed" still makes the parent wait for one, and the sub agent shows as needs you once it ends its turn without replying.
 - **Long answers.** Agents reply with a short summary and a path to the full report in a temp dir. `tmux-ask` also saves any message over 60 lines to `$TMPDIR/tmux-agents/<sender>/` and sends the first 15 lines plus the path.
@@ -76,7 +78,7 @@ auth-review:  ...works, then tmux-ask --reply back to the caller
 | `tmux-peek <name> [lines]` | Print the last lines (default 40) of a connected pane. |
 | `tmux-spawn [claude\|codex\|PROFILE] [--name NAME] [task]` | Start a connected sub agent hidden, or visibly with `--split NAME`, and send it the task (or stdin). Taken names get `-2`, `-3`... |
 | `tmux-agent-report [--from ME] "text"` | Report what a sub agent is doing, for the chip. |
-| `tmux-agents` | Browse sub agents, or every named pane with `ctrl-a` (`prefix + a`). |
+| `tmux-agents` | Browse this window's sub agents; `ctrl-a` selects every named pane, `ctrl-t` selects all windows (`prefix + a`). |
 | `tmux-dismiss [--from ME] <name>` | Close an agent's pane and its transcript. With `--from`, only your own sub agents. `--done` closes every done/exited one after a y/N. |
 
 ## How messages flow

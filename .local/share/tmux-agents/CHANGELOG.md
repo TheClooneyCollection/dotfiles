@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.0 (2026-10-03)
+
+- **Window-scoped agent list.** `prefix + a` opens on this window and its descendants. `ctrl-t` switches to all windows; `ctrl-a` still switches between sub agents and every named pane. Returning from a hidden agent keeps the view and scope, and closed agents follow their recorded parent.
+- **Pinned attention.** Sub agents needing permission or user input appear first from every window, longest wait first, with their owning window and project (the first visible ancestor for hidden agents). The chip stays global.
+- **Tests:** `tests/list-scope.sh` covers membership, pinned order, closed records, empty windows and picker navigation.
+
 ## v1.4.0 (2026-10-03)
 
 - **Visible sub agents.** `tmux-spawn --split <name-or-pane-id> [--right | --below] [--size N%]` opens a detached split, including with `--for`. Hidden windows remain the default. Only the new pane keeps its transcript on exit; reopening a closed split still uses a hidden window.
