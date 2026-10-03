@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **Fix:** a notice to a Claude sub agent waiting on background work (`--waiting`) no longer clears that and flags it as needs you.
+- **Tests:** `tests/needs-you.sh` checks normal workflows don't flag sub agents as needs you, and real cases do.
 - **Fix:** agents are told to inform sub agents with `tmux-ask --notice`, not a request. A request saying "no reply needed" put finished sub agents back to working, and they then showed as needs you.
 
 ## v1.2.0 (2026-10-03)
