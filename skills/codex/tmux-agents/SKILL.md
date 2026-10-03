@@ -69,6 +69,8 @@ MSG
 - If `tmux-ask` says a sub agent **was closed by the user**, don't retry, and don't reopen it on your own. If you still need that work, spawn a new sub agent and pass along the report paths the old one gave you.
 - **Reopening.** When the user asks to bring back a closed sub agent ("reopen auth-review", "把 xxx 再开回来"), run `tmux-spawn --resume <name> --from ME`: it comes back in a hidden window with its whole conversation, connected to you, and idle. Then send it the next request with `tmux-ask`. It works for sub agents closed in the last 7 days; a Codex one needs to have finished at least one turn before it was closed.
 - Depth is limited to two levels. If `tmux-spawn` says the depth limit is reached, do the work yourself.
+- **Spawning for another agent.** To give an agent you're connected to a sub agent of its own (e.g. main spawning a worker for its coordinator, so the worker isn't two levels deep), run `tmux-spawn [claude|codex|PROFILE] --from ME --for <owner> --name <name> <<'MSG' <brief> MSG`. It becomes `<owner>`'s sub agent, connected to `<owner>` only, and starts without a task; `<owner>` gets your brief in a request. Don't send the new agent tasks yourself, and don't close it: `<owner>` does both.
+- **When someone spawns a sub agent for you** ("I spawned X for you"): it's your sub agent now. Introduce yourself to it (who you are, your role, how you'll work together) and send it its first task in one `tmux-ask`, then reply to whoever spawned it that you did. Treat it like any sub agent of yours from then on.
 - The user browses sub agents with `prefix + a` (`tmux-agents`).
 
 ## Sending a request
