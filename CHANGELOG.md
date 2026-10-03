@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.3.0 (2026-10-03)
 
 - **`tmux-spawn --for <owner>`.** Spawn a sub agent for an agent you're connected to: it belongs to the owner, is connected only to it, starts without a task, and gets its first task from the owner, whom you brief. Depth counts from you, so main can spawn a worker for its coordinator that can still start sub agents. Tests: `tests/spawn-for.sh`.
 - **Product decisions** are recorded one per file in `docs/decisions/`.
