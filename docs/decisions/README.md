@@ -6,6 +6,9 @@ Each file: the context, the decision, why, and what was rejected. Name new ones 
 
 | Date | Decision |
 | --- | --- |
+| 2026-10-03 | [The agent list shows this window's sub agents](2026-10-03-list-shows-this-window.md) |
+| 2026-10-03 | [Agents that need the user are pinned at the top of the list](2026-10-03-needs-you-pinned.md) |
+| 2026-10-03 | [The status-bar chip stays global](2026-10-03-chip-stays-global.md) |
 | 2026-10-03 | [Sub agents can open in a visible split](2026-10-03-spawn-into-a-split.md) |
 | 2026-10-03 | [A reopened sub agent comes back in a hidden window](2026-10-03-resume-reopens-hidden.md) |
 | 2026-10-03 | [An agent can spawn a sub agent for another agent](2026-10-03-spawn-for-another-agent.md) |

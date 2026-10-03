@@ -16,8 +16,59 @@ Bound to prefix + a.
   ctrl-x  dismiss (close the pane)
   ctrl-d  clean up every done or exited sub agent (asks first)
   ctrl-a  toggle between sub agents and every named pane
+  ctrl-t  toggle between this window and all windows
   ctrl-r  refresh
 EOF
+}
+
+# Both view dimensions travel in FZF_PROMPT during reloads, not global scope.
+list_prompt() {
+  local label=agents scope='this window'
+  [ "$1" != all ] || label=all
+  [ "$2" != all ] || scope='all windows'
+  printf '%s · %s> ' "$label" "$scope"
+}
+parse_prompt() {
+  list_mode=sub list_scope=window
+  case "$1" in all*) list_mode=all ;; esac
+  case "$1" in *'all windows>'*) list_scope=all ;; esac
+}
+
+# Snapshot the parent graph, then grow the set from this window's panes.
+# Missing parents and cycles cannot loop forever. Include unnamed ancestors.
+window_members() {
+  local window
+  if [ -n "${1:-}" ]; then
+    window="$(tmux list-clients -F '#{client_name} #{window_id}' | awk -v c="$1" '$1 == c {print $2; exit}')"
+  else
+    window="$(tmux display-message -p ${TMUX_PANE:+-t "$TMUX_PANE"} '#{window_id}')"
+  fi
+  [ -n "$window" ] || return 0
+  tmux list-panes -a -F '#{pane_id} #{?@parent,#{@parent},-} #{window_id}' | awk -v w="$window" '
+    { parent[$1]=$2; if ($3 == w) member[$1]=1 }
+    END {
+      do { changed=0
+        for (p in parent) if (!member[p] && member[parent[p]]) { member[p]=1; changed=1 }
+      } while (changed)
+      for (p in member) if (member[p]) printf "%s ", p
+    }'
+}
+in_list_window() { case " $list_members " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
+
+# A hidden pane's useful location is its first visible ancestor's window.
+# Splits already have that location. Keep the original if the chain is broken
+# or entirely hidden; guard cycles in stale parent links too.
+attention_window() {
+  tmux list-panes -a -F '#{pane_id}	#{?@parent,#{@parent},-}	#{session_name}	#{session_name}:#{window_index}' | awk -F '\t' \
+    -v pane="$1" -v fallback="$2" -v prefix="$AGENTS_PREFIX-" '
+    { parent[$1]=$2; session[$1]=$3; location[$1]=$4 }
+    END {
+      while ((pane in parent) && !seen[pane]++) {
+        if (index(session[pane], prefix) != 1) { print location[pane]; exit }
+        pane=parent[pane]
+      }
+      print fallback
+    }'
 }
 
 # Sub agents that were closed in the last TMUX_AGENTS_RESUME_DAYS (default
@@ -25,7 +76,7 @@ EOF
 # name, status, parent, "project · closed 5m ago". Newest first; older
 # records are deleted. A record whose name has a live pane isn't closed.
 closed_agents() {
-  local dir now keep f name id at age section n=0 rows="" tab nl=$'\n'
+  local dir now keep f name id at age section parent_pane n=0 rows="" tab nl=$'\n'
   dir="$(sessions_dir)"
   [ -d "$dir" ] || return 0
   tab="$(printf '\t')"
@@ -37,6 +88,10 @@ closed_agents() {
     [ -n "$at" ] || at="$(stat -f %m "$f" 2>/dev/null || stat -c %Y "$f")"
     if [ $((now - at)) -gt "$keep" ]; then rm -f "$f"; continue; fi
     [ -z "$(find_pane "$name")" ] || continue
+    if [ "${list_scope:-all}" != all ]; then
+      parent_pane="$(find_pane "$(record_get "$name" parent)")"
+      [ -n "$parent_pane" ] && in_list_window "$parent_pane" || continue
+    fi
     id="$(record_get "$name" id)"
     [ -n "$id" ] || continue
     age=$((now - at))
@@ -63,16 +118,18 @@ closed_agents() {
 # Closed sub agents that can be reopened (see closed_agents) come last, in
 # their own section, with "closed:NAME" in place of the pane id.
 list_agents() {
-  local all="${1:-}" rows sorted tab
+  local all="${1:-}" rows sorted tab list_scope="${2:-window}" list_members
+  local id name dead perm st parent session activity path location attention rank status pname project since
+  list_members="$(window_members "${3:-}")"
   tab="$(printf '\t')"
-  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@perm_since,1,0}	#{?@state,#{@state},-}	#{?@parent,#{@parent},-}	#{session_name}	#{?@activity,#{@activity},-}	#{pane_current_path}' \
+  rows="$(tmux list-panes -a -F '#{pane_id}	#{@agent}	#{pane_dead}	#{?@perm_since,#{@perm_since},-}	#{?@state,#{@state},-}	#{?@parent,#{@parent},-}	#{session_name}	#{?@activity,#{@activity},-}	#{pane_current_path}	#{session_name}:#{window_index}	#{?@attention_since,#{@attention_since},-}' \
     | awk -F '\t' -v all="$all" '$2 != "" && (all == "all" || $6 != "-") && !seen[$1]++')"
-  # Same states as the chip; those that need the user sort first. A
-  # project's section sorts by its most urgent agent.
-  sorted="$(printf '%s\n' "$rows" | while IFS="$tab" read -r id name dead perm st parent session activity path; do
+  # Same states as the chip. Pinned sub agents sort by waiting time;
+  # other project sections sort by their most urgent scoped agent.
+  sorted="$(printf '%s\n' "$rows" | while IFS="$tab" read -r id name dead perm st parent session activity path location attention; do
       [ -n "$id" ] || continue
       if [ "$dead" = 1 ]; then rank=4 status="✗ exited"
-      elif [ "$perm" = 1 ]; then rank=0 status="⚠ permission"
+      elif [ "$perm" != - ]; then rank=0 status="⚠ permission"
       elif [ "$st" = needs_you ]; then rank=1 status="◆ needs you"
       elif [ "$st" = done ]; then rank=3 status="✓ done"
       else rank=2 status="⠿ working"
@@ -84,12 +141,23 @@ list_agents() {
       if is_agents_session "$session"; then project="${session#"$AGENTS_PREFIX"-}"
       else project="$(agents_session_for "$path")"; project="${project#"$AGENTS_PREFIX"-}"
       fi
+      if [ "$parent" != - ] && [ "$dead" != 1 ] && { [ "$perm" != - ] || [ "$st" = needs_you ]; }; then
+        since="$attention"; [ "$perm" = - ] || since="$perm"
+        [[ $since =~ ^[0-9]+$ ]] || since="$(date +%s)"
+        rank=$((since - 20000000000))
+        [ "$activity" != - ] || activity='no report yet'
+        location="$(attention_window "$id" "$location")"
+        activity="$location · $project · $activity"
+        project='needs you'
+      elif [ "$list_scope" != all ] && ! in_list_window "$id"; then
+        continue
+      fi
       printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$rank" "$project" "$id" "$name" "$status" "${pname:--}" "$activity"
     done | { cat; closed_agents; } | awk -F '\t' '{ r[NR] = $0; if (!($2 in best) || $1 < best[$2]) best[$2] = $1; p[NR] = $2 }
       END { for (i = 1; i <= NR; i++) print best[p[i]] "\t" r[i] }' \
     | sort -t "$tab" -k1,1n -k3,3 -k2,2n -s | cut -f3-)"
   # Align NAME STATUS PARENT, then add each entry's id, section and activity.
-  { printf 'NAME\tSTATUS\tPARENT\n'; [ -z "$sorted" ] || printf '%s\n' "$sorted" | cut -f3-5; } \
+  { if [ -z "$sorted" ] && [ "$list_scope" != all ]; then printf 'NAME\tSTATUS\tPARENT (ctrl-t: all windows)\n'; else printf 'NAME\tSTATUS\tPARENT\n'; fi; [ -z "$sorted" ] || printf '%s\n' "$sorted" | cut -f3-5; } \
     | column -t -s "$tab" \
     | META="$(printf '%s\n' "$sorted" | cut -f1,2,6 | tr '\n' '\036')" awk '
       BEGIN { n = split(ENVIRON["META"], m, "\036")
@@ -288,7 +356,7 @@ case "${1:-}" in
     fi
     exit 0
     ;;
-  --list) require_tmux; { [ "${FZF_PROMPT:-}" = "all> " ] && list_agents all || list_agents; } | tr '\036' '\0'; exit 0 ;;
+  --list) require_tmux; parse_prompt "${FZF_PROMPT:-}"; list_agents "$list_mode" "$list_scope" "${TMUX_AGENTS_LIST_CLIENT:-}" | tr '\036' '\0'; exit 0 ;;
   # Popup body: a nested client on the hidden session, showing pane $2.
   # Detaching (prefix + d) brings back the list, on the same agent.
   --view)
@@ -298,7 +366,7 @@ case "${1:-}" in
     sock="${TMUX%%,*}"
     sess="$(tmux display-message -p -t "$2" '#{session_name}')"
     ( unset TMUX; tmux -S "$sock" attach-session -t "=$sess" \; select-window -t "$win" )
-    exec "$here/tmux-agents" --client "${3:-}" --select "$name"
+    exec "$here/tmux-agents" --client "${3:-}" --select "$name" --scope "${4:-window}" --mode "${5:-sub}"
     ;;
   # Started by fzf on "start": keep the preview live by asking fzf (on its
   # --listen port) to refresh it. Ends when fzf exits and the port closes.
@@ -334,12 +402,17 @@ case "${1:-}" in
     if [ -n "$at" ] && [ $(( $(date +%s) - at )) -le 2 ]; then echo abort; else echo "put(d)"; fi
     exit 0
     ;;
-  # fzf ctrl-a: flip between sub agents and every named pane, remember the
-  # choice for next time, and tell fzf what to do.
-  --toggle)
-    if [ "${2:-}" = "all> " ]; then mode=sub prompt="agents> "; else mode=all prompt="all> "; fi
-    tmux set-option -g @tmux_agents_list_mode "$mode"
-    printf "change-prompt(%s)+reload('%s' --list)\n" "$prompt" "$here/tmux-agents"
+  # ctrl-a remembers the named/sub view; ctrl-t changes only this picker
+  # scope. Both preserve the other dimension in the prompt.
+  --toggle|--toggle-scope)
+    parse_prompt "${2:-}"
+    if [ "$1" = --toggle ]; then
+      if [ "$list_mode" = all ]; then list_mode=sub; else list_mode=all; fi
+      tmux set-option -g @tmux_agents_list_mode "$list_mode"
+    else
+      if [ "$list_scope" = all ]; then list_scope=window; else list_scope=all; fi
+    fi
+    printf "change-prompt(%s)+reload('%s' --list)\n" "$(list_prompt "$list_mode" "$list_scope")" "$here/tmux-agents"
     exit 0
     ;;
   # status-right: "active subagents: N", plus how many rang for attention.
@@ -367,11 +440,13 @@ case "${1:-}" in
     ;;
 esac
 
-client="" select=""
+client="" select="" scope=window mode=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --client) client="${2:-}"; shift 2 ;;
     --select) select="${2:-}"; shift 2 ;;
+    --scope) scope="${2:-window}"; shift 2 ;;
+    --mode) mode="${2:-sub}"; shift 2 ;;
     *) shift ;;
   esac
 done
@@ -380,12 +455,13 @@ require_tmux
 command -v fzf >/dev/null 2>&1 || die "fzf is required"
 
 self="$here/tmux-agents"
-# Open in the view used last time (ctrl-a), with the cursor on --select.
-if [ "$(tmux show-options -gqv @tmux_agents_list_mode)" = all ]; then
-  prompt="all> " rows="$(list_agents all)"
-else
-  prompt="agents> " rows="$(list_agents)"
-fi
+# Scope starts local on every fresh open; popup return passes both dimensions.
+export TMUX_AGENTS_LIST_CLIENT="$client"
+[ -n "$mode" ] || mode="$(tmux show-options -gqv @tmux_agents_list_mode)"
+[ "$mode" = all ] || mode=sub
+[ "$scope" = all ] || scope=window
+prompt="$(list_prompt "$mode" "$scope")"
+rows="$(list_agents "$mode" "$scope" "$client")"
 # The tmux prefix (C-b -> ctrl-b) arms "d" to close the list: prefix + d.
 prefix_keys=()
 case "$(tmux show-options -gv prefix 2>/dev/null)" in
@@ -402,16 +478,19 @@ out="$(printf '%s' "$rows" | tr '\036' '\0' | fzf --read0 --ansi --reverse --no-
   ${prefix_keys[@]+"${prefix_keys[@]}"} \
   --with-shell 'bash -c' \
   --listen --bind "start:execute-silent('$self' --preview-loop >/dev/null 2>&1 &)" \
-  --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^r refresh · prefix+d close')" --footer-border=rounded \
-  --expect=ctrl-o \
+  --footer="$(printf 'enter open · ^o jump (prefix+L back) · ^x dismiss\n^d clean done · ^a all/sub · ^t this/all windows · ^r refresh · prefix+d close')" --footer-border=rounded \
   --preview "case {1} in closed:*) '$self' --closed-info {1} ;; *) tmux capture-pane -ep -J -t {1} -S -300 ;; esac" --preview-window='right,55%,follow' \
   --bind "ctrl-x:execute-silent('$self' --dismiss {1})+reload('$self' --list)" \
   --bind "ctrl-r:reload('$self' --list)" \
   --bind "ctrl-d:execute('$here/tmux-dismiss' --done)+reload('$self' --list)" \
+  --bind "enter:transform:printf 'print(enter)+print(%s)+accept' \"\$FZF_PROMPT\"" \
+  --bind "ctrl-o:transform:printf 'print(ctrl-o)+print(%s)+accept' \"\$FZF_PROMPT\"" \
+  --bind "ctrl-t:transform:'$self' --toggle-scope \"\$FZF_PROMPT\"" \
   --bind "ctrl-a:transform:'$self' --toggle \"\$FZF_PROMPT\"")" || exit 0
 
 key="$(printf '%s\n' "$out" | sed -n 1p)"
-pane="$(printf '%s\n' "$out" | sed -n 2p | awk '{ print $1 }')"
+parse_prompt "$(printf '%s\n' "$out" | sed -n 2p)"
+pane="$(printf '%s\n' "$out" | sed -n 3p | awk '{ print $1 }')"
 [ -n "$pane" ] || exit 0
 
 # A closed sub agent: reopen it with its conversation, connected to its
@@ -433,7 +512,7 @@ session="$(tmux display-message -p -t "$pane" '#{session_name}')"
 
 if [ "$key" != "ctrl-o" ] && is_agents_session "$session"; then
   # This script runs in a popup itself, so open the viewer once it closes.
-  tmux run-shell -b "sleep 0.2; tmux display-popup -c '$client' -E -w 90% -h 90% -T ' $name  (prefix + d: back to the list) ' '$here/tmux-agents --view $pane $client'"
+  tmux run-shell -b "sleep 0.2; tmux display-popup -c '$client' -E -w 90% -h 90% -T ' $name  (prefix + d: back to the list) ' '$here/tmux-agents --view $pane $client $list_scope $list_mode'"
 else
   tmux switch-client -c "$client" -t "$pane"
   tmux display-message -c "$client" -d 4000 "jumped to $name · prefix + L to go back"

@@ -90,13 +90,16 @@ export SPLIT_PICK="$worker" SPLIT_UI_LOG="$tmp/ui.log" SPLIT_REAL_TMUX="$(comman
 cat >"$tmp/ui/fzf" <<'STUB'
 #!/bin/sh
 cat >/dev/null
-printf '\n%s worker\n' "$SPLIT_PICK"
+printf 'enter\nagents · this window> \n%s worker\n' "$SPLIT_PICK"
 STUB
 cat >"$tmp/ui/tmux" <<'STUB'
 #!/bin/sh
 case "$1" in
+  list-clients) printf 'test-client %s\n' "$("$SPLIT_REAL_TMUX" display-message -p -t %0 '#{window_id}')"; exit 0 ;;
   switch-client) echo "jump $*" >>"$SPLIT_UI_LOG"; exit 0 ;;
-  display-message) if [ "${2:-}" = -c ]; then exit 0; fi ;;
+  display-message)
+    if [ "${2:-}" = -c ]; then exit 0; fi
+    if [ "${3:-}" = -c ]; then exec "$SPLIT_REAL_TMUX" display-message -p -t %0 '#{window_id}'; fi ;;
   run-shell|display-popup) echo "popup $*" >>"$SPLIT_UI_LOG"; exit 1 ;;
 esac
 exec "$SPLIT_REAL_TMUX" "$@"
