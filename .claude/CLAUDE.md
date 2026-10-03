@@ -29,4 +29,5 @@ Messages:
 - Everything goes through `tmux-ask`. Long reports go in a file; the message is a short summary plus the path.
 - The user reads secondary → main agent messages directly, so the main agent does not restate them; it surfaces a decision as a one-line summary plus options.
 - Send FYIs as notices (`tmux-ask --notice`), not requests: a request makes the receiver work again and the sender wait for a reply, even if it says "no reply needed". A decision request states the default and what is blocked meanwhile.
+- Reply as soon as a request's main work is done (e.g. the release is out). Don't hold the reply for follow-ups such as a blog entry going live or a deploy; send those later as notices. For a request with several parts, send a notice as each part lands.
 - An instruction the user gives directly to any agent wins; that agent tells the others what changed.
