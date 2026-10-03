@@ -58,6 +58,12 @@ ask %0 kid "do x"; turn_start "[request from boss to kid via tmux-ask] do x"
 ask %1 --reply boss "done"; turn_end
 expect "replies to its parent, then ends its turn" done
 
+reset
+ask %0 kid "do z"; turn_start "[request from boss to kid via tmux-ask] do z"
+ask %1 --reply boss "delivered abc123"
+"$B/tmux-agent-report" --pane %1 "abc123 delivered, all green" >/dev/null; turn_end
+expect "replies, then reports progress, then ends its turn" done
+
 turn_start "$(printf '[notice from boss to kid via tmux-ask]\nfyi')"; turn_end
 expect "done, then gets a notice" done
 [ -z "$(st %0 @awaiting)" ] || { echo "FAIL  a notice made boss wait on kid"; fail=1; }

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fix:** a sub agent that reports progress after replying to its parent stays done. The report set it back to working, so the turn end marked it needs you.
+
 ## v1.3.0 (2026-10-03)
 
 - **`tmux-spawn --for <owner>`.** Spawn a sub agent for an agent you're connected to: it belongs to the owner, is connected only to it, starts without a task, and gets its first task from the owner, whom you brief. Depth counts from you, so main can spawn a worker for its coordinator that can still start sub agents. Tests: `tests/spawn-for.sh`.

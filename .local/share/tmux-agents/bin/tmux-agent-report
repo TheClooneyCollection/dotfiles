@@ -186,7 +186,9 @@ else
   tmux set-option -pu -t "$pane" @waiting_on 2>/dev/null || true
 fi
 tmux set-option -p -t "$pane" @activity "$text"
-tmux set-option -p -t "$pane" @state working
+# A report after replying ("delivered abc123") is a summary, not new work:
+# a done agent stays done. Only a new request (tmux-ask) makes it working.
+[ "$(tmux show-options -pqv -t "$pane" @state)" = done ] || tmux set-option -p -t "$pane" @state working
 tmux set-option -pu -t "$pane" @perm_since 2>/dev/null || true
 tmux set-option -pu -t "$pane" @attention_since 2>/dev/null || true
 echo "reported: $text"
