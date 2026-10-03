@@ -98,6 +98,7 @@ Replies use `[reply from X to Y ...]` and `[end of reply from X to Y]` the same 
 - Text **outside** the markers in the same prompt was typed by the **user**: a draft of theirs got submitted together with the message. Treat it as the user's own instruction, with the user's authority over X's request. If it looks unfinished, ask the user what they meant.
 
 - `[request from X to Y via tmux-ask]`: you are Y. Do the work, then always answer with `tmux-ask --from Y --reply X` (the message spells out the exact command), even if you could not do it (say why). Put the actual answer in the reply; X cannot see your screen.
+- **Reply as soon as the main work is done** (e.g. the release is out). Don't hold the reply for follow-ups such as a deploy or a page going live; send those later as notices (`--notice`). For a request with several parts, send a notice as each part lands.
 - **Long answers go in a file.** If the answer is more than about 20 lines, write the full report to a file and reply with a 3 to 5 line high-level summary plus the path. The receiver reads the file itself.
   - Claude: your session scratchpad directory (it looks like `/private/tmp/claude-501/<project>/<session>/scratchpad/`).
   - Others: `${TMPDIR:-/tmp}/tmux-agents/<your name>/` (`mkdir -p` it).
