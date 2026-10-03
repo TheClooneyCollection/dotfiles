@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+# tmux-chain — start an agent chain in a new project window.
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: tmux-chain [dir] [--save] [--target session[:index]] [--name name]
+
+Start a chain in a new tmux window (dir defaults to $PWD).
+Print the new pane ID to stdout. Without --target, run inside tmux and
+focus the new window. With --target, leave the new window detached.
+
+Options:
+  --save          add the canonical directory to the projects file
+  --target        destination session, optionally with a window index
+  --name          window name (default: directory basename)
+  -h, --help      show this help
+  --              treat remaining arguments as the directory
+
+Environment:
+  TMUX_MAIN_SEQUENCE_AGENT   whole shell command (default: claude "start the chain")
+  TMUX_MAIN_SEQUENCE_CONFIG  projects file (default: ~/.config/tmux-main-sequence/projects)
+  TMUX_MAIN_SEQUENCE_SOCKET  named tmux socket, passed with -L
+
+Saved paths use ~ for HOME. Existing paths are resolved relative to the
+current directory for deduplication; blank lines and comments are ignored.
+EOF
+}
+
+fail() { printf 'tmux-chain: %s\n' "$*" >&2; exit 1; }
+invalid() { printf 'tmux-chain: %s\n' "$*" >&2; usage >&2; exit 2; }
+
+DIR=$PWD
+HAVE_DIR=0
+SAVE=0
+TARGET=
+NAME=
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help) usage; exit 0 ;;
+    --save) SAVE=1; shift ;;
+    --target|--name)
+      [[ $# -ge 2 && -n $2 && $2 != --* ]] || invalid "$1 requires a value"
+      case "$1" in
+        --target) TARGET=$2 ;;
+        --name) NAME=$2 ;;
+      esac
+      shift 2
+      ;;
+    --) shift; break ;;
+    -*) invalid "unknown option: $1" ;;
+    *)
+      [[ $HAVE_DIR -eq 0 ]] || invalid "only one directory is allowed"
+      DIR=$1; HAVE_DIR=1; shift
+      ;;
+  esac
+done
+for ARG in "$@"; do
+  [[ $HAVE_DIR -eq 0 ]] || invalid "only one directory is allowed"
+  DIR=$ARG; HAVE_DIR=1
+done
+
+# Expand only the supported home shorthand; never evaluate config contents.
+canonical_dir() {
+  local path=$1
+  case "$path" in
+    '~') path=$HOME ;;
+    '~/'*) path=$HOME/${path#\~/} ;;
+  esac
+  (CDPATH= cd -- "$path" 2>/dev/null && pwd -P)
+}
+
+[[ -n $DIR ]] || fail "directory must not be empty"
+DIR=$(canonical_dir "$DIR") || fail "directory does not exist or is inaccessible"
+[[ $DIR != *$'\n'* ]] || fail "directory names containing newlines are not supported"
+[[ -n $TARGET || -n ${TMUX:-} ]] || fail "run inside tmux or specify --target session[:index]"
+
+TMUX_CMD=(tmux)
+[[ -z ${TMUX_MAIN_SEQUENCE_SOCKET:-} ]] || TMUX_CMD+=(-L "$TMUX_MAIN_SEQUENCE_SOCKET")
+WINDOW_ARGS=(-P -F '#{pane_id}')
+if [[ -z $TARGET ]]; then
+  TARGET=$("${TMUX_CMD[@]}" display-message -p '#{session_id}')
+else
+  WINDOW_ARGS+=(-d)
+fi
+[[ $TARGET == *:* ]] || TARGET=$TARGET:
+[[ -n $NAME ]] || NAME=${DIR##*/}
+[[ -n $NAME ]] || NAME=/
+AGENT=${TMUX_MAIN_SEQUENCE_AGENT:-'claude "start the chain"'}
+
+if [[ $SAVE -eq 1 ]]; then
+  CONFIG=${TMUX_MAIN_SEQUENCE_CONFIG:-$HOME/.config/tmux-main-sequence/projects}
+  mkdir -p -- "$(dirname -- "$CONFIG")"
+  touch -- "$CONFIG"
+  FOUND=0
+  while IFS= read -r ENTRY || [[ -n $ENTRY ]]; do
+    ENTRY="${ENTRY#"${ENTRY%%[![:space:]]*}"}"
+    ENTRY="${ENTRY%"${ENTRY##*[![:space:]]}"}"
+    [[ $ENTRY =~ ^[[:space:]]*$ || $ENTRY =~ ^[[:space:]]*# ]] && continue
+    EXISTING=$(canonical_dir "$ENTRY") || continue
+    if [[ $EXISTING == "$DIR" ]]; then FOUND=1; break; fi
+  done < "$CONFIG"
+  if [[ $FOUND -eq 0 ]]; then
+    SAVED=$DIR
+    HOME_DIR=$(canonical_dir "$HOME")
+    case "$SAVED" in
+      "$HOME_DIR") SAVED='~' ;;
+      "$HOME_DIR"/*) SAVED="~/${SAVED#"$HOME_DIR"/}" ;;
+    esac
+    # Keep a final unterminated entry separate from the appended path.
+    if [[ -s $CONFIG && -n $(tail -c 1 -- "$CONFIG") ]]; then printf '\n' >> "$CONFIG"; fi
+    printf '%s\n' "$SAVED" >> "$CONFIG"
+  fi
+fi
+
+PANE=$("${TMUX_CMD[@]}" new-window "${WINDOW_ARGS[@]}" -t "$TARGET" -n "$NAME" -c "$DIR")
+"${TMUX_CMD[@]}" set-option -w -t "$PANE" automatic-rename off
+"${TMUX_CMD[@]}" set-option -w -t "$PANE" allow-rename off
+"${TMUX_CMD[@]}" send-keys -t "$PANE" -l -- "$AGENT"
+"${TMUX_CMD[@]}" send-keys -t "$PANE" Enter
+printf '%s\n' "$PANE"

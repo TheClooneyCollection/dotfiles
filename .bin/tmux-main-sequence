@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+
+# tmux-main-sequence — join the standard project session group
+#
+# Usage: tmux-main-sequence [--add-missing] [--no-attach]
+#
+# Windows: 0 dashboard (shell), 1 ~, 2 blog, then configured projects.
+# Each client joins through its own main-N session, with independent window selection.
+# Existing group windows are unchanged unless --add-missing is given.
+# Per-client sessions are destroyed on detach; the base session stays available.
+# Config: ~/.config/tmux-main-sequence/projects, one directory per line.
+# Blank lines and full-line # comments are ignored; spaces in paths are supported.
+# Example config (local and untracked):
+#   ~/Source/Projects/tmux-agents
+#   ~/Source/Projects/projects-stone-age
+#   ~/Source/Projects/job-hunting/career-ops
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: tmux-main-sequence [--add-missing] [--no-attach]
+
+Create or join the main session group through a separate main-N client session.
+Client sessions share windows but select them independently and vanish on detach.
+An existing group or a base session named main is reused.
+  --add-missing  Add missing window names with fresh agents, then join.
+                Use the intended index if free; otherwise append at the end.
+  --no-attach    Skip joining: do not create a per-client session or attach.
+  -h, --help    Show this help.
+
+Environment:
+  TMUX_MAIN_SEQUENCE_SESSION  Group/base name (default: main; clients: main-N).
+  TMUX_MAIN_SEQUENCE_CONFIG   Project list (default: ~/.config/tmux-main-sequence/projects).
+  TMUX_MAIN_SEQUENCE_AGENT    Shell command (default: claude "start the chain").
+  TMUX_MAIN_SEQUENCE_SOCKET   Isolated tmux socket name (tmux -L).
+
+Project list: one directory per line, with ~ expansion, blank lines and
+full-line # comments. Missing directories are warned about and skipped.
+EOF
+}
+
+add_missing=false
+attach=true
+for arg in "$@"; do
+  case "$arg" in
+    --add-missing) add_missing=true ;;
+    --no-attach) attach=false ;;
+    -h|--help) usage; exit 0 ;;
+    *) printf 'tmux-main-sequence: unknown argument: %s\n' "$arg" >&2
+       usage >&2; exit 2 ;;
+  esac
+done
+
+session=${TMUX_MAIN_SEQUENCE_SESSION:-main}
+config=${TMUX_MAIN_SEQUENCE_CONFIG:-$HOME/.config/tmux-main-sequence/projects}
+script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+tmux_cmd=(tmux)
+if [[ -n ${TMUX_MAIN_SEQUENCE_SOCKET:-} ]]; then
+  tmux_cmd+=(-L "$TMUX_MAIN_SEQUENCE_SOCKET")
+fi
+
+attach_session() {
+  local number=1 client_id
+  if "$attach"; then
+    while "${tmux_cmd[@]}" has-session -t "=$session-$number" 2>/dev/null; do
+      number=$((number + 1))
+    done
+    client_id=$("${tmux_cmd[@]}" new-session -d -t "$session_id" -s "$session-$number" -P -F '#{session_id}')
+    if "$fresh"; then
+      "${tmux_cmd[@]}" select-window -t "$client_id:1"
+    fi
+    # Queue the option and attach together: a standalone set-option would
+    # immediately destroy this still-unattached session before we could join it.
+    if [[ -n ${TMUX:-} ]]; then
+      "${tmux_cmd[@]}" set-option -t "$client_id" destroy-unattached on \; switch-client -t "$client_id"
+    else
+      "${tmux_cmd[@]}" set-option -t "$client_id" destroy-unattached on \; attach-session -t "$client_id"
+    fi
+  fi
+}
+
+fresh=false
+session_id=
+base_id=
+# A group may survive after its originally named session has been removed.
+while IFS='|' read -r id name group; do
+  if [[ $group == "$session" ]]; then
+    session_id=$id
+    break
+  fi
+  if [[ $name == "$session" ]]; then base_id=$id; fi
+done < <("${tmux_cmd[@]}" list-sessions -F '#{session_id}|#{session_name}|#{session_group}' 2>/dev/null || true)
+session_id=${session_id:-$base_id}
+if [[ -n $session_id ]]; then
+  if ! "$add_missing"; then
+    attach_session
+    exit 0
+  fi
+else
+  fresh=true
+  session_id=$("${tmux_cmd[@]}" new-session -d -s "$session" -n dashboard -c "$HOME" -P -F '#{session_id}')
+  "${tmux_cmd[@]}" set-option -t "$session_id" base-index 0
+  "${tmux_cmd[@]}" set-option -t "$session_id" renumber-windows off
+  initial_index=$("${tmux_cmd[@]}" display-message -p -t "$session_id:" '#{window_index}')
+  if [[ $initial_index != 0 ]]; then
+    "${tmux_cmd[@]}" move-window -s "$session_id:$initial_index" -t "$session_id:0"
+  fi
+  "${tmux_cmd[@]}" set-window-option -t "$session_id:0" automatic-rename off
+  "${tmux_cmd[@]}" set-window-option -t "$session_id:0" allow-rename off
+fi
+
+add_window() {
+  local index=$1 name=$2 dir=$3 start_agent=$4 existing max=-1 occupied=false pane
+  while IFS= read -r existing; do
+    [[ $existing != "$name" ]] || return 0
+  done < <("${tmux_cmd[@]}" list-windows -t "$session_id" -F '#{window_name}')
+  if [[ ! -d $dir ]]; then
+    printf 'tmux-main-sequence: skipping missing directory: %s\n' "$dir" >&2
+    return 0
+  fi
+  while IFS= read -r existing; do
+    if (( existing == index )); then occupied=true; fi
+    if (( existing > max )); then max=$existing; fi
+  done < <("${tmux_cmd[@]}" list-windows -t "$session_id" -F '#{window_index}')
+  if "$occupied"; then
+    printf 'tmux-main-sequence: index %s occupied; appending %s at %s\n' "$index" "$name" "$((max + 1))" >&2
+    index=$((max + 1))
+  fi
+  if "$start_agent"; then
+    "$script_dir/tmux-chain" "$dir" --target "$session_id:$index" --name "$name" >/dev/null
+  else
+    pane=$("${tmux_cmd[@]}" new-window -d -t "$session_id:$index" -n "$name" -c "$dir" -P -F '#{pane_id}')
+    "${tmux_cmd[@]}" set-window-option -t "$pane" automatic-rename off
+    "${tmux_cmd[@]}" set-window-option -t "$pane" allow-rename off
+  fi
+}
+
+add_window 0 dashboard "$HOME" false
+add_window 1 '~' "$HOME" true
+add_window 2 blog "$HOME/Source/Projects/subspace-collection/blog.clooney.io" true
+index=3
+if [[ -f $config ]]; then
+  while IFS= read -r dir || [[ -n $dir ]]; do
+    # Trim surrounding whitespace, preserving spaces inside directory names.
+    dir="${dir#"${dir%%[![:space:]]*}"}"
+    dir="${dir%"${dir##*[![:space:]]}"}"
+    case "$dir" in
+      ''|'#'*) continue ;;
+      '~') dir=$HOME ;;
+      '~/'*) dir="$HOME/${dir:2}" ;;
+    esac
+    while [[ $dir != / && $dir == */ ]]; do dir=${dir%/}; done
+    add_window "$index" "$(basename "$dir")" "$dir" true
+    index=$((index + 1))
+  done < "$config"
+fi
+if "$fresh"; then
+  "${tmux_cmd[@]}" select-window -t "$session_id:1"
+fi
+attach_session
