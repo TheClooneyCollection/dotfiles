@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Docs:** the agent chain's middle role is called "secondary" (was "coordinator") in the guide, skills and tests.
+
 ## v1.3.1 (2026-10-03)
 
 - **Fix:** a sub agent that reports progress after replying to its parent stays done. The report set it back to working, so the turn end marked it needs you.
