@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.1 (2026-10-03)
+
+- The skills tell agents to reply as soon as a request's main work is done and send follow-ups (a deploy, a page going live) as notices.
+
 ## v1.6.0 (2026-10-03)
 
 - **Idle agents.** Agents spawned without a task show grey `○ idle` in the list and chip until a request or progress report starts work.
