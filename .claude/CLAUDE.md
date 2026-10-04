@@ -32,3 +32,12 @@ Messages:
 - Send FYIs as notices (`tmux-ask --notice`), not requests: a request makes the receiver work again and the sender wait for a reply, even if it says "no reply needed". A decision request states the default and what is blocked meanwhile.
 - Reply as soon as a request's main work is done (e.g. the release is out). Don't hold the reply for follow-ups such as a blog entry going live or a deploy; send those later as notices. For a request with several parts, send a notice as each part lands.
 - An instruction the user gives directly to any agent wins; that agent tells the others what changed.
+
+Cross-project work:
+
+- Each project's secondary is its interface to other projects. Cross-project requests go secondary ⇄ secondary, never straight to another project's main or worker. If that project has no chain, talk to its main or current agent.
+- Requests are self-contained (goal, paths, constraints, deliverable); the receiving project decides how and who does it.
+- Agents only edit their own project's files. Changes elsewhere are requested from that project's agents (like the blog timeline entries).
+- User decisions go back up the requesting chain to its main, the one the user is talking to. Ask the other project's main only about decisions purely about its own project.
+- The usual message rules apply: request vs notice, reply as soon as the main work is done, long reports in files.
+- Main reaches other projects through its secondary; `tmux-ask --any` only when the user asks.
