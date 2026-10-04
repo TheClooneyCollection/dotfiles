@@ -11,11 +11,12 @@ Notes for AI agents working in this dotfiles repo.
 - Do not imply semver meaning in release numbers. They are chronological snapshot labels for this dotfiles repo.
 - Keep docs concise and practical. Add local workflow notes where future agents are likely to make the same mistake.
 
-## tmux-agents sync
+## tmux-agents install
 
-- `.local/share/tmux-agents` is a squashed subtree of https://github.com/TheClooneyCollection/tmux-agents.git (`main`). Changes may be made here or upstream; sync them both ways by default. When a task says not to release or sync, don't, and say in the reply what's left unsynced.
-- Run subtree commands from the dotfiles repo root (`~`).
-- Dotfiles → upstream: `git subtree push --prefix=.local/share/tmux-agents https://github.com/TheClooneyCollection/tmux-agents.git main`.
-- Upstream → dotfiles: `GIT_LFS_SKIP_SMUDGE=1 git subtree pull --prefix=.local/share/tmux-agents https://github.com/TheClooneyCollection/tmux-agents.git main --squash`. Documentation images may stay as LFS pointers.
-- `git subtree pull` needs a clean working tree. Keep the user's local commits and uncommitted files: never stash, reset or commit them for the sync; if the tree is dirty, pull in a temporary worktree and fast-forward `main`, then remove the worktree. After merging, check that the subtree (and `bin/`) matches upstream and that the user's local commits and files are still there.
+- tmux-agents is developed in `~/Source/Projects/tmux-agents`. `~/.local/share/tmux-agents` is the installed copy: a clean clone of https://github.com/TheClooneyCollection/tmux-agents checked out at the latest release tag (detached HEAD). It is not tracked by dotfiles; never edit or commit in it.
+- After each tmux-agents release, the agent that released it updates the installed copy (these `git -C` commands are the user's explicit exception to the no-`git -C` rule):
+  1. `git -C ~/.local/share/tmux-agents fetch --tags`
+  2. `git -C ~/.local/share/tmux-agents checkout vX.Y.Z`
+  3. `tmux-agents --chip-layout on`
+- Roll back by checking out the previous tag the same way.
 - After each tmux-agents release, add a timeline entry for it on the blog (blog.clooney.io), using the tagged commit's time.

@@ -152,10 +152,3 @@ __pycache__/
 !.config/yazi
 .config/yazi/*
 !.config/yazi/keymap.toml
-
-# Vendored tmux-agents subtree
-!/.local
-/.local/*
-!/.local/share
-/.local/share/*
-!/.local/share/tmux-agents/
