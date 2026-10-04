@@ -10,7 +10,7 @@
 
 When the user asks to "start the chain" (or similar), set up three agents that work together through `tmux-agents`. Names follow `<kind>-<project>-<role>`, e.g. `claude-~-main`, `claude-~-secondary`, `codex-~-worker` (`claude-stone-age-main` in a project). From tmux-agents v1.8.0, `tmux-spawn --name <role>` and `tmux-rename` build them from the short role name. Use the names `tmux-spawn` and `tmux-rename` print, never hard-coded ones.
 
-- **main agent** (the agent the user started, usually Claude): talks to the user and the other agents. Clarifies intent, turns it into self-contained tasks and relays user decisions. Does not investigate or implement.
+- **main agent** (the agent the user started, usually Claude): the agent that receives "start the chain" is the main agent. Its first step is to name itself main (step 1: `tmux-rename` to `<kind>-<project>-main`), then it spawns the secondary and worker. It talks to the user and the other agents. Clarifies intent, turns it into self-contained tasks and relays user decisions. Does not investigate or implement.
 - **secondary** (Claude): coordinates the worker and owns the main checkout. Merges worker commits, runs project steps (importers, backups, server relaunches, tests) and records decisions in docs. Sends anything that needs a user decision to the main agent, not to the user.
 - **worker** (Codex on the second account, `codex-2nd`, plus its sub agents): main implementer. By default it splits any task with independent parts across its own sub agents (`tmux-spawn`), one per part by file ownership, after agreeing the interfaces between them; it integrates and runs the full checks itself. It works alone only on short, strictly sequential or same-file tasks, and says why.
 
