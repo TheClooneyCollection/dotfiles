@@ -13,7 +13,9 @@ Notes for AI agents working in this dotfiles repo.
 
 ## tmux-agents sync
 
-- `.local/share/tmux-agents` is a squashed subtree of https://github.com/TheClooneyCollection/tmux-agents.git (`main`). Changes may be made here or upstream; always sync them both ways.
+- `.local/share/tmux-agents` is a squashed subtree of https://github.com/TheClooneyCollection/tmux-agents.git (`main`). Changes may be made here or upstream; sync them both ways by default. When a task says not to release or sync, don't, and say in the reply what's left unsynced.
 - Run subtree commands from the dotfiles repo root (`~`).
 - Dotfiles → upstream: `git subtree push --prefix=.local/share/tmux-agents https://github.com/TheClooneyCollection/tmux-agents.git main`.
 - Upstream → dotfiles: `GIT_LFS_SKIP_SMUDGE=1 git subtree pull --prefix=.local/share/tmux-agents https://github.com/TheClooneyCollection/tmux-agents.git main --squash`. Documentation images may stay as LFS pointers.
+- `git subtree pull` needs a clean working tree. Keep the user's local commits and uncommitted files: never stash, reset or commit them for the sync; if the tree is dirty, pull in a temporary worktree and fast-forward `main`, then remove the worktree. After merging, check that the subtree (and `bin/`) matches upstream and that the user's local commits and files are still there.
+- After each tmux-agents release, add a timeline entry for it on the blog (blog.clooney.io), using the tagged commit's time.
