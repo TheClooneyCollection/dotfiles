@@ -2,9 +2,15 @@ if test -e ~/.config/fish/local.fish
     source ~/.config/fish/local.fish
 end
 
-fish_add_path /opt/homebrew/bin ~/.bin ~/.bin/tmux ~/.local/bin (brew --prefix python)/libexec/bin
+fish_add_path /opt/homebrew/bin ~/.bin ~/.bin/tmux ~/.local/bin /opt/homebrew/opt/python/libexec/bin
 # tmux-agents: the second Codex account, for tmux-spawn codex-2nd
 set -gx TMUX_AGENTS_CODEX_HOMES "codex-2nd=$HOME/.codex-2nd"
+
+# Everything below is for interactive shells. Non-interactive ones (`fish -c`,
+# which runs every tmux popup) stop here, so they start in ~10ms instead of
+# ~400ms (thefuck, zoxide, mise). conf.d/00-noninteractive.fish turns off
+# mise's auto-activation for them.
+status is-interactive; or return
 
 # Set up thefuck
 

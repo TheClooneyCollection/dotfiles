@@ -133,6 +133,9 @@ __pycache__/
 .config/fish/*
 !.config/fish/fishfile
 !.config/fish/config.fish
+!.config/fish/conf.d
+.config/fish/conf.d/*
+!.config/fish/conf.d/00-noninteractive.fish
 !.config/fish/functions
 .config/fish/functions/*
 !.config/fish/functions/fisher.fish
