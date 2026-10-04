@@ -32,7 +32,7 @@ An existing group or a base session named main is reused.
 Environment:
   TMUX_MAIN_SEQUENCE_SESSION  Group/base name (default: main; clients: main-N).
   TMUX_MAIN_SEQUENCE_CONFIG   Project list (default: ~/.config/tmux-main-sequence/projects).
-  TMUX_MAIN_SEQUENCE_AGENT    Shell command (default: tmux-chain's main-agent prompt).
+  TMUX_MAIN_SEQUENCE_AGENT    Shell command (default: claude "start the chain").
   TMUX_MAIN_SEQUENCE_SOCKET   Isolated tmux socket name (tmux -L).
 
 Project list: one directory per line, with ~ expansion, blank lines and
