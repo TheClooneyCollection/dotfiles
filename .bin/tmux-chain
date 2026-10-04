@@ -19,7 +19,8 @@ Options:
   --              treat remaining arguments as the directory
 
 Environment:
-  TMUX_MAIN_SEQUENCE_AGENT   whole shell command (default: claude "start the chain")
+  TMUX_MAIN_SEQUENCE_AGENT   whole shell command (default: claude "<main-agent prompt>",
+                             which starts the chain per ~/.claude/CLAUDE.md)
   TMUX_MAIN_SEQUENCE_CONFIG  projects file (default: ~/.config/tmux-main-sequence/projects)
   TMUX_MAIN_SEQUENCE_SOCKET  named tmux socket, passed with -L
 
@@ -87,7 +88,9 @@ fi
 [[ $TARGET == *:* ]] || TARGET=$TARGET:
 [[ -n $NAME ]] || NAME=${DIR##*/}
 [[ -n $NAME ]] || NAME=/
-AGENT=${TMUX_MAIN_SEQUENCE_AGENT:-'claude "start the chain"'}
+# Typed into the pane's shell: keep the prompt free of $, quotes and backslashes.
+MAIN_PROMPT='You are the main agent in the agent chain. Start the chain: first name yourself <kind>-<project>-main (step 1 in ~/.claude/CLAUDE.md), then spawn the secondary and worker.'
+AGENT=${TMUX_MAIN_SEQUENCE_AGENT:-"claude \"$MAIN_PROMPT\""}
 
 if [[ $SAVE -eq 1 ]]; then
   CONFIG=${TMUX_MAIN_SEQUENCE_CONFIG:-$HOME/.config/tmux-main-sequence/projects}
