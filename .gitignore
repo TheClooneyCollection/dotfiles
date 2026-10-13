@@ -148,6 +148,12 @@ __pycache__/
 !.config/fish/functions/codex.fish
 !.config/fish/functions/codex-2nd.fish
 !.config/fish/functions/__codex_tmux_pins.fish
+!.config/fish/functions/secret.fish
+!.config/fish/functions/cliproxy-url.fish
+!.config/fish/functions/cliproxy-models.fish
+!.config/fish/functions/claude-proxy.fish
+!.config/fish/functions/claude-astra.fish
+!.config/fish/functions/claude-codex.fish
 
 !.config/karabiner
 .config/karabiner/automatic_backups
