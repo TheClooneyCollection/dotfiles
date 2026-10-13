@@ -17,6 +17,7 @@ Notes for AI agents working in this dotfiles repo.
 - After each tmux-agents release, the agent that released it updates the installed copy (these `git -C` commands are the user's explicit exception to the no-`git -C` rule):
   1. `git -C ~/.local/share/tmux-agents fetch --tags`
   2. `git -C ~/.local/share/tmux-agents checkout vX.Y.Z`
-  3. `tmux-agents --chip-layout on`
-- Roll back by checking out the previous tag the same way.
+  3. `cd ~/.local/share/tmux-agents && ./install.sh`. Checkout alone leaves the copied Codex rules (`~/.codex/rules`, `~/.codex-2nd/rules`) stale; `install.sh` refreshes them.
+  4. `tmux-agents --chip-layout on`
+- Roll back by checking out the previous tag the same way, then rerun `install.sh`.
 - After each tmux-agents release, add a timeline entry for it on the blog (blog.clooney.io), using the tagged commit's time.
