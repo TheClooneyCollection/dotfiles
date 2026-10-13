@@ -72,5 +72,10 @@
   "effortLevel": "low",
   "theme": "dark-ansi",
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "modelSettings": {
+    "gpt-6-astra": {
+      "effortLevel": "medium"
+    }
+  }
 }
