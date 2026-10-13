@@ -18,6 +18,7 @@
       "Bash(tmux-connect --from:*)",
       "Bash(tmux-agent-report:*)",
       "Bash(tmux-dismiss --from:*)",
+      "Bash(tmux-agents chain-config:*)",
       "Bash(~/.bin/tmux/tmux-ask:*)",
       "Bash(~/.bin/tmux/tmux-peers:*)",
       "Bash(~/.bin/tmux/tmux-peek:*)",
