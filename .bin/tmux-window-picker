@@ -23,12 +23,22 @@ fi
 [ -n "$client" ] || { printf 'tmux-window-picker: no client specified.\n' >&2; exit 1; }
 
 # Keep stable session/window IDs hidden, including the session for linked windows.
-# Tabs split the fields so the pane count is shown but not searched.
-rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}:#{window_index} #{window_name}\t[#{window_panes} panes]\t#{pane_current_command}')"
+# Skip tmux-agents' hidden agents-* sessions, and pad the searched label so the
+# pane counts line up; the tab after the padding keeps --nth on the label.
+rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}' |
+  awk -F '\t' '
+    $2 ~ /^agents-/ { next }
+    { n++; id[n] = $1; label[n] = $3; panes[n] = $4
+      if (length($3) > width) width = length($3) }
+    END {
+      for (i = 1; i <= n; i++)
+        printf "%s\t%-*s\t[%d %s]\n", id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
+    }')"
+[ -n "$rows" ] || { printf 'tmux-window-picker: no windows to show.\n' >&2; exit 0; }
 # Quote the command for fzf's shell; {1} is the hidden target, quoted by fzf.
 printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
 selection="$(printf '%s\n' "$rows" | fzf --no-multi --reverse \
-  --delimiter=$'\t' --with-nth=2.. --nth=1,3 --tiebreak=begin,index \
+  --delimiter=$'\t' --with-nth=2.. --nth=1 --tiebreak=begin,index \
   --prompt='windows> ' \
   --header='enter switch · esc cancel' --with-shell='bash -c' \
   --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
