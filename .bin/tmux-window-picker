@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Browse windows across all sessions, with the active pane as the preview.
+set -euo pipefail
+
+client=''
+tmux_args=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --client|-L)
+      [ "$#" -ge 2 ] || { printf 'Missing value for %s\n' "$1" >&2; exit 1; }
+      if [ "$1" = --client ]; then client="$2"; else tmux_args=(-L "$2"); fi
+      shift 2
+      ;;
+    *) printf 'Usage: tmux-window-picker [--client NAME] [-L SOCKET]\n' >&2; exit 1 ;;
+  esac
+done
+
+if ! command -v fzf >/dev/null 2>&1; then
+  printf 'tmux-window-picker: fzf is required.\n' >&2
+  exit 1
+fi
+[ -n "$client" ] || client="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -p '#{client_name}')"
+[ -n "$client" ] || { printf 'tmux-window-picker: no client specified.\n' >&2; exit 1; }
+
+# Keep stable session/window IDs hidden, including the session for linked windows.
+rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}:#{window_index} #{window_name}  [#{window_panes} panes]  #{pane_current_command}')"
+# Quote the command for fzf's shell; {1} is the hidden target, quoted by fzf.
+printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
+selection="$(printf '%s\n' "$rows" | fzf --no-multi --reverse --no-sort \
+  --delimiter=$'\t' --with-nth=2.. --prompt='windows> ' \
+  --header='enter switch · esc cancel' --with-shell='bash -c' \
+  --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
+[ -n "$selection" ] || exit 0
+target="${selection%%$'\t'*}"
+tmux ${tmux_args[@]+"${tmux_args[@]}"} switch-client -c "$client" -t "$target"
