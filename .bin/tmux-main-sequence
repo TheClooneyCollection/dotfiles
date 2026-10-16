@@ -8,6 +8,7 @@
 # Each client joins through its own main-N session, with independent window selection.
 # Existing group windows are unchanged unless --add-missing is given.
 # Per-client sessions are destroyed on detach; the base session stays available.
+# Launches use --no-save so built-ins never become configured project windows.
 # Config: ~/.config/tmux-main-sequence/projects, one directory per line.
 # Blank lines and full-line # comments are ignored; spaces in paths are supported.
 # Example config (local and untracked):
@@ -24,6 +25,7 @@ Usage: tmux-main-sequence [--add-missing] [--no-attach]
 Create or join the main session group through a separate main-N client session.
 Client sessions share windows but select them independently and vanish on detach.
 An existing group or a base session named main is reused.
+Launching windows leaves the project list unchanged.
   --add-missing  Add missing window names with fresh agents, then join.
                 Use the intended index if free; otherwise append at the end.
   --no-attach    Skip joining: do not create a per-client session or attach.
@@ -55,6 +57,8 @@ done
 session=${TMUX_MAIN_SEQUENCE_SESSION:-main}
 config=${TMUX_MAIN_SEQUENCE_CONFIG:-$HOME/.config/tmux-main-sequence/projects}
 script_dir=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=.bin/tmux-projects.sh
+source "$script_dir/tmux-projects.sh"
 tmux_cmd=(tmux)
 if [[ -n ${TMUX_MAIN_SEQUENCE_SOCKET:-} ]]; then
   tmux_cmd+=(-L "$TMUX_MAIN_SEQUENCE_SOCKET")
@@ -128,7 +132,7 @@ add_window() {
     index=$((max + 1))
   fi
   if "$start_agent"; then
-    "$script_dir/tmux-chain" "$dir" --target "$session_id:$index" --name "$name" >/dev/null
+    "$script_dir/tmux-chain" "$dir" --no-save --target "$session_id:$index" --name "$name" >/dev/null
   else
     pane=$("${tmux_cmd[@]}" new-window -d -t "$session_id:$index" -n "$name" -c "$dir" -P -F '#{pane_id}')
     "${tmux_cmd[@]}" set-window-option -t "$pane" automatic-rename off
@@ -137,8 +141,8 @@ add_window() {
 }
 
 add_window 0 dashboard "$HOME" false
-add_window 1 '~' "$HOME" true
-add_window 2 blog "$HOME/Source/Projects/subspace-collection/blog.clooney.io" true
+add_window 1 '~' "${TMUX_BUILTIN_PROJECT_DIRS[0]}" true
+add_window 2 blog "${TMUX_BUILTIN_PROJECT_DIRS[1]}" true
 index=3
 if [[ -f $config ]]; then
   while IFS= read -r dir || [[ -n $dir ]]; do

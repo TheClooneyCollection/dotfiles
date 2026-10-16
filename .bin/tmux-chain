@@ -5,16 +5,19 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: tmux-chain [dir] [--save] [--target session[:index]] [--name name]
+Usage: tmux-chain [dir] [--no-save] [--target session[:index]] [--name name]
 
 Start a chain in a new tmux window. With no dir, pick from $PWD (default)
-and saved projects using fzf. An explicit dir skips the picker.
+then saved projects, built-in projects and Git repos using fzf.
+An explicit dir skips the picker. Paths under HOME are displayed with ~.
 Without a terminal or fzf, warn and use $PWD. Esc cancels without saving.
 Print the new pane ID to stdout. Without --target, run inside tmux and
 focus the new window. With --target, leave the new window detached.
+Successful launches save the directory unless --no-save is given.
 
 Options:
-  --save          add the canonical directory to the projects file
+  --no-save       do not add the directory to the projects file
+  --save          save the canonical directory (default; compatibility option)
   --target        destination session, optionally with a window index
   --name          window name (default: directory basename)
   -h, --help      show this help
@@ -24,6 +27,8 @@ Environment:
   TMUX_MAIN_SEQUENCE_AGENT   whole shell command (default: tmux-agents start claude -- "start the chain")
   TMUX_MAIN_SEQUENCE_CONFIG  projects file (default: ~/.config/tmux-main-sequence/projects)
   TMUX_MAIN_SEQUENCE_SOCKET  named tmux socket, passed with -L
+  TMUX_CHAIN_SCAN_ROOT       scan Git repos at depths 1 and 2 (default: ~/Source/Projects)
+                             stop descending when a repo is found
 
 Saved paths use ~ for HOME. Existing paths are resolved relative to the
 current directory for deduplication; blank lines and comments are ignored.
@@ -35,13 +40,14 @@ invalid() { printf 'tmux-chain: %s\n' "$*" >&2; usage >&2; exit 2; }
 
 DIR=$PWD
 HAVE_DIR=0
-SAVE=0
+SAVE=1
 TARGET=
 NAME=
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
-    --save) SAVE=1; shift ;;
+    --save) shift ;;
+    --no-save) SAVE=0; shift ;;
     --target|--name)
       [[ $# -ge 2 && -n $2 && $2 != --* ]] || invalid "$1 requires a value"
       case "$1" in
@@ -89,6 +95,24 @@ saved_dirs() {
   done < "$CONFIG"
 }
 
+# Only inspect two levels, and do not descend into a repository.
+scanned_dirs() (
+  local root first second
+  root=$(canonical_dir "${TMUX_CHAIN_SCAN_ROOT:-$HOME/Source/Projects}") || return 0
+  shopt -s nullglob dotglob
+  for first in "$root"/*; do
+    [[ -d $first ]] || continue
+    if [[ -d $first/.git || -f $first/.git ]]; then
+      printf '%s\n' "$first"
+      continue
+    fi
+    for second in "$first"/*; do
+      [[ -d $second && ( -d $second/.git || -f $second/.git ) ]] || continue
+      printf '%s\n' "$second"
+    done
+  done
+)
+
 [[ -n $DIR ]] || fail "directory must not be empty"
 DIR=$(canonical_dir "$DIR") || fail "directory does not exist or is inaccessible"
 [[ $DIR != *$'\n'* ]] || fail "directory names containing newlines are not supported"
@@ -99,21 +123,44 @@ if [[ $HAVE_DIR -eq 0 ]]; then
     printf 'tmux-chain: fzf is not on PATH; using current directory\n' >&2
   else
     # Preserve order so the current directory is the initial choice.
+    SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+    # shellcheck source=.bin/tmux-projects.sh
+    source "$SCRIPT_DIR/tmux-projects.sh"
+    HOME_DIR=$(canonical_dir "$HOME")
     CHOICES=("$DIR")
     while IFS= read -r ENTRY; do
+      ENTRY=$(canonical_dir "$ENTRY") || continue
+      [[ $ENTRY != *$'\n'* ]] || continue
       FOUND=0
       for EXISTING in "${CHOICES[@]}"; do
         if [[ $EXISTING == "$ENTRY" ]]; then FOUND=1; break; fi
       done
       [[ $FOUND -eq 1 ]] || CHOICES+=("$ENTRY")
-    done < <(saved_dirs)
+    done < <(saved_dirs; printf '%s\n' "${TMUX_BUILTIN_PROJECT_DIRS[@]}"; scanned_dirs)
+    LABELS=()
+    for ENTRY in "${CHOICES[@]}"; do
+      case "$ENTRY" in
+        "$HOME_DIR") ENTRY='~' ;;
+        "$HOME_DIR"/*) ENTRY="~/${ENTRY#"$HOME_DIR"/}" ;;
+      esac
+      LABELS+=("$ENTRY")
+    done
     STATUS=0
-    DIR=$(printf '%s\n' "${CHOICES[@]}" | fzf --no-sort --no-multi --layout=reverse --query='' --prompt='Project> ') || STATUS=$?
+    SELECTED=$(printf '%s\n' "${LABELS[@]}" | fzf --no-sort --no-multi --layout=reverse --query='' --prompt='Project> ') || STATUS=$?
     case $STATUS in
-      0) [[ -n $DIR ]] || exit 0 ;;
+      0) [[ -n $SELECTED ]] || exit 0 ;;
       1|130) exit 0 ;;
       *) fail "fzf failed (exit $STATUS)" ;;
     esac
+    FOUND=0
+    for INDEX in "${!LABELS[@]}"; do
+      if [[ ${LABELS[$INDEX]} == "$SELECTED" ]]; then
+        DIR=${CHOICES[$INDEX]}
+        FOUND=1
+        break
+      fi
+    done
+    [[ $FOUND -eq 1 ]] || fail "fzf returned an unknown project"
   fi
 fi
 [[ -n $TARGET || -n ${TMUX:-} ]] || fail "run inside tmux or specify --target session[:index]"
@@ -131,6 +178,12 @@ fi
 [[ -n $NAME ]] || NAME=/
 AGENT=${TMUX_MAIN_SEQUENCE_AGENT:-'tmux-agents start claude -- "start the chain"'}
 
+PANE=$("${TMUX_CMD[@]}" new-window "${WINDOW_ARGS[@]}" -t "$TARGET" -n "$NAME" -c "$DIR")
+"${TMUX_CMD[@]}" set-option -w -t "$PANE" automatic-rename off
+"${TMUX_CMD[@]}" set-option -w -t "$PANE" allow-rename off
+"${TMUX_CMD[@]}" send-keys -t "$PANE" -l -- "$AGENT"
+"${TMUX_CMD[@]}" send-keys -t "$PANE" Enter
+# Persist only after the window and its launch command were created successfully.
 if [[ $SAVE -eq 1 ]]; then
   mkdir -p -- "$(dirname -- "$CONFIG")"
   touch -- "$CONFIG"
@@ -151,9 +204,4 @@ if [[ $SAVE -eq 1 ]]; then
   fi
 fi
 
-PANE=$("${TMUX_CMD[@]}" new-window "${WINDOW_ARGS[@]}" -t "$TARGET" -n "$NAME" -c "$DIR")
-"${TMUX_CMD[@]}" set-option -w -t "$PANE" automatic-rename off
-"${TMUX_CMD[@]}" set-option -w -t "$PANE" allow-rename off
-"${TMUX_CMD[@]}" send-keys -t "$PANE" -l -- "$AGENT"
-"${TMUX_CMD[@]}" send-keys -t "$PANE" Enter
 printf '%s\n' "$PANE"
