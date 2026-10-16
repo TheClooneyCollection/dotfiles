@@ -22,15 +22,22 @@ fi
 [ -n "$client" ] || client="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -p '#{client_name}')"
 [ -n "$client" ] || { printf 'tmux-window-picker: no client specified.\n' >&2; exit 1; }
 
+current="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -c "$client" -p '#{session_id}')"
+
 # Keep stable session/window IDs hidden, including the session for linked windows.
-# Skip tmux-agents' hidden agents-* sessions, and pad the searched label so the
-# pane counts line up; the tab after the padding keeps --nth on the label.
-rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}' |
-  awk -F '\t' '
+# Grouped sessions share windows, so list each window once per group, from the
+# client's own session when it is in the group. Skip tmux-agents' hidden
+# agents-* sessions, and pad the searched label so the pane counts line up; the
+# tab after the padding keeps --nth on the label.
+rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}' |
+  awk -F '\t' -v current="$current" '
     $2 ~ /^agents-/ { next }
-    { n++; id[n] = $1; label[n] = $3; panes[n] = $4
-      if (length($3) > width) width = length($3) }
+    { key = ($7 != "" ? $7 : $5) SUBSEP $6
+      if (key in row) { if ($5 != current) next; i = row[key] }
+      else { i = row[key] = ++n }
+      id[i] = $1; label[i] = $3; panes[i] = $4 }
     END {
+      for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])
       for (i = 1; i <= n; i++)
         printf "%s\t%-*s\t[%d %s]\n", id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
     }')"
