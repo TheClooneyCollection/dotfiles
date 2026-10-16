@@ -16,6 +16,7 @@ focus the new window. With --target, leave the new window detached.
 Successful launches save the directory unless --no-save is given.
 
 Options:
+  --include-worktrees  include scanned repos whose .git is a file
   --no-save       do not add the directory to the projects file
   --save          save the canonical directory (default; compatibility option)
   --target        destination session, optionally with a window index
@@ -28,7 +29,7 @@ Environment:
   TMUX_MAIN_SEQUENCE_CONFIG  projects file (default: ~/.config/tmux-main-sequence/projects)
   TMUX_MAIN_SEQUENCE_SOCKET  named tmux socket, passed with -L
   TMUX_CHAIN_SCAN_ROOT       scan Git repos at depths 1 and 2 (default: ~/Source/Projects)
-                             stop descending when a repo is found
+                             skip worktrees by default; stop at any repo
 
 Saved paths use ~ for HOME. Existing paths are resolved relative to the
 current directory for deduplication; blank lines and comments are ignored.
@@ -41,11 +42,13 @@ invalid() { printf 'tmux-chain: %s\n' "$*" >&2; usage >&2; exit 2; }
 DIR=$PWD
 HAVE_DIR=0
 SAVE=1
+INCLUDE_WORKTREES=0
 TARGET=
 NAME=
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
+    --include-worktrees) INCLUDE_WORKTREES=1; shift ;;
     --save) shift ;;
     --no-save) SAVE=0; shift ;;
     --target|--name)
@@ -103,11 +106,13 @@ scanned_dirs() (
   for first in "$root"/*; do
     [[ -d $first ]] || continue
     if [[ -d $first/.git || -f $first/.git ]]; then
-      printf '%s\n' "$first"
+      if [[ -d $first/.git || $INCLUDE_WORKTREES -eq 1 ]]; then
+        printf '%s\n' "$first"
+      fi
       continue
     fi
     for second in "$first"/*; do
-      [[ -d $second && ( -d $second/.git || -f $second/.git ) ]] || continue
+      [[ -d $second && ( -d $second/.git || ( $INCLUDE_WORKTREES -eq 1 && -f $second/.git ) ) ]] || continue
       printf '%s\n' "$second"
     done
   done
