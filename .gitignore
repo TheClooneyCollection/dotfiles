@@ -154,6 +154,7 @@ __pycache__/
 !.config/fish/functions/claude-proxy.fish
 !.config/fish/functions/claude-astra.fish
 !.config/fish/functions/claude-codex.fish
+!.config/fish/functions/fuck.fish
 
 !.config/karabiner
 .config/karabiner/automatic_backups

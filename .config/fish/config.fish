@@ -12,13 +12,11 @@ set -gx TMUX_AGENTS_CODEX_HOMES "codex-2nd=$HOME/.codex-2nd"
 # mise's auto-activation for them.
 status is-interactive; or return
 
-# Set up thefuck
+# thefuck: `fuck` is autoloaded from functions/fuck.fish, generated once with
+# `fish -c 'thefuck --alias' > ~/.config/fish/functions/fuck.fish`. Sourcing
+# the alias on every start cost ~80ms.
 
-if type -q thefuck
-    thefuck --alias | source
-else
-    echo "thefuck not installed..."
-end
+type -q thefuck; or echo "thefuck not installed..."
 
 # Set up zoxide
 
@@ -29,11 +27,11 @@ else
     echo "zoxide not installed..."
 end
 
-# Load rbenv automatically by appending
-# the following to ~/.config/fish/config.fish:
+# rbenv: --no-rehash skips the ~37ms shim rehash on every start; run
+# `rbenv rehash` after installing a gem with executables.
 
 if type -q rbenv
-    status --is-interactive; and source (rbenv init -|psub)
+    rbenv init - --no-rehash fish | source
 else
     echo "rbenv not installed..."
 end
