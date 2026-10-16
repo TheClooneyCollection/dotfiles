@@ -7,7 +7,9 @@ usage() {
   cat <<'EOF'
 Usage: tmux-chain [dir] [--save] [--target session[:index]] [--name name]
 
-Start a chain in a new tmux window (dir defaults to $PWD).
+Start a chain in a new tmux window. With no dir, pick from $PWD (default)
+and saved projects using fzf. An explicit dir skips the picker.
+Without a terminal or fzf, warn and use $PWD. Esc cancels without saving.
 Print the new pane ID to stdout. Without --target, run inside tmux and
 focus the new window. With --target, leave the new window detached.
 
@@ -71,9 +73,49 @@ canonical_dir() {
   (CDPATH= cd -- "$path" 2>/dev/null && pwd -P)
 }
 
+CONFIG=${TMUX_MAIN_SEQUENCE_CONFIG:-$HOME/.config/tmux-main-sequence/projects}
+
+# Share the same parsing rules between the picker and --save.
+saved_dirs() {
+  local entry existing
+  [[ -f $CONFIG ]] || return 0
+  while IFS= read -r entry || [[ -n $entry ]]; do
+    entry="${entry#"${entry%%[![:space:]]*}"}"
+    entry="${entry%"${entry##*[![:space:]]}"}"
+    [[ -z $entry || $entry == \#* ]] && continue
+    existing=$(canonical_dir "$entry") || continue
+    [[ $existing != *$'\n'* ]] || continue
+    printf '%s\n' "$existing"
+  done < "$CONFIG"
+}
+
 [[ -n $DIR ]] || fail "directory must not be empty"
 DIR=$(canonical_dir "$DIR") || fail "directory does not exist or is inaccessible"
 [[ $DIR != *$'\n'* ]] || fail "directory names containing newlines are not supported"
+if [[ $HAVE_DIR -eq 0 ]]; then
+  if [[ ! -t 0 || ! -t 2 ]]; then
+    printf 'tmux-chain: no terminal; using current directory\n' >&2
+  elif ! command -v fzf >/dev/null 2>&1; then
+    printf 'tmux-chain: fzf is not on PATH; using current directory\n' >&2
+  else
+    # Preserve order so the current directory is the initial choice.
+    CHOICES=("$DIR")
+    while IFS= read -r ENTRY; do
+      FOUND=0
+      for EXISTING in "${CHOICES[@]}"; do
+        if [[ $EXISTING == "$ENTRY" ]]; then FOUND=1; break; fi
+      done
+      [[ $FOUND -eq 1 ]] || CHOICES+=("$ENTRY")
+    done < <(saved_dirs)
+    STATUS=0
+    DIR=$(printf '%s\n' "${CHOICES[@]}" | fzf --no-sort --no-multi --layout=reverse --query='' --prompt='Project> ') || STATUS=$?
+    case $STATUS in
+      0) [[ -n $DIR ]] || exit 0 ;;
+      1|130) exit 0 ;;
+      *) fail "fzf failed (exit $STATUS)" ;;
+    esac
+  fi
+fi
 [[ -n $TARGET || -n ${TMUX:-} ]] || fail "run inside tmux or specify --target session[:index]"
 
 TMUX_CMD=(tmux)
@@ -90,17 +132,12 @@ fi
 AGENT=${TMUX_MAIN_SEQUENCE_AGENT:-'tmux-agents start claude -- "start the chain"'}
 
 if [[ $SAVE -eq 1 ]]; then
-  CONFIG=${TMUX_MAIN_SEQUENCE_CONFIG:-$HOME/.config/tmux-main-sequence/projects}
   mkdir -p -- "$(dirname -- "$CONFIG")"
   touch -- "$CONFIG"
   FOUND=0
-  while IFS= read -r ENTRY || [[ -n $ENTRY ]]; do
-    ENTRY="${ENTRY#"${ENTRY%%[![:space:]]*}"}"
-    ENTRY="${ENTRY%"${ENTRY##*[![:space:]]}"}"
-    [[ $ENTRY =~ ^[[:space:]]*$ || $ENTRY =~ ^[[:space:]]*# ]] && continue
-    EXISTING=$(canonical_dir "$ENTRY") || continue
+  while IFS= read -r EXISTING; do
     if [[ $EXISTING == "$DIR" ]]; then FOUND=1; break; fi
-  done < "$CONFIG"
+  done < <(saved_dirs)
   if [[ $FOUND -eq 0 ]]; then
     SAVED=$DIR
     HOME_DIR=$(canonical_dir "$HOME")
