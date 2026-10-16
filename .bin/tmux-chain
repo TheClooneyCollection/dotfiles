@@ -25,7 +25,8 @@ Options:
   --              treat remaining arguments as the directory
 
 Environment:
-  TMUX_MAIN_SEQUENCE_AGENT   whole shell command (default: tmux-agents start claude -- "start the chain")
+  TMUX_MAIN_SEQUENCE_AGENT   when set, custom shell command sent to a new window
+                             when unset, delegate to tmux-agents start chain
   TMUX_MAIN_SEQUENCE_CONFIG  projects file (default: ~/.config/tmux-main-sequence/projects)
   TMUX_MAIN_SEQUENCE_SOCKET  named tmux socket, passed with -L
   TMUX_CHAIN_SCAN_ROOT       scan Git repos at depths 1 and 2 (default: ~/Source/Projects)
@@ -172,22 +173,36 @@ fi
 
 TMUX_CMD=(tmux)
 [[ -z ${TMUX_MAIN_SEQUENCE_SOCKET:-} ]] || TMUX_CMD+=(-L "$TMUX_MAIN_SEQUENCE_SOCKET")
-WINDOW_ARGS=(-P -F '#{pane_id}')
-if [[ -z $TARGET ]]; then
-  TARGET=$("${TMUX_CMD[@]}" display-message -p '#{session_id}')
+if [[ ${TMUX_MAIN_SEQUENCE_AGENT+x} ]]; then
+  # Custom shell commands retain the legacy send-keys launch path.
+  WINDOW_ARGS=(-P -F '#{pane_id}')
+  if [[ -z $TARGET ]]; then
+    TARGET=$("${TMUX_CMD[@]}" display-message -p '#{session_id}')
+  else
+    WINDOW_ARGS+=(-d)
+  fi
+  [[ $TARGET == *:* ]] || TARGET=$TARGET:
+  [[ -n $NAME ]] || NAME=${DIR##*/}
+  [[ -n $NAME ]] || NAME=/
+  PANE=$("${TMUX_CMD[@]}" new-window "${WINDOW_ARGS[@]}" -t "$TARGET" -n "$NAME" -c "$DIR")
+  "${TMUX_CMD[@]}" set-option -w -t "$PANE" automatic-rename off
+  "${TMUX_CMD[@]}" set-option -w -t "$PANE" allow-rename off
+  "${TMUX_CMD[@]}" send-keys -t "$PANE" -l -- "$TMUX_MAIN_SEQUENCE_AGENT"
+  "${TMUX_CMD[@]}" send-keys -t "$PANE" Enter
 else
-  WINDOW_ARGS+=(-d)
+  CHAIN_ARGS=(start chain "$DIR")
+  [[ -z $TARGET ]] || CHAIN_ARGS+=(--target "$TARGET")
+  # Let start chain derive the basename itself, including names starting with --.
+  [[ -z $NAME ]] || CHAIN_ARGS+=(--name "$NAME")
+  if [[ -n ${TMUX_MAIN_SEQUENCE_SOCKET:-} ]]; then
+    SOCKET_PATH=$("${TMUX_CMD[@]}" display-message -p '#{socket_path}')
+    # A pane inherited from another server must not select the destination.
+    SOCKET_PANE=$("${TMUX_CMD[@]}" display-message -p '#{pane_id}')
+    PANE=$(TMUX="$SOCKET_PATH" TMUX_PANE="$SOCKET_PANE" FROM_PANE="$SOCKET_PANE" tmux-agents "${CHAIN_ARGS[@]}")
+  else
+    PANE=$(tmux-agents "${CHAIN_ARGS[@]}")
+  fi
 fi
-[[ $TARGET == *:* ]] || TARGET=$TARGET:
-[[ -n $NAME ]] || NAME=${DIR##*/}
-[[ -n $NAME ]] || NAME=/
-AGENT=${TMUX_MAIN_SEQUENCE_AGENT:-'tmux-agents start claude -- "start the chain"'}
-
-PANE=$("${TMUX_CMD[@]}" new-window "${WINDOW_ARGS[@]}" -t "$TARGET" -n "$NAME" -c "$DIR")
-"${TMUX_CMD[@]}" set-option -w -t "$PANE" automatic-rename off
-"${TMUX_CMD[@]}" set-option -w -t "$PANE" allow-rename off
-"${TMUX_CMD[@]}" send-keys -t "$PANE" -l -- "$AGENT"
-"${TMUX_CMD[@]}" send-keys -t "$PANE" Enter
 # Persist only after the window and its launch command were created successfully.
 if [[ $SAVE -eq 1 ]]; then
   mkdir -p -- "$(dirname -- "$CONFIG")"
