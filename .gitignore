@@ -31,6 +31,13 @@ __pycache__/
 !/.claude/skills/tmux-agents-perf
 !/.claude/skills/agent-chain
 !/.claude/skills/grilling
+!/.claude/skills/grill-me
+!/.claude/skills/handoff
+!/.claude/skills/teach
+!/.claude/skills/to-questionnaire
+!/.claude/skills/wait-what
+!/.claude/skills/writing-for-agents
+!/.claude/skills/maintain-mattpocock-skills
 
 # Codex
 
@@ -43,6 +50,13 @@ __pycache__/
 !/.codex/skills/tmux-agents-perf
 !/.codex/skills/agent-chain
 !/.codex/skills/grilling
+!/.codex/skills/grill-me
+!/.codex/skills/handoff
+!/.codex/skills/teach
+!/.codex/skills/to-questionnaire
+!/.codex/skills/wait-what
+!/.codex/skills/writing-for-agents
+!/.codex/skills/maintain-mattpocock-skills
 !/.codex/AGENTS.md
 !/.codex/rules
 /.codex/rules/*
@@ -57,6 +71,13 @@ __pycache__/
 !/.codex-2nd/skills/tmux-agents-perf
 !/.codex-2nd/skills/agent-chain
 !/.codex-2nd/skills/grilling
+!/.codex-2nd/skills/grill-me
+!/.codex-2nd/skills/handoff
+!/.codex-2nd/skills/teach
+!/.codex-2nd/skills/to-questionnaire
+!/.codex-2nd/skills/wait-what
+!/.codex-2nd/skills/writing-for-agents
+!/.codex-2nd/skills/maintain-mattpocock-skills
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
 /.codex-2nd/rules/*
@@ -178,4 +199,5 @@ __pycache__/
 /.agents/*
 !/.agents/skills/
 /.agents/skills/*
-!/.agents/skills/grilling/
+!/.agents/skills/mattpocock/
+!/.agents/skills/maintain-mattpocock-skills/

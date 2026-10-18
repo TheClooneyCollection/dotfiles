@@ -1,0 +1,213 @@
+#!/usr/bin/env python3
+"""Review and selectively vendor mattpocock/skills; check is the default."""
+import argparse
+import difflib
+import hashlib
+import io
+import json
+import os
+from pathlib import Path, PurePosixPath
+import re
+import shutil
+import subprocess
+import sys
+import tarfile
+
+REPO = 'https://github.com/mattpocock/skills'
+ROOT = Path(__file__).resolve().parent.parent
+DEST = ROOT / '.agents/skills/mattpocock'
+CLIENTS = ('.codex', '.codex-2nd', '.claude')
+
+
+def fetch(url):
+    return subprocess.check_output(['curl', '--fail', '--silent', '--show-error',
+                                    '--location', '--max-time', '60', url])
+
+
+def snapshot(ref):
+    if not re.fullmatch(r'[a-zA-Z0-9._/-]+', ref):
+        raise ValueError('invalid upstream ref')
+    commit = json.loads(fetch(f'https://api.github.com/repos/mattpocock/skills/commits/{ref}'))['sha']
+    data = fetch(f'https://codeload.github.com/mattpocock/skills/tar.gz/{commit}')
+    files = {}
+    with tarfile.open(fileobj=io.BytesIO(data), mode='r:gz') as archive:
+        for member in archive:
+            parts = PurePosixPath(member.name).parts[1:]
+            if member.isdir():
+                continue
+            if not parts or '..' in parts:
+                raise ValueError('unsafe upstream archive path')
+            path = '/'.join(parts)
+            if member.issym() or member.islnk():
+                if path.startswith('skills/') or path == 'LICENSE':
+                    raise ValueError(f'unsupported upstream link: {path}')
+                continue
+            if member.isfile():
+                files[path] = archive.extractfile(member).read()
+    return commit, files
+
+
+def hashes(files):
+    return {p: hashlib.sha256(data).hexdigest() for p, data in sorted(files.items())}
+
+
+def local_files(directory):
+    if directory.is_symlink():
+        raise ValueError(f'local source is a symlink: {directory}')
+    result = {}
+    if directory.exists():
+        for p in directory.rglob('*'):
+            if p.is_symlink():
+                raise ValueError(f'local source contains a symlink: {p}')
+            if p.is_file():
+                result[p.relative_to(directory).as_posix()] = p.read_bytes()
+    return result
+
+
+def subset(files, path):
+    return {p[len(path) + 1:]: data for p, data in files.items() if p.startswith(path + '/')}
+
+
+def links(path):
+    for client in CLIENTS:
+        yield ROOT / client / 'skills' / PurePosixPath(path).name
+
+
+def validate_links(path):
+    target = DEST / path
+    for link in links(path):
+        if os.path.lexists(link) and (not link.is_symlink() or link.resolve() != target.resolve()):
+            raise ValueError(f'link collision (left untouched): {link}')
+
+
+def write_files(directory, files):
+    directory.mkdir(parents=True, exist_ok=True)
+    for name, data in files.items():
+        p = directory / name
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(data)
+
+
+def run(args):
+    manifest_path = DEST / 'upstream.json'
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {
+        'repository': REPO, 'skills': {}, 'metadata': {}}
+    commit, remote = snapshot(args.ref)
+    available = sorted(p[:-len('/SKILL.md')] for p in remote
+                       if p.startswith('skills/') and p.endswith('/SKILL.md'))
+    installed = manifest['skills']
+    if args.action == 'list':
+        for path in available:
+            if args.category and not path.startswith(f'skills/{args.category}/'):
+                continue
+            print(f'{path}\t{"installed" if path in installed else "available"}')
+        return 0
+    selected = args.skills or (available if args.action == 'import' and args.category else sorted(installed))
+    if args.category:
+        selected = [p for p in selected if p.startswith(f'skills/{args.category}/')]
+    if args.action == 'import' and not args.skills and not args.category:
+        raise ValueError('import requires skill paths or --category')
+    if not selected:
+        raise ValueError('no skills selected')
+    for path in selected:
+        if path not in available and path not in installed:
+            raise ValueError(f'unknown skill: {path}; use list for upstream paths')
+        if args.action == 'import' and path in installed:
+            raise ValueError(f'already installed: {path}; use update')
+        if args.action == 'update' and path not in installed:
+            raise ValueError(f'not installed: {path}; use import')
+    dirty = []
+    changed = False
+    for path in selected:
+        local = local_files(DEST / path)
+        baseline = installed.get(path, {}).get('files', {})
+        modified = hashes(local) != baseline
+        upstream_changed = hashes(subset(remote, path)) != baseline
+        changed |= modified or upstream_changed
+        if modified:
+            dirty.append(path)
+        state = 'removed upstream' if path not in available else ('upstream changed' if upstream_changed else 'up to date')
+        print(f'{path}: {state}' + ('; LOCAL CHANGES' if modified else ''))
+        if args.action == 'diff':
+            newer = subset(remote, path)
+            for file in sorted(local.keys() | newer.keys()):
+                if local.get(file) != newer.get(file):
+                    a = local.get(file, b'').decode('utf-8', errors='replace').splitlines(True)
+                    b = newer.get(file, b'').decode('utf-8', errors='replace').splitlines(True)
+                    sys.stdout.writelines(difflib.unified_diff(a, b, f'local/{path}/{file}', f'{commit}/{path}/{file}'))
+    if args.action in ('check', 'diff'):
+        for path in selected:
+            for link in links(path):
+                if not link.is_symlink() or link.resolve() != (DEST / path).resolve():
+                    print(f'LINK NEEDS ATTENTION: {link}')
+                    changed = True
+        for file, record in manifest['metadata'].items():
+            local = DEST / file
+            data = local.read_bytes() if local.is_file() else b''
+            if hashlib.sha256(data).hexdigest() != record['sha256']:
+                print(f'LOCAL METADATA CHANGES: {file}')
+                changed = True
+            if file not in remote or hashlib.sha256(remote[file]).hexdigest() != record['sha256']:
+                print(f'UPSTREAM METADATA CHANGED: {file}')
+                changed = True
+        print(f'Upstream: {commit}')
+        print('Available but not imported: ' + ', '.join(p for p in available if p not in installed))
+        return 1 if changed else 0
+    if dirty:
+        raise ValueError('local changes; nothing updated: ' + ', '.join(dirty))
+    if 'LICENSE' not in remote:
+        raise ValueError('upstream LICENSE missing; review before importing')
+    # Preflight every destination before changing any tracked content.
+    names = {}
+    for path in set(installed) | set(selected):
+        name = PurePosixPath(path).name
+        if name in names and names[name] != path:
+            raise ValueError(f'duplicate skill name: {name}')
+        names[name] = path
+    for path in selected:
+        if path not in available:
+            raise ValueError(f'removed upstream; review manually: {path}')
+        validate_links(path)
+    metadata = {'LICENSE'} | {f'{str(PurePosixPath(p).parent)}/README.md' for p in set(installed) | set(selected)}
+    for file in metadata:
+        existing = DEST / file
+        if existing.is_symlink():
+            raise ValueError(f'metadata is a symlink: {file}')
+        if existing.exists() and hashlib.sha256(existing.read_bytes()).hexdigest() != manifest['metadata'].get(file, {}).get('sha256'):
+            raise ValueError(f'local metadata changes; nothing updated: {file}')
+    for path in selected:
+        target = DEST / path
+        if target.exists():
+            shutil.rmtree(target)
+        content = subset(remote, path)
+        write_files(target, content)
+        installed[path] = {'commit': commit, 'files': hashes(content)}
+        for link in links(path):
+            link.parent.mkdir(parents=True, exist_ok=True)
+            if not os.path.lexists(link):
+                link.symlink_to(os.path.relpath(target, link.parent))
+    for file in metadata:
+        if file in remote:
+            write_files(DEST, {file: remote[file]})
+            manifest['metadata'][file] = {'commit': commit, 'sha256': hashlib.sha256(remote[file]).hexdigest()}
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+    print(f'{args.action}: {len(selected)} skills at {commit}; no Git commit or push performed')
+    return 0
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action', nargs='?', default='check', choices=['list', 'check', 'diff', 'update', 'import'])
+    parser.add_argument('skills', nargs='*', help='upstream paths, e.g. skills/productivity/grilling')
+    parser.add_argument('--category', help='select an upstream category, e.g. productivity')
+    parser.add_argument('--ref', default='main', help='upstream ref or reviewed commit (default: main)')
+    args = parser.parse_args()
+    try:
+        return run(args)
+    except (ValueError, OSError, subprocess.CalledProcessError, tarfile.TarError, KeyError) as error:
+        print(f'mattpocock-skills: {error}', file=sys.stderr)
+        return 2
+
+
+if __name__ == '__main__':
+    sys.exit(main())
