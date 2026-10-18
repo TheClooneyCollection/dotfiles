@@ -8,6 +8,7 @@ Use the dotfiles script `.bin/mattpocock-skills` from the dotfiles root. Shared 
 ## Review first
 
 - Run `.bin/mattpocock-skills check` (also the default action). It fetches upstream but does not alter installed files. Exit 0 means no differences for selected installed skills; 1 means differences or broken links; 2 means failure. New unimported skills are listed separately and do not alone make the check fail.
+- Run `.bin/mattpocock-skills installed` for the offline per-agent installation manifest (`installations.json`), including our maintenance skill. Import/update regenerate it; check/diff flag manifest drift and missing links.
 - Run `.bin/mattpocock-skills list` to discover upstream skill paths and installation status.
 - Run `.bin/mattpocock-skills diff [skills/category/name ...] --ref COMMIT` to compare local content against a specific upstream revision. Explain substantive behavior changes, added references, invocation metadata, and local changes. The manifest hashes distinguish local changes from upstream changes; the displayed patch compares local files to upstream.
 - Check/diff report metadata changes separately. If LICENSE or a category README changed, inspect that upstream file at the reported commit before applying an update.
@@ -29,3 +30,7 @@ Local modifications and conflicting client links stop updates before writes. Sho
 For each new skill, explicitly allow its symlink in `.gitignore` under `.codex/skills`, `.codex-2nd/skills` and `.claude/skills`. The vendored source tree is already allowlisted. Check all three links resolve to the shared source, inspect `git diff --check` and `git status --short --untracked-files=all`, and run the script tests with `python3 .bin/tests/test-mattpocock-skills.py`. Preserve upstream invocation settings. Newly installed skills are available on a subsequent turn after discovery refresh.
 
 Do not schedule checks, commit or push unless requested. Report the reviewed/applied commit, selected skills, remaining differences and verification.
+
+## Cleanup when requested
+
+Use `installations.json` to identify this collection's links for the selected agent. Paths are relative to the dotfiles root; `source` identifies the shared directory and `symlink_target` records the relative link value. Before unlinking, verify the path is still a symlink resolving to the recorded source. If it was replaced, leave it intact and report the conflict. Unlink client entries only; shared source directories may still serve other agents. The local maintenance entry is recorded for cleanup, but its link is not created or repaired by import/update. This inventory is a registration record, not a live filesystem report; check the filesystem before acting. Current import/update installs upstream skills for all three clients, so it will recreate manually removed upstream links.

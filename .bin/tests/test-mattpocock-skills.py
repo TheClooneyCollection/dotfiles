@@ -108,6 +108,48 @@ class VendorTests(unittest.TestCase):
             self.run_action('update')
         self.assertEqual(self.tree(), before)
 
+    def test_per_agent_manifest_and_offline_listing(self):
+        self.install()
+        records = json.loads((self.dest / 'installations.json').read_text())
+        self.assertEqual(set(records['agents']), {'codex', 'codex-2nd', 'claude'})
+        for client, entries in records['agents'].items():
+            self.assertEqual(len(entries), 1)
+            entry = entries[0]
+            self.assertEqual(entry['skill'], 'a')
+            self.assertEqual(entry['link'], f'.{client}/skills/a')
+            self.assertEqual((self.root / entry['link']).resolve(), self.root / entry['source'])
+        before = self.tree()
+        with patch.object(mod, 'snapshot', side_effect=AssertionError('network not allowed')):
+            status, output = self.run_action('installed')
+        self.assertEqual(status, 0)
+        self.assertEqual(json.loads(output), records)
+        self.assertEqual(self.tree(), before)
+        self.run_action('import', [B])
+        records = json.loads((self.dest / 'installations.json').read_text())
+        self.assertTrue(all(len(entries) == 2 for entries in records['agents'].values()))
+
+    def test_manifest_drift_and_maintenance_links(self):
+        maintenance = self.root / '.agents/skills/maintain-mattpocock-skills'
+        maintenance.mkdir(parents=True)
+        (maintenance / 'SKILL.md').write_text('local maintenance')
+        for client in mod.CLIENTS:
+            link = self.root / client / 'skills' / maintenance.name
+            link.parent.mkdir(parents=True)
+            link.symlink_to(maintenance)
+        self.install()
+        self.assertEqual(self.run_action('check')[0], 0)
+        inventory = self.dest / 'installations.json'
+        records = json.loads(inventory.read_text())
+        self.assertEqual(records['agents']['claude'][-1]['origin'], 'local-maintenance')
+        inventory.write_text('{}')
+        self.assertEqual(self.run_action('check')[0], 1)
+        self.run_action('update')
+        self.assertEqual(self.run_action('check')[0], 0)
+        (self.root / '.claude/skills' / maintenance.name).unlink()
+        status, output = self.run_action('check')
+        self.assertEqual(status, 1)
+        self.assertIn('LINK NEEDS ATTENTION', output)
+
     def test_unknown_and_duplicate_names_block_import(self):
         with self.assertRaisesRegex(ValueError, 'unknown skill'):
             self.run_action('import', ['../../outside'])

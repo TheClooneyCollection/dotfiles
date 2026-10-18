@@ -88,10 +88,40 @@ def write_files(directory, files):
         p.write_bytes(data)
 
 
+def installation_manifest(installed):
+    sources = [(PurePosixPath(path).name, DEST / path, 'upstream')
+               for path in sorted(installed)]
+    maintenance = ROOT / '.agents/skills/maintain-mattpocock-skills'
+    if (maintenance / 'SKILL.md').is_file():
+        sources.append((maintenance.name, maintenance, 'local-maintenance'))
+    agents = {}
+    for client in CLIENTS:
+        entries = []
+        for name, target, origin in sources:
+            link = ROOT / client / 'skills' / name
+            entries.append({
+                'skill': name, 'origin': origin,
+                'link': link.relative_to(ROOT).as_posix(),
+                'source': target.relative_to(ROOT).as_posix(),
+                'symlink_target': os.path.relpath(target, link.parent),
+            })
+        agents[client.lstrip('.')] = entries
+    return {'schema_version': 1, 'scope': 'mattpocock collection and its local maintenance skill',
+            'paths_relative_to': 'dotfiles root', 'agents': agents}
+
+
+def write_installations(installed):
+    (DEST / 'installations.json').write_text(
+        json.dumps(installation_manifest(installed), indent=2, sort_keys=True) + '\n')
+
+
 def run(args):
     manifest_path = DEST / 'upstream.json'
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {
         'repository': REPO, 'skills': {}, 'metadata': {}}
+    if args.action == 'installed':
+        print((DEST / 'installations.json').read_text(), end='')
+        return 0
     commit, remote = snapshot(args.ref)
     available = sorted(p[:-len('/SKILL.md')] for p in remote
                        if p.startswith('skills/') and p.endswith('/SKILL.md'))
@@ -136,6 +166,18 @@ def run(args):
                     b = newer.get(file, b'').decode('utf-8', errors='replace').splitlines(True)
                     sys.stdout.writelines(difflib.unified_diff(a, b, f'local/{path}/{file}', f'{commit}/{path}/{file}'))
     if args.action in ('check', 'diff'):
+        registrations = installation_manifest(installed)
+        inventory = DEST / 'installations.json'
+        if not inventory.is_file() or json.loads(inventory.read_text()) != registrations:
+            print('INSTALLATION MANIFEST NEEDS ATTENTION: installations.json')
+            changed = True
+        for entries in registrations['agents'].values():
+            for entry in entries:
+                if entry['origin'] == 'local-maintenance':
+                    link = ROOT / entry['link']
+                    if not link.is_symlink() or link.resolve() != (ROOT / entry['source']).resolve():
+                        print(f'LINK NEEDS ATTENTION: {link}')
+                        changed = True
         for path in selected:
             for link in links(path):
                 if not link.is_symlink() or link.resolve() != (DEST / path).resolve():
@@ -191,13 +233,14 @@ def run(args):
             write_files(DEST, {file: remote[file]})
             manifest['metadata'][file] = {'commit': commit, 'sha256': hashlib.sha256(remote[file]).hexdigest()}
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+    write_installations(installed)
     print(f'{args.action}: {len(selected)} skills at {commit}; no Git commit or push performed')
     return 0
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', nargs='?', default='check', choices=['list', 'check', 'diff', 'update', 'import'])
+    parser.add_argument('action', nargs='?', default='check', choices=['list', 'installed', 'check', 'diff', 'update', 'import'])
     parser.add_argument('skills', nargs='*', help='upstream paths, e.g. skills/productivity/grilling')
     parser.add_argument('--category', help='select an upstream category, e.g. productivity')
     parser.add_argument('--ref', default='main', help='upstream ref or reviewed commit (default: main)')
