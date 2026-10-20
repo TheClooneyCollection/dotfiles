@@ -3,17 +3,28 @@
 set -euo pipefail
 
 client=''
+record=''
 tmux_args=()
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --client|-L)
+    --client|-L|-S|--record)
       [ "$#" -ge 2 ] || { printf 'Missing value for %s\n' "$1" >&2; exit 1; }
-      if [ "$1" = --client ]; then client="$2"; else tmux_args=(-L "$2"); fi
+      if [ "$1" = --client ]; then client="$2"; elif [ "$1" = --record ]; then record="$2"; else tmux_args=("$1" "$2"); fi
       shift 2
       ;;
-    *) printf 'Usage: tmux-window-picker [--client NAME] [-L SOCKET]\n' >&2; exit 1 ;;
+    *) printf 'Usage: tmux-window-picker [--client NAME] [-L SOCKET | -S PATH] [--record SESSION:WINDOW]\n' >&2; exit 1 ;;
   esac
 done
+
+# Hooks pass stable session/window IDs. Detached and hidden sessions do not
+# represent user visits; opening the popup does not fire these hooks.
+if [ -n "$record" ]; then
+  state="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -p -t "$record" '#{session_name}:#{session_attached}')" || exit 0
+  case "$state" in agents-*|*:0) exit 0 ;; esac
+  stamp="$(python3 -c 'import time; print(time.time_ns())')"
+  tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_visit "$stamp"
+  exit 0
+fi
 
 if ! command -v fzf >/dev/null 2>&1; then
   printf 'tmux-window-picker: fzf is required.\n' >&2
@@ -22,32 +33,45 @@ fi
 [ -n "$client" ] || client="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -p '#{client_name}')"
 [ -n "$client" ] || { printf 'tmux-window-picker: no client specified.\n' >&2; exit 1; }
 
-current="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -c "$client" -p '#{session_id}')"
+# display-message -c controls output destination, not the target pane. Resolve
+# the requested client's session explicitly (important with grouped sessions).
+context="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-clients -F $'#{client_name}\t#{session_id}\t#{window_id}' |
+  awk -F '\t' -v client="$client" '$1 == client { print $2 "\t" $3; exit }')"
+[ -n "$context" ] || { printf 'tmux-window-picker: client not found.\n' >&2; exit 1; }
+current="${context%%$'\t'*}"
+active="${context#*$'\t'}"
+work="$(mktemp -d "${TMPDIR:-/tmp}/tmux-window-picker.XXXXXX")"
+trap 'rm -rf "$work"' EXIT
 
 # Keep stable session/window IDs hidden, including the session for linked windows.
 # Grouped sessions share windows, so list each window once per group, from the
 # client's own session when it is in the group. Skip tmux-agents' hidden
 # agents-* sessions, and pad the searched label so the pane counts line up; the
 # tab after the padding keeps --nth on the label.
-rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}' |
-  awk -F '\t' -v current="$current" '
+rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}\t#{@window_picker_visit}' |
+  awk -F '\t' -v current="$current" -v active="$active" '
     $2 ~ /^agents-/ { next }
     { key = ($7 != "" ? $7 : $5) SUBSEP $6
       if (key in row) { if ($5 != current) next; i = row[key] }
       else { i = row[key] = ++n }
-      id[i] = $1; label[i] = $3; panes[i] = $4 }
+      id[i] = $1; label[i] = $3; panes[i] = $4; visit[i] = $8 + 0; isactive[i] = ($6 == active) }
     END {
       for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])
       for (i = 1; i <= n; i++)
-        printf "%s\t%-*s\t[%d %s]\n", id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
+        printf "%d\t%.0f\t%d\t%s\t%-*s\t[%d %s]\n", isactive[i], visit[i], i, id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
     }')"
 [ -n "$rows" ] || { printf 'tmux-window-picker: no windows to show.\n' >&2; exit 0; }
+printf '%s\n' "$rows" | cut -f4- > "$work/original"
+printf '%s\n' "$rows" | sort -t $'\t' -k1,1n -k2,2nr -k3,3n | cut -f4- > "$work/mru"
+printf -v original_cmd 'cat %q' "$work/original"
+printf -v mru_cmd 'cat %q' "$work/mru"
+toggle="if [[ \$FZF_PROMPT == 'MRU> ' ]]; then printf '%s' 'change-prompt(windows> )+reload($original_cmd)'; else printf '%s' 'change-prompt(MRU> )+reload($mru_cmd)'; fi"
 # Quote the command for fzf's shell; {1} is the hidden target, quoted by fzf.
 printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
-selection="$(printf '%s\n' "$rows" | fzf --no-multi --reverse \
+selection="$(cat "$work/mru" | fzf --no-multi --reverse --no-sort \
   --delimiter=$'\t' --with-nth=2.. --nth=1 --tiebreak=begin,index \
-  --prompt='windows> ' \
-  --header='enter switch · esc cancel' --with-shell='bash -c' \
+  --prompt='MRU> ' --bind="ctrl-s:transform:$toggle" \
+  --header='ctrl-s toggle MRU / session order · enter switch · esc cancel' --with-shell='bash -c' \
   --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
 [ -n "$selection" ] || exit 0
 target="${selection%%$'\t'*}"
