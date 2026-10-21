@@ -2,8 +2,8 @@
 
 Press `prefix prefix` (normally `Ctrl-b Ctrl-b`) to browse visible sessions.
 The picker starts in `Frequent` order: historical visit frequency weighted
-by recency. Each visit adds one point; points have a seven-day half-life.
-Eight visits a week ago have the same weight as four visits today. Visits to
+by recency. Each visit adds one point; points have a 15-minute half-life.
+Eight visits 15 minutes ago have the same weight as four visits now. Visits to
 the same window within one minute are coalesced, including duplicate hooks.
 The current window follows the same rules as every other window. Equal scores
 use the original session/window order, without a last-visited tie-breaker.

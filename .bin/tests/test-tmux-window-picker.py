@@ -61,10 +61,13 @@ class PickerTest(unittest.TestCase):
 
     def test_decay_and_rapid_revisit_coalescing(self):
         target = 'alpha:' + self.one
-        self.tmux('set-option', '-w', '-t', target, '@window_picker_score', f'8 {time.time() - 7 * 86400}')
+        previous_time = time.time() - 15 * 60
+        self.tmux('set-option', '-w', '-t', target, '@window_picker_score', f'8 {previous_time}')
         subprocess.run([str(PICKER), '-L', self.socket, '--record', target], env=self.env, check=True)
         recorded = self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score')
-        self.assertAlmostEqual(float(recorded.split()[0]), 5, places=4)
+        value, updated = map(float, recorded.split())
+        expected = 8 * 0.5 ** ((updated - previous_time) / 900) + 1
+        self.assertAlmostEqual(value, expected, places=8)
         subprocess.run([str(PICKER), '-L', self.socket, '--record', target], env=self.env, check=True)
         self.assertEqual(self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score'), recorded)
 
@@ -97,7 +100,7 @@ class PickerTest(unittest.TestCase):
         # Recent repeated visits beat an older, larger raw visit count.
         # The current window receives exactly the same scoring treatment.
         now = time.time()
-        for window, value, updated in [(self.one, 8, now), (self.two, 4, now), (self.beta, 10, now - 14 * 86400)]:
+        for window, value, updated in [(self.one, 8, now), (self.two, 4, now), (self.beta, 10, now - 30 * 60)]:
             self.tmux('set-option', '-w', '-t', window, '@window_picker_score', f'{value} {updated}')
         # fzf harness exercises the actual generated transform/reload and preview
         # commands, then selects a different session using the real picker.

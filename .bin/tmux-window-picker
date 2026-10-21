@@ -23,7 +23,7 @@ if [ -n "$record" ]; then
   case "$state" in agents-*|*:0) exit 0 ;; esac
   previous="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} show-option -wqv -t "$record" @window_picker_score)"
   legacy="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} show-option -wqv -t "$record" @window_picker_visit)"
-  # Seven-day half-life; coalesce duplicate hooks and rapid revisits within
+  # Fifteen-minute half-life; coalesce duplicate hooks and rapid revisits within
   # one minute so bouncing between windows does not dominate the ranking.
   score="$(python3 - "$previous" "$legacy" <<'SCORE'
 import sys, time
@@ -36,7 +36,7 @@ age = max(0.0, now - updated)
 if age < 60:
     print(f"{value:.12g} {updated:.9f}")
 else:
-    print(f"{value * 2 ** (-age / 604800) + 1:.12g} {now:.9f}")
+    print(f"{value * 2 ** (-age / 900) + 1:.12g} {now:.9f}")
 SCORE
 )"
   tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_score "$score"
@@ -74,7 +74,7 @@ rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id
       value = ($9 != "" ? history[1] : ($8 != "" ? 1 : 0));
       updated = ($9 != "" ? history[2] : $8 / 1000000000);
       age = now - updated; if (age < 0) age = 0;
-      score[i] = value * exp(-log(2) * age / 604800) }
+      score[i] = value * exp(-log(2) * age / 900) }
     END {
       for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])
       for (i = 1; i <= n; i++)
