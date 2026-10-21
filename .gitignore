@@ -37,7 +37,7 @@ __pycache__/
 !/.claude/skills/to-questionnaire
 !/.claude/skills/wait-what
 !/.claude/skills/writing-for-agents
-!/.claude/skills/maintain-mattpocock-skills
+!/.claude/skills/maintain-skills
 
 # Codex
 
@@ -56,7 +56,7 @@ __pycache__/
 !/.codex/skills/to-questionnaire
 !/.codex/skills/wait-what
 !/.codex/skills/writing-for-agents
-!/.codex/skills/maintain-mattpocock-skills
+!/.codex/skills/maintain-skills
 !/.codex/AGENTS.md
 !/.codex/rules
 /.codex/rules/*
@@ -77,7 +77,7 @@ __pycache__/
 !/.codex-2nd/skills/to-questionnaire
 !/.codex-2nd/skills/wait-what
 !/.codex-2nd/skills/writing-for-agents
-!/.codex-2nd/skills/maintain-mattpocock-skills
+!/.codex-2nd/skills/maintain-skills
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
 /.codex-2nd/rules/*
@@ -200,4 +200,7 @@ __pycache__/
 !/.agents/skills/
 /.agents/skills/*
 !/.agents/skills/mattpocock/
-!/.agents/skills/maintain-mattpocock-skills/
+!/.agents/skills/local/
+
+# Skill manager source configuration and installation records.
+!.config/skill-manager/

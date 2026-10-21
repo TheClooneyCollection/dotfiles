@@ -2,180 +2,203 @@
   "agents": {
     "claude": [
       {
+        "collection": "local",
+        "link": ".claude/skills/maintain-skills",
+        "path": "maintain-skills",
+        "skill": "maintain-skills",
+        "source": ".agents/skills/local/maintain-skills",
+        "symlink_target": "../../.agents/skills/local/maintain-skills"
+      },
+      {
+        "collection": "mattpocock",
         "link": ".claude/skills/grill-me",
-        "origin": "upstream",
+        "path": "skills/productivity/grill-me",
         "skill": "grill-me",
         "source": ".agents/skills/mattpocock/skills/productivity/grill-me",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/grill-me"
       },
       {
+        "collection": "mattpocock",
         "link": ".claude/skills/grilling",
-        "origin": "upstream",
+        "path": "skills/productivity/grilling",
         "skill": "grilling",
         "source": ".agents/skills/mattpocock/skills/productivity/grilling",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/grilling"
       },
       {
+        "collection": "mattpocock",
         "link": ".claude/skills/handoff",
-        "origin": "upstream",
+        "path": "skills/productivity/handoff",
         "skill": "handoff",
         "source": ".agents/skills/mattpocock/skills/productivity/handoff",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/handoff"
       },
       {
+        "collection": "mattpocock",
         "link": ".claude/skills/teach",
-        "origin": "upstream",
+        "path": "skills/productivity/teach",
         "skill": "teach",
         "source": ".agents/skills/mattpocock/skills/productivity/teach",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/teach"
       },
       {
+        "collection": "mattpocock",
         "link": ".claude/skills/to-questionnaire",
-        "origin": "upstream",
+        "path": "skills/productivity/to-questionnaire",
         "skill": "to-questionnaire",
         "source": ".agents/skills/mattpocock/skills/productivity/to-questionnaire",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/to-questionnaire"
       },
       {
+        "collection": "mattpocock",
         "link": ".claude/skills/wait-what",
-        "origin": "upstream",
+        "path": "skills/productivity/wait-what",
         "skill": "wait-what",
         "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
       },
       {
+        "collection": "mattpocock",
         "link": ".claude/skills/writing-for-agents",
-        "origin": "upstream",
+        "path": "skills/productivity/writing-for-agents",
         "skill": "writing-for-agents",
         "source": ".agents/skills/mattpocock/skills/productivity/writing-for-agents",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/writing-for-agents"
-      },
-      {
-        "link": ".claude/skills/maintain-mattpocock-skills",
-        "origin": "local-maintenance",
-        "skill": "maintain-mattpocock-skills",
-        "source": ".agents/skills/maintain-mattpocock-skills",
-        "symlink_target": "../../.agents/skills/maintain-mattpocock-skills"
       }
     ],
     "codex": [
       {
+        "collection": "local",
+        "link": ".codex/skills/maintain-skills",
+        "path": "maintain-skills",
+        "skill": "maintain-skills",
+        "source": ".agents/skills/local/maintain-skills",
+        "symlink_target": "../../.agents/skills/local/maintain-skills"
+      },
+      {
+        "collection": "mattpocock",
         "link": ".codex/skills/grill-me",
-        "origin": "upstream",
+        "path": "skills/productivity/grill-me",
         "skill": "grill-me",
         "source": ".agents/skills/mattpocock/skills/productivity/grill-me",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/grill-me"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex/skills/grilling",
-        "origin": "upstream",
+        "path": "skills/productivity/grilling",
         "skill": "grilling",
         "source": ".agents/skills/mattpocock/skills/productivity/grilling",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/grilling"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex/skills/handoff",
-        "origin": "upstream",
+        "path": "skills/productivity/handoff",
         "skill": "handoff",
         "source": ".agents/skills/mattpocock/skills/productivity/handoff",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/handoff"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex/skills/teach",
-        "origin": "upstream",
+        "path": "skills/productivity/teach",
         "skill": "teach",
         "source": ".agents/skills/mattpocock/skills/productivity/teach",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/teach"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex/skills/to-questionnaire",
-        "origin": "upstream",
+        "path": "skills/productivity/to-questionnaire",
         "skill": "to-questionnaire",
         "source": ".agents/skills/mattpocock/skills/productivity/to-questionnaire",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/to-questionnaire"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex/skills/wait-what",
-        "origin": "upstream",
+        "path": "skills/productivity/wait-what",
         "skill": "wait-what",
         "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex/skills/writing-for-agents",
-        "origin": "upstream",
+        "path": "skills/productivity/writing-for-agents",
         "skill": "writing-for-agents",
         "source": ".agents/skills/mattpocock/skills/productivity/writing-for-agents",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/writing-for-agents"
-      },
-      {
-        "link": ".codex/skills/maintain-mattpocock-skills",
-        "origin": "local-maintenance",
-        "skill": "maintain-mattpocock-skills",
-        "source": ".agents/skills/maintain-mattpocock-skills",
-        "symlink_target": "../../.agents/skills/maintain-mattpocock-skills"
       }
     ],
     "codex-2nd": [
       {
+        "collection": "local",
+        "link": ".codex-2nd/skills/maintain-skills",
+        "path": "maintain-skills",
+        "skill": "maintain-skills",
+        "source": ".agents/skills/local/maintain-skills",
+        "symlink_target": "../../.agents/skills/local/maintain-skills"
+      },
+      {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/grill-me",
-        "origin": "upstream",
+        "path": "skills/productivity/grill-me",
         "skill": "grill-me",
         "source": ".agents/skills/mattpocock/skills/productivity/grill-me",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/grill-me"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/grilling",
-        "origin": "upstream",
+        "path": "skills/productivity/grilling",
         "skill": "grilling",
         "source": ".agents/skills/mattpocock/skills/productivity/grilling",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/grilling"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/handoff",
-        "origin": "upstream",
+        "path": "skills/productivity/handoff",
         "skill": "handoff",
         "source": ".agents/skills/mattpocock/skills/productivity/handoff",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/handoff"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/teach",
-        "origin": "upstream",
+        "path": "skills/productivity/teach",
         "skill": "teach",
         "source": ".agents/skills/mattpocock/skills/productivity/teach",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/teach"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/to-questionnaire",
-        "origin": "upstream",
+        "path": "skills/productivity/to-questionnaire",
         "skill": "to-questionnaire",
         "source": ".agents/skills/mattpocock/skills/productivity/to-questionnaire",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/to-questionnaire"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/wait-what",
-        "origin": "upstream",
+        "path": "skills/productivity/wait-what",
         "skill": "wait-what",
         "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
       },
       {
+        "collection": "mattpocock",
         "link": ".codex-2nd/skills/writing-for-agents",
-        "origin": "upstream",
+        "path": "skills/productivity/writing-for-agents",
         "skill": "writing-for-agents",
         "source": ".agents/skills/mattpocock/skills/productivity/writing-for-agents",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/writing-for-agents"
-      },
-      {
-        "link": ".codex-2nd/skills/maintain-mattpocock-skills",
-        "origin": "local-maintenance",
-        "skill": "maintain-mattpocock-skills",
-        "source": ".agents/skills/maintain-mattpocock-skills",
-        "symlink_target": "../../.agents/skills/maintain-mattpocock-skills"
       }
     ]
   },
   "paths_relative_to": "dotfiles root",
-  "schema_version": 1,
-  "scope": "mattpocock collection and its local maintenance skill"
+  "schema_version": 2
 }

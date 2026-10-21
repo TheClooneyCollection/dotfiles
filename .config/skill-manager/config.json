@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "agents": {
+    "claude": ".claude/skills",
+    "codex": ".codex/skills",
+    "codex-2nd": ".codex-2nd/skills"
+  },
+  "default_agents": ["claude", "codex", "codex-2nd"],
+  "sources": {
+    "mattpocock": {
+      "kind": "github",
+      "repository": "mattpocock/skills",
+      "ref": "main",
+      "directory": ".agents/skills/mattpocock",
+      "skill_roots": ["skills"],
+      "required_files": ["LICENSE"],
+      "parent_readme": true
+    },
+    "local": {
+      "kind": "local",
+      "directory": ".agents/skills/local",
+      "skill_roots": ["."]
+    }
+  }
+}
