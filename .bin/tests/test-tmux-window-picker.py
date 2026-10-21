@@ -53,56 +53,70 @@ class PickerTest(unittest.TestCase):
         self.tmux('switch-client', '-c', self.client, '-t', target)
         # Wait for the synchronous run-shell hook to finish recording.
         for _ in range(100):
-            value = self.tmux('show-option', '-wqv', '-t', target, '@window_picker_visit')
+            value = self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score')
             if value:
-                return int(value)
+                return float(value.split()[1])
             time.sleep(.02)
         self.fail('visit hook did not record ' + target)
 
-    def test_mru_hooks_toggle_preview_and_switch(self):
+    def test_decay_and_rapid_revisit_coalescing(self):
+        target = 'alpha:' + self.one
+        self.tmux('set-option', '-w', '-t', target, '@window_picker_score', f'8 {time.time() - 7 * 86400}')
+        subprocess.run([str(PICKER), '-L', self.socket, '--record', target], env=self.env, check=True)
+        recorded = self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score')
+        self.assertAlmostEqual(float(recorded.split()[0]), 5, places=4)
+        subprocess.run([str(PICKER), '-L', self.socket, '--record', target], env=self.env, check=True)
+        self.assertEqual(self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score'), recorded)
+
+    def test_weighted_history_hooks_toggle_preview_and_switch(self):
         second = self.visit('alpha:' + self.two)
         third = self.visit('beta:' + self.beta)
         self.assertGreater(third, second)
         self.tmux('switch-client', '-c', self.client, '-t', 'alpha:' + self.one)
         time.sleep(.15)
-        self.assertGreater(int(self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_visit')), third)
-        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.hidden, '@window_picker_visit'), '')
+        self.assertTrue(self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_score'))
+        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.hidden, '@window_picker_score'), '')
         # Even explicit recording must ignore hidden sessions.
         self.tmux('switch-client', '-c', self.client, '-t', 'agents-test')
         time.sleep(.1)
-        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.hidden, '@window_picker_visit'), '')
+        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.hidden, '@window_picker_score'), '')
         self.tmux('switch-client', '-c', self.client, '-t', 'alpha:' + self.one)
         self.tmux('new-session', '-d', '-s', 'alpha-group', '-t', 'alpha')
         time.sleep(.1)
-        before_popup = self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_visit')
+        before_popup = self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_score')
         self.tmux('display-popup', '-c', self.client, '-E', 'true')
         time.sleep(.1)
-        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_visit'), before_popup)
+        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_score'), before_popup)
         # A detached session cannot alter the window's previous visit stamp.
         subprocess.run([str(PICKER), '-L', self.socket, '--record', 'beta:' + self.beta], env=self.env, check=True)
-        self.assertEqual(int(self.tmux('show-option', '-wqv', '-t', self.beta, '@window_picker_visit')), third)
+        self.assertEqual(float(self.tmux('show-option', '-wqv', '-t', self.beta, '@window_picker_score').split()[1]), third)
         # Renaming a window preserves its stable-ID history.
-        before_rename = self.tmux('show-option', '-wqv', '-t', self.two, '@window_picker_visit')
+        before_rename = self.tmux('show-option', '-wqv', '-t', self.two, '@window_picker_score')
         self.tmux('rename-window', '-t', self.two, 'renamed')
-        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.two, '@window_picker_visit'), before_rename)
+        self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.two, '@window_picker_score'), before_rename)
+        # Recent repeated visits beat an older, larger raw visit count.
+        # The current window receives exactly the same scoring treatment.
+        now = time.time()
+        for window, value, updated in [(self.one, 8, now), (self.two, 4, now), (self.beta, 10, now - 14 * 86400)]:
+            self.tmux('set-option', '-w', '-t', window, '@window_picker_score', f'{value} {updated}')
         # fzf harness exercises the actual generated transform/reload and preview
         # commands, then selects a different session using the real picker.
         stub = Path(self.tmp.name) / 'fzf'
         stub.write_text('''#!/usr/bin/env python3
-import json, os, subprocess, sys
+import json, os, shlex, subprocess, sys
 args=sys.argv[1:]
 rows=sys.stdin.read().splitlines()
 bind=next(a for a in args if a.startswith('--bind=')).split('ctrl-s:transform:',1)[1]
 outputs=[]
-for prompt in ['MRU> ', 'windows> ']:
+for prompt in ['Frequent> ', 'windows> ']:
  env=dict(os.environ,FZF_PROMPT=prompt)
  action=subprocess.check_output(['bash','-c',bind],env=env,text=True)
  command=action.split('+reload(',1)[1][:-1]
  outputs.append(subprocess.check_output(['bash','-c',command],text=True).splitlines())
 preview=next(a for a in args if a.startswith('--preview=')).split('=',1)[1]
-subprocess.run(['bash','-c',preview.replace('{1}',rows[0].split('\\t')[0])],check=True,stdout=subprocess.DEVNULL)
+subprocess.run(['bash','-c',preview.replace('{1}',shlex.quote(rows[0].split('\\t')[0]))],check=True,stdout=subprocess.DEVNULL)
 with open(os.environ['PICKER_REPORT'],'w') as f:json.dump([rows,outputs,args],f)
-print(rows[0])
+print(rows[-1])
 ''')
         stub.chmod(0o755)
         report = Path(self.tmp.name) / 'report.json'
@@ -110,12 +124,18 @@ print(rows[0])
         subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
         rows, orders, args = json.loads(report.read_text())
         windows = [r.split('\t')[0].split(':')[1] for r in rows]
-        self.assertEqual(windows, [self.beta, self.two, self.one])
+        self.assertEqual(windows, [self.one, self.two, self.beta])
         self.assertEqual(orders[1], rows)
         self.assertEqual([r.split('\t')[0].split(':')[1] for r in orders[0]], [self.one, self.two, self.beta])
         self.assertTrue(all('agents-' not in r and 'alpha-group' not in r for r in rows))
         self.assertEqual(self.tmux('list-clients', '-F', '#{window_id}'), self.beta)
         self.assertIn('--no-sort', args)
+        # Switching to a lower-ranked window and reopening keeps the layout;
+        # neither being current nor one extra visit overrides history.
+        time.sleep(.1)
+        subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
+        self.assertEqual(json.loads(report.read_text())[0], rows)
+
         # The installed fzf must accept the generated options and still search
         # the visible label, rather than the hidden stable IDs.
         filtered = subprocess.check_output(['fzf', *args, '--filter=beta'], input='\n'.join(rows) + '\n', text=True, env=self.env)

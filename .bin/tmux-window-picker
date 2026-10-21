@@ -21,8 +21,25 @@ done
 if [ -n "$record" ]; then
   state="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} display-message -p -t "$record" '#{session_name}:#{session_attached}')" || exit 0
   case "$state" in agents-*|*:0) exit 0 ;; esac
-  stamp="$(python3 -c 'import time; print(time.time_ns())')"
-  tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_visit "$stamp"
+  previous="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} show-option -wqv -t "$record" @window_picker_score)"
+  legacy="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} show-option -wqv -t "$record" @window_picker_visit)"
+  # Seven-day half-life; coalesce duplicate hooks and rapid revisits within
+  # one minute so bouncing between windows does not dominate the ranking.
+  score="$(python3 - "$previous" "$legacy" <<'SCORE'
+import sys, time
+now = time.time()
+if sys.argv[1]:
+    value, updated = map(float, sys.argv[1].split())
+else:
+    value, updated = (1.0, int(sys.argv[2]) / 1e9) if sys.argv[2] else (0.0, 0.0)
+age = max(0.0, now - updated)
+if age < 60:
+    print(f"{value:.12g} {updated:.9f}")
+else:
+    print(f"{value * 2 ** (-age / 604800) + 1:.12g} {now:.9f}")
+SCORE
+)"
+  tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_score "$score"
   exit 0
 fi
 
@@ -39,7 +56,6 @@ context="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-clients -F $'#{client_nam
   awk -F '\t' -v client="$client" '$1 == client { print $2 "\t" $3; exit }')"
 [ -n "$context" ] || { printf 'tmux-window-picker: client not found.\n' >&2; exit 1; }
 current="${context%%$'\t'*}"
-active="${context#*$'\t'}"
 work="$(mktemp -d "${TMPDIR:-/tmp}/tmux-window-picker.XXXXXX")"
 trap 'rm -rf "$work"' EXIT
 
@@ -48,30 +64,34 @@ trap 'rm -rf "$work"' EXIT
 # client's own session when it is in the group. Skip tmux-agents' hidden
 # agents-* sessions, and pad the searched label so the pane counts line up; the
 # tab after the padding keeps --nth on the label.
-rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}\t#{@window_picker_visit}' |
-  awk -F '\t' -v current="$current" -v active="$active" '
+rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}\t#{@window_picker_visit}\t#{@window_picker_score}' |
+  awk -F '\t' -v current="$current" -v now="$(date +%s)" '
     $2 ~ /^agents-/ { next }
     { key = ($7 != "" ? $7 : $5) SUBSEP $6
       if (key in row) { if ($5 != current) next; i = row[key] }
       else { i = row[key] = ++n }
-      id[i] = $1; label[i] = $3; panes[i] = $4; visit[i] = $8 + 0; isactive[i] = ($6 == active) }
+      id[i] = $1; label[i] = $3; panes[i] = $4; split($9, history, " ");
+      value = ($9 != "" ? history[1] : ($8 != "" ? 1 : 0));
+      updated = ($9 != "" ? history[2] : $8 / 1000000000);
+      age = now - updated; if (age < 0) age = 0;
+      score[i] = value * exp(-log(2) * age / 604800) }
     END {
       for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])
       for (i = 1; i <= n; i++)
-        printf "%d\t%.0f\t%d\t%s\t%-*s\t[%d %s]\n", isactive[i], visit[i], i, id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
+        printf "%.12f\t%d\t%s\t%-*s\t[%d %s]\n", score[i], i, id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
     }')"
 [ -n "$rows" ] || { printf 'tmux-window-picker: no windows to show.\n' >&2; exit 0; }
-printf '%s\n' "$rows" | cut -f4- > "$work/original"
-printf '%s\n' "$rows" | sort -t $'\t' -k1,1n -k2,2nr -k3,3n | cut -f4- > "$work/mru"
+printf '%s\n' "$rows" | cut -f3- > "$work/original"
+printf '%s\n' "$rows" | sort -t $'\t' -k1,1nr -k2,2n | cut -f3- > "$work/ranked"
 printf -v original_cmd 'cat %q' "$work/original"
-printf -v mru_cmd 'cat %q' "$work/mru"
-toggle="if [[ \$FZF_PROMPT == 'MRU> ' ]]; then printf '%s' 'change-prompt(windows> )+reload($original_cmd)'; else printf '%s' 'change-prompt(MRU> )+reload($mru_cmd)'; fi"
+printf -v ranked_cmd 'cat %q' "$work/ranked"
+toggle="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf '%s' 'change-prompt(windows> )+reload($original_cmd)'; else printf '%s' 'change-prompt(Frequent> )+reload($ranked_cmd)'; fi"
 # Quote the command for fzf's shell; {1} is the hidden target, quoted by fzf.
 printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
-selection="$(cat "$work/mru" | fzf --no-multi --reverse --no-sort \
+selection="$(cat "$work/ranked" | fzf --no-multi --reverse --no-sort \
   --delimiter=$'\t' --with-nth=2.. --nth=1 --tiebreak=begin,index \
-  --prompt='MRU> ' --bind="ctrl-s:transform:$toggle" \
-  --header='ctrl-s toggle MRU / session order · enter switch · esc cancel' --with-shell='bash -c' \
+  --prompt='Frequent> ' --bind="ctrl-s:transform:$toggle" \
+  --header='ctrl-s toggle Frequent / session order · enter switch · esc cancel' --with-shell='bash -c' \
   --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
 [ -n "$selection" ] || exit 0
 target="${selection%%$'\t'*}"
