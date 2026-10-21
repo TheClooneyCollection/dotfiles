@@ -1,0 +1,421 @@
+#!/usr/bin/env python3
+"""Vendor GitHub skills and manage per-agent links. Default: read-only check."""
+import argparse
+import copy
+import difflib
+import hashlib
+import io
+import json
+import os
+from pathlib import Path, PurePosixPath
+import re
+import shutil
+import subprocess
+import sys
+import tarfile
+import tempfile
+from urllib.parse import quote
+
+ROOT = Path(__file__).resolve().parent.parent
+CONFIG = '.config/skill-manager/config.json'
+LOCK = '.config/skill-manager/lock.json'
+INVENTORY = '.config/skill-manager/installations.json'
+
+
+def relative(value):
+    path = PurePosixPath(value)
+    if not value or path.is_absolute() or '..' in path.parts:
+        raise ValueError(f'expected safe relative path: {value}')
+    return path.as_posix()
+
+
+def location(root, value):
+    path = root / relative(value)
+    # Never traverse a redirected managed parent directory.
+    for parent in path.parents:
+        if parent == root:
+            break
+        if parent.is_symlink():
+            raise ValueError(f'symlinked parent: {parent}')
+    return path
+
+
+def encoded(value):
+    return (json.dumps(value, indent=2, sort_keys=True) + '\n').encode()
+
+
+def fingerprints(files):
+    return {p: {'sha256': hashlib.sha256(data).hexdigest(), 'executable': executable}
+            for p, (data, executable) in sorted(files.items())}
+
+
+def read_tree(directory):
+    if directory.is_symlink():
+        raise ValueError(f'source directory is a symlink: {directory}')
+    result = {}
+    if directory.exists():
+        for path in directory.rglob('*'):
+            if path.is_symlink():
+                raise ValueError(f'source contains symlink: {path}')
+            if path.is_file():
+                result[path.relative_to(directory).as_posix()] = (path.read_bytes(), bool(path.stat().st_mode & 0o111))
+    return result
+
+
+def subset(files, directory):
+    prefix = directory.rstrip('/') + '/' if directory != '.' else ''
+    return {path[len(prefix):]: item for path, item in files.items() if path.startswith(prefix)}
+
+
+def fetch(url):
+    return subprocess.check_output(['curl', '-fsSL', '--max-time', '60', url])
+
+
+def snapshot(root, source, ref=None):
+    if source['kind'] == 'local':
+        return 'local', read_tree(location(root, source['directory']))
+    repo = source['repository']
+    if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', repo):
+        raise ValueError(f'invalid GitHub repository: {repo}')
+    revision = ref or source.get('ref', 'main')
+    commit = json.loads(fetch(f'https://api.github.com/repos/{repo}/commits/{quote(revision, safe="")}'))['sha']
+    if not re.fullmatch(r'[0-9a-f]{40}', commit):
+        raise ValueError('invalid upstream commit')
+    files = {}
+    with tarfile.open(fileobj=io.BytesIO(fetch(f'https://codeload.github.com/{repo}/tar.gz/{commit}')), mode='r:gz') as archive:
+        for entry in archive:
+            if entry.isdir():
+                continue
+            parts = PurePosixPath(entry.name).parts[1:]
+            path = relative('/'.join(parts))
+            # Unrelated repo symlinks are ignored; a selected skill containing one
+            # is rejected via the sentinel, rather than silently copied incompletely.
+            if entry.issym() or entry.islnk():
+                files[path] = None
+            elif entry.isfile():
+                files[path] = (archive.extractfile(entry).read(), bool(entry.mode & 0o111))
+    return commit, files
+
+
+def discover(source, files, category=None):
+    result = []
+    roots = source.get('skill_roots', ['skills'])
+    for file in files:
+        if not file.endswith('/SKILL.md'):
+            continue
+        path = file[:-len('/SKILL.md')]
+        for base in roots:
+            base = relative(base)
+            prefix = '' if base == '.' else base + '/'
+            if path.startswith(prefix) and (not category or path.startswith(prefix + category.strip('/') + '/')):
+                result.append(path)
+                break
+    return sorted(set(result))
+
+
+def content(files, path):
+    result = subset(files, path)
+    if any(item is None for item in result.values()):
+        raise ValueError(f'upstream skill contains unsupported symlink: {path}')
+    return result
+
+
+def transact(root, changes):
+    """Stage all replacements, then publish; roll back on a filesystem error."""
+    targets = [target for target, _, _ in changes]
+    for index, target in enumerate(targets):
+        if any(target == other or target in other.parents or other in target.parents
+               for other in targets[index + 1:]):
+            raise ValueError(f'overlapping mutation targets: {target}')
+    cache = root / '.cache/skill-manager'
+    cache.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=cache) as temporary:
+        temp = Path(temporary)
+        prepared = []
+        for index, (target, kind, value) in enumerate(changes):
+            staged = temp / f'new-{index}'
+            backup = temp / f'old-{index}'
+            if kind == 'tree':
+                staged.mkdir()
+                for name, (data, executable) in value.items():
+                    path = staged / relative(name)
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(data)
+                    path.chmod(0o755 if executable else 0o644)
+            elif kind == 'file':
+                staged.write_bytes(value)
+            elif kind == 'link':
+                staged.symlink_to(value)
+            prepared.append((target, staged, backup, kind))
+        applied = []
+        try:
+            for target, staged, backup, kind in prepared:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                existed = os.path.lexists(target)
+                if existed:
+                    os.replace(target, backup)
+                applied.append((target, backup, existed))
+                if kind != 'delete':
+                    os.replace(staged, target)
+        except OSError:
+            for target, backup, existed in reversed(applied):
+                if target.is_symlink() or target.is_file():
+                    target.unlink()
+                elif target.exists():
+                    shutil.rmtree(target)
+                if existed:
+                    os.replace(backup, target)
+            raise
+
+
+class Manager:
+    def __init__(self, root=ROOT):
+        self.root = root
+        self.config = json.loads((root / CONFIG).read_text())
+        self.lock = json.loads((root / LOCK).read_text()) if (root / LOCK).exists() else {'schema_version': 1, 'sources': {}}
+        for name, path in self.config['agents'].items():
+            location(root, path)
+        for name in self.config['default_agents']:
+            if name not in self.config['agents']:
+                raise ValueError(f'unknown default agent: {name}')
+        directories = []
+        for name, source in self.config['sources'].items():
+            if source['kind'] not in ('github', 'local'):
+                raise ValueError(f'unsupported source kind: {name}')
+            directory = relative(source['directory'])
+            if directory == '.':
+                raise ValueError('source directory cannot be dotfiles root')
+            full = location(root, directory)
+            if full.is_symlink():
+                raise ValueError(f'source directory is a symlink: {directory}')
+            if any(full == other or full in other.parents or other in full.parents for other in directories):
+                raise ValueError('source directories must not overlap')
+            directories.append(full)
+
+    def source(self, name):
+        if name not in self.config['sources']:
+            raise ValueError(f'unknown source: {name}; use sources')
+        return self.config['sources'][name]
+
+    def registrations(self, lock=None):
+        agents = {name: [] for name in self.config['agents']}
+        for source_name, state in sorted((lock or self.lock)['sources'].items()):
+            source = self.source(source_name)
+            for path, record in sorted(state['skills'].items()):
+                target = location(self.root, source['directory']) / relative(path)
+                for agent in record['agents']:
+                    link = location(self.root, self.config['agents'][agent]) / PurePosixPath(path).name
+                    agents[agent].append({'skill': PurePosixPath(path).name, 'collection': source_name,
+                                          'path': path, 'link': link.relative_to(self.root).as_posix(),
+                                          'source': target.relative_to(self.root).as_posix(),
+                                          'symlink_target': os.path.relpath(target, link.parent)})
+        return {'schema_version': 2, 'paths_relative_to': 'dotfiles root', 'agents': agents}
+
+    def agent_selection(self, value):
+        names = value.split(',') if value else self.config['default_agents']
+        names = list(dict.fromkeys(names))
+        if not names or any(name not in self.config['agents'] for name in names):
+            raise ValueError('unknown agent; choose from: ' + ', '.join(self.config['agents']))
+        return names
+
+    def link_changes(self, new_lock):
+        old = {item['link']: item for entries in self.registrations()['agents'].values() for item in entries}
+        new = {}
+        for entries in self.registrations(new_lock)['agents'].values():
+            for item in entries:
+                if item['link'] in new and new[item['link']]['source'] != item['source']:
+                    raise ValueError(f'skill name collision: {item["link"]}')
+                new[item['link']] = item
+        changes = []
+        for name in sorted(old.keys() | new.keys()):
+            item = new.get(name, old.get(name))
+            link = location(self.root, name)
+            target = location(self.root, item['source'])
+            if os.path.lexists(link) and (not link.is_symlink() or link.resolve() != target.resolve()):
+                raise ValueError(f'link collision (left untouched): {name}')
+            if name not in new:
+                if link.is_symlink():
+                    changes.append((link, 'delete', None))
+            elif not os.path.lexists(link):
+                changes.append((link, 'link', item['symlink_target']))
+        return changes
+
+    def save(self, new_lock, changes):
+        changes += self.link_changes(new_lock)
+        changes += [(self.root / LOCK, 'file', encoded(new_lock)),
+                    (self.root / INVENTORY, 'file', encoded(self.registrations(new_lock)))]
+        transact(self.root, changes)
+        self.lock = new_lock
+
+    def check_links(self):
+        expected = self.registrations()
+        inventory = self.root / INVENTORY
+        changed = not inventory.exists() or json.loads(inventory.read_text()) != expected
+        if changed:
+            print('INSTALLATION MANIFEST NEEDS ATTENTION')
+        for entries in expected['agents'].values():
+            for entry in entries:
+                link = location(self.root, entry['link'])
+                target = location(self.root, entry['source'])
+                if not link.is_symlink() or link.resolve() != target.resolve() or not (target / 'SKILL.md').is_file():
+                    print(f'LINK NEEDS ATTENTION: {entry["link"]}')
+                    changed = True
+        return changed
+
+    def run(self, args):
+        action = args.action
+        if action == 'sources':
+            print(json.dumps(self.config['sources'], indent=2))
+            return 0
+        if action == 'installed':
+            result = self.registrations()
+            if args.agents:
+                result['agents'] = {name: result['agents'][name] for name in self.agent_selection(args.agents)}
+            if args.source:
+                self.source(args.source)
+                result['agents'] = {name: [e for e in entries if e['collection'] == args.source]
+                                    for name, entries in result['agents'].items()}
+            print(json.dumps(result, indent=2))
+            return 0
+        if args.agents and action not in ('import', 'install', 'uninstall'):
+            raise ValueError('--agents applies to import/install/uninstall/installed; update preserves recorded choices')
+        if not args.source:
+            if action in ('check', 'diff'):
+                status = 0
+                for name in sorted(self.lock['sources']):
+                    item = copy.copy(args); item.source = name
+                    status = max(status, self.run(item))
+                return status
+            raise ValueError('--source is required; use sources to list configured sources')
+        source = self.source(args.source)
+        state = self.lock['sources'].get(args.source, {'skills': {}, 'metadata': {}})
+        installed = state['skills']
+        if action in ('install', 'uninstall'):
+            if not args.skills:
+                raise ValueError('specify imported skill paths')
+            agents = self.agent_selection(args.agents)
+            new_lock = copy.deepcopy(self.lock)
+            for path in args.skills:
+                if path not in installed:
+                    raise ValueError(f'not imported: {path}')
+                record = new_lock['sources'][args.source]['skills'][path]
+                selected = set(record['agents'])
+                selected = selected | set(agents) if action == 'install' else selected - set(agents)
+                if action == 'install' and not (location(self.root, source['directory']) / path / 'SKILL.md').is_file():
+                    raise ValueError(f'missing shared source: {path}')
+                record['agents'] = sorted(selected)
+            self.save(new_lock, [])
+            print(f'{action}: links changed; shared source files retained')
+            return 0
+        commit, remote = snapshot(self.root, source, args.ref)
+        available = discover(source, remote, args.category)
+        if action == 'list':
+            for path in available:
+                agents = ','.join(installed[path]['agents']) if path in installed else 'not imported'
+                print(f'{path}\t{agents or "imported; no agents"}')
+            return 0
+        selected = args.skills or (available if action == 'import' and args.category else sorted(installed))
+        if args.category and action != 'import':
+            # Filter installed paths using the same configurable root rules.
+            selected = discover(source, {p + '/SKILL.md': None for p in selected}, args.category)
+        if action == 'import' and not args.skills and not args.category:
+            raise ValueError('import requires skill paths or --category')
+        if not selected:
+            raise ValueError('no skills selected')
+        all_available = discover(source, remote)
+        destination = location(self.root, source['directory'])
+        dirty, changed = [], False
+        for path in selected:
+            relative(path)
+            if action == 'import' and path in installed:
+                raise ValueError(f'already imported: {path}; use install for more agents, or update')
+            if action != 'import' and path not in installed:
+                raise ValueError(f'not imported: {path}')
+            if path not in installed and path not in all_available:
+                raise ValueError(f'unknown skill: {path}')
+            current = read_tree(destination / path)
+            newer = content(remote, path)
+            baseline = installed.get(path, {}).get('files', {})
+            modified = source['kind'] != 'local' and fingerprints(current) != baseline
+            upstream_changed = source['kind'] != 'local' and fingerprints(newer) != baseline
+            if modified:
+                dirty.append(path)
+            missing = path not in all_available
+            changed |= modified or upstream_changed or missing
+            print(f'{args.source}/{path}: ' + ('missing upstream' if missing else 'upstream changed' if upstream_changed else 'up to date') + ('; LOCAL CHANGES' if modified else ''))
+            if action == 'diff':
+                for file in sorted(current.keys() | newer.keys()):
+                    if current.get(file) != newer.get(file):
+                        before = current.get(file, (b'', False))[0].decode('utf-8', errors='replace').splitlines(True)
+                        after = newer.get(file, (b'', False))[0].decode('utf-8', errors='replace').splitlines(True)
+                        sys.stdout.writelines(difflib.unified_diff(before, after, f'local/{path}/{file}', f'{commit}/{path}/{file}'))
+                        if current.get(file, (b'', False))[1] != newer.get(file, (b'', False))[1]:
+                            print(f'Executable bit changed: {path}/{file}')
+        if action in ('check', 'diff'):
+            changed |= self.check_links()
+            for file, record in state.get('metadata', {}).items():
+                local = destination / relative(file)
+                item = (local.read_bytes(), bool(local.stat().st_mode & 0o111)) if local.is_file() else None
+                if local.is_symlink() or item is None or fingerprints({file: item})[file] != record['fingerprint']:
+                    print(f'LOCAL METADATA CHANGES: {file}'); changed = True
+                item = remote.get(file)
+                if item is None or fingerprints({file: item})[file] != record['fingerprint']:
+                    print(f'UPSTREAM METADATA CHANGED: {file}'); changed = True
+            print(f'Upstream: {commit}')
+            print('Available but not imported: ' + ', '.join(p for p in available if p not in installed))
+            return int(changed)
+        if dirty:
+            raise ValueError('local changes; nothing updated: ' + ', '.join(dirty))
+        new_lock = copy.deepcopy(self.lock)
+        new_state = new_lock['sources'].setdefault(args.source, {'skills': {}, 'metadata': {}})
+        changes = []
+        for path in selected:
+            if path not in all_available:
+                raise ValueError(f'removed upstream; review manually: {path}')
+            agents = self.agent_selection(args.agents) if action == 'import' else installed[path]['agents']
+            record = {'agents': sorted(agents), 'commit': commit}
+            if source['kind'] == 'github':
+                files = content(remote, path)
+                record['files'] = fingerprints(files)
+                changes.append((destination / path, 'tree', files))
+            new_state['skills'][path] = record
+        metadata = set(source.get('required_files', []))
+        if source.get('parent_readme'):
+            metadata |= {str(PurePosixPath(p).parent / 'README.md') for p in new_state['skills']}
+        for file in sorted(metadata):
+            relative(file)
+            if file in source.get('required_files', []) and file not in remote:
+                raise ValueError(f'required upstream file missing: {file}')
+            existing = destination / file
+            old = state.get('metadata', {}).get(file, {}).get('fingerprint')
+            if existing.is_symlink() or (existing.exists() and fingerprints({file: (existing.read_bytes(), bool(existing.stat().st_mode & 0o111))})[file] != old):
+                raise ValueError(f'local metadata changes; nothing updated: {file}')
+            if file in remote:
+                if remote[file] is None:
+                    raise ValueError(f'unsupported metadata symlink: {file}')
+                # Metadata files are text documents; keep them non-executable.
+                changes.append((existing, 'file', remote[file][0]))
+                new_state['metadata'][file] = {'commit': commit, 'fingerprint': fingerprints({file: (remote[file][0], False)})[file]}
+        self.save(new_lock, changes)
+        print(f'{action}: {len(selected)} skills at {commit}; no commit or push performed')
+        return 0
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action', nargs='?', default='check', choices=['sources', 'list', 'installed', 'check', 'diff', 'import', 'update', 'install', 'uninstall'])
+    parser.add_argument('skills', nargs='*', help='paths relative to the configured upstream skill root repository')
+    parser.add_argument('--source', help='configured source name')
+    parser.add_argument('--agents', help='comma-separated agents; import/install defaults to all configured default agents')
+    parser.add_argument('--category', help='category below a configured skill search root')
+    parser.add_argument('--ref', help='GitHub ref/commit; defaults to the source configuration')
+    args = parser.parse_intermixed_args()
+    try:
+        return Manager().run(args)
+    except (ValueError, OSError, KeyError, TypeError, subprocess.CalledProcessError, tarfile.TarError) as error:
+        print(f'skill-manager: {error}', file=sys.stderr)
+        return 2
+
+
+if __name__ == '__main__':
+    sys.exit(main())
