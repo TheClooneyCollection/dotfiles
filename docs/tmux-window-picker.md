@@ -14,6 +14,14 @@ preview and grouped-session deduplication are retained. Opening the picker does
 not change scores; the ordering is a snapshot when opened. Small score changes
 can still move similarly ranked windows, especially while history is sparse.
 
+On a counted visit, only that window is updated:
+`new_score = old_score * 0.5^(elapsed_seconds / 900) + 1`.
+Opening the picker compares all scores decayed to the current time, without
+writing back or adding visits. Sorting uses logarithms of the decayed scores
+so very small values retain their relative order after hours or days of idle
+time. Fifteen minutes is a half-life, not an expiry: inactivity alone does not
+reset the ordering. Windows with history rank ahead of never-visited windows.
+
 Scores and update times are recorded by stable window ID in the tmux window
 option `@window_picker_score`, shared across clients on that server. Renaming or
 renumbering windows preserves history. History lasts until the window or server

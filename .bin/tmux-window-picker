@@ -74,15 +74,18 @@ rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id
       value = ($9 != "" ? history[1] : ($8 != "" ? 1 : 0));
       updated = ($9 != "" ? history[2] : $8 / 1000000000);
       age = now - updated; if (age < 0) age = 0;
-      score[i] = value * exp(-log(2) * age / 900) }
+      # Compare logarithms to avoid rounding tiny decayed scores to zero
+      # (or floating-point underflow after long idle periods).
+      visited[i] = (value > 0);
+      score[i] = (value > 0 ? log(value) - log(2) * age / 900 : 0) }
     END {
       for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])
       for (i = 1; i <= n; i++)
-        printf "%.12f\t%d\t%s\t%-*s\t[%d %s]\n", score[i], i, id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
+        printf "%d\t%.12f\t%d\t%s\t%-*s\t[%d %s]\n", visited[i], score[i], i, id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
     }')"
 [ -n "$rows" ] || { printf 'tmux-window-picker: no windows to show.\n' >&2; exit 0; }
-printf '%s\n' "$rows" | cut -f3- > "$work/original"
-printf '%s\n' "$rows" | sort -t $'\t' -k1,1nr -k2,2n | cut -f3- > "$work/ranked"
+printf '%s\n' "$rows" | cut -f4- > "$work/original"
+printf '%s\n' "$rows" | sort -t $'\t' -k1,1nr -k2,2nr -k3,3n | cut -f4- > "$work/ranked"
 printf -v original_cmd 'cat %q' "$work/original"
 printf -v ranked_cmd 'cat %q' "$work/ranked"
 toggle="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf '%s' 'change-prompt(windows> )+reload($original_cmd)'; else printf '%s' 'change-prompt(Frequent> )+reload($ranked_cmd)'; fi"

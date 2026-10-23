@@ -71,6 +71,27 @@ class PickerTest(unittest.TestCase):
         subprocess.run([str(PICKER), '-L', self.socket, '--record', target], env=self.env, check=True)
         self.assertEqual(self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score'), recorded)
 
+    def test_idle_history_keeps_order_without_mutating_scores(self):
+        self.visit('alpha:' + self.one)
+        time.sleep(.1)
+        unvisited = self.tmux('new-window', '-d', '-t', 'alpha', '-P', '-F', '#{window_id}')
+        stub = Path(self.tmp.name) / 'fzf'
+        stub.write_text('#!/bin/sh\ncat > "$PICKER_REPORT"\nexit 1\n')
+        stub.chmod(0o755)
+        report = Path(self.tmp.name) / 'idle-rows'
+        env = dict(self.env, PATH=self.tmp.name + os.pathsep + os.environ['PATH'], PICKER_REPORT=str(report))
+        for idle in (20 * 60, 12 * 3600, 30 * 86400):
+            with self.subTest(idle_seconds=idle):
+                now = time.time()
+                records = {self.one: f'1 {now-idle}', self.two: f'8 {now-idle}', self.beta: f'4 {now-idle-900}'}
+                for window, record in records.items():
+                    self.tmux('set-option', '-w', '-t', window, '@window_picker_score', record)
+                subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
+                windows = [r.split('\t')[0].split(':')[1] for r in report.read_text().splitlines()]
+                self.assertEqual(windows, [self.two, self.beta, self.one, unvisited])
+                for window, record in records.items():
+                    self.assertEqual(self.tmux('show-option', '-wqv', '-t', window, '@window_picker_score'), record)
+
     def test_weighted_history_hooks_toggle_preview_and_switch(self):
         second = self.visit('alpha:' + self.two)
         third = self.visit('beta:' + self.beta)
