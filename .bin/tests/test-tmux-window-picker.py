@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Integration checks using an isolated tmux server and an attached PTY client."""
+"""Integration checks using an isolated tmux server and an attached PTY client.
+
+Known flake: the fixed time.sleep(.1) calls below wait for tmux's run-shell
+hooks to finish writing window options. Under load a hook can take longer and
+an assertion reads a stale value, so the suite fails roughly once in ten runs
+and passes on rerun. If you hit it, do not raise the sleeps; replace the
+fixed sleep with a poll like visit() below (poll until the option changes,
+with a deadline), then remove this note.
+"""
 import json
 import os
 from pathlib import Path
