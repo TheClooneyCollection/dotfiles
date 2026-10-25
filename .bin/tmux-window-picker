@@ -37,9 +37,12 @@ if age < 60:
     print(f"{value:.12g} {updated:.9f}")
 else:
     print(f"{value * 2 ** (-age / 900) + 1:.12g} {now:.9f}")
+print(f"{now:.9f}")
 SCORE
 )"
-  tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_score "$score"
+  tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_score "${score%$'\n'*}"
+  # Every visit, uncoalesced: lets the picker start on the last visited window.
+  tmux ${tmux_args[@]+"${tmux_args[@]}"} set-option -w -t "$record" @window_picker_last "${score##*$'\n'}"
   exit 0
 fi
 
@@ -56,6 +59,7 @@ context="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-clients -F $'#{client_nam
   awk -F '\t' -v client="$client" '$1 == client { print $2 "\t" $3; exit }')"
 [ -n "$context" ] || { printf 'tmux-window-picker: client not found.\n' >&2; exit 1; }
 current="${context%%$'\t'*}"
+current_window="${context##*$'\t'}"
 work="$(mktemp -d "${TMPDIR:-/tmp}/tmux-window-picker.XXXXXX")"
 trap 'rm -rf "$work"' EXIT
 
@@ -64,13 +68,13 @@ trap 'rm -rf "$work"' EXIT
 # client's own session when it is in the group. Skip tmux-agents' hidden
 # agents-* sessions, and pad the searched label so the pane counts line up; the
 # tab after the padding keeps --nth on the label.
-rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}\t#{@window_picker_visit}\t#{@window_picker_score}' |
+rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}\t#{@window_picker_visit}\t#{@window_picker_score}\t#{@window_picker_last}' |
   awk -F '\t' -v current="$current" -v now="$(date +%s)" '
     $2 ~ /^agents-/ { next }
     { key = ($7 != "" ? $7 : $5) SUBSEP $6
       if (key in row) { if ($5 != current) next; i = row[key] }
       else { i = row[key] = ++n }
-      id[i] = $1; label[i] = $3; panes[i] = $4; split($9, history, " ");
+      id[i] = $1; label[i] = $3; panes[i] = $4; last[i] = $10; split($9, history, " ");
       value = ($9 != "" ? history[1] : ($8 != "" ? 1 : 0));
       updated = ($9 != "" ? history[2] : $8 / 1000000000);
       age = now - updated; if (age < 0) age = 0;
@@ -81,19 +85,30 @@ rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id
     END {
       for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])
       for (i = 1; i <= n; i++)
-        printf "%d\t%.12f\t%d\t%s\t%-*s\t[%d %s]\n", visited[i], score[i], i, id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
+        printf "%d\t%.12f\t%d\t%s\t%s\t%-*s\t[%d %s]\n", visited[i], score[i], i, last[i], id[i], width, label[i], panes[i], (panes[i] == 1 ? "pane" : "panes")
     }')"
 [ -n "$rows" ] || { printf 'tmux-window-picker: no windows to show.\n' >&2; exit 0; }
-printf '%s\n' "$rows" | cut -f4- > "$work/original"
-printf '%s\n' "$rows" | sort -t $'\t' -k1,1nr -k2,2nr -k3,3n | cut -f4- > "$work/ranked"
+printf '%s\n' "$rows" | cut -f5- > "$work/original"
+printf '%s\n' "$rows" | sort -t $'\t' -k1,1nr -k2,2nr -k3,3n | cut -f5- > "$work/ranked"
 printf -v original_cmd 'cat %q' "$work/original"
 printf -v ranked_cmd 'cat %q' "$work/ranked"
+# Start on the most recently visited window other than the current one, in
+# both orders; fall back to the first row when there is no history.
+last_id="$(printf '%s\n' "$rows" | awk -F '\t' -v current_window="$current_window" '
+  $4 != "" && substr($5, index($5, ":") + 1) != current_window && $4 + 0 > best + 0 { best = $4; id = $5 }
+  END { print id }')"
+row_of() { awk -F '\t' -v id="$1" '$1 == id { print NR; exit }' "$2"; }
+ranked_pos="$(row_of "$last_id" "$work/ranked")"
+original_pos="$(row_of "$last_id" "$work/original")"
+# reload is asynchronous, so position the cursor on the load event, which fires
+# once the initial list and each reloaded list are complete.
+place="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf 'pos(%s)' '${ranked_pos:-1}'; else printf 'pos(%s)' '${original_pos:-1}'; fi"
 toggle="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf '%s' 'change-prompt(windows> )+reload($original_cmd)'; else printf '%s' 'change-prompt(Frequent> )+reload($ranked_cmd)'; fi"
 # Quote the command for fzf's shell; {1} is the hidden target, quoted by fzf.
 printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
 selection="$(cat "$work/ranked" | fzf --no-multi --reverse --no-sort \
   --delimiter=$'\t' --with-nth=2.. --nth=1 --tiebreak=begin,index \
-  --prompt='Frequent> ' --bind="ctrl-s:transform:$toggle" \
+  --prompt='Frequent> ' --bind="load:transform:$place" --bind="ctrl-s:transform:$toggle" \
   --header='ctrl-s toggle Frequent / session order · enter switch · esc cancel' --with-shell='bash -c' \
   --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
 [ -n "$selection" ] || exit 0

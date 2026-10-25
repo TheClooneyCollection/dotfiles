@@ -68,8 +68,11 @@ class PickerTest(unittest.TestCase):
         value, updated = map(float, recorded.split())
         expected = 8 * 0.5 ** ((updated - previous_time) / 900) + 1
         self.assertAlmostEqual(value, expected, places=8)
+        self.assertEqual(float(self.tmux('show-option', '-wqv', '-t', target, '@window_picker_last')), updated)
         subprocess.run([str(PICKER), '-L', self.socket, '--record', target], env=self.env, check=True)
         self.assertEqual(self.tmux('show-option', '-wqv', '-t', target, '@window_picker_score'), recorded)
+        # The last-visit stamp is never coalesced.
+        self.assertGreater(float(self.tmux('show-option', '-wqv', '-t', target, '@window_picker_last')), updated)
 
     def test_idle_history_keeps_order_without_mutating_scores(self):
         self.visit('alpha:' + self.one)
@@ -96,6 +99,7 @@ class PickerTest(unittest.TestCase):
         second = self.visit('alpha:' + self.two)
         third = self.visit('beta:' + self.beta)
         self.assertGreater(third, second)
+        self.assertEqual(float(self.tmux('show-option', '-wqv', '-t', self.beta, '@window_picker_last')), third)
         self.tmux('switch-client', '-c', self.client, '-t', 'alpha:' + self.one)
         time.sleep(.15)
         self.assertTrue(self.tmux('show-option', '-wqv', '-t', self.one, '@window_picker_score'))
@@ -130,25 +134,30 @@ class PickerTest(unittest.TestCase):
 import json, os, shlex, subprocess, sys
 args=sys.argv[1:]
 rows=sys.stdin.read().splitlines()
-bind=next(a for a in args if a.startswith('--bind=')).split('ctrl-s:transform:',1)[1]
-outputs=[]
+bind=next(a for a in args if 'ctrl-s:transform:' in a).split('ctrl-s:transform:',1)[1]
+place=next(a for a in args if 'load:transform:' in a).split('load:transform:',1)[1]
+outputs=[];positions=[]
 for prompt in ['Frequent> ', 'windows> ']:
  env=dict(os.environ,FZF_PROMPT=prompt)
  action=subprocess.check_output(['bash','-c',bind],env=env,text=True)
  command=action.split('+reload(',1)[1][:-1]
  outputs.append(subprocess.check_output(['bash','-c',command],text=True).splitlines())
+ positions.append(subprocess.check_output(['bash','-c',place],env=env,text=True))
 preview=next(a for a in args if a.startswith('--preview=')).split('=',1)[1]
 subprocess.run(['bash','-c',preview.replace('{1}',shlex.quote(rows[0].split('\\t')[0]))],check=True,stdout=subprocess.DEVNULL)
-with open(os.environ['PICKER_REPORT'],'w') as f:json.dump([rows,outputs,args],f)
+with open(os.environ['PICKER_REPORT'],'w') as f:json.dump([rows,outputs,args,positions],f)
 print(rows[-1])
 ''')
         stub.chmod(0o755)
         report = Path(self.tmp.name) / 'report.json'
         env = dict(self.env, PATH=self.tmp.name + os.pathsep + os.environ['PATH'], PICKER_REPORT=str(report))
         subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
-        rows, orders, args = json.loads(report.read_text())
+        rows, orders, args, positions = json.loads(report.read_text())
         windows = [r.split('\t')[0].split(':')[1] for r in rows]
         self.assertEqual(windows, [self.one, self.two, self.beta])
+        # Current is one; beta was visited after two, so the cursor starts on
+        # beta: row 3 in Frequent order, row 3 in session order.
+        self.assertEqual(positions, ['pos(3)', 'pos(3)'])
         self.assertEqual(orders[1], rows)
         self.assertEqual([r.split('\t')[0].split(':')[1] for r in orders[0]], [self.one, self.two, self.beta])
         self.assertTrue(all('agents-' not in r and 'alpha-group' not in r for r in rows))
@@ -159,6 +168,8 @@ print(rows[-1])
         time.sleep(.1)
         subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
         self.assertEqual(json.loads(report.read_text())[0], rows)
+        # Now current is beta and one was the last visited: Frequent row 1, session row 1.
+        self.assertEqual(json.loads(report.read_text())[3], ['pos(1)', 'pos(1)'])
 
         # The installed fzf must accept the generated options and still search
         # the visible label, rather than the hidden stable IDs.

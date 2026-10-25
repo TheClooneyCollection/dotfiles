@@ -7,6 +7,9 @@ Eight visits 15 minutes ago have the same weight as four visits now. Visits to
 the same window within one minute are coalesced, including duplicate hooks.
 The current window follows the same rules as every other window. Equal scores
 use the original session/window order, without a last-visited tie-breaker.
+The cursor starts on the most recently visited window other than the current
+one, in both orders, so Enter flips straight back to it. Without history the
+cursor starts on the first row.
 
 Press `Ctrl-s` to toggle between Frequent and the original session/window order.
 Typing filters either list, Enter switches, and Escape cancels. The active pane
@@ -23,7 +26,9 @@ time. Fifteen minutes is a half-life, not an expiry: inactivity alone does not
 reset the ordering. Windows with history rank ahead of never-visited windows.
 
 Scores and update times are recorded by stable window ID in the tmux window
-option `@window_picker_score`, shared across clients on that server. Renaming or
+option `@window_picker_score`, shared across clients on that server. Every
+counted visit also writes its time to `@window_picker_last`, uncoalesced, which
+only decides where the cursor starts. Renaming or
 renumbering windows preserves history. History lasts until the window or server
 is destroyed; no history file is written. Detached and `agents-*` sessions do
 not record visits. Existing `@window_picker_visit` timestamps count as one
@@ -44,5 +49,5 @@ python3 .bin/tests/test-tmux-window-picker.py
 
 The integration test creates a randomly named private tmux server, attaches a
 PTY client, and shuts down only that server. It exercises real visit hooks,
-decay, rapid-revisit coalescing, current-window neutrality, cross-session ordering, hidden/detached filtering, stable IDs, popup behavior,
+decay, rapid-revisit coalescing, last-visit stamps and cursor placement, current-window neutrality, cross-session ordering, hidden/detached filtering, stable IDs, popup behavior,
 grouped sessions, both fzf reload commands, preview capture and switching.
