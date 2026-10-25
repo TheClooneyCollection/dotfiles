@@ -30,7 +30,7 @@
       "Read"
     ]
   },
-  "model": "opus",
+  "model": "fable",
   "hooks": {
     "Notification": [
       {
@@ -70,12 +70,12 @@
     }
   },
   "effortLevel": "low",
-  "theme": "dark-ansi",
-  "agentPushNotifEnabled": true,
-  "voiceEnabled": true,
   "modelSettings": {
     "gpt-6-astra": {
       "effortLevel": "medium"
     }
-  }
+  },
+  "theme": "dark-ansi",
+  "agentPushNotifEnabled": true,
+  "voiceEnabled": true
 }
