@@ -130,7 +130,7 @@ class PickerTest(unittest.TestCase):
 import json, os, shlex, subprocess, sys
 args=sys.argv[1:]
 rows=sys.stdin.read().splitlines()
-bind=next(a for a in args if a.startswith('--bind=')).split('ctrl-s:transform:',1)[1]
+bind=next(a for a in args if 'ctrl-s:transform:' in a).split('ctrl-s:transform:',1)[1]
 outputs=[]
 for prompt in ['Frequent> ', 'windows> ']:
  env=dict(os.environ,FZF_PROMPT=prompt)
@@ -154,6 +154,8 @@ print(rows[-1])
         self.assertTrue(all('agents-' not in r and 'alpha-group' not in r for r in rows))
         self.assertEqual(self.tmux('list-clients', '-F', '#{window_id}'), self.beta)
         self.assertIn('--no-sort', args)
+        # The cursor starts on the second row: the current window is usually on top.
+        self.assertIn('--bind=start:down', args)
         # Switching to a lower-ranked window and reopening keeps the layout;
         # neither being current nor one extra visit overrides history.
         time.sleep(.1)

@@ -93,7 +93,7 @@ toggle="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf '%s' 'change-prompt(w
 printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
 selection="$(cat "$work/ranked" | fzf --no-multi --reverse --no-sort \
   --delimiter=$'\t' --with-nth=2.. --nth=1 --tiebreak=begin,index \
-  --prompt='Frequent> ' --bind="ctrl-s:transform:$toggle" \
+  --prompt='Frequent> ' --sync --bind=start:down --bind="ctrl-s:transform:$toggle" \
   --header='ctrl-s toggle Frequent / session order · enter switch · esc cancel' --with-shell='bash -c' \
   --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
 [ -n "$selection" ] || exit 0

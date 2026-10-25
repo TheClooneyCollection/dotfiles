@@ -5,8 +5,10 @@ The picker starts in `Frequent` order: historical visit frequency weighted
 by recency. Each visit adds one point; points have a 15-minute half-life.
 Eight visits 15 minutes ago have the same weight as four visits now. Visits to
 the same window within one minute are coalesced, including duplicate hooks.
-The current window follows the same rules as every other window. Equal scores
-use the original session/window order, without a last-visited tie-breaker.
+The current window follows the same rules as every other window, so it is
+usually on top; the cursor therefore starts on the second row, which is
+normally the window you want to flip back to. Equal scores use the original
+session/window order, without a last-visited tie-breaker.
 
 Press `Ctrl-s` to toggle between Frequent and the original session/window order.
 Typing filters either list, Enter switches, and Escape cancels. The active pane
