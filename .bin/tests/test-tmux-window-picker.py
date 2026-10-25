@@ -143,6 +143,9 @@ for prompt in ['Frequent> ', 'windows> ']:
  command=action.split('+reload(',1)[1][:-1]
  outputs.append(subprocess.check_output(['bash','-c',command],text=True).splitlines())
  positions.append(subprocess.check_output(['bash','-c',place],env=env,text=True))
+retype=next(a for a in args if 'change:transform:' in a).split('change:transform:',1)[1]
+for query in ['ar','']:
+ positions.append(subprocess.check_output(['bash','-c',retype],env=dict(os.environ,FZF_PROMPT='Frequent> ',FZF_QUERY=query),text=True))
 preview=next(a for a in args if a.startswith('--preview=')).split('=',1)[1]
 subprocess.run(['bash','-c',preview.replace('{1}',shlex.quote(rows[0].split('\\t')[0]))],check=True,stdout=subprocess.DEVNULL)
 with open(os.environ['PICKER_REPORT'],'w') as f:json.dump([rows,outputs,args,positions],f)
@@ -157,7 +160,8 @@ print(rows[-1])
         self.assertEqual(windows, [self.one, self.two, self.beta])
         # Current is one; beta was visited after two, so the cursor starts on
         # beta: row 3 in Frequent order, row 3 in session order.
-        self.assertEqual(positions, ['pos(3)', 'pos(3)'])
+        # Typing jumps to the best match; clearing the query returns to beta.
+        self.assertEqual(positions, ['pos(3)', 'pos(3)', 'first', 'pos(3)'])
         self.assertEqual(orders[1], rows)
         self.assertEqual([r.split('\t')[0].split(':')[1] for r in orders[0]], [self.one, self.two, self.beta])
         self.assertTrue(all('agents-' not in r and 'alpha-group' not in r for r in rows))
@@ -169,7 +173,7 @@ print(rows[-1])
         subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
         self.assertEqual(json.loads(report.read_text())[0], rows)
         # Now current is beta and one was the last visited: Frequent row 1, session row 1.
-        self.assertEqual(json.loads(report.read_text())[3], ['pos(1)', 'pos(1)'])
+        self.assertEqual(json.loads(report.read_text())[3], ['pos(1)', 'pos(1)', 'first', 'pos(1)'])
 
         # The installed fzf must accept the generated options and still search
         # the visible label, rather than the hidden stable IDs.

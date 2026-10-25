@@ -103,12 +103,14 @@ original_pos="$(row_of "$last_id" "$work/original")"
 # reload is asynchronous, so position the cursor on the load event, which fires
 # once the initial list and each reloaded list are complete.
 place="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf 'pos(%s)' '${ranked_pos:-1}'; else printf 'pos(%s)' '${original_pos:-1}'; fi"
+# Typing filters: move to the best match; clearing the query restores the start row.
+retype="if [[ -n \$FZF_QUERY ]]; then printf first; else $place; fi"
 toggle="if [[ \$FZF_PROMPT == 'Frequent> ' ]]; then printf '%s' 'change-prompt(windows> )+reload($original_cmd)'; else printf '%s' 'change-prompt(Frequent> )+reload($ranked_cmd)'; fi"
 # Quote the command for fzf's shell; {1} is the hidden target, quoted by fzf.
 printf -v preview '%q ' tmux ${tmux_args[@]+"${tmux_args[@]}"} capture-pane -ep -J -S -300 -t
 selection="$(cat "$work/ranked" | fzf --no-multi --reverse --no-sort \
   --delimiter=$'\t' --with-nth=2.. --nth=1 --tiebreak=begin,index \
-  --prompt='Frequent> ' --bind="load:transform:$place" --bind="ctrl-s:transform:$toggle" \
+  --prompt='Frequent> ' --bind="load:transform:$place" --bind="change:transform:$retype" --bind="ctrl-s:transform:$toggle" \
   --header='ctrl-s toggle Frequent / session order · enter switch · esc cancel' --with-shell='bash -c' \
   --preview="${preview}{1}" --preview-window='right,60%,follow')" || exit 0
 [ -n "$selection" ] || exit 0
