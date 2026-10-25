@@ -56,6 +56,7 @@ context="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-clients -F $'#{client_nam
   awk -F '\t' -v client="$client" '$1 == client { print $2 "\t" $3; exit }')"
 [ -n "$context" ] || { printf 'tmux-window-picker: client not found.\n' >&2; exit 1; }
 current="${context%%$'\t'*}"
+current_window="${context##*$'\t'}"
 work="$(mktemp -d "${TMPDIR:-/tmp}/tmux-window-picker.XXXXXX")"
 trap 'rm -rf "$work"' EXIT
 
@@ -65,7 +66,7 @@ trap 'rm -rf "$work"' EXIT
 # agents-* sessions, and pad the searched label so the pane counts line up; the
 # tab after the padding keeps --nth on the label.
 rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id}:#{window_id}\t#{session_name}\t#{session_name}:#{window_index} #{window_name}\t#{window_panes}\t#{session_id}\t#{window_id}\t#{session_group}\t#{@window_picker_visit}\t#{@window_picker_score}' |
-  awk -F '\t' -v current="$current" -v now="$(date +%s)" '
+  awk -F '\t' -v current="$current" -v current_window="$current_window" -v now="$(date +%s)" '
     $2 ~ /^agents-/ { next }
     { key = ($7 != "" ? $7 : $5) SUBSEP $6
       if (key in row) { if ($5 != current) next; i = row[key] }
@@ -76,7 +77,10 @@ rows="$(tmux ${tmux_args[@]+"${tmux_args[@]}"} list-windows -a -F $'#{session_id
       age = now - updated; if (age < 0) age = 0;
       # Compare logarithms to avoid rounding tiny decayed scores to zero
       # (or floating-point underflow after long idle periods).
-      visited[i] = (value > 0);
+      # Frequent order: visited windows, then unvisited, then the current window
+      # last. The current window is where you already are, so the top row is
+      # the window you most likely want to flip back to.
+      visited[i] = ($6 == current_window ? 0 : (value > 0 ? 2 : 1));
       score[i] = (value > 0 ? log(value) - log(2) * age / 900 : 0) }
     END {
       for (i = 1; i <= n; i++) if (length(label[i]) > width) width = length(label[i])

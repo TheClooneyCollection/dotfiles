@@ -88,7 +88,8 @@ class PickerTest(unittest.TestCase):
                     self.tmux('set-option', '-w', '-t', window, '@window_picker_score', record)
                 subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
                 windows = [r.split('\t')[0].split(':')[1] for r in report.read_text().splitlines()]
-                self.assertEqual(windows, [self.two, self.beta, self.one, unvisited])
+                # The current window (one) sinks below even unvisited windows.
+                self.assertEqual(windows, [self.two, self.beta, unvisited, self.one])
                 for window, record in records.items():
                     self.assertEqual(self.tmux('show-option', '-wqv', '-t', window, '@window_picker_score'), record)
 
@@ -119,7 +120,7 @@ class PickerTest(unittest.TestCase):
         self.tmux('rename-window', '-t', self.two, 'renamed')
         self.assertEqual(self.tmux('show-option', '-wqv', '-t', self.two, '@window_picker_score'), before_rename)
         # Recent repeated visits beat an older, larger raw visit count.
-        # The current window receives exactly the same scoring treatment.
+        # The current window (one) is listed last regardless of its score.
         now = time.time()
         for window, value, updated in [(self.one, 8, now), (self.two, 4, now), (self.beta, 10, now - 30 * 60)]:
             self.tmux('set-option', '-w', '-t', window, '@window_picker_score', f'{value} {updated}')
@@ -140,25 +141,27 @@ for prompt in ['Frequent> ', 'windows> ']:
 preview=next(a for a in args if a.startswith('--preview=')).split('=',1)[1]
 subprocess.run(['bash','-c',preview.replace('{1}',shlex.quote(rows[0].split('\\t')[0]))],check=True,stdout=subprocess.DEVNULL)
 with open(os.environ['PICKER_REPORT'],'w') as f:json.dump([rows,outputs,args],f)
-print(rows[-1])
+print(next(r for r in rows if r.split('\\t')[0].endswith(':'+os.environ['PICKER_BETA'])))
 ''')
         stub.chmod(0o755)
         report = Path(self.tmp.name) / 'report.json'
-        env = dict(self.env, PATH=self.tmp.name + os.pathsep + os.environ['PATH'], PICKER_REPORT=str(report))
+        env = dict(self.env, PATH=self.tmp.name + os.pathsep + os.environ['PATH'], PICKER_REPORT=str(report), PICKER_BETA=self.beta)
         subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
         rows, orders, args = json.loads(report.read_text())
         windows = [r.split('\t')[0].split(':')[1] for r in rows]
-        self.assertEqual(windows, [self.one, self.two, self.beta])
+        self.assertEqual(windows, [self.two, self.beta, self.one])
         self.assertEqual(orders[1], rows)
+        # Session order keeps the current window in place.
         self.assertEqual([r.split('\t')[0].split(':')[1] for r in orders[0]], [self.one, self.two, self.beta])
         self.assertTrue(all('agents-' not in r and 'alpha-group' not in r for r in rows))
         self.assertEqual(self.tmux('list-clients', '-F', '#{window_id}'), self.beta)
         self.assertIn('--no-sort', args)
-        # Switching to a lower-ranked window and reopening keeps the layout;
-        # neither being current nor one extra visit overrides history.
+        # After switching to beta, it becomes current and sinks to the bottom;
+        # one extra visit does not reorder the rest.
         time.sleep(.1)
         subprocess.run([str(PICKER), '-L', self.socket, '--client', self.client], env=env, check=True)
-        self.assertEqual(json.loads(report.read_text())[0], rows)
+        reopened = [r.split('\t')[0].split(':')[1] for r in json.loads(report.read_text())[0]]
+        self.assertEqual(reopened, [self.one, self.two, self.beta])
 
         # The installed fzf must accept the generated options and still search
         # the visible label, rather than the hidden stable IDs.
