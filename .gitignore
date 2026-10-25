@@ -38,6 +38,7 @@ __pycache__/
 !/.claude/skills/wait-what
 !/.claude/skills/writing-for-agents
 !/.claude/skills/maintain-skills
+!/.claude/skills/tiny-slice
 
 # Codex
 
@@ -57,6 +58,7 @@ __pycache__/
 !/.codex/skills/wait-what
 !/.codex/skills/writing-for-agents
 !/.codex/skills/maintain-skills
+!/.codex/skills/tiny-slice
 !/.codex/AGENTS.md
 !/.codex/rules
 /.codex/rules/*
@@ -78,6 +80,7 @@ __pycache__/
 !/.codex-2nd/skills/wait-what
 !/.codex-2nd/skills/writing-for-agents
 !/.codex-2nd/skills/maintain-skills
+!/.codex-2nd/skills/tiny-slice
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
 /.codex-2nd/rules/*

@@ -10,6 +10,14 @@
         "symlink_target": "../../.agents/skills/local/maintain-skills"
       },
       {
+        "collection": "local",
+        "link": ".claude/skills/tiny-slice",
+        "path": "tiny-slice",
+        "skill": "tiny-slice",
+        "source": ".agents/skills/local/tiny-slice",
+        "symlink_target": "../../.agents/skills/local/tiny-slice"
+      },
+      {
         "collection": "mattpocock",
         "link": ".claude/skills/grill-me",
         "path": "skills/productivity/grill-me",
@@ -76,6 +84,14 @@
         "symlink_target": "../../.agents/skills/local/maintain-skills"
       },
       {
+        "collection": "local",
+        "link": ".codex/skills/tiny-slice",
+        "path": "tiny-slice",
+        "skill": "tiny-slice",
+        "source": ".agents/skills/local/tiny-slice",
+        "symlink_target": "../../.agents/skills/local/tiny-slice"
+      },
+      {
         "collection": "mattpocock",
         "link": ".codex/skills/grill-me",
         "path": "skills/productivity/grill-me",
@@ -140,6 +156,14 @@
         "skill": "maintain-skills",
         "source": ".agents/skills/local/maintain-skills",
         "symlink_target": "../../.agents/skills/local/maintain-skills"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/tiny-slice",
+        "path": "tiny-slice",
+        "skill": "tiny-slice",
+        "source": ".agents/skills/local/tiny-slice",
+        "symlink_target": "../../.agents/skills/local/tiny-slice"
       },
       {
         "collection": "mattpocock",
