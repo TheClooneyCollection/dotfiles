@@ -16,6 +16,15 @@
       "required_files": ["LICENSE"],
       "parent_readme": true
     },
+    "anthropic": {
+      "kind": "github",
+      "repository": "anthropics/skills",
+      "ref": "main",
+      "directory": ".agents/skills/anthropic",
+      "skill_roots": ["skills"],
+      "required_files": [],
+      "parent_readme": false
+    },
     "local": {
       "kind": "local",
       "directory": ".agents/skills/local",

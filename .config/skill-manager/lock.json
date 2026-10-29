@@ -1,9 +1,40 @@
 {
   "schema_version": 1,
   "sources": {
+    "anthropic": {
+      "metadata": {},
+      "skills": {
+        "skills/frontend-design": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "ca45fc496a3436251f191354091d557da31c15b5",
+          "files": {
+            "LICENSE.txt": {
+              "executable": false,
+              "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+            },
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3"
+            }
+          }
+        }
+      }
+    },
     "local": {
       "metadata": {},
       "skills": {
+        "afk": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
+        },
         "maintain-skills": {
           "agents": [
             "claude",

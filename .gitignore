@@ -40,6 +40,8 @@ __pycache__/
 !/.claude/skills/maintain-skills
 !/.claude/skills/tiny-slice
 !/.claude/skills/new-project-setup
+!/.claude/skills/afk
+!/.claude/skills/frontend-design
 
 # Codex
 
@@ -61,6 +63,8 @@ __pycache__/
 !/.codex/skills/maintain-skills
 !/.codex/skills/tiny-slice
 !/.codex/skills/new-project-setup
+!/.codex/skills/afk
+!/.codex/skills/frontend-design
 !/.codex/AGENTS.md
 !/.codex/rules
 /.codex/rules/*
@@ -84,6 +88,8 @@ __pycache__/
 !/.codex-2nd/skills/maintain-skills
 !/.codex-2nd/skills/tiny-slice
 !/.codex-2nd/skills/new-project-setup
+!/.codex-2nd/skills/afk
+!/.codex-2nd/skills/frontend-design
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
 /.codex-2nd/rules/*
@@ -206,6 +212,7 @@ __pycache__/
 !/.agents/skills/
 /.agents/skills/*
 !/.agents/skills/mattpocock/
+!/.agents/skills/anthropic/
 !/.agents/skills/local/
 
 # Skill manager source configuration and installation records.

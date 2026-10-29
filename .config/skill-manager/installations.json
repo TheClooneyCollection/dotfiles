@@ -2,6 +2,22 @@
   "agents": {
     "claude": [
       {
+        "collection": "anthropic",
+        "link": ".claude/skills/frontend-design",
+        "path": "skills/frontend-design",
+        "skill": "frontend-design",
+        "source": ".agents/skills/anthropic/skills/frontend-design",
+        "symlink_target": "../../.agents/skills/anthropic/skills/frontend-design"
+      },
+      {
+        "collection": "local",
+        "link": ".claude/skills/afk",
+        "path": "afk",
+        "skill": "afk",
+        "source": ".agents/skills/local/afk",
+        "symlink_target": "../../.agents/skills/local/afk"
+      },
+      {
         "collection": "local",
         "link": ".claude/skills/maintain-skills",
         "path": "maintain-skills",
@@ -84,6 +100,22 @@
     ],
     "codex": [
       {
+        "collection": "anthropic",
+        "link": ".codex/skills/frontend-design",
+        "path": "skills/frontend-design",
+        "skill": "frontend-design",
+        "source": ".agents/skills/anthropic/skills/frontend-design",
+        "symlink_target": "../../.agents/skills/anthropic/skills/frontend-design"
+      },
+      {
+        "collection": "local",
+        "link": ".codex/skills/afk",
+        "path": "afk",
+        "skill": "afk",
+        "source": ".agents/skills/local/afk",
+        "symlink_target": "../../.agents/skills/local/afk"
+      },
+      {
         "collection": "local",
         "link": ".codex/skills/maintain-skills",
         "path": "maintain-skills",
@@ -165,6 +197,22 @@
       }
     ],
     "codex-2nd": [
+      {
+        "collection": "anthropic",
+        "link": ".codex-2nd/skills/frontend-design",
+        "path": "skills/frontend-design",
+        "skill": "frontend-design",
+        "source": ".agents/skills/anthropic/skills/frontend-design",
+        "symlink_target": "../../.agents/skills/anthropic/skills/frontend-design"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/afk",
+        "path": "afk",
+        "skill": "afk",
+        "source": ".agents/skills/local/afk",
+        "symlink_target": "../../.agents/skills/local/afk"
+      },
       {
         "collection": "local",
         "link": ".codex-2nd/skills/maintain-skills",
