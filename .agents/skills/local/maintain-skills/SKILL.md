@@ -27,4 +27,6 @@ Explicitly allow each new source directory and new client symlink in `.gitignore
 
 `uninstall --source NAME PATH --agents AGENT` removes that client's registration and matching symlink while retaining the shared source. Without `--agents`, install/uninstall targets all configured default agents. A replaced link or a real directory at that path causes a conflict rather than deletion. Skills with no remaining clients stay imported so they can be inspected or reinstalled. Removing shared source files or dropping an entire source is a separate explicit task.
 
+Client directories also hold skills owned by other installers (tmux-agents, the Claude app, Codex); the README's "Managed elsewhere" lists them. Leave those to their installers.
+
 The script never schedules work, commits or pushes. Report the selected source, revision, clients, remaining differences and verification. Commit/push only when requested. The old `.bin/mattpocock-skills` command forwards to this manager with `--source mattpocock`.

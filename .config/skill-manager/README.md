@@ -89,3 +89,15 @@ at a time. Upstream archive links inside selected skills are rejected.
 Uninstall removes only registered matching symlinks, retaining shared sources.
 A replaced link or real directory is a conflict. The manager never commits or
 pushes. Run `python3 .bin/tests/test-skill-manager.py` for offline integration tests.
+
+## Managed elsewhere
+
+Client skill directories also hold skills this manager does not own. Leave them
+to their installers:
+
+- `tmux-agents`, `tmux-agents-setup`, `tmux-agents-perf`, `agent-chain`: symlinks
+  into `~/.local/share/tmux-agents/skills`, created and refreshed by that clone's
+  `install.sh` (see "tmux-agents install" in `~/AGENTS.md`). Its Claude list is
+  hard-coded; Codex homes get every skill in the clone.
+- `.claude/skills/synced`: synced by the Claude app.
+- `.codex*/skills/.system` and `.codex/skills/pdf`: Codex's own skills.
