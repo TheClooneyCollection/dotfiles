@@ -1,0 +1,51 @@
+# Manual tool only: run ./scripts/lint.sh. Not wired into the Xcode build.
+# SwiftFormat (.swiftformat) owns layout; SwiftLint checks the rest.
+
+included:
+  - {{APP}}
+  - {{APP}}Tests
+
+excluded:
+  - {{APP}}.xcodeproj
+
+# Rules that fight SwiftFormat's output. SwiftFormat decides these.
+disabled_rules:
+  - trailing_comma                 # SwiftFormat adds trailing commas to multi-element lists
+  - opening_brace                  # SwiftFormat places braces after wrapped conditions
+  - vertical_parameter_alignment   # SwiftFormat indents wrapped params instead of aligning
+  - vertical_parameter_alignment_on_call
+
+opt_in_rules:
+  - empty_count
+  - first_where
+  - contains_over_filter_count
+  - sorted_first_last
+  - redundant_type_annotation
+  - unneeded_parentheses_in_closure_argument
+  - closure_spacing
+  - toggle_bool
+  - unused_parameter
+
+line_length:
+  warning: 80    # soft target, reported but does not fail lint.sh
+  error: 120    # hard limit, same as SwiftFormat --max-width
+  ignores_urls: true
+  ignores_comments: false
+
+identifier_name:
+  excluded: [id, x, y]
+
+# Size and complexity limits. A warning is a nudge, an error fails lint.sh. Code over a limit says why
+# with a swiftlint:disable comment. Tests get their own, looser limits in {{APP}}Tests/.swiftlint.yml.
+function_body_length:
+  warning: 30
+  error: 40
+type_body_length:
+  warning: 200
+  error: 300
+file_length:
+  warning: 400
+  error: 500
+cyclomatic_complexity:
+  warning: 6
+  error: 10

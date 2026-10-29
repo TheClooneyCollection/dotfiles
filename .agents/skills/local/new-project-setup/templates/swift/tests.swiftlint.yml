@@ -1,0 +1,16 @@
+# Tests only: allow short names like `a` and `b` in equality checks.
+identifier_name:
+  min_length: 1
+
+# Tests only: test names and argument tables run long.
+line_length:
+  warning: 120
+  error: 150
+
+# Tests only: suites grow with every user scenario, so types and files may run longer than the app's.
+type_body_length:
+  warning: 400
+  error: 500
+file_length:
+  warning: 600
+  error: 700

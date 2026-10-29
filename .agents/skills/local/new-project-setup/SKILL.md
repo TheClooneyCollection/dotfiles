@@ -5,6 +5,8 @@ description: Set up a new project repository with the user's conventions (Git, c
 
 Lay down the **skeleton**: Git, agent instructions, docs layout and versioning rules. No language, framework or build tooling; those come later, from the project itself. The templates live in [`templates/`](templates/) next to this file.
 
+**Swift or Xcode** app: also follow [`references/swift.md`](references/swift.md); read it before step 1, since it adds questions.
+
 ## 1. Ask once
 
 Ask everything in one message, each with its default, and accept "defaults" as an answer:
@@ -25,7 +27,7 @@ Look at the target directory before writing. If it already has a `.git` or any f
 ## 3. Write the skeleton
 
 1. `git init -b main`.
-2. Copy the templates, keeping their paths, with these renames: `gitignore-<style>` becomes `.gitignore` (drop the other one), and `versioning/` is consumed rather than copied.
+2. Copy the templates, keeping their paths, with these renames: `gitignore-<style>` becomes `.gitignore` (drop the other one), `versioning/` is consumed rather than copied, and `swift/` is used only through `references/swift.md`.
 3. Fill the placeholders: `{{PROJECT_NAME}}`, `{{DESCRIPTION}}`, and in `AGENTS.md` replace `{{VERSIONING}}` with the body of `versioning/<scheme>.md`.
 4. Changelog notes on:
    - Keep `docs/development/changelog-notes/`, `tools/build_changelog.py`, `tools/test_build_changelog.py` and `scripts/refresh-changelog.sh` (executable).

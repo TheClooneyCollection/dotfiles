@@ -1,0 +1,16 @@
+# SwiftFormat (nicklockwood/SwiftFormat) owns layout; SwiftLint checks the rest.
+# Manual tool only: run ./scripts/format.sh or ./scripts/lint.sh.
+
+--swift-version {{SWIFT_VERSION}}
+--exclude {{APP}}.xcodeproj
+
+--indent 4
+--max-width 120
+--ifdef no-indent
+--header ignore
+--import-grouping testable-last
+--trailing-commas always
+--wrap-arguments before-first
+--wrap-parameters before-first
+--wrap-collections before-first
+--ranges no-space
