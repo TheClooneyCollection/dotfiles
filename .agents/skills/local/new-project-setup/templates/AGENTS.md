@@ -3,7 +3,7 @@
 {{DESCRIPTION}}
 
 - Work from the repository root with relative paths. Run `git` directly, never through `git -C` or after a `cd` elsewhere.
-- `README.md` is for people: what the project is, why, its status, how to try it and how to contribute. Technical detail goes in `docs/`, one topic per file under the matching folder (`docs/technical/`, `docs/development/`, `docs/product/`, `docs/research/` for surveys and prior art, `docs/decisions/` for decisions, see [Decisions](#decisions)), with a one-line entry in that folder's `README.md`, which is its index. A new folder gets its own `README.md` and a line in [docs/README.md](docs/README.md). Name each file after its topic (`docs/technical/save-format.md`) so it can be found by name or search.
+- `README.md` is for people: what the project is, why, its status, how to try it and how to contribute. Technical detail goes in `docs/`, one topic per file under the matching folder (`docs/technical/`, `docs/development/`, `docs/product/`, `docs/research/` for research records, `docs/decisions/` for decisions, see [Decisions](#decisions)), with a one-line entry in that folder's `README.md`, which is its index. A new folder gets its own `README.md` and a line in [docs/README.md](docs/README.md). Name each file after its topic (`docs/technical/save-format.md`) so it can be found by name or search.
 - Keep docs concise and practical. When agents are likely to repeat a mistake, add a short note in the doc they will read for that task.
 - Record every idea the user raises in [docs/product/ideas.md](docs/product/ideas.md), with its status and outcome.
 - Track source and docs only: build output, generated files, screenshots and secrets stay out of Git.
