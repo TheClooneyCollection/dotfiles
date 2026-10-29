@@ -67,8 +67,21 @@ def subset(files, directory):
     return {path[len(prefix):]: item for path, item in files.items() if path.startswith(prefix)}
 
 
+def github_token():
+    token = os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN')
+    if token or not shutil.which('gh'):
+        return token
+    result = subprocess.run(['gh', 'auth', 'token'], capture_output=True, text=True)
+    return result.stdout.strip() if result.returncode == 0 else None
+
+
 def fetch(url):
-    return subprocess.check_output(['curl', '-fsSL', '--max-time', '60', url])
+    command = ['curl', '-fsSL', '--max-time', '60', url]
+    token = github_token() if url.startswith('https://api.github.com/') else None
+    if not token:
+        return subprocess.check_output(command)
+    # Header via stdin keeps the token out of the process list.
+    return subprocess.check_output(command + ['-H', '@-'], input=f'Authorization: Bearer {token}\n'.encode())
 
 
 def snapshot(root, source, ref=None):

@@ -4,6 +4,9 @@
 symlinks. `.bin/mattpocock-skills` is a compatibility wrapper supplying
 `--source mattpocock`.
 
+GitHub API calls authenticate with `GH_TOKEN`, `GITHUB_TOKEN` or `gh auth token`
+when available; anonymous calls hit the 60/hour rate limit quickly.
+
 - `config.json`: named sources, client directories and default clients.
 - `lock.json`: per-source imported paths, pinned commits, file hashes/executable
   bits and each skill's chosen agents. This is the installation policy.
