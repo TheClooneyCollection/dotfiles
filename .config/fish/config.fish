@@ -95,6 +95,18 @@ function mkcd
     cd $argv
 end
 
+# Interactive only: show $HOME as ~. Scripts still get the builtin.
+function pwd --description "Print the working directory with \$HOME as ~"
+    set -l dir (builtin pwd $argv); or return
+    if test "$dir" = "$HOME"
+        echo '~'
+    else if string match -q -- "$HOME/*" "$dir"
+        echo "~"(string sub -s (math (string length -- $HOME) + 1) -- $dir)
+    else
+        echo $dir
+    end
+end
+
 # git wrapper
 
 function git --description "After running git commands that would affect HEAD, print out the last commit hash"
