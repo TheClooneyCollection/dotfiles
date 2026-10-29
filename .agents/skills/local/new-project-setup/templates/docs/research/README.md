@@ -7,6 +7,8 @@ Records of research: anything we looked into, what we found and what came of it.
 
 Researched <YYYY-MM-DD>. Status: <open, concluded or stale>.
 
+**Summary:** one to three sentences: the question, the answer and what came of it.
+
 **Question:** what we wanted to know, and why it mattered.
 
 **Constraints:** limits the answer had to fit: platform, licence, budget, performance, existing code.
@@ -20,4 +22,4 @@ Researched <YYYY-MM-DD>. Status: <open, concluded or stale>.
 **Outcome:** what came of it: a decision (link its file in docs/decisions/), an idea in docs/product/ideas.md, or nothing yet.
 ```
 
-When a constraint or assumption changes, mark the record `stale`.
+When a constraint or assumption changes, mark the record `stale` and update the summary.

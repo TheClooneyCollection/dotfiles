@@ -2,6 +2,8 @@
 
 Each folder's `README.md` indexes the docs in it.
 
+Every doc opens with a short summary: what it covers and the key takeaway. Details follow.
+
 - [technical/](technical/README.md): architecture, interfaces, data formats.
 - [development/](development/README.md): workflow, tooling, testing, estimates.
 - [product/](product/README.md): features, scope decisions, ideas.
