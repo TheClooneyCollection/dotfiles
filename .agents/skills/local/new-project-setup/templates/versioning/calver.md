@@ -1,0 +1,1 @@
+Releases are time-versioned: `vYYYY.MM.X`, where `MM` is the zero-padded month and `X` is that month's release counter starting at `0` (for example `v2026.10.0`, then `v2026.10.1`). The numbers are chronological snapshot labels with no compatibility meaning. Tag only when the user asks, with an annotated tag: `git tag -a vYYYY.MM.X -m "vYYYY.MM.X"`.

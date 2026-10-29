@@ -1,0 +1,19 @@
+# OS and editors
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Build and generated output
+build/
+dist/
+out/
+
+# Local secrets and settings
+.env
+.env.*
+*.local
+.claude/settings.local.json
+
+# Python caches
+__pycache__/

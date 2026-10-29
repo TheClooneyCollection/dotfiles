@@ -1,0 +1,16 @@
+# Ignore everything, then track by exception.
+# A new top-level file or folder is untracked until it gets a line here.
+/*
+
+!/.gitignore
+!/AGENTS.md
+!/CLAUDE.md
+!/README.md
+!/LICENSE
+!/CHANGELOG.md
+!/docs/
+!/tools/
+!/scripts/
+
+.DS_Store
+__pycache__/

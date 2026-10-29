@@ -39,6 +39,7 @@ __pycache__/
 !/.claude/skills/writing-for-agents
 !/.claude/skills/maintain-skills
 !/.claude/skills/tiny-slice
+!/.claude/skills/new-project-setup
 
 # Codex
 
@@ -59,6 +60,7 @@ __pycache__/
 !/.codex/skills/writing-for-agents
 !/.codex/skills/maintain-skills
 !/.codex/skills/tiny-slice
+!/.codex/skills/new-project-setup
 !/.codex/AGENTS.md
 !/.codex/rules
 /.codex/rules/*
@@ -81,6 +83,7 @@ __pycache__/
 !/.codex-2nd/skills/writing-for-agents
 !/.codex-2nd/skills/maintain-skills
 !/.codex-2nd/skills/tiny-slice
+!/.codex-2nd/skills/new-project-setup
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
 /.codex-2nd/rules/*

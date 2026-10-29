@@ -11,6 +11,14 @@
       },
       {
         "collection": "local",
+        "link": ".claude/skills/new-project-setup",
+        "path": "new-project-setup",
+        "skill": "new-project-setup",
+        "source": ".agents/skills/local/new-project-setup",
+        "symlink_target": "../../.agents/skills/local/new-project-setup"
+      },
+      {
+        "collection": "local",
         "link": ".claude/skills/tiny-slice",
         "path": "tiny-slice",
         "skill": "tiny-slice",
@@ -85,6 +93,14 @@
       },
       {
         "collection": "local",
+        "link": ".codex/skills/new-project-setup",
+        "path": "new-project-setup",
+        "skill": "new-project-setup",
+        "source": ".agents/skills/local/new-project-setup",
+        "symlink_target": "../../.agents/skills/local/new-project-setup"
+      },
+      {
+        "collection": "local",
         "link": ".codex/skills/tiny-slice",
         "path": "tiny-slice",
         "skill": "tiny-slice",
@@ -156,6 +172,14 @@
         "skill": "maintain-skills",
         "source": ".agents/skills/local/maintain-skills",
         "symlink_target": "../../.agents/skills/local/maintain-skills"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/new-project-setup",
+        "path": "new-project-setup",
+        "skill": "new-project-setup",
+        "source": ".agents/skills/local/new-project-setup",
+        "symlink_target": "../../.agents/skills/local/new-project-setup"
       },
       {
         "collection": "local",

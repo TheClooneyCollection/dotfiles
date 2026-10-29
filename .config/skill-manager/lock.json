@@ -12,6 +12,14 @@
           ],
           "commit": "local"
         },
+        "new-project-setup": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
+        },
         "tiny-slice": {
           "agents": [
             "claude",
