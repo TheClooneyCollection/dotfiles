@@ -52,6 +52,8 @@ docs/development/README.md
 [docs/development/changelog-notes/README.md]   # note format; notes sit beside it
 docs/product/README.md
 docs/product/ideas.md
+docs/research/README.md
+docs/decisions/README.md            # decision format and index
 ```
 
 ## 4. Commit and publish
