@@ -35,6 +35,22 @@
           ],
           "commit": "local"
         },
+        "agent-pool": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
+        },
+        "behavior-tests": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
+        },
         "maintain-skills": {
           "agents": [
             "claude",

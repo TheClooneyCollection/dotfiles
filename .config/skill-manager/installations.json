@@ -19,6 +19,22 @@
       },
       {
         "collection": "local",
+        "link": ".claude/skills/agent-pool",
+        "path": "agent-pool",
+        "skill": "agent-pool",
+        "source": ".agents/skills/local/agent-pool",
+        "symlink_target": "../../.agents/skills/local/agent-pool"
+      },
+      {
+        "collection": "local",
+        "link": ".claude/skills/behavior-tests",
+        "path": "behavior-tests",
+        "skill": "behavior-tests",
+        "source": ".agents/skills/local/behavior-tests",
+        "symlink_target": "../../.agents/skills/local/behavior-tests"
+      },
+      {
+        "collection": "local",
         "link": ".claude/skills/maintain-skills",
         "path": "maintain-skills",
         "skill": "maintain-skills",
@@ -117,6 +133,22 @@
       },
       {
         "collection": "local",
+        "link": ".codex/skills/agent-pool",
+        "path": "agent-pool",
+        "skill": "agent-pool",
+        "source": ".agents/skills/local/agent-pool",
+        "symlink_target": "../../.agents/skills/local/agent-pool"
+      },
+      {
+        "collection": "local",
+        "link": ".codex/skills/behavior-tests",
+        "path": "behavior-tests",
+        "skill": "behavior-tests",
+        "source": ".agents/skills/local/behavior-tests",
+        "symlink_target": "../../.agents/skills/local/behavior-tests"
+      },
+      {
+        "collection": "local",
         "link": ".codex/skills/maintain-skills",
         "path": "maintain-skills",
         "skill": "maintain-skills",
@@ -212,6 +244,22 @@
         "skill": "afk",
         "source": ".agents/skills/local/afk",
         "symlink_target": "../../.agents/skills/local/afk"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/agent-pool",
+        "path": "agent-pool",
+        "skill": "agent-pool",
+        "source": ".agents/skills/local/agent-pool",
+        "symlink_target": "../../.agents/skills/local/agent-pool"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/behavior-tests",
+        "path": "behavior-tests",
+        "skill": "behavior-tests",
+        "source": ".agents/skills/local/behavior-tests",
+        "symlink_target": "../../.agents/skills/local/behavior-tests"
       },
       {
         "collection": "local",

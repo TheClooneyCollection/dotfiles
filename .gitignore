@@ -39,6 +39,8 @@ __pycache__/
 !/.claude/skills/writing-for-agents
 !/.claude/skills/maintain-skills
 !/.claude/skills/tiny-slice
+!/.claude/skills/behavior-tests
+!/.claude/skills/agent-pool
 !/.claude/skills/new-project-setup
 !/.claude/skills/afk
 !/.claude/skills/frontend-design
@@ -62,6 +64,8 @@ __pycache__/
 !/.codex/skills/writing-for-agents
 !/.codex/skills/maintain-skills
 !/.codex/skills/tiny-slice
+!/.codex/skills/behavior-tests
+!/.codex/skills/agent-pool
 !/.codex/skills/new-project-setup
 !/.codex/skills/afk
 !/.codex/skills/frontend-design
@@ -87,6 +91,8 @@ __pycache__/
 !/.codex-2nd/skills/writing-for-agents
 !/.codex-2nd/skills/maintain-skills
 !/.codex-2nd/skills/tiny-slice
+!/.codex-2nd/skills/behavior-tests
+!/.codex-2nd/skills/agent-pool
 !/.codex-2nd/skills/new-project-setup
 !/.codex-2nd/skills/afk
 !/.codex-2nd/skills/frontend-design
