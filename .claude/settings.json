@@ -78,9 +78,10 @@
       "effortLevel": "medium"
     }
   },
+  "autoCompactWindow": 250000,
+  "tui": "fullscreen",
   "theme": "dark-ansi",
   "autoCompactEnabled": true,
-  "autoCompactWindow": 250000,
   "agentPushNotifEnabled": true,
   "voiceEnabled": true
 }
