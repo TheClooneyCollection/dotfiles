@@ -80,7 +80,7 @@
   },
   "theme": "dark-ansi",
   "autoCompactEnabled": true,
-  "autoCompactWindow": 200000,
+  "autoCompactWindow": 250000,
   "agentPushNotifEnabled": true,
   "voiceEnabled": true
 }
