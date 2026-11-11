@@ -51,6 +51,14 @@
           ],
           "commit": "local"
         },
+        "logo": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
+        },
         "maintain-skills": {
           "agents": [
             "claude",

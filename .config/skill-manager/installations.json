@@ -35,6 +35,14 @@
       },
       {
         "collection": "local",
+        "link": ".claude/skills/logo",
+        "path": "logo",
+        "skill": "logo",
+        "source": ".agents/skills/local/logo",
+        "symlink_target": "../../.agents/skills/local/logo"
+      },
+      {
+        "collection": "local",
         "link": ".claude/skills/maintain-skills",
         "path": "maintain-skills",
         "skill": "maintain-skills",
@@ -149,6 +157,14 @@
       },
       {
         "collection": "local",
+        "link": ".codex/skills/logo",
+        "path": "logo",
+        "skill": "logo",
+        "source": ".agents/skills/local/logo",
+        "symlink_target": "../../.agents/skills/local/logo"
+      },
+      {
+        "collection": "local",
         "link": ".codex/skills/maintain-skills",
         "path": "maintain-skills",
         "skill": "maintain-skills",
@@ -260,6 +276,14 @@
         "skill": "behavior-tests",
         "source": ".agents/skills/local/behavior-tests",
         "symlink_target": "../../.agents/skills/local/behavior-tests"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/logo",
+        "path": "logo",
+        "skill": "logo",
+        "source": ".agents/skills/local/logo",
+        "symlink_target": "../../.agents/skills/local/logo"
       },
       {
         "collection": "local",

@@ -43,6 +43,7 @@ __pycache__/
 !/.claude/skills/agent-pool
 !/.claude/skills/new-project-setup
 !/.claude/skills/afk
+!/.claude/skills/logo
 !/.claude/skills/frontend-design
 
 # Codex
@@ -68,6 +69,7 @@ __pycache__/
 !/.codex/skills/agent-pool
 !/.codex/skills/new-project-setup
 !/.codex/skills/afk
+!/.codex/skills/logo
 !/.codex/skills/frontend-design
 !/.codex/AGENTS.md
 !/.codex/rules
@@ -95,6 +97,7 @@ __pycache__/
 !/.codex-2nd/skills/agent-pool
 !/.codex-2nd/skills/new-project-setup
 !/.codex-2nd/skills/afk
+!/.codex-2nd/skills/logo
 !/.codex-2nd/skills/frontend-design
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
