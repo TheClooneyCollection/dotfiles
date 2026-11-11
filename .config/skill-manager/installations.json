@@ -59,6 +59,14 @@
       },
       {
         "collection": "local",
+        "link": ".claude/skills/polish-readme",
+        "path": "polish-readme",
+        "skill": "polish-readme",
+        "source": ".agents/skills/local/polish-readme",
+        "symlink_target": "../../.agents/skills/local/polish-readme"
+      },
+      {
+        "collection": "local",
         "link": ".claude/skills/tiny-slice",
         "path": "tiny-slice",
         "skill": "tiny-slice",
@@ -181,6 +189,14 @@
       },
       {
         "collection": "local",
+        "link": ".codex/skills/polish-readme",
+        "path": "polish-readme",
+        "skill": "polish-readme",
+        "source": ".agents/skills/local/polish-readme",
+        "symlink_target": "../../.agents/skills/local/polish-readme"
+      },
+      {
+        "collection": "local",
         "link": ".codex/skills/tiny-slice",
         "path": "tiny-slice",
         "skill": "tiny-slice",
@@ -300,6 +316,14 @@
         "skill": "new-project-setup",
         "source": ".agents/skills/local/new-project-setup",
         "symlink_target": "../../.agents/skills/local/new-project-setup"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/polish-readme",
+        "path": "polish-readme",
+        "skill": "polish-readme",
+        "source": ".agents/skills/local/polish-readme",
+        "symlink_target": "../../.agents/skills/local/polish-readme"
       },
       {
         "collection": "local",
