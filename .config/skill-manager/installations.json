@@ -74,6 +74,14 @@
         "symlink_target": "../../.agents/skills/local/tiny-slice"
       },
       {
+        "collection": "local",
+        "link": ".claude/skills/wrap-up",
+        "path": "wrap-up",
+        "skill": "wrap-up",
+        "source": ".agents/skills/local/wrap-up",
+        "symlink_target": "../../.agents/skills/local/wrap-up"
+      },
+      {
         "collection": "mattpocock",
         "link": ".claude/skills/grill-me",
         "path": "skills/productivity/grill-me",
@@ -204,6 +212,14 @@
         "symlink_target": "../../.agents/skills/local/tiny-slice"
       },
       {
+        "collection": "local",
+        "link": ".codex/skills/wrap-up",
+        "path": "wrap-up",
+        "skill": "wrap-up",
+        "source": ".agents/skills/local/wrap-up",
+        "symlink_target": "../../.agents/skills/local/wrap-up"
+      },
+      {
         "collection": "mattpocock",
         "link": ".codex/skills/grill-me",
         "path": "skills/productivity/grill-me",
@@ -332,6 +348,14 @@
         "skill": "tiny-slice",
         "source": ".agents/skills/local/tiny-slice",
         "symlink_target": "../../.agents/skills/local/tiny-slice"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/wrap-up",
+        "path": "wrap-up",
+        "skill": "wrap-up",
+        "source": ".agents/skills/local/wrap-up",
+        "symlink_target": "../../.agents/skills/local/wrap-up"
       },
       {
         "collection": "mattpocock",

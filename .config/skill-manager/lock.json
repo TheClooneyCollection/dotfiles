@@ -90,6 +90,14 @@
             "codex-2nd"
           ],
           "commit": "local"
+        },
+        "wrap-up": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
         }
       }
     },
