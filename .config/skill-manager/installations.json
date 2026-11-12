@@ -19,6 +19,14 @@
       },
       {
         "collection": "local",
+        "link": ".claude/skills/agent-docs",
+        "path": "agent-docs",
+        "skill": "agent-docs",
+        "source": ".agents/skills/local/agent-docs",
+        "symlink_target": "../../.agents/skills/local/agent-docs"
+      },
+      {
+        "collection": "local",
         "link": ".claude/skills/agent-pool",
         "path": "agent-pool",
         "skill": "agent-pool",
@@ -128,14 +136,6 @@
         "skill": "wait-what",
         "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
-      },
-      {
-        "collection": "mattpocock",
-        "link": ".claude/skills/writing-for-agents",
-        "path": "skills/productivity/writing-for-agents",
-        "skill": "writing-for-agents",
-        "source": ".agents/skills/mattpocock/skills/productivity/writing-for-agents",
-        "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/writing-for-agents"
       }
     ],
     "codex": [
@@ -154,6 +154,14 @@
         "skill": "afk",
         "source": ".agents/skills/local/afk",
         "symlink_target": "../../.agents/skills/local/afk"
+      },
+      {
+        "collection": "local",
+        "link": ".codex/skills/agent-docs",
+        "path": "agent-docs",
+        "skill": "agent-docs",
+        "source": ".agents/skills/local/agent-docs",
+        "symlink_target": "../../.agents/skills/local/agent-docs"
       },
       {
         "collection": "local",
@@ -266,14 +274,6 @@
         "skill": "wait-what",
         "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
-      },
-      {
-        "collection": "mattpocock",
-        "link": ".codex/skills/writing-for-agents",
-        "path": "skills/productivity/writing-for-agents",
-        "skill": "writing-for-agents",
-        "source": ".agents/skills/mattpocock/skills/productivity/writing-for-agents",
-        "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/writing-for-agents"
       }
     ],
     "codex-2nd": [
@@ -292,6 +292,14 @@
         "skill": "afk",
         "source": ".agents/skills/local/afk",
         "symlink_target": "../../.agents/skills/local/afk"
+      },
+      {
+        "collection": "local",
+        "link": ".codex-2nd/skills/agent-docs",
+        "path": "agent-docs",
+        "skill": "agent-docs",
+        "source": ".agents/skills/local/agent-docs",
+        "symlink_target": "../../.agents/skills/local/agent-docs"
       },
       {
         "collection": "local",
@@ -404,14 +412,6 @@
         "skill": "wait-what",
         "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
-      },
-      {
-        "collection": "mattpocock",
-        "link": ".codex-2nd/skills/writing-for-agents",
-        "path": "skills/productivity/writing-for-agents",
-        "skill": "writing-for-agents",
-        "source": ".agents/skills/mattpocock/skills/productivity/writing-for-agents",
-        "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/writing-for-agents"
       }
     ]
   },

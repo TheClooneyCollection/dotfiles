@@ -35,6 +35,14 @@
           ],
           "commit": "local"
         },
+        "agent-docs": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "local"
+        },
         "agent-pool": {
           "agents": [
             "claude",
@@ -244,11 +252,7 @@
           }
         },
         "skills/productivity/writing-for-agents": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
+          "agents": [],
           "commit": "49dd158d1076134a641b33efb035946536778336",
           "files": {
             "SKILL-MECHANICS.md": {

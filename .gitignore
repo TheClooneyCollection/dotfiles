@@ -36,7 +36,7 @@ __pycache__/
 !/.claude/skills/teach
 !/.claude/skills/to-questionnaire
 !/.claude/skills/wait-what
-!/.claude/skills/writing-for-agents
+!/.claude/skills/agent-docs
 !/.claude/skills/maintain-skills
 !/.claude/skills/tiny-slice
 !/.claude/skills/behavior-tests
@@ -64,7 +64,7 @@ __pycache__/
 !/.codex/skills/teach
 !/.codex/skills/to-questionnaire
 !/.codex/skills/wait-what
-!/.codex/skills/writing-for-agents
+!/.codex/skills/agent-docs
 !/.codex/skills/maintain-skills
 !/.codex/skills/tiny-slice
 !/.codex/skills/behavior-tests
@@ -94,7 +94,7 @@ __pycache__/
 !/.codex-2nd/skills/teach
 !/.codex-2nd/skills/to-questionnaire
 !/.codex-2nd/skills/wait-what
-!/.codex-2nd/skills/writing-for-agents
+!/.codex-2nd/skills/agent-docs
 !/.codex-2nd/skills/maintain-skills
 !/.codex-2nd/skills/tiny-slice
 !/.codex-2nd/skills/behavior-tests
