@@ -234,11 +234,7 @@
           }
         },
         "skills/productivity/wait-what": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
+          "agents": [],
           "commit": "49dd158d1076134a641b33efb035946536778336",
           "files": {
             "SKILL.md": {

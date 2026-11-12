@@ -128,14 +128,6 @@
         "skill": "to-questionnaire",
         "source": ".agents/skills/mattpocock/skills/productivity/to-questionnaire",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/to-questionnaire"
-      },
-      {
-        "collection": "mattpocock",
-        "link": ".claude/skills/wait-what",
-        "path": "skills/productivity/wait-what",
-        "skill": "wait-what",
-        "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
-        "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
       }
     ],
     "codex": [
@@ -266,14 +258,6 @@
         "skill": "to-questionnaire",
         "source": ".agents/skills/mattpocock/skills/productivity/to-questionnaire",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/to-questionnaire"
-      },
-      {
-        "collection": "mattpocock",
-        "link": ".codex/skills/wait-what",
-        "path": "skills/productivity/wait-what",
-        "skill": "wait-what",
-        "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
-        "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
       }
     ],
     "codex-2nd": [
@@ -404,14 +388,6 @@
         "skill": "to-questionnaire",
         "source": ".agents/skills/mattpocock/skills/productivity/to-questionnaire",
         "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/to-questionnaire"
-      },
-      {
-        "collection": "mattpocock",
-        "link": ".codex-2nd/skills/wait-what",
-        "path": "skills/productivity/wait-what",
-        "skill": "wait-what",
-        "source": ".agents/skills/mattpocock/skills/productivity/wait-what",
-        "symlink_target": "../../.agents/skills/mattpocock/skills/productivity/wait-what"
       }
     ]
   },
