@@ -2,6 +2,8 @@
 
 Notes for AI agents working in this dotfiles repo.
 
+Claude also loads this file in every project under `~`. The rules just below apply only to the dotfiles repo, and a project's own AGENTS.md wins. The sections after them are steps that other projects point to.
+
 - The Git repo root is `~/`. Dotfile directories like `.emacs.d/` are tracked subdirectories, not separate repos.
 - Run shell and Git commands from the current working directory with relative paths. Do not use `git -C` or absolute paths in commands.
 - This repo is mostly allowlisted through `.gitignore`. If a new root file should be tracked, update `.gitignore` explicitly.
@@ -25,6 +27,7 @@ Notes for AI agents working in this dotfiles repo.
   1. `git -C ~/.local/share/tmux-agents fetch --tags`
   2. `git -C ~/.local/share/tmux-agents checkout vX.Y.Z`
   3. `cd ~/.local/share/tmux-agents && ./install.sh`. Checkout alone leaves the copied Codex rules (`~/.codex/rules`, `~/.codex-2nd/rules`) stale; `install.sh` refreshes them.
-  4. `tmux-agents --chip-layout on`
+  4. Commit the refreshed `.codex/rules` and `.codex-2nd/rules` here: `chore(tmux-agents): update rules to vX.Y.Z`.
+  5. `tmux-agents --chip-layout on`
 - Roll back by checking out the previous tag the same way, then rerun `install.sh`.
 - After each tmux-agents release, add a timeline entry for it on the blog (blog.clooney.io), using the tagged commit's time.
