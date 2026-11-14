@@ -10,7 +10,7 @@ function __fish_tmux_chain_needs_directory
             return 1
         else
             switch $word
-                case --target --name --main-resume
+                case --target --name --main-resume --filter
                     set needs_value 1
                 case --
                     set positional_only 1
@@ -33,3 +33,4 @@ complete -c tmux-chain -l target -x -d 'Destination session, optionally with a w
 complete -c tmux-chain -l name -x -d 'Window name (default: directory basename)'
 complete -c tmux-chain -s h -l help -d 'Show help'
 complete -c tmux-chain -l main-resume -x -d 'Resume the main conversation by ID'
+complete -c tmux-chain -l filter -x -d 'Choose with fzf noninteractively'

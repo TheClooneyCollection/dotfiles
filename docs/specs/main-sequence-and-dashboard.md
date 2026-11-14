@@ -9,6 +9,10 @@ Two features that work together:
 
 **Where it lives.** Both features are personal workflow, so they live in the dotfiles repo, not in tmux-agents (a public subtree). Only the events log is a generic tmux-agents feature; it gets its own design note there when it is built.
 
+Implementation note: launchers now live in tmux-agents as `tmux-agents main-sequence`
+and `tmux-agents chain`, with config `~/.config/tmux-agents/projects`. The dotfiles
+commands remain short aliases; the original product spec below is retained.
+
 ## 1. `tmux-main-sequence`
 
 ### Windows
