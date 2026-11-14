@@ -27,7 +27,7 @@
     "clooney": {
       "metadata": {
         "LICENSE": {
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "fingerprint": {
             "executable": false,
             "sha256": "9eebe8ab42f3f2a4f76660abd042782336baa03912f2aae62b661b1b15444cad"
@@ -41,7 +41,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -55,7 +55,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -77,11 +77,25 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
               "sha256": "2ebd246ebd2361906430e9f3747dc6655338eda77963206385ecd00615956c9f"
+            }
+          }
+        },
+        "skills/avp-mvd-alvr-stutter-resolver": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "7992a75ac28a0e12bf4bf42526bb246dc8a00ae220301398cbfbd1b803053f92"
             }
           }
         },
@@ -91,7 +105,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -109,7 +123,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -123,7 +137,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -245,7 +259,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -259,7 +273,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -273,7 +287,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -287,7 +301,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "commit": "878ff024c9233e64c0af058f79f30bb534588357",
           "files": {
             "SKILL.md": {
               "executable": false,

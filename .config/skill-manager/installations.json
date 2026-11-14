@@ -35,6 +35,14 @@
       },
       {
         "collection": "clooney",
+        "link": ".claude/skills/avp-mvd-alvr-stutter-resolver",
+        "path": "skills/avp-mvd-alvr-stutter-resolver",
+        "skill": "avp-mvd-alvr-stutter-resolver",
+        "source": ".agents/skills/clooney/skills/avp-mvd-alvr-stutter-resolver",
+        "symlink_target": "../../.agents/skills/clooney/skills/avp-mvd-alvr-stutter-resolver"
+      },
+      {
+        "collection": "clooney",
         "link": ".claude/skills/behavior-tests",
         "path": "skills/behavior-tests",
         "skill": "behavior-tests",
@@ -173,6 +181,14 @@
       },
       {
         "collection": "clooney",
+        "link": ".codex/skills/avp-mvd-alvr-stutter-resolver",
+        "path": "skills/avp-mvd-alvr-stutter-resolver",
+        "skill": "avp-mvd-alvr-stutter-resolver",
+        "source": ".agents/skills/clooney/skills/avp-mvd-alvr-stutter-resolver",
+        "symlink_target": "../../.agents/skills/clooney/skills/avp-mvd-alvr-stutter-resolver"
+      },
+      {
+        "collection": "clooney",
         "link": ".codex/skills/behavior-tests",
         "path": "skills/behavior-tests",
         "skill": "behavior-tests",
@@ -308,6 +324,14 @@
         "skill": "agent-pool",
         "source": ".agents/skills/clooney/skills/agent-pool",
         "symlink_target": "../../.agents/skills/clooney/skills/agent-pool"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/avp-mvd-alvr-stutter-resolver",
+        "path": "skills/avp-mvd-alvr-stutter-resolver",
+        "skill": "avp-mvd-alvr-stutter-resolver",
+        "source": ".agents/skills/clooney/skills/avp-mvd-alvr-stutter-resolver",
+        "symlink_target": "../../.agents/skills/clooney/skills/avp-mvd-alvr-stutter-resolver"
       },
       {
         "collection": "clooney",

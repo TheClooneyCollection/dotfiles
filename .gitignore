@@ -47,6 +47,7 @@ __pycache__/
 !/.claude/skills/polish-readme
 !/.claude/skills/wrap-up
 !/.claude/skills/release
+!/.claude/skills/avp-mvd-alvr-stutter-resolver
 !/.claude/skills/frontend-design
 
 # Codex
@@ -76,6 +77,7 @@ __pycache__/
 !/.codex/skills/polish-readme
 !/.codex/skills/wrap-up
 !/.codex/skills/release
+!/.codex/skills/avp-mvd-alvr-stutter-resolver
 !/.codex/skills/frontend-design
 !/.codex/AGENTS.md
 !/.codex/rules
@@ -107,6 +109,7 @@ __pycache__/
 !/.codex-2nd/skills/polish-readme
 !/.codex-2nd/skills/wrap-up
 !/.codex-2nd/skills/release
+!/.codex-2nd/skills/avp-mvd-alvr-stutter-resolver
 !/.codex-2nd/skills/frontend-design
 !/.codex-2nd/AGENTS.md
 !/.codex-2nd/rules
