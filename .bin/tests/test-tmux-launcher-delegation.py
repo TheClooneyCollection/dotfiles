@@ -23,16 +23,17 @@ class LauncherDelegation(unittest.TestCase):
         self.env.update(PATH=str(self.directory) + os.pathsep + os.environ['PATH'],
                         TMUX_MAIN_SEQUENCE_SOCKET=self.socket,
                         TMUX_MAIN_SEQUENCE_SESSION='legacy-test',
+                        TEST_SUPPORTED='0',
+                        TEST_CALL_LOG=str(self.directory / 'calls'),
                         TMUX_MAIN_SEQUENCE_CONFIG=str(self.directory / 'projects'))
         stub = self.directory / 'tmux-agents'
         stub.write_text('''#!/usr/bin/env python3
 import json, os, sys
-if sys.argv[2:] == ['--help']:
-    print('probe noise stdout')
-    print('probe noise stderr', file=sys.stderr)
-    sys.exit(0 if os.environ.get('TEST_SUPPORTED') == '1' else 1)
+with open(os.environ['TEST_CALL_LOG'], 'a') as log:
+    log.write(repr(sys.argv))
 print(json.dumps(sys.argv[1:]))
-sys.exit(7)
+# v1.19.0 falls through to the browser and succeeds for unknown commands.
+sys.exit(7 if os.environ.get('TEST_SUPPORTED') == '1' else 0)
 ''')
         stub.chmod(0o755)
 
@@ -46,8 +47,12 @@ sys.exit(7)
 
     def test_supported_commands_preserve_arguments_output_and_exit_status(self):
         self.env['TEST_SUPPORTED'] = '1'
+        for command in ('chain', 'main-sequence'):
+            sibling = self.directory / ('tmux-agents-' + command)
+            sibling.write_text('#!/bin/sh\nexit 99\n')
+            sibling.chmod(0o755)
         for script, command in [('tmux-chain', 'chain'), ('tmux-main-sequence', 'main-sequence')]:
-            for args in [('--help', 'extra'), ('path with spaces', '--main-resume', 'abc')]:
+            for args in [('--help',), ('path with spaces', '--main-resume', 'abc')]:
                 with self.subTest(script=script, args=args):
                     result = self.run_launcher(script, *args)
                     self.assertEqual(result.returncode, 7)
@@ -64,7 +69,7 @@ sys.exit(7)
                 result = self.run_launcher(script, '--unknown-test-flag')
                 self.assertEqual(result.returncode, 2)
                 self.assertIn('unknown', result.stderr)
-                self.assertNotIn('probe noise', result.stderr)
+                self.assertFalse((self.directory / 'calls').exists())
 
     def test_legacy_launch_and_existing_sequence_use_only_private_socket(self):
         self.tmux('-f', '/dev/null', 'new-session', '-d', '-s', 'legacy-test')

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Delegate when the installed release supports this command.
+# Check for the sibling executable: old dispatchers open the browser for unknown commands.
 # Delete the legacy body and tmux-projects.sh once that release is installed.
-if tmux-agents chain --help >/dev/null 2>&1; then
+if command -v tmux-agents-chain >/dev/null 2>&1; then
   exec tmux-agents chain "$@"
 fi
 
