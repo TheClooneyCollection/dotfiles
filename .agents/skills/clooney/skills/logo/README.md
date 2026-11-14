@@ -2,7 +2,7 @@
 
 Designs a project logo with an image model and puts it at the top of the README.
 
-**Why:** This aligns the icon, wordmark and dark-mode versions by building them all from the one image you picked.
+**Why:** This aligns the icon, wordmark and dark-mode versions by building them all from the one image I picked.
 
 **Use it:** ask for a logo, icon or wordmark.
 
