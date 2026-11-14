@@ -27,7 +27,7 @@
     "clooney": {
       "metadata": {
         "LICENSE": {
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "fingerprint": {
             "executable": false,
             "sha256": "9eebe8ab42f3f2a4f76660abd042782336baa03912f2aae62b661b1b15444cad"
@@ -41,7 +41,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -55,7 +55,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -77,7 +77,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -91,7 +91,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -109,7 +109,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -123,11 +123,11 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
-              "sha256": "87f4b37c60c3df6f83e381d560437b02a66814fbaf8b006d9266cbf1c30466c9"
+              "sha256": "ae2a664d725f663778d160d995a01c2c996a255504537d4ebe37313a75f4b1a2"
             },
             "references/swift.md": {
               "executable": false,
@@ -135,7 +135,7 @@
             },
             "templates/AGENTS.md": {
               "executable": false,
-              "sha256": "4b12cab88f7a04cd3dcfd3750a0b16f892fbb6b471ccdc41b79b42148db8a3a5"
+              "sha256": "3ac27d900817459f83ac8d8d0c6eaa7d34e15d893732d10a2ca4a48660e5778e"
             },
             "templates/CLAUDE.md": {
               "executable": false,
@@ -245,11 +245,25 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
               "sha256": "43a9ecddae2f7911bd64e9503789f6776a77b17284269e9abc0e2e03e2d73881"
+            }
+          }
+        },
+        "skills/release": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "b957d2531f3f90f71421451f39e2a566ed37f3a766cc1bafc529e1f9d555c1cb"
             }
           }
         },
@@ -259,7 +273,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,
@@ -273,7 +287,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "commit": "2eb584020d13f79f67552b66b9cde09722aa96df",
           "files": {
             "SKILL.md": {
               "executable": false,

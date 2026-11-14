@@ -67,6 +67,14 @@
       },
       {
         "collection": "clooney",
+        "link": ".claude/skills/release",
+        "path": "skills/release",
+        "skill": "release",
+        "source": ".agents/skills/clooney/skills/release",
+        "symlink_target": "../../.agents/skills/clooney/skills/release"
+      },
+      {
+        "collection": "clooney",
         "link": ".claude/skills/tiny-slice",
         "path": "skills/tiny-slice",
         "skill": "tiny-slice",
@@ -197,6 +205,14 @@
       },
       {
         "collection": "clooney",
+        "link": ".codex/skills/release",
+        "path": "skills/release",
+        "skill": "release",
+        "source": ".agents/skills/clooney/skills/release",
+        "symlink_target": "../../.agents/skills/clooney/skills/release"
+      },
+      {
+        "collection": "clooney",
         "link": ".codex/skills/tiny-slice",
         "path": "skills/tiny-slice",
         "skill": "tiny-slice",
@@ -324,6 +340,14 @@
         "skill": "polish-readme",
         "source": ".agents/skills/clooney/skills/polish-readme",
         "symlink_target": "../../.agents/skills/clooney/skills/polish-readme"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/release",
+        "path": "skills/release",
+        "skill": "release",
+        "source": ".agents/skills/clooney/skills/release",
+        "symlink_target": "../../.agents/skills/clooney/skills/release"
       },
       {
         "collection": "clooney",

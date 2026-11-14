@@ -28,7 +28,7 @@ Look at the target directory before writing. If it already has a `.git` or any f
 
 1. `git init -b main`.
 2. Copy the templates, keeping their paths, with these renames: `gitignore-<style>` becomes `.gitignore` (drop the other one), `versioning/` is consumed rather than copied, and `swift/` is used only through `references/swift.md`.
-3. Fill the placeholders: `{{PROJECT_NAME}}`, `{{DESCRIPTION}}`, and in `AGENTS.md` replace `{{VERSIONING}}` with the body of `versioning/<scheme>.md`.
+3. Fill the placeholders: `{{PROJECT_NAME}}`, `{{DESCRIPTION}}`, and in `AGENTS.md` replace `{{VERSIONING}}` with the body of `versioning/<scheme>.md`. The `## Release` section is read by the `release` skill; its fields grow with the project (version files, checks, post-release steps).
 4. Changelog notes on:
    - Keep `docs/development/changelog-notes/`, `tools/build_changelog.py`, `tools/test_build_changelog.py` and `scripts/refresh-changelog.sh` (executable).
    - Write `tools/build_changelog.json` as `{"scheme": "<scheme>"}`. The defaults generate `CHANGELOG.md` at the root; the other settings (`json`, `version_file` outputs, `notes_dir`) are documented at the top of `build_changelog.py`, so add them only when the project asks.

@@ -32,3 +32,14 @@ Areas grow with the project. Record a new decision as its own file there; when n
 {{VERSIONING}}
 
 {{CHANGELOG}}
+
+## Release
+
+Releases are cut by hand with the `release` skill.
+
+- Version files: none yet.
+- Checks: none yet.
+- Prep commit: `chore: release vX.Y.Z`.
+- Title: `{{PROJECT_NAME}} vX.Y.Z`.
+- Notes: a short summary of what changed for users.
+- After release: none.
