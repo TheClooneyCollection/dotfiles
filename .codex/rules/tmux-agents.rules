@@ -2,6 +2,7 @@
 # (don't symlink it: Codex skips symlinked .rules files) into ~/.codex/rules/.
 # Allowed commands run outside the sandbox, which blocks the tmux socket.
 prefix_rule(pattern=["tmux-ask"], decision="allow")
+prefix_rule(pattern=["tmux-read"], decision="allow")
 prefix_rule(pattern=["tmux-peers"], decision="allow")
 prefix_rule(pattern=["tmux-peek"], decision="allow")
 prefix_rule(pattern=["tmux-spawn"], decision="allow")
@@ -11,3 +12,5 @@ prefix_rule(pattern=["tmux-agent-report"], decision="allow")
 prefix_rule(pattern=["tmux-connect", "--from"], decision="allow")
 prefix_rule(pattern=["tmux-rename", "--from"], decision="allow")
 prefix_rule(pattern=["tmux-agents", "chain-config"], decision="allow")
+prefix_rule(pattern=["tmux-agents", "main-sequence"], decision="allow")
+prefix_rule(pattern=["tmux-agents", "chain"], decision="allow")
