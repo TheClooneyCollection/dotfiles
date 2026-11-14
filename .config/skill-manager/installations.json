@@ -51,6 +51,14 @@
       },
       {
         "collection": "clooney",
+        "link": ".claude/skills/illustrate-post",
+        "path": "skills/illustrate-post",
+        "skill": "illustrate-post",
+        "source": ".agents/skills/clooney/skills/illustrate-post",
+        "symlink_target": "../../.agents/skills/clooney/skills/illustrate-post"
+      },
+      {
+        "collection": "clooney",
         "link": ".claude/skills/logo",
         "path": "skills/logo",
         "skill": "logo",
@@ -197,6 +205,14 @@
       },
       {
         "collection": "clooney",
+        "link": ".codex/skills/illustrate-post",
+        "path": "skills/illustrate-post",
+        "skill": "illustrate-post",
+        "source": ".agents/skills/clooney/skills/illustrate-post",
+        "symlink_target": "../../.agents/skills/clooney/skills/illustrate-post"
+      },
+      {
+        "collection": "clooney",
         "link": ".codex/skills/logo",
         "path": "skills/logo",
         "skill": "logo",
@@ -340,6 +356,14 @@
         "skill": "behavior-tests",
         "source": ".agents/skills/clooney/skills/behavior-tests",
         "symlink_target": "../../.agents/skills/clooney/skills/behavior-tests"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/illustrate-post",
+        "path": "skills/illustrate-post",
+        "skill": "illustrate-post",
+        "source": ".agents/skills/clooney/skills/illustrate-post",
+        "symlink_target": "../../.agents/skills/clooney/skills/illustrate-post"
       },
       {
         "collection": "clooney",

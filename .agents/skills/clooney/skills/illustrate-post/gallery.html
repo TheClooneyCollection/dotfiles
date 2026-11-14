@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Image candidates</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --fg:#1f2933; --muted:#5f6b7a; --line:#dde1e6; --accent:#1c7ed6; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#111418; --card:#1a1f25; --fg:#e6e9ee; --muted:#9aa4b1; --line:#2a313a; --accent:#4dabf7; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif; }
+  header { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line); padding:14px 16px; }
+  h1 { font-size:18px; margin:0 0 8px; }
+  nav { display:flex; flex-wrap:wrap; gap:6px; }
+  nav button { border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:999px; padding:4px 12px; font:inherit; font-size:13px; cursor:pointer; }
+  nav button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; }
+  main { padding:16px; max-width:1800px; margin:0 auto; }
+  section { margin:0 0 36px; }
+  h2 { font-size:16px; margin:0 0 2px; }
+  .what { color:var(--muted); font-size:13px; margin:0 0 12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr)); gap:14px; }
+  figure { margin:0; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  figure img { display:block; width:100%; height:auto; cursor:zoom-in; }
+  figcaption { padding:8px 12px; font-size:13px; display:flex; justify-content:space-between; gap:8px; }
+  figcaption span { color:var(--muted); }
+  .hidden { display:none !important; }
+  #lb { position:fixed; inset:0; background:rgba(0,0,0,.88); display:none; align-items:center; justify-content:center; z-index:10; flex-direction:column; gap:10px; padding:16px; }
+  #lb.open { display:flex; }
+  #lb img { max-width:100%; max-height:calc(100vh - 80px); object-fit:contain; border-radius:8px; }
+  #lb p { color:#eee; margin:0; font-size:14px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Image candidates</h1>
+  <nav id="filters"></nav>
+</header>
+<main id="main"></main>
+<div id="lb" role="dialog" aria-modal="true"><img alt=""><p></p></div>
+<script>
+// Fill these two lists. Images live at <variant id>/<concept slug>.<ext>.
+const concepts = [
+  // [slug, title, what it shows]
+  ["01-overview", "Overview diagram", "The parts of the system and how they connect."],
+  ["02-hero", "Hero", "A mood image for the top of the post."],
+];
+const variants = [
+  // covers: the concept slugs this variant made; leave it out when it made all of them.
+  { id:"claude-svg", name:"Hand-drawn SVG", by:"Claude", ext:"svg", covers:["01-overview"] },
+  { id:"style-a", name:"Style A", by:"Image model", ext:"png" },
+];
+
+const main = document.getElementById("main");
+concepts.forEach(([slug, title, what]) => {
+  const sec = document.createElement("section");
+  sec.id = slug;
+  sec.innerHTML = `<h2>${title}</h2><p class="what">${what}</p><div class="grid"></div>`;
+  const grid = sec.querySelector(".grid");
+  variants.forEach(v => {
+    if (v.covers && !v.covers.includes(slug)) return;
+    const fig = document.createElement("figure");
+    fig.dataset.variant = v.id;
+    fig.innerHTML = `<img loading="lazy" src="${v.id}/${slug}.${v.ext}" alt="${title}, ${v.name}"><figcaption><b>${v.name}</b><span>${v.by}</span></figcaption>`;
+    grid.appendChild(fig);
+  });
+  main.appendChild(sec);
+});
+const nav = document.getElementById("filters");
+let active = "all";
+const render = () => {
+  nav.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === active));
+  document.querySelectorAll("figure").forEach(f => f.classList.toggle("hidden", active !== "all" && f.dataset.variant !== active));
+  document.querySelectorAll("section").forEach(s => s.classList.toggle("hidden", !s.querySelector("figure:not(.hidden)")));
+};
+[["all", "All"], ...variants.map(v => [v.id, v.name])].forEach(([f, label]) => {
+  const b = document.createElement("button");
+  b.dataset.f = f; b.textContent = label;
+  b.onclick = () => { active = f; render(); };
+  nav.appendChild(b);
+});
+render();
+const lb = document.getElementById("lb");
+main.addEventListener("click", e => {
+  if (e.target.tagName !== "IMG") return;
+  lb.querySelector("img").src = e.target.src;
+  lb.querySelector("p").textContent = e.target.alt;
+  lb.classList.add("open");
+});
+lb.onclick = () => lb.classList.remove("open");
+document.addEventListener("keydown", e => { if (e.key === "Escape") lb.classList.remove("open"); });
+</script>
+</body>
+</html>
