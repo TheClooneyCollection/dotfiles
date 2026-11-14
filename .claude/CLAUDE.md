@@ -7,4 +7,5 @@
 - To work in another repo, `cd` there once as its own command, then run `git` plainly. `git -C` stays banned outside the tmux-agents install steps.
 - Never backslash-escape spaces in paths. Always quote paths that contain spaces (e.g. `"dir/with spaces/file"`).
 - So instead of `find /Users/foo/Bar\ Baz -type f`, write `find . -type f`.
+- When the user asks what you are doing or why it is slow, answer that first in one or two sentences, before any more tool calls. During long waits (CI, remote checks, release steps) post a one-line progress note every few steps instead of going quiet.
 - Avoid em dashes. Rewrite the sentence, split it in two, or use a comma instead.
