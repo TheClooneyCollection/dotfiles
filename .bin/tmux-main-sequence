@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Delegate when the installed release supports this command.
+# Delete the legacy body and tmux-projects.sh once that release is installed.
+if tmux-agents main-sequence --help >/dev/null 2>&1; then
+  exec tmux-agents main-sequence "$@"
+fi
+
 # tmux-main-sequence — join the standard project session group
 #
 # Usage: tmux-main-sequence [--add-missing] [--no-attach]
