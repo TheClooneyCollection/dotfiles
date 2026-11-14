@@ -229,6 +229,7 @@ __pycache__/
 /.agents/skills/*
 !/.agents/skills/mattpocock/
 !/.agents/skills/anthropic/
+!/.agents/skills/clooney/
 !/.agents/skills/local/
 
 # Skill manager source configuration and installation records.

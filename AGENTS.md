@@ -12,6 +12,12 @@ Notes for AI agents working in this dotfiles repo.
 - Do not imply semver meaning in release numbers. They are chronological snapshot labels for this dotfiles repo.
 - Keep docs concise and practical. Add local workflow notes where future agents are likely to make the same mistake.
 
+## Own skills
+
+- The user's own skills live in `~/Source/Projects/skills` (https://github.com/TheClooneyCollection/skills). `.agents/skills/clooney/` is a vendored copy; never edit it.
+- Change a skill there, push to `main`, then run `.bin/skill-manager update --source clooney` here. It tracks latest `main`; do not pin `--ref`.
+- `maintain-skills` stays in `.agents/skills/local/` because it drives `.bin/skill-manager`.
+
 ## tmux-agents install
 
 - tmux-agents is developed in `~/Source/Projects/tmux-agents`. `~/.local/share/tmux-agents` is the installed copy: a clean clone of https://github.com/TheClooneyCollection/tmux-agents checked out at the latest release tag (detached HEAD). It is not tracked by dotfiles; never edit or commit in it.

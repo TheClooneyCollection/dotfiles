@@ -10,44 +10,76 @@
         "symlink_target": "../../.agents/skills/anthropic/skills/frontend-design"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".claude/skills/afk",
-        "path": "afk",
+        "path": "skills/afk",
         "skill": "afk",
-        "source": ".agents/skills/local/afk",
-        "symlink_target": "../../.agents/skills/local/afk"
+        "source": ".agents/skills/clooney/skills/afk",
+        "symlink_target": "../../.agents/skills/clooney/skills/afk"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".claude/skills/agent-docs",
-        "path": "agent-docs",
+        "path": "skills/agent-docs",
         "skill": "agent-docs",
-        "source": ".agents/skills/local/agent-docs",
-        "symlink_target": "../../.agents/skills/local/agent-docs"
+        "source": ".agents/skills/clooney/skills/agent-docs",
+        "symlink_target": "../../.agents/skills/clooney/skills/agent-docs"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".claude/skills/agent-pool",
-        "path": "agent-pool",
+        "path": "skills/agent-pool",
         "skill": "agent-pool",
-        "source": ".agents/skills/local/agent-pool",
-        "symlink_target": "../../.agents/skills/local/agent-pool"
+        "source": ".agents/skills/clooney/skills/agent-pool",
+        "symlink_target": "../../.agents/skills/clooney/skills/agent-pool"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".claude/skills/behavior-tests",
-        "path": "behavior-tests",
+        "path": "skills/behavior-tests",
         "skill": "behavior-tests",
-        "source": ".agents/skills/local/behavior-tests",
-        "symlink_target": "../../.agents/skills/local/behavior-tests"
+        "source": ".agents/skills/clooney/skills/behavior-tests",
+        "symlink_target": "../../.agents/skills/clooney/skills/behavior-tests"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".claude/skills/logo",
-        "path": "logo",
+        "path": "skills/logo",
         "skill": "logo",
-        "source": ".agents/skills/local/logo",
-        "symlink_target": "../../.agents/skills/local/logo"
+        "source": ".agents/skills/clooney/skills/logo",
+        "symlink_target": "../../.agents/skills/clooney/skills/logo"
+      },
+      {
+        "collection": "clooney",
+        "link": ".claude/skills/new-project-setup",
+        "path": "skills/new-project-setup",
+        "skill": "new-project-setup",
+        "source": ".agents/skills/clooney/skills/new-project-setup",
+        "symlink_target": "../../.agents/skills/clooney/skills/new-project-setup"
+      },
+      {
+        "collection": "clooney",
+        "link": ".claude/skills/polish-readme",
+        "path": "skills/polish-readme",
+        "skill": "polish-readme",
+        "source": ".agents/skills/clooney/skills/polish-readme",
+        "symlink_target": "../../.agents/skills/clooney/skills/polish-readme"
+      },
+      {
+        "collection": "clooney",
+        "link": ".claude/skills/tiny-slice",
+        "path": "skills/tiny-slice",
+        "skill": "tiny-slice",
+        "source": ".agents/skills/clooney/skills/tiny-slice",
+        "symlink_target": "../../.agents/skills/clooney/skills/tiny-slice"
+      },
+      {
+        "collection": "clooney",
+        "link": ".claude/skills/wrap-up",
+        "path": "skills/wrap-up",
+        "skill": "wrap-up",
+        "source": ".agents/skills/clooney/skills/wrap-up",
+        "symlink_target": "../../.agents/skills/clooney/skills/wrap-up"
       },
       {
         "collection": "local",
@@ -56,38 +88,6 @@
         "skill": "maintain-skills",
         "source": ".agents/skills/local/maintain-skills",
         "symlink_target": "../../.agents/skills/local/maintain-skills"
-      },
-      {
-        "collection": "local",
-        "link": ".claude/skills/new-project-setup",
-        "path": "new-project-setup",
-        "skill": "new-project-setup",
-        "source": ".agents/skills/local/new-project-setup",
-        "symlink_target": "../../.agents/skills/local/new-project-setup"
-      },
-      {
-        "collection": "local",
-        "link": ".claude/skills/polish-readme",
-        "path": "polish-readme",
-        "skill": "polish-readme",
-        "source": ".agents/skills/local/polish-readme",
-        "symlink_target": "../../.agents/skills/local/polish-readme"
-      },
-      {
-        "collection": "local",
-        "link": ".claude/skills/tiny-slice",
-        "path": "tiny-slice",
-        "skill": "tiny-slice",
-        "source": ".agents/skills/local/tiny-slice",
-        "symlink_target": "../../.agents/skills/local/tiny-slice"
-      },
-      {
-        "collection": "local",
-        "link": ".claude/skills/wrap-up",
-        "path": "wrap-up",
-        "skill": "wrap-up",
-        "source": ".agents/skills/local/wrap-up",
-        "symlink_target": "../../.agents/skills/local/wrap-up"
       },
       {
         "collection": "mattpocock",
@@ -140,44 +140,76 @@
         "symlink_target": "../../.agents/skills/anthropic/skills/frontend-design"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex/skills/afk",
-        "path": "afk",
+        "path": "skills/afk",
         "skill": "afk",
-        "source": ".agents/skills/local/afk",
-        "symlink_target": "../../.agents/skills/local/afk"
+        "source": ".agents/skills/clooney/skills/afk",
+        "symlink_target": "../../.agents/skills/clooney/skills/afk"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex/skills/agent-docs",
-        "path": "agent-docs",
+        "path": "skills/agent-docs",
         "skill": "agent-docs",
-        "source": ".agents/skills/local/agent-docs",
-        "symlink_target": "../../.agents/skills/local/agent-docs"
+        "source": ".agents/skills/clooney/skills/agent-docs",
+        "symlink_target": "../../.agents/skills/clooney/skills/agent-docs"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex/skills/agent-pool",
-        "path": "agent-pool",
+        "path": "skills/agent-pool",
         "skill": "agent-pool",
-        "source": ".agents/skills/local/agent-pool",
-        "symlink_target": "../../.agents/skills/local/agent-pool"
+        "source": ".agents/skills/clooney/skills/agent-pool",
+        "symlink_target": "../../.agents/skills/clooney/skills/agent-pool"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex/skills/behavior-tests",
-        "path": "behavior-tests",
+        "path": "skills/behavior-tests",
         "skill": "behavior-tests",
-        "source": ".agents/skills/local/behavior-tests",
-        "symlink_target": "../../.agents/skills/local/behavior-tests"
+        "source": ".agents/skills/clooney/skills/behavior-tests",
+        "symlink_target": "../../.agents/skills/clooney/skills/behavior-tests"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex/skills/logo",
-        "path": "logo",
+        "path": "skills/logo",
         "skill": "logo",
-        "source": ".agents/skills/local/logo",
-        "symlink_target": "../../.agents/skills/local/logo"
+        "source": ".agents/skills/clooney/skills/logo",
+        "symlink_target": "../../.agents/skills/clooney/skills/logo"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex/skills/new-project-setup",
+        "path": "skills/new-project-setup",
+        "skill": "new-project-setup",
+        "source": ".agents/skills/clooney/skills/new-project-setup",
+        "symlink_target": "../../.agents/skills/clooney/skills/new-project-setup"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex/skills/polish-readme",
+        "path": "skills/polish-readme",
+        "skill": "polish-readme",
+        "source": ".agents/skills/clooney/skills/polish-readme",
+        "symlink_target": "../../.agents/skills/clooney/skills/polish-readme"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex/skills/tiny-slice",
+        "path": "skills/tiny-slice",
+        "skill": "tiny-slice",
+        "source": ".agents/skills/clooney/skills/tiny-slice",
+        "symlink_target": "../../.agents/skills/clooney/skills/tiny-slice"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex/skills/wrap-up",
+        "path": "skills/wrap-up",
+        "skill": "wrap-up",
+        "source": ".agents/skills/clooney/skills/wrap-up",
+        "symlink_target": "../../.agents/skills/clooney/skills/wrap-up"
       },
       {
         "collection": "local",
@@ -186,38 +218,6 @@
         "skill": "maintain-skills",
         "source": ".agents/skills/local/maintain-skills",
         "symlink_target": "../../.agents/skills/local/maintain-skills"
-      },
-      {
-        "collection": "local",
-        "link": ".codex/skills/new-project-setup",
-        "path": "new-project-setup",
-        "skill": "new-project-setup",
-        "source": ".agents/skills/local/new-project-setup",
-        "symlink_target": "../../.agents/skills/local/new-project-setup"
-      },
-      {
-        "collection": "local",
-        "link": ".codex/skills/polish-readme",
-        "path": "polish-readme",
-        "skill": "polish-readme",
-        "source": ".agents/skills/local/polish-readme",
-        "symlink_target": "../../.agents/skills/local/polish-readme"
-      },
-      {
-        "collection": "local",
-        "link": ".codex/skills/tiny-slice",
-        "path": "tiny-slice",
-        "skill": "tiny-slice",
-        "source": ".agents/skills/local/tiny-slice",
-        "symlink_target": "../../.agents/skills/local/tiny-slice"
-      },
-      {
-        "collection": "local",
-        "link": ".codex/skills/wrap-up",
-        "path": "wrap-up",
-        "skill": "wrap-up",
-        "source": ".agents/skills/local/wrap-up",
-        "symlink_target": "../../.agents/skills/local/wrap-up"
       },
       {
         "collection": "mattpocock",
@@ -270,44 +270,76 @@
         "symlink_target": "../../.agents/skills/anthropic/skills/frontend-design"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex-2nd/skills/afk",
-        "path": "afk",
+        "path": "skills/afk",
         "skill": "afk",
-        "source": ".agents/skills/local/afk",
-        "symlink_target": "../../.agents/skills/local/afk"
+        "source": ".agents/skills/clooney/skills/afk",
+        "symlink_target": "../../.agents/skills/clooney/skills/afk"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex-2nd/skills/agent-docs",
-        "path": "agent-docs",
+        "path": "skills/agent-docs",
         "skill": "agent-docs",
-        "source": ".agents/skills/local/agent-docs",
-        "symlink_target": "../../.agents/skills/local/agent-docs"
+        "source": ".agents/skills/clooney/skills/agent-docs",
+        "symlink_target": "../../.agents/skills/clooney/skills/agent-docs"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex-2nd/skills/agent-pool",
-        "path": "agent-pool",
+        "path": "skills/agent-pool",
         "skill": "agent-pool",
-        "source": ".agents/skills/local/agent-pool",
-        "symlink_target": "../../.agents/skills/local/agent-pool"
+        "source": ".agents/skills/clooney/skills/agent-pool",
+        "symlink_target": "../../.agents/skills/clooney/skills/agent-pool"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex-2nd/skills/behavior-tests",
-        "path": "behavior-tests",
+        "path": "skills/behavior-tests",
         "skill": "behavior-tests",
-        "source": ".agents/skills/local/behavior-tests",
-        "symlink_target": "../../.agents/skills/local/behavior-tests"
+        "source": ".agents/skills/clooney/skills/behavior-tests",
+        "symlink_target": "../../.agents/skills/clooney/skills/behavior-tests"
       },
       {
-        "collection": "local",
+        "collection": "clooney",
         "link": ".codex-2nd/skills/logo",
-        "path": "logo",
+        "path": "skills/logo",
         "skill": "logo",
-        "source": ".agents/skills/local/logo",
-        "symlink_target": "../../.agents/skills/local/logo"
+        "source": ".agents/skills/clooney/skills/logo",
+        "symlink_target": "../../.agents/skills/clooney/skills/logo"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/new-project-setup",
+        "path": "skills/new-project-setup",
+        "skill": "new-project-setup",
+        "source": ".agents/skills/clooney/skills/new-project-setup",
+        "symlink_target": "../../.agents/skills/clooney/skills/new-project-setup"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/polish-readme",
+        "path": "skills/polish-readme",
+        "skill": "polish-readme",
+        "source": ".agents/skills/clooney/skills/polish-readme",
+        "symlink_target": "../../.agents/skills/clooney/skills/polish-readme"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/tiny-slice",
+        "path": "skills/tiny-slice",
+        "skill": "tiny-slice",
+        "source": ".agents/skills/clooney/skills/tiny-slice",
+        "symlink_target": "../../.agents/skills/clooney/skills/tiny-slice"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/wrap-up",
+        "path": "skills/wrap-up",
+        "skill": "wrap-up",
+        "source": ".agents/skills/clooney/skills/wrap-up",
+        "symlink_target": "../../.agents/skills/clooney/skills/wrap-up"
       },
       {
         "collection": "local",
@@ -316,38 +348,6 @@
         "skill": "maintain-skills",
         "source": ".agents/skills/local/maintain-skills",
         "symlink_target": "../../.agents/skills/local/maintain-skills"
-      },
-      {
-        "collection": "local",
-        "link": ".codex-2nd/skills/new-project-setup",
-        "path": "new-project-setup",
-        "skill": "new-project-setup",
-        "source": ".agents/skills/local/new-project-setup",
-        "symlink_target": "../../.agents/skills/local/new-project-setup"
-      },
-      {
-        "collection": "local",
-        "link": ".codex-2nd/skills/polish-readme",
-        "path": "polish-readme",
-        "skill": "polish-readme",
-        "source": ".agents/skills/local/polish-readme",
-        "symlink_target": "../../.agents/skills/local/polish-readme"
-      },
-      {
-        "collection": "local",
-        "link": ".codex-2nd/skills/tiny-slice",
-        "path": "tiny-slice",
-        "skill": "tiny-slice",
-        "source": ".agents/skills/local/tiny-slice",
-        "symlink_target": "../../.agents/skills/local/tiny-slice"
-      },
-      {
-        "collection": "local",
-        "link": ".codex-2nd/skills/wrap-up",
-        "path": "wrap-up",
-        "skill": "wrap-up",
-        "source": ".agents/skills/local/wrap-up",
-        "symlink_target": "../../.agents/skills/local/wrap-up"
       },
       {
         "collection": "mattpocock",

@@ -24,82 +24,269 @@
         }
       }
     },
+    "clooney": {
+      "metadata": {
+        "LICENSE": {
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "fingerprint": {
+            "executable": false,
+            "sha256": "9eebe8ab42f3f2a4f76660abd042782336baa03912f2aae62b661b1b15444cad"
+          }
+        }
+      },
+      "skills": {
+        "skills/afk": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "b830f60e3e7405151f31a4b35192db49b5f884e8b1768e51eb51614bbf8355a2"
+            }
+          }
+        },
+        "skills/agent-docs": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "489f401c999544a5c52390d22e668ba1c51f3ad9746012242c5b1fbe423bfe8b"
+            },
+            "agents-md.md": {
+              "executable": false,
+              "sha256": "5e1ba7201ed3f8cffbdbb5b9e0563e770ee7c3339d52c8c51aedd1ce214a3e40"
+            },
+            "skills.md": {
+              "executable": false,
+              "sha256": "2038cd83ca79b9e0f77c40e358d41347cda0c791fff1f6a691f660c8432cb8a2"
+            }
+          }
+        },
+        "skills/agent-pool": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "2ebd246ebd2361906430e9f3747dc6655338eda77963206385ecd00615956c9f"
+            }
+          }
+        },
+        "skills/behavior-tests": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "97e07a25dfb9945dd9383432b9cc28f8c22117e71a94809bf7fb63f95ee1f006"
+            },
+            "swift.md": {
+              "executable": false,
+              "sha256": "cd910c8644365260e6d25c4af6991c8241aac8c7f764aa536bb9f3cf60b50311"
+            }
+          }
+        },
+        "skills/logo": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "9115f8b4d194552f0b93ac489c2a8e9aa566430630de8e7bfd2e0ea33fb47fb1"
+            }
+          }
+        },
+        "skills/new-project-setup": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "87f4b37c60c3df6f83e381d560437b02a66814fbaf8b006d9266cbf1c30466c9"
+            },
+            "references/swift.md": {
+              "executable": false,
+              "sha256": "2589d1968c9739536e15bb6d53a46b977ae72f3f9abcde214340e12cdc91e38a"
+            },
+            "templates/AGENTS.md": {
+              "executable": false,
+              "sha256": "4b12cab88f7a04cd3dcfd3750a0b16f892fbb6b471ccdc41b79b42148db8a3a5"
+            },
+            "templates/CLAUDE.md": {
+              "executable": false,
+              "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49"
+            },
+            "templates/README.md": {
+              "executable": false,
+              "sha256": "893bfc5762d815789f26ab22a05ad3d77d1381c02df46d0f7ebab72741038878"
+            },
+            "templates/docs/README.md": {
+              "executable": false,
+              "sha256": "f6920d2c2ba723ef5219eb2f04bfbf7990a6a5035fb9adbd3f2de49a6f9569a1"
+            },
+            "templates/docs/decisions/README.md": {
+              "executable": false,
+              "sha256": "b8f225d01660348c178ec95759b855982298bdba8db7e97079f00fffda0e9054"
+            },
+            "templates/docs/development/README.md": {
+              "executable": false,
+              "sha256": "73b1f34bd129ebf145a9b15ab0e31c9bb059a1dcbf4b69e94d768c2109998df2"
+            },
+            "templates/docs/development/changelog-notes/README.md": {
+              "executable": false,
+              "sha256": "a8bdc7b5552883c44aec268d92b865a06decee19cb9d82bb48740980814a4321"
+            },
+            "templates/docs/product/README.md": {
+              "executable": false,
+              "sha256": "54a90fdbb83d79ddcc8fe256c43e84a31c18d9192cf19030a658790c0248f530"
+            },
+            "templates/docs/product/ideas.md": {
+              "executable": false,
+              "sha256": "7bbc6892088ba4b362cfede8774b45210eb758223c85bdda3b71db4d5f501010"
+            },
+            "templates/docs/research/README.md": {
+              "executable": false,
+              "sha256": "2dc6feebe4de06fb9549bb7eae2805703b89030a6b9264db3a1e6b37fa1b769f"
+            },
+            "templates/docs/technical/README.md": {
+              "executable": false,
+              "sha256": "86f49374650f777f582aedcc542526e14ec9483186f0792e89c229eafe6ca7de"
+            },
+            "templates/gitignore-allowlist": {
+              "executable": false,
+              "sha256": "595912251c06882d6f13069da2365a37c33954cf8b8eb70345cc19d28136ec5b"
+            },
+            "templates/gitignore-standard": {
+              "executable": false,
+              "sha256": "c2169701326edebbfb66cf09ba6697a74b26bd49f656649ce449710053800a32"
+            },
+            "templates/scripts/refresh-changelog.sh": {
+              "executable": true,
+              "sha256": "55f8794685a8f7b7abe8609d48167be8947bd35b0d361230740f828fbcc95400"
+            },
+            "templates/swift/AGENTS-swift.md": {
+              "executable": false,
+              "sha256": "c91fc291370f7a06e31b27b6a2aadfff1bb1753afea3ade0bbf33d6f60e29863"
+            },
+            "templates/swift/scripts/coverage.sh": {
+              "executable": true,
+              "sha256": "493b175d2549a239acb1c57edc9409800e1b9951c434db252fd0ca60a44b484e"
+            },
+            "templates/swift/scripts/format.sh": {
+              "executable": true,
+              "sha256": "7ce2f871cdce77e0aba08b97f4f71384a2dce8d8e0f087b49b0f268e6376edc5"
+            },
+            "templates/swift/scripts/lint.sh": {
+              "executable": true,
+              "sha256": "79b0df6311a069f03cb4320f5f0e9851851ac582a5c847d2bcb5e9688d90ee44"
+            },
+            "templates/swift/swiftformat": {
+              "executable": false,
+              "sha256": "7344c43ce50d99c0b2b9e3cca7d80c1c912080db379d5708cbed9c1dba13ad93"
+            },
+            "templates/swift/swiftlint.yml": {
+              "executable": false,
+              "sha256": "bf5b19b99363e426922cd2b476ceafd9dab1a339ce19de94efaa9b832361a01a"
+            },
+            "templates/swift/tests.swiftlint.yml": {
+              "executable": false,
+              "sha256": "f6329c8f64fcabca0260d77838e75d4d671a115974531d4fe66168e41b26cf35"
+            },
+            "templates/tools/build_changelog.py": {
+              "executable": false,
+              "sha256": "7ffa970fdd6841d81d3cc21841d1d88c41997fe5ffc841395b794989a42afd77"
+            },
+            "templates/tools/test_build_changelog.py": {
+              "executable": false,
+              "sha256": "af9e0357c5b59fda3febbda433a999b5b0788c55d59a966793d4c9fb083c944b"
+            },
+            "templates/versioning/beta.md": {
+              "executable": false,
+              "sha256": "afa6a831f38a95a2723d1dd942df3d6d2bb99ce9c7fe8f22a521f857d6e69076"
+            },
+            "templates/versioning/calver.md": {
+              "executable": false,
+              "sha256": "9ffa6787da67c520dd27a2830356e7e4a0795cb08ce44ea567aa4436496a8561"
+            },
+            "templates/versioning/semver.md": {
+              "executable": false,
+              "sha256": "2e9a07776704783b9dd94a72a300b1478ff5f377cfba0957e672358c952c36c2"
+            }
+          }
+        },
+        "skills/polish-readme": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "43a9ecddae2f7911bd64e9503789f6776a77b17284269e9abc0e2e03e2d73881"
+            }
+          }
+        },
+        "skills/tiny-slice": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "9b658789ea793e90eb7b52e34ef30c84ed094db9d8570c39da61fbd80fa776cd"
+            }
+          }
+        },
+        "skills/wrap-up": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9feee01730b48acef172faa51a971bba70901b8d",
+          "files": {
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "95b2c29c803956294f4ab63e3657f31b979349124f0f75b78b3e79e497672006"
+            }
+          }
+        }
+      }
+    },
     "local": {
       "metadata": {},
       "skills": {
-        "afk": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "agent-docs": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "agent-pool": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "behavior-tests": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "logo": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
         "maintain-skills": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "new-project-setup": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "polish-readme": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "tiny-slice": {
-          "agents": [
-            "claude",
-            "codex",
-            "codex-2nd"
-          ],
-          "commit": "local"
-        },
-        "wrap-up": {
           "agents": [
             "claude",
             "codex",
