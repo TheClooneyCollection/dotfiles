@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import tarfile
 import unittest
 from unittest.mock import patch
 
@@ -17,6 +18,47 @@ spec = importlib.util.spec_from_loader(loader.name, loader)
 mod = importlib.util.module_from_spec(spec); loader.exec_module(mod)
 A = 'skills/productivity/a'
 B = 'library/b'
+
+
+class GitHubDownloads(unittest.TestCase):
+    def test_snapshot_downloads_archive_through_authenticated_api_route(self):
+        commit = 'a' * 40
+        archive = io.BytesIO()
+        with tarfile.open(fileobj=archive, mode='w:gz') as tar:
+            entry = tarfile.TarInfo('owner-repo-sha/skills/missions/SKILL.md')
+            content = b'missions skill\n'
+            entry.size = len(content)
+            tar.addfile(entry, io.BytesIO(content))
+        routes = {
+            'https://api.github.com/repos/owner/repo/commits/main': json.dumps({'sha': commit}).encode(),
+            f'https://api.github.com/repos/owner/repo/tarball/{commit}': archive.getvalue(),
+        }
+        with patch.object(mod, 'fetch', side_effect=routes.__getitem__):
+            revision, files = mod.snapshot(Path('.'), {'kind': 'github', 'repository': 'owner/repo'})
+        self.assertEqual(revision, commit)
+        self.assertEqual(files, {'skills/missions/SKILL.md': (content, False)})
+
+    def test_archive_fetch_follows_redirects_without_trusting_other_hosts(self):
+        url = 'https://api.github.com/repos/owner/repo/tarball/' + 'a' * 40
+        for token in ('test-private-token', None):
+            with self.subTest(authenticated=bool(token)):
+                requests = []
+                def download(command, **kwargs):
+                    requests.append((command, kwargs))
+                    return b'archive'
+                with patch.object(mod, 'github_token', return_value=token), patch.object(mod.subprocess, 'check_output', side_effect=download):
+                    self.assertEqual(mod.fetch(url), b'archive')
+                command, options = requests[0]
+                self.assertIn('-fsSL', command)
+                self.assertIn(url, command)
+                self.assertNotIn('--location-trusted', command)
+                if token:
+                    self.assertNotIn(token, ' '.join(command))
+                    self.assertEqual(options['input'], f'Authorization: Bearer {token}\n'.encode())
+                    self.assertEqual(command[-2:], ['-H', '@-'])
+                else:
+                    self.assertNotIn('-H', command)
+                    self.assertEqual(options, {})
 
 
 class Tests(unittest.TestCase):

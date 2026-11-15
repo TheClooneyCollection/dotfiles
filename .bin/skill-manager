@@ -76,6 +76,8 @@ def github_token():
 
 
 def fetch(url):
+    # -L follows the API archive redirect; never use --location-trusted, so
+    # curl strips Authorization when redirecting to a different host.
     command = ['curl', '-fsSL', '--max-time', '60', url]
     token = github_token() if url.startswith('https://api.github.com/') else None
     if not token:
@@ -95,7 +97,7 @@ def snapshot(root, source, ref=None):
     if not re.fullmatch(r'[0-9a-f]{40}', commit):
         raise ValueError('invalid upstream commit')
     files = {}
-    with tarfile.open(fileobj=io.BytesIO(fetch(f'https://codeload.github.com/{repo}/tar.gz/{commit}')), mode='r:gz') as archive:
+    with tarfile.open(fileobj=io.BytesIO(fetch(f'https://api.github.com/repos/{repo}/tarball/{commit}')), mode='r:gz') as archive:
         for entry in archive:
             if entry.isdir():
                 continue
