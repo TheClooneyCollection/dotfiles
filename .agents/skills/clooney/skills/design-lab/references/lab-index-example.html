@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Lab</title>
+<style>
+  :root { --bg:#f4f4f1; --card:#fff; --ink:#1d2129; --mute:#646b78; --line:#d9dbe0;
+          --liked:#1f8a4c; --dropped:#9aa0aa; --weak:#c26a12; --new:#2f62d8; --wip:#8a62c9; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171c; --card:#1e232b; --ink:#e9ecf1; --mute:#9aa3b1; --line:#323945;
+            --liked:#4cc07f; --dropped:#6c7480; --weak:#f0a04b; --new:#7aa2ff; --wip:#b693f0; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui, -apple-system, sans-serif; }
+  main { max-width:1080px; margin:auto; padding:40px 20px 64px; }
+  h1 { font-size:clamp(30px,5vw,44px); letter-spacing:-.03em; margin:0 0 6px; }
+  .lede { color:var(--mute); margin:0 0 32px; max-width:62ch; }
+  section.exp { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:24px; }
+  .head { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+  .head img { width:200px; max-width:100%; aspect-ratio:100/56; object-fit:cover; border-radius:10px; border:1px solid var(--line); background:var(--bg); }
+  .head .ph { width:200px; max-width:100%; aspect-ratio:100/56; border-radius:10px; border:1px dashed var(--line); display:grid; place-items:center; color:var(--mute); font-size:13px; }
+  .meta { flex:1 1 260px; min-width:0; }
+  h2 { margin:0 0 4px; font-size:22px; }
+  h2 a { color:inherit; }
+  .sub { color:var(--mute); font-size:14px; margin:0 0 8px; }
+  .chip { display:inline-block; font-size:12px; font-weight:600; padding:2px 9px; border-radius:99px; border:1px solid currentColor; margin-right:6px; white-space:nowrap; }
+  .liked{color:var(--liked)} .dropped{color:var(--dropped)} .weak{color:var(--weak)} .new{color:var(--new)} .wip{color:var(--wip)}
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:14px; margin-top:18px; }
+  .tile { display:block; color:inherit; text-decoration:none; }
+  .frame { position:relative; aspect-ratio:390/560; overflow:hidden; border-radius:10px; border:1px solid var(--line); background:var(--bg); }
+  .frame iframe { position:absolute; top:0; left:0; width:390px; height:560px; border:0; transform-origin:0 0; pointer-events:none; }
+  .frame .missing { position:absolute; inset:0; display:grid; place-items:center; color:var(--mute); font-size:13px; }
+  .tile b { display:block; font-size:14px; margin-top:6px; }
+  .tile .date { display:block; font-size:12px; color:var(--mute); }
+  .tile .note { display:block; font-size:12px; line-height:1.4; margin-top:2px; }
+  .tile:hover b { text-decoration:underline; }
+  .tile.is-dropped .frame { opacity:.45; }
+  footer { color:var(--mute); font-size:13px; margin-top:32px; }
+  code { font-size:13px; }
+  a { color:var(--new); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Design Lab</h1>
+  <p class="lede">Visual experiments for this project. Private: reviewed locally or over the tailnet, nothing here is committed.</p>
+  <div id="list"></div>
+  <footer>To add an experiment, append a row to <code>experiments</code> at the bottom of <code>index.html</code> and symlink its folder into this folder.</footer>
+</main>
+<script>
+// One row per experiment. status: active | done | waiting | wip | onhold | abandoned
+const experiments = [
+  {
+    title: "Site style mockups",
+    href: "mockups/",
+    thumb: "mockups/thumbs/index.png",
+    date: "2026-01-01",
+    status: "waiting",
+    note: "Round 2: 6 directions, light + dark. Loved: A, C. To pick: B r2 vs r3.",
+    // Optional per-item grid, grouped by review status: kept | changed | new | dropped.
+    styles: [
+      { file: "a.html", name: "Direction A", status: "kept", date: "2026-01-01", note: "user: love it" },
+      { file: "b.html", name: "Direction B", status: "changed", date: "2026-01-02", note: "r2: more colour" },
+      { file: "d.html", name: "Direction D", status: "dropped", date: "2026-01-01" },
+    ],
+  },
+  {
+    title: "Hero image round 1",
+    href: "hero-images/",
+    thumb: "hero-images/01.png",
+    date: "2026-01-01",
+    status: "onhold",
+    note: "12 images, none picked: too close to the old logo. On hold until the user gives direction.",
+  },
+];
+
+const statusLabel = { active: ["active", "new"], done: ["done", "liked"], waiting: ["waiting for a pick", "weak"], wip: ["in progress", "wip"], abandoned: ["abandoned, none matched", "dropped"], onhold: ["on hold, none picked", "dropped"] };
+const styleSections = [
+  ["kept", "Reviewed, kept", "liked"],
+  ["changed", "Reviewed, changed since", "weak"],
+  ["new", "Not reviewed yet", "new"],
+  ["dropped", "Dropped", "dropped"],
+];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render() {
+  const list = document.getElementById("list");
+  const grids = [];
+  list.innerHTML = experiments.map((e, i) => {
+    const [label, cls] = statusLabel[e.status] || [e.status, "new"];
+    const thumb = e.thumb
+      ? `<a href="${esc(e.href)}"><img src="${esc(e.thumb)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=ph>no thumbnail yet</div>'"></a>`
+      : "";
+    const styles = e.styles ? `<div id="styles-${i}">${styleSections.map(([key, heading, cls]) => {
+      const items = e.styles.filter(st => st.status === key);
+      if (!items.length) return "";
+      return `<section class="exp"><h2>${esc(heading)} <span class="chip ${cls}">${items.length}</span></h2><div class="grid">${items.map(st => `
+        <a class="tile ${key === "dropped" ? "is-dropped" : ""}" href="${esc(e.href + st.file)}">
+          <div class="frame" data-src="${esc(e.href + st.file)}"><div class="missing">in progress</div></div>
+          <b>${esc(st.name)}</b><span class="date">${esc(st.date)}</span>
+          ${st.note ? `<span class="note">${esc(st.note)}</span>` : ""}
+        </a>`).join("")}</div></section>`;
+    }).join("")}</div>` : "";
+    if (styles) grids.push(styles);
+    return `<section class="exp">
+      <div class="head">${thumb}
+        <div class="meta">
+          <h2><a href="${esc(e.href)}">${esc(e.title)}</a></h2>
+          <p class="sub">${esc(e.date)} · <span class="chip ${cls}">${label}</span></p>
+          <p style="margin:0">${esc(e.note)}</p>
+          ${e.styles ? `<p style="margin:8px 0 0"><a href="#styles-${i}">See all ${e.styles.length} styles below, by review status ↓</a></p>` : ""}
+        </div>
+      </div></section>`;
+  }).join("") + grids.join("");
+
+  // Live thumbnails: load each mockup into a scaled iframe once it exists.
+  document.querySelectorAll(".frame[data-src]").forEach(async frame => {
+    const src = frame.dataset.src;
+    try {
+      const r = await fetch(src, { method: "HEAD" });
+      if (!r.ok) return;
+    } catch { return; }
+    const f = document.createElement("iframe");
+    f.src = src; f.loading = "lazy"; f.tabIndex = -1; f.setAttribute("aria-hidden", "true");
+    frame.innerHTML = ""; frame.appendChild(f);
+    const fit = () => { f.style.transform = `scale(${frame.clientWidth / 390})`; };
+    fit(); new ResizeObserver(fit).observe(frame);
+  });
+}
+render();
+</script>
+</body>
+</html>

@@ -31,6 +31,7 @@ __pycache__/
 !/.claude/skills/tmux-agents-perf
 !/.claude/skills/agent-chain
 !/.claude/skills/missions
+!/.claude/skills/design-lab
 !/.claude/skills/grilling
 !/.claude/skills/grill-me
 !/.claude/skills/handoff
@@ -63,6 +64,7 @@ __pycache__/
 !/.codex/skills/tmux-agents-perf
 !/.codex/skills/agent-chain
 !/.codex/skills/missions
+!/.codex/skills/design-lab
 !/.codex/skills/grilling
 !/.codex/skills/grill-me
 !/.codex/skills/handoff
@@ -97,6 +99,7 @@ __pycache__/
 !/.codex-2nd/skills/tmux-agents-perf
 !/.codex-2nd/skills/agent-chain
 !/.codex-2nd/skills/missions
+!/.codex-2nd/skills/design-lab
 !/.codex-2nd/skills/grilling
 !/.codex-2nd/skills/grill-me
 !/.codex-2nd/skills/handoff
