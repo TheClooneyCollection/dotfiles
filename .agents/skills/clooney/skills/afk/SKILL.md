@@ -19,4 +19,4 @@ The user has stepped away. **Away** lasts until their next message. Messages fro
 
 ## On return
 
-The user's next message ends away. Open your reply with the **return brief** built from the away log, its three sections in that order, a few lines each, then handle their message.
+The user's next message ends away. Open with a **return brief** built from the away log in the [catch-up](../catch-up/SKILL.md) format, then handle their message. Map **Done** to landed work and the state now; include **Decided for you** in that state, each with its reason. Map **Waiting on you** to pending or blocked work and, when needed, the decision question.

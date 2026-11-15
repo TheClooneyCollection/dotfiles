@@ -32,6 +32,8 @@ __pycache__/
 !/.claude/skills/agent-chain
 !/.claude/skills/missions
 !/.claude/skills/design-lab
+!/.claude/skills/engineering-standards
+!/.claude/skills/catch-up
 !/.claude/skills/grilling
 !/.claude/skills/grill-me
 !/.claude/skills/handoff
@@ -65,6 +67,8 @@ __pycache__/
 !/.codex/skills/agent-chain
 !/.codex/skills/missions
 !/.codex/skills/design-lab
+!/.codex/skills/engineering-standards
+!/.codex/skills/catch-up
 !/.codex/skills/grilling
 !/.codex/skills/grill-me
 !/.codex/skills/handoff
@@ -100,6 +104,8 @@ __pycache__/
 !/.codex-2nd/skills/agent-chain
 !/.codex-2nd/skills/missions
 !/.codex-2nd/skills/design-lab
+!/.codex-2nd/skills/engineering-standards
+!/.codex-2nd/skills/catch-up
 !/.codex-2nd/skills/grilling
 !/.codex-2nd/skills/grill-me
 !/.codex-2nd/skills/handoff

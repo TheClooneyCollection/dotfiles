@@ -59,11 +59,27 @@
       },
       {
         "collection": "clooney",
+        "link": ".claude/skills/catch-up",
+        "path": "skills/catch-up",
+        "skill": "catch-up",
+        "source": ".agents/skills/clooney/skills/catch-up",
+        "symlink_target": "../../.agents/skills/clooney/skills/catch-up"
+      },
+      {
+        "collection": "clooney",
         "link": ".claude/skills/design-lab",
         "path": "skills/design-lab",
         "skill": "design-lab",
         "source": ".agents/skills/clooney/skills/design-lab",
         "symlink_target": "../../.agents/skills/clooney/skills/design-lab"
+      },
+      {
+        "collection": "clooney",
+        "link": ".claude/skills/engineering-standards",
+        "path": "skills/engineering-standards",
+        "skill": "engineering-standards",
+        "source": ".agents/skills/clooney/skills/engineering-standards",
+        "symlink_target": "../../.agents/skills/clooney/skills/engineering-standards"
       },
       {
         "collection": "clooney",
@@ -229,11 +245,27 @@
       },
       {
         "collection": "clooney",
+        "link": ".codex/skills/catch-up",
+        "path": "skills/catch-up",
+        "skill": "catch-up",
+        "source": ".agents/skills/clooney/skills/catch-up",
+        "symlink_target": "../../.agents/skills/clooney/skills/catch-up"
+      },
+      {
+        "collection": "clooney",
         "link": ".codex/skills/design-lab",
         "path": "skills/design-lab",
         "skill": "design-lab",
         "source": ".agents/skills/clooney/skills/design-lab",
         "symlink_target": "../../.agents/skills/clooney/skills/design-lab"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex/skills/engineering-standards",
+        "path": "skills/engineering-standards",
+        "skill": "engineering-standards",
+        "source": ".agents/skills/clooney/skills/engineering-standards",
+        "symlink_target": "../../.agents/skills/clooney/skills/engineering-standards"
       },
       {
         "collection": "clooney",
@@ -399,11 +431,27 @@
       },
       {
         "collection": "clooney",
+        "link": ".codex-2nd/skills/catch-up",
+        "path": "skills/catch-up",
+        "skill": "catch-up",
+        "source": ".agents/skills/clooney/skills/catch-up",
+        "symlink_target": "../../.agents/skills/clooney/skills/catch-up"
+      },
+      {
+        "collection": "clooney",
         "link": ".codex-2nd/skills/design-lab",
         "path": "skills/design-lab",
         "skill": "design-lab",
         "source": ".agents/skills/clooney/skills/design-lab",
         "symlink_target": "../../.agents/skills/clooney/skills/design-lab"
+      },
+      {
+        "collection": "clooney",
+        "link": ".codex-2nd/skills/engineering-standards",
+        "path": "skills/engineering-standards",
+        "skill": "engineering-standards",
+        "source": ".agents/skills/clooney/skills/engineering-standards",
+        "symlink_target": "../../.agents/skills/clooney/skills/engineering-standards"
       },
       {
         "collection": "clooney",

@@ -12,7 +12,7 @@ Away mode for when you step away from the keyboard. The agent keeps working unti
 - Picks sensible defaults for routine decisions and logs each one with its reason.
 - Parks anything hard to reverse or outward-facing (deleting, pushing, publishing, spending) for you.
 - Keeps an away log in a file, so it survives context compaction.
-- When you return, starts its reply with three short sections: **Done**, **Decided for you**, **Waiting on you**.
+- When you return, briefs you from the away log in the [catch-up](../catch-up/SKILL.md) format, including defaulted decisions and their reasons.
 
 ## Needs
 
