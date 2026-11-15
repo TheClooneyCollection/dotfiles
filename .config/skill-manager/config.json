@@ -34,6 +34,15 @@
       "required_files": ["LICENSE"],
       "parent_readme": false
     },
+    "agent-fleet-command": {
+      "kind": "github",
+      "repository": "TheClooneyCollection/agent-fleet-command",
+      "ref": "main",
+      "directory": ".agents/skills/agent-fleet-command",
+      "skill_roots": ["skills"],
+      "required_files": ["LICENSE"],
+      "parent_readme": false
+    },
     "local": {
       "kind": "local",
       "directory": ".agents/skills/local",

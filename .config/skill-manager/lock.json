@@ -1,6 +1,37 @@
 {
   "schema_version": 1,
   "sources": {
+    "agent-fleet-command": {
+      "metadata": {
+        "LICENSE": {
+          "commit": "9d6923e3464877beb35ffd627fb3f825b2bda9e4",
+          "fingerprint": {
+            "executable": false,
+            "sha256": "f5ab46c53338109fdd2bf476de75e46747ab0513d4122f2c2f7629efd204a89c"
+          }
+        }
+      },
+      "skills": {
+        "skills/missions": {
+          "agents": [
+            "claude",
+            "codex",
+            "codex-2nd"
+          ],
+          "commit": "9d6923e3464877beb35ffd627fb3f825b2bda9e4",
+          "files": {
+            "README.md": {
+              "executable": false,
+              "sha256": "3e94a5a7aa8eddfd0d8faef647954bfa891652a7565478771c48006d2fdbe528"
+            },
+            "SKILL.md": {
+              "executable": false,
+              "sha256": "1f323b6a975c86daa8253977b6b1219910be48c6a577314ba82326fb63ec9f10"
+            }
+          }
+        }
+      }
+    },
     "anthropic": {
       "metadata": {},
       "skills": {

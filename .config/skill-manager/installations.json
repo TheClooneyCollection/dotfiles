@@ -2,6 +2,14 @@
   "agents": {
     "claude": [
       {
+        "collection": "agent-fleet-command",
+        "link": ".claude/skills/missions",
+        "path": "skills/missions",
+        "skill": "missions",
+        "source": ".agents/skills/agent-fleet-command/skills/missions",
+        "symlink_target": "../../.agents/skills/agent-fleet-command/skills/missions"
+      },
+      {
         "collection": "anthropic",
         "link": ".claude/skills/frontend-design",
         "path": "skills/frontend-design",
@@ -156,6 +164,14 @@
     ],
     "codex": [
       {
+        "collection": "agent-fleet-command",
+        "link": ".codex/skills/missions",
+        "path": "skills/missions",
+        "skill": "missions",
+        "source": ".agents/skills/agent-fleet-command/skills/missions",
+        "symlink_target": "../../.agents/skills/agent-fleet-command/skills/missions"
+      },
+      {
         "collection": "anthropic",
         "link": ".codex/skills/frontend-design",
         "path": "skills/frontend-design",
@@ -309,6 +325,14 @@
       }
     ],
     "codex-2nd": [
+      {
+        "collection": "agent-fleet-command",
+        "link": ".codex-2nd/skills/missions",
+        "path": "skills/missions",
+        "skill": "missions",
+        "source": ".agents/skills/agent-fleet-command/skills/missions",
+        "symlink_target": "../../.agents/skills/agent-fleet-command/skills/missions"
+      },
       {
         "collection": "anthropic",
         "link": ".codex-2nd/skills/frontend-design",
