@@ -19,15 +19,20 @@ session_tokens=$(echo "$input" | jq -r '
 # Shorten the path like fish's prompt_pwd (show last 2 components)
 short_cwd=$(basename "$cwd")
 
-# user@host — cyan/dim
-user=$(whoami)
-host=$(hostname -s)
-
 # git branch (fast, no locks)
 branch=$(git -C "$cwd" --no-optional-locks symbolic-ref --short HEAD 2>/dev/null)
 git_part=""
 if [ -n "$branch" ]; then
   git_part=$(printf " (\033[0;35m%s\033[0m)" "$branch")
+fi
+
+# unread tmux-agents notes, only when there are any
+notes_part=""
+if command -v tmux-notes >/dev/null 2>&1; then
+  unread=$(tmux-notes --count 2>/dev/null)
+  if [ "${unread:-0}" -gt 0 ] 2>/dev/null; then
+    notes_part=$(printf " \033[0;33m✉ %s unread\033[0m" "$unread")
+  fi
 fi
 
 # context usage
@@ -120,5 +125,5 @@ model_short=$(echo "$model" | sed 's/Claude //')
 # time
 time_str=$(date +%H:%M)
 
-printf "%s \033[0;36m%s\033[0m\033[0;90m@%s\033[0m \033[0;34m%s\033[0m%s\033[0;90m [%s]%s\033[0m \033[0;90m%s\033[0m" \
-  "$ctx_part" "$user" "$host" "$short_cwd" "$git_part" "$model_short" "$daily_part" "$time_str"
+printf "%s \033[0;34m%s\033[0m%s%s\033[0;90m [%s]%s\033[0m \033[0;90m%s\033[0m" \
+  "$ctx_part" "$short_cwd" "$git_part" "$notes_part" "$model_short" "$daily_part" "$time_str"
