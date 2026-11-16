@@ -17,9 +17,9 @@ Principle first, then the Swift form as one example; in another language, use it
 
 ## Reference
 
-- Read [structure.md](references/structure.md) when separating view models from view states, wiring dependencies, or defining configuration, concurrency, validation and error boundaries.
+- Read [structure.md](references/structure.md) when separating view models from view states, wiring dependencies, defining configuration, concurrency, validation and error boundaries, choosing request serialization or boundary payloads, or grouping members and function stages.
 - Read [screen-state.md](references/screen-state.md) when deriving screen state, formatting values, guarding async actions, extracting components or documenting escape hatches.
-- Read [tests.md](references/tests.md) when choosing test boundaries, recording fixture provenance or covering screen states offline.
+- Read [tests.md](references/tests.md) when choosing test boundaries, recording fixture provenance, covering screen states offline or verifying request wire output.
 
 ## Done
 

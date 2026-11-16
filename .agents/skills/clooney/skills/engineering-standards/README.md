@@ -11,6 +11,6 @@ Build and review app code with standards for simple objects, single responsibili
 ## Files
 
 - [SKILL.md](SKILL.md): five core rules, reference pointers and the completion check.
-- [references/structure.md](references/structure.md): rules 6–12 for structure and dependencies.
-- [references/screen-state.md](references/screen-state.md): rules 13–18 for screen state and presentation.
-- [references/tests.md](references/tests.md): rules 19–22 for test boundaries, fixtures and offline coverage.
+- [references/structure.md](references/structure.md): rules 6–15 for structure, dependencies, serialization, semantic payloads and grouping.
+- [references/screen-state.md](references/screen-state.md): rules 16–21 for screen state and presentation.
+- [references/tests.md](references/tests.md): rules 22–26 for test boundaries, fixtures, offline coverage and wire output.
