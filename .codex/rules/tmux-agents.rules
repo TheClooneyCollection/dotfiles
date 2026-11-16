@@ -3,6 +3,7 @@
 # Allowed commands run outside the sandbox, which blocks the tmux socket.
 prefix_rule(pattern=["tmux-ask"], decision="allow")
 prefix_rule(pattern=["tmux-read"], decision="allow")
+prefix_rule(pattern=["tmux-notes"], decision="allow")
 prefix_rule(pattern=["tmux-peers"], decision="allow")
 prefix_rule(pattern=["tmux-peek"], decision="allow")
 prefix_rule(pattern=["tmux-spawn"], decision="allow")
