@@ -58,7 +58,7 @@
     "clooney": {
       "metadata": {
         "LICENSE": {
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "fingerprint": {
             "executable": false,
             "sha256": "9eebe8ab42f3f2a4f76660abd042782336baa03912f2aae62b661b1b15444cad"
@@ -72,7 +72,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -90,7 +90,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -116,7 +116,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -134,7 +134,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -152,7 +152,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -174,7 +174,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -192,7 +192,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -222,7 +222,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -238,7 +238,7 @@
             },
             "references/structure.md": {
               "executable": false,
-              "sha256": "c32cd0d96b79536c15b8f0b88f05f663e5bd6d8211172ea87023910b9732e3ce"
+              "sha256": "b4d68a2c946641d80a19c8e65258d5dea6c1508f129a5b2b9f81e3e623f0975a"
             },
             "references/tests.md": {
               "executable": false,
@@ -252,7 +252,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -274,7 +274,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -292,7 +292,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -418,7 +418,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -436,7 +436,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -454,7 +454,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
@@ -472,7 +472,7 @@
             "codex",
             "codex-2nd"
           ],
-          "commit": "f822dfbada8f98085e2d75655645d287e5179767",
+          "commit": "bdfb317fe60c15304634074bc01d3a37e0a23c6d",
           "files": {
             "README.md": {
               "executable": false,
