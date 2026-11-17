@@ -69,18 +69,34 @@ def request_columns(row, count):
     return f"  {count:>9,}  {context // max(count, 1):>11,}"
 
 
+def parse_since(text):
+    try:
+        when = datetime.strptime(text, "%H:%M")
+        return datetime.now().astimezone().replace(hour=when.hour, minute=when.minute, second=0, microsecond=0)
+    except ValueError:
+        pass
+    try:
+        return datetime.fromisoformat(text).astimezone()
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected HH:MM or YYYY-MM-DD[THH:MM], got {text!r}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--days", type=int, default=7, help="look back this many days (default 7)")
     parser.add_argument("--by", choices=("project", "day", "model", "project-day", "agent", "session"),
                         default="project-day")
     parser.add_argument("--today", action="store_true", help="only count usage since local midnight")
+    parser.add_argument("--since", type=parse_since,
+                        help="only count usage from this local time: HH:MM today, or YYYY-MM-DD[THH:MM]")
     parser.add_argument("--limit", type=int, default=0, help="show only the top N rows")
     args = parser.parse_args()
 
     since = datetime.now(timezone.utc).astimezone() - timedelta(days=args.days)
     if args.today:
         since = datetime.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0)
+    if args.since:
+        since = args.since
     rows, names = scan(Path.home() / ".claude" / "projects", since)
     totals = defaultdict(lambda: [0] * len(FIELDS))
     requests = defaultdict(int)
@@ -101,7 +117,7 @@ def main():
             row[i] += usage.get(field) or 0
 
     if not totals:
-        print(f"no usage in the last {args.days} days")
+        print(f"no usage since {since:%Y-%m-%d %H:%M}")
         return
     if args.by in ("day", "project-day"):
         order = sorted(totals.items())

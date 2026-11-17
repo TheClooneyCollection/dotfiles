@@ -5,7 +5,8 @@ description: Measure where Claude Code tokens go, per project, day, model, agent
 
 ## Who used the tokens
 
-Run `.bin/claude-usage` from `~`; `--help` lists the flags (`--by`, `--days`, `--today`, `--limit`). It scans every transcript, so allow a few minutes of timeout.
+Run `.bin/claude-usage` from `~`; `--help` lists the flags (`--by`, `--days`, `--today`, `--since`, `--limit`). It scans every transcript, so allow a few minutes of timeout.
+- For a 5-hour limit window, use `--since HH:MM` (local time today) or `--since YYYY-MM-DDTHH:MM`. To find when heavy use started, rerun with a few earlier `--since` times and compare totals.
 
 - Rows are wide. Read them with `awk '{print $1, $(NF-2), $(NF-1), $NF}' | column -t` (name, total, requests, avg context).
 - Agent names come from the first tmux-ask message a session received; `(unnamed)` is a session nobody messaged. For chain roles, group `--by agent` names on their `-main` / `-secondary` suffix; the rest are sub agents.
