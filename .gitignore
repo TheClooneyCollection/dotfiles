@@ -30,7 +30,6 @@ __pycache__/
 !/.claude/skills/tmux-agents-setup
 !/.claude/skills/tmux-agents-perf
 !/.claude/skills/agent-chain
-!/.claude/skills/missions
 !/.claude/skills/design-lab
 !/.claude/skills/engineering-standards
 !/.claude/skills/catch-up
@@ -66,7 +65,6 @@ __pycache__/
 !/.codex/skills/tmux-agents-setup
 !/.codex/skills/tmux-agents-perf
 !/.codex/skills/agent-chain
-!/.codex/skills/missions
 !/.codex/skills/design-lab
 !/.codex/skills/engineering-standards
 !/.codex/skills/catch-up
@@ -103,7 +101,6 @@ __pycache__/
 !/.codex-2nd/skills/tmux-agents-setup
 !/.codex-2nd/skills/tmux-agents-perf
 !/.codex-2nd/skills/agent-chain
-!/.codex-2nd/skills/missions
 !/.codex-2nd/skills/design-lab
 !/.codex-2nd/skills/engineering-standards
 !/.codex-2nd/skills/catch-up
@@ -252,7 +249,6 @@ __pycache__/
 !/.agents/skills/mattpocock/
 !/.agents/skills/anthropic/
 !/.agents/skills/clooney/
-!/.agents/skills/agent-fleet-command/
 !/.agents/skills/local/
 
 # Skill manager source configuration and installation records.
