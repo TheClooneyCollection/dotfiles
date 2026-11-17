@@ -15,6 +15,6 @@ Run `.bin/claude-usage` from `~`; `--help` lists the flags (`--by`, `--days`, `-
 ## Fixed overhead of a new session
 
 - Headless: `claude -p "reply with just ok" --output-format json --max-turns 1` and sum `input_tokens + cache_read_input_tokens + cache_creation_input_tokens`. Test a cut before making it with `--disallowedTools X` or `--settings '{...}'` and diff against the baseline.
-- Headless misses Artifact, AskUserQuestion and SendFeedback and undercounts skills. For those, ask the user to run `/context` in a fresh session; trust its total, not the System tools row.
+- Headless misses Artifact, AskUserQuestion and SendFeedback and undercounts skills. For those, ask the user to run `/context` in a fresh session; trust its total, not the System tools row. Its percentage is of `autoCompactWindow` (250k in settings); the status line divides by the model's own window, so it reads lower. Check the window size the status line shows before treating the gap as a bug.
 - Knobs in `.claude/settings.json`: `permissions.deny` (whole tool names), `skillOverrides` (`off` / `user-invocable-only` / `name-only`), `env.ENABLE_CLAUDEAI_MCP_SERVERS`. Check what is already there before adding.
 - Measure before recommending a cut; early guesses here were wrong both ways.
