@@ -30,6 +30,12 @@
       "Bash(~/.bin/tmux/tmux-agent-report:*)",
       "Bash(~/.bin/tmux/tmux-dismiss --from:*)",
       "Read"
+    ],
+    "deny": [
+      "Agent",
+      "Artifact",
+      "ScheduleWakeup",
+      "Workflow"
     ]
   },
   "model": "opus",
@@ -60,8 +66,8 @@
     "command": "sh ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "swift-lsp@claude-plugins-official": true,
-    "codex@openai-codex": true
+    "swift-lsp@claude-plugins-official": false,
+    "codex@openai-codex": false
   },
   "extraKnownMarketplaces": {
     "openai-codex": {
@@ -78,6 +84,9 @@
     },
     "claude-opus-5-5": {
       "effortLevel": "medium"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "high"
     }
   },
   "autoCompactWindow": 250000,
@@ -85,5 +94,39 @@
   "theme": "dark-ansi",
   "autoCompactEnabled": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "env": {
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false"
+  },
+  "skillOverrides": {
+    "artifact-capabilities": "off",
+    "artifact-design": "off",
+    "artifact-diagramming": "off",
+    "workflow-authoring": "off",
+    "anthropic-skills:deep-research": "off",
+    "anthropic-skills:docs": "user-invocable-only",
+    "anthropic-skills:pptx": "user-invocable-only",
+    "anthropic-skills:xlsx": "user-invocable-only",
+    "anthropic-skills:docx": "user-invocable-only",
+    "anthropic-skills:pdf": "user-invocable-only",
+    "anthropic-skills:google-workspace": "user-invocable-only",
+    "anthropic-skills:computer-use": "user-invocable-only",
+    "anthropic-skills:built-in-browser": "user-invocable-only",
+    "anthropic-skills:chrome-browser": "user-invocable-only",
+    "anthropic-skills:morning": "user-invocable-only",
+    "anthropic-skills:skill-creator": "user-invocable-only",
+    "anthropic-skills:import-memory": "user-invocable-only",
+    "dataviz": "user-invocable-only",
+    "code-review": "user-invocable-only",
+    "claude-in-chrome": "user-invocable-only",
+    "schedule": "user-invocable-only",
+    "loop": "user-invocable-only",
+    "run": "user-invocable-only",
+    "plugin-authoring": "user-invocable-only",
+    "keybindings-help": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only",
+    "simplify": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "init": "user-invocable-only"
+  }
 }
