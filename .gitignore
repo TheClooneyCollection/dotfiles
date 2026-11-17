@@ -42,6 +42,7 @@ __pycache__/
 !/.claude/skills/wait-what
 !/.claude/skills/agent-docs
 !/.claude/skills/maintain-skills
+!/.claude/skills/claude-usage
 !/.claude/skills/tiny-slice
 !/.claude/skills/behavior-tests
 !/.claude/skills/agent-pool

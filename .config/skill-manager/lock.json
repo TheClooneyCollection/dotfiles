@@ -489,6 +489,12 @@
     "local": {
       "metadata": {},
       "skills": {
+        "claude-usage": {
+          "agents": [
+            "claude"
+          ],
+          "commit": "local"
+        },
         "maintain-skills": {
           "agents": [
             "claude",

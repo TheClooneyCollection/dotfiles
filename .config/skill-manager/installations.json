@@ -139,6 +139,14 @@
       },
       {
         "collection": "local",
+        "link": ".claude/skills/claude-usage",
+        "path": "claude-usage",
+        "skill": "claude-usage",
+        "source": ".agents/skills/local/claude-usage",
+        "symlink_target": "../../.agents/skills/local/claude-usage"
+      },
+      {
+        "collection": "local",
         "link": ".claude/skills/maintain-skills",
         "path": "maintain-skills",
         "skill": "maintain-skills",
