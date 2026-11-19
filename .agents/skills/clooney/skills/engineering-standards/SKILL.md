@@ -1,6 +1,6 @@
 ---
 name: engineering-standards
-description: Build and review app code to a fixed set of engineering standards (simple objects, single responsibility, strong boundaries, full dependency injection, testable state and logic), each stated as a principle with its Swift or SwiftUI form. Use when designing or reviewing app architecture, wiring dependency injection, writing view models or view states, mapping network responses and errors into domain types, or when the user says "our standards" or "to our engineering standards".
+description: Build and review app code to a fixed set of engineering standards (simple objects, single responsibility, strong boundaries, full dependency injection, testable state and logic), each stated as a principle with its Swift or SwiftUI form. Use when designing or reviewing app architecture, wiring dependency injection, writing view models or view states, mapping network responses and errors into domain types, applying code layout conventions, or when the user says "our standards" or "to our engineering standards".
 ---
 
 # Engineering standards
@@ -17,7 +17,8 @@ Principle first, then the Swift form as one example; in another language, use it
 
 ## Reference
 
-- Read [structure.md](references/structure.md) when separating view models from view states, wiring dependencies, defining configuration, concurrency, validation and error boundaries, choosing request serialization or boundary payloads, or grouping members and function stages.
+- Read [structure.md](references/structure.md) when separating view models from view states, wiring dependencies, defining configuration, concurrency, validation and error boundaries, choosing request serialization or boundary payloads, naming functions and their argument labels, grouping members and function stages, or choosing enum projections versus behavioural pattern matching.
+- Read [layout.md](references/layout.md) when formatting multiline conditions, arguments, parameters or nested calls.
 - Read [screen-state.md](references/screen-state.md) when deriving screen state, formatting values, guarding async actions, extracting components or documenting escape hatches.
 - Read [tests.md](references/tests.md) when choosing test boundaries, recording fixture provenance, covering screen states offline or verifying request wire output.
 
