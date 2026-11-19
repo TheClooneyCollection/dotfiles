@@ -70,7 +70,7 @@ today=$(date +%Y-%m-%d)
 daily_total=0
 
 if [ -n "$session_id" ] && [ "$session_tokens" -gt 0 ] 2>/dev/null; then
-  if [ -f "$daily_file" ]; then
+  if [ -f "$daily_file" ] && jq -e . "$daily_file" >/dev/null 2>&1; then
     file_date=$(jq -r '.date // ""' "$daily_file" 2>/dev/null)
     if [ "$file_date" = "$today" ]; then
       tmp="${daily_file}.tmp.$$"
@@ -84,10 +84,11 @@ if [ -n "$session_id" ] && [ "$session_tokens" -gt 0 ] 2>/dev/null; then
   fi
 fi
 
-if [ -f "$daily_file" ]; then
+if [ -f "$daily_file" ] && jq -e . "$daily_file" >/dev/null 2>&1; then
   file_date=$(jq -r '.date // ""' "$daily_file" 2>/dev/null)
   if [ "$file_date" = "$today" ]; then
-    daily_total=$(jq '[.sessions | to_entries[] | .value] | add // 0' "$daily_file" 2>/dev/null || echo 0)
+    daily_total=$(jq '[.sessions | to_entries[] | .value] | add // 0' "$daily_file" 2>/dev/null)
+    daily_total=${daily_total:-0}
   fi
 fi
 
